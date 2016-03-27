@@ -1,0 +1,83 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: types_test.xml 1033 2009-06-17 17:10:56Z cjones $ -->
+<actionModel version="1.0">
+    <type id="oid">
+        <description>This is an Object ID for a notional Object type.
+        </description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="oidList">
+        <description>Represents a list of OIDs.</description>
+        <list>
+            <ref typeRef="oid"/>
+        </list>
+    </type>
+    <type id="name">
+        <description>A name of something in the TestApp.</description>
+        <equivalentTo>string</equivalentTo>
+    </type>
+    <type id="friendlyObject">
+        <description>An object paired with a human-readable name for that
+            object.
+        </description>
+        <struct>
+            <ref typeRef="oid"/>
+            <ref typeRef="name"/>
+        </struct>
+    </type>
+    <type id="floatCoord">
+        <description>A float-valued coordinate.</description>
+        <custom>
+            <javaType>java.lang.Float</javaType>
+        </custom>
+    </type>
+    <type id="point">
+        <description>A float-valued point in 3 space.</description>
+        <struct>
+            <ref typeRef="floatCoord" name="X"/>
+            <ref typeRef="floatCoord" name="Y"/>
+            <ref typeRef="floatCoord" name="Z"/>
+        </struct>
+    </type>
+    <type id="pointsList">
+        <description>A list of points.</description>
+        <equivalentTo>list&lt;point&gt;</equivalentTo>
+    </type>
+    <type id="createArg">
+        <description>This is an Object ID for a notional Object type.
+        </description>
+        <equivalentTo>string</equivalentTo>
+    </type>
+    <type id="createType">
+        <description>The different types of objects that can be created.</description>
+        <enum>
+            <value>Type A</value>
+            <value>Type B</value>
+            <value>Type C</value>
+        </enum>
+    </type>
+    <type id="destroyArg">
+        <description>This is an Object ID for a notional Object type.
+        </description>
+        <nullable>
+            <ref typeRef="oid"/>
+        </nullable>
+    </type>
+</actionModel>

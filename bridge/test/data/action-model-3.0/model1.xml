@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+
+    <require url="./model4.xml"/>
+    <require url="./model2.xml"/>
+    <require url="./model3.xml"/>
+    <require url="./model10.xml"/>
+    <require url="./model5.xml"/>
+    <require url="./model9.xml"/>
+    <require url="./model7.xml"/>
+    <require url="./model6.xml"/>
+    <require url="./model8.xml"/>
+
+    <type id="type119">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+
+    </type>
+
+    <action id="action221">
+        <description>No descr.</description>
+        <inputParam id="stepID">
+            <description/>
+            <typeRef typeId="type119"/>
+        </inputParam>
+    </action>
+
+    <action id="action148">
+        <description>No descr.</description>
+        <inputParam id="dataType">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="template">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+    <action id="action126">
+        <description>No descr.</description>
+        <inputParam id="collectionID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="value">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="selectedMembers">
+            <description/>
+            <!-- This could be a bag -->
+            <typeRef typeId="type112"/>
+        </outputParam>
+    </action>
+
+    <action id="action145">
+        <description>No descr.</description>
+        <inputParam id="rootID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="secondaryIDs">
+            <description>No descr.</description>
+            <!-- This can be a set. -->
+            <typeRef typeId="type112"/>
+        </inputParam>
+    </action>
+
+    <action id="action168">
+        <description>No descr.</description>
+        <inputParam id="item45ID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <outputParam id="entityIDs">
+            <description/>
+            <!-- This can be a bag -->
+            <typeRef typeId="type112"/>
+        </outputParam>
+    </action>
+
+    <action id="action128">
+        <description>No descr.</description>
+        <inputParam id="tableID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+    </action>
+
+    <action id="action188">
+        <description>No descr.</description>
+        <inputParam id="item45ID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="title">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action131">
+        <description>No descr.</description>
+        <inputParam id="item45ID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="annotationGroupID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+    <action id="action204">
+        <description>No descr.</description>
+        <inputParam id="item45ID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="annotationGroupID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="stroke">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type116"/>
+        </inputParam>
+        <inputParam id="color">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="inkID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+    <action id="action162">
+        <description>No descr.</description>
+        <inputParam id="item45ID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="annotationGroupID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="graphicTemplate">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="stroke">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type116"/>
+        </inputParam>
+        <inputParam id="color">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="graphicID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+    <action id="action166">
+        <description>No descr.</description>
+        <inputParam id="source">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="procName">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="procedure">
+            <description/>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+</actionModel>

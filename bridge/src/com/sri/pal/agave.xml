@@ -1,0 +1,117 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--  $Id: agave.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<!-- WARNING: The actions in this file must be kept in sync with
+     LapdogClientCallServiceImpl.agaveActions. -->
+<actionModel version="1.0">
+    <type id="url">
+        <description>Universal Resource Locator (URL)</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <action id="findLinkRef" category="completer">
+        <description>Find the URL corresponding to a link name in a webpage.</description>
+        <metadata key="name" value="Find link reference"/>
+        <metadata key="fancyName" value="Find the link labeled ,#linkname, on the page ,#url"/>
+        <metadata key="executeJ"
+                  value="com.sri.ai.tasklearning.lapdog.agave.WebCompletors.findLinkRef"/>
+        <metadata key="inverse" value="agave^1.0^findLinkName"/>
+        <inputParam id="url">
+            <description>The URL for the webpage to search</description>
+            <typeRef typeId="url"/>
+        </inputParam>
+        <inputParam id="linkname">
+            <description>The name of the link to look for</description>
+            <class class="constant"/>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="linkref">
+            <description>The URL corresponding to the link name in the webpage</description>
+            <typeRef typeId="url"/>
+        </outputParam>
+    </action>
+
+    <action id="findLinkName" category="completer">
+        <description>Find the link name corresponding to a URL in a webpage.</description>
+        <metadata key="executeJ"
+                  value="com.sri.ai.tasklearning.lapdog.agave.WebCompletors.findLinkName"/>
+        <metadata key="inverseCompleter" value="true"/>
+        <inputParam id="url">
+            <description>The URL for the webpage to search</description>
+            <typeRef typeId="url"/>
+        </inputParam>
+        <inputParam id="linkref">
+            <description>The URL to look for</description>
+            <class class="constant"/>
+            <typeRef typeId="url"/>
+        </inputParam>
+        <outputParam id="linkname">
+            <description>The link name corresponding to the URL in the webpage</description>
+            <typeRef typeId="string"/>
+        </outputParam>
+    </action>
+
+    <action id="createStringFromFormatString" category="completer">
+        <description>Create a string using a format string and arguments.</description>
+        <metadata key="name" value="Create string from format string"/>
+        <metadata key="fancyName" value="Substitute the arguments ,#arglist, in the format string ,#formatstr"/>
+        <metadata key="executeJ"
+                  value="com.sri.ai.tasklearning.lapdog.agave.StringCompletors.createStringFromFormatString"/>
+        <metadata key="inverse" value="agave^1.0^createFormatStringFromString"/>
+        <inputParam id="formatstr">
+            <description>The format string</description>
+            <class class="constant"/>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="arglist">
+            <description>The arguments</description>
+            <class class="constant"/>
+            <typeRef typeId="list&lt;string&gt;"/>
+        </inputParam>
+        <outputParam id="string">
+            <description>The resulting string</description>
+            <typeRef typeId="string"/>
+        </outputParam>
+    </action>
+
+    <action id="createFormatStringFromString" category="completer">
+        <description>Create a format string and arguments from a string and known other strings.</description>
+        <metadata key="executeJ"
+                  value="com.sri.ai.tasklearning.lapdog.agave.StringCompletors.createFormatStringFromString"/>
+        <metadata key="inverseCompleter" value="true"/>
+        <inputParam id="string">
+            <description>The string to parameterize</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="substrings">
+            <description>The strings available for parameterization</description>
+            <class class="constant"/>
+            <typeRef typeId="list&lt;string&gt;"/>
+        </inputParam>
+        <inputParam id="arglist">
+            <description>The arguments</description>
+            <class class="constant"/>
+            <typeRef typeId="list&lt;string&gt;"/>
+        </inputParam>
+        <outputParam id="formatstr">
+            <description>The resulting format string</description>
+            <typeRef typeId="string"/>
+        </outputParam>
+    </action>
+</actionModel>

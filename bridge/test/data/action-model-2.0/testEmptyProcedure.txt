@@ -1,0 +1,3 @@
+Test empty Procedure
+Make sure we can learn a procedure that consists of zero actions
+#########################################################

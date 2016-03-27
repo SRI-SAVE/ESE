@@ -1,0 +1,11 @@
+(LapdogType
+ (BuiltinType
+  BOOLEAN
+  STRING
+  DATETIME
+  DURATION
+  URI
+  REAL
+  INTEGER
+  )
+ )

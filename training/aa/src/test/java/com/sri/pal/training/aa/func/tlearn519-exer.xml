@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise id="ex-1">
+    <name>Load test</name>
+    <description>Load test</description>
+    <problem>
+        <task id="task-2">
+        </task>
+    </problem>
+    <solution>
+        <task_solution>
+            <option>
+                <step id="step-0">
+                    <atom functor="LoadTest^1.0^addToContainer"/>
+                </step>             
+                <step id="step-1">
+                    <atom functor="LoadTest^1.0^move">
+                        <parameter id="param-1.1" accessor="source"/>
+                        <parameter id="param-1.2" accessor="dest"/>
+                        <parameter id="param-1.3" accessor="object"/>                        
+                    </atom>
+                </step>       
+                <step id="step-2">
+                    <atom functor="LoadTest^1.0^removeFromContainer"/>
+                </step>                         
+                <equality_constraint negated="true">
+                    <parameter>param-1.1</parameter>
+                    <parameter>param-1.2</parameter>                
+                </equality_constraint>
+                <ordering_constraint predecessor="step-0" successor="step-1" />                
+                <ordering_constraint predecessor="step-1" successor="step-2" />                    
+                <query_constraint functor="LoadTest^1.0^div2">
+                    <arg><ref>param-1.1</ref></arg>
+                </query_constraint>
+                <value_constraint>
+                  <parameter>param-1.3</parameter>
+                  <value>
+                    <ctrs>"2"</ctrs>
+                    <type>LoadTest^1.0^oid</type>
+                  </value>
+                </value_constraint>
+            </option>
+        </task_solution>
+    </solution>
+</exercise>

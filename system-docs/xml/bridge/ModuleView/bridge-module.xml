@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+<?Pub Inc?>
+<section id="bridge_module">
+<title>Bridge</title>
+<section>
+<title>Introduction</title>
+<para>The PALBridge is an API layer which presents a coherent API
+    to the application (CPOF) enabling it to access PAL functionality
+    for learning, execution, visualization, and editing of     procedures.
+The Bridge provides none of this functionality itself;     it simply
+wraps existing functionality in a consistent API and     performs
+various bookkeeping tasks.</para>
+<section>
+<title>Context Diagram</title>
+<para>The Bridge relays information between the 2D client on one 
+   side and the PAL system on the other. The Bridge communicates with
+    the LAPDOG and Lumen Mediators and the Shell, but it does this
+    solely via the Spine.</para>
+<figure>
+<title>PAL System Context Diagram</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PAL_Architecture.png" scale="100"/></imageobject>
+</mediaobject>
+</figure>
+</section>
+<section>
+<title>Bridge API</title>
+<para><xref linkend="Bridge_API" xrefstyle="select: label"/> shows
+    the CPOF-facing Bridge API. <xref linkend="Bridge_Actors"
+xrefstyle="select: label"/> shows the interrelationships of the  
+  active elements of the Bridge (excluding passive elements such as
+    data structures).</para>
+<figure id="Bridge_API">
+<title>Bridge API</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/Bridge_API.png" scale="50"/></imageobject><caption
+>           <para>All pictured elements are Bridge classes. Some are
+          interfaces defined by the Bridge, which CPOF provides  
+        implementations for. The Bridge API primarily concerns three
+          functional areas: persistence of procedures, the action
+          model which defines types and actions, and instrumentation
+          and execution for running procedures and reacting to their
+          actions.</para>         </caption></mediaobject>
+<mediaobject><imageobject><imagedata fileref="graphics/Bridge_Key.png"/>
+</imageobject></mediaobject>
+</figure>
+<figure id="Bridge_Actors">
+<title>Bridge Actor Elements</title>
+<mediaobject><imageobject><imagedata fileref="graphics/Bridge_Actors.png"/>
+</imageobject><caption>           <para>The structural relationships
+of active elements of the           Bridge are shown. The Bridge elements
+which interact most           strongly with external components are
+depicted. Some of           those components are in CPOF 2D, and others
+are parts of the           PAL system.</para>         </caption>
+</mediaobject>
+<mediaobject><imageobject><imagedata
+fileref="graphics/Bridge_Actors_Key.png"/></imageobject></mediaobject>
+</figure><?Pub Caret?>
+</section>
+</section>
+<section>
+<title>Structural View</title>
+<section>
+<title>Element Catalog</title>
+<para>The core of the Bridge API is the data type hierarchy. Each
+    type definition has a corresponding form for instantiating objects
+    of the respective type. Some instantiation classes are defined
+by     the PAL Bridge, some are defined by the application (CPOF),
+and     some are standard Java classes.</para>
+<table>
+<title>Bridge Type Hierarchy</title>
+<tgroup cols="4">
+<thead>
+<row><entry>Type Definition</entry><entry>Superclass</entry><entry
+>Description</entry><entry>Instantiation</entry></row>
+</thead>
+<tbody>
+<row><entry>TypeDef</entry><entry></entry><entry>The root of the type
+hierarchy. Also used for base             types such as UUID or String.</entry>
+<entry>A class specified in the action model XML             file.</entry>
+</row>
+<row><entry>AggregateTypeDef</entry><entry>TypeDef</entry><entry>Abstract
+class which handles definitions of             one-parameter collections
+such as lists and sets.</entry><entry>java.util.Collection</entry></row>
+<row><entry>BagDef</entry><entry>AggregateTypeDef</entry><entry>A
+bag is an unordered collection of objects which             permits
+duplicates.</entry><entry>java.util.Collection</entry></row>
+<row><entry>ListDef</entry><entry>AggregateTypeDef</entry><entry>A
+list is an ordered collection of objects which             permits
+duplicates.</entry><entry>java.util.List</entry></row>
+<row><entry>PListDef</entry><entry>AggregateTypeDef</entry><entry
+>A parameterized list behaves like a list, except             for
+its treatment within LAPDOG for generalization and             loop
+learning purposes. See the LAPDOG documentation for             more
+detail.</entry><entry>java.util.List</entry></row>
+<row><entry>SetDef</entry><entry>AggregateTypeDef</entry><entry>A
+set is an unordered collection of objects which             does not
+allow duplicates.</entry><entry>java.util.Set</entry></row>
+<row><entry>TupleDef</entry><entry>TypeDef</entry><entry>A tuple is
+an ordered, typed sequence of             objects. The tuple definition
+stores the type information             for each field of the tuple.</entry>
+<entry>com.sri.pal.Tuple</entry></row>
+<row><entry>ActionDef</entry><entry>TupleDef</entry><entry>An action
+definition represents an action that can             be performed,
+such as adding something to a collection or             changing the
+text in a stickie. The fields of an action             are typed like
+those of a tuple, but its fields are             extended to also
+represent whether they are input or             output parameters.</entry>
+<entry>com.sri.pal.ActionInvocation</entry></row>
+<row><entry>ProcedureDef</entry><entry>ActionDef</entry><entry>A procedure
+is a special kind of action that has             associated source.
+A Lumen procedure's source string is             the canonical information
+from which all its other             attributes are computed.</entry>
+<entry>com.sri.pal.ProcedureInvocation</entry></row>
+</tbody>
+</tgroup>
+</table>
+<para>Other important elements of the PAL Bridge concern more    
+dynamic aspects of the system:</para>
+<table>
+<title>Bridge Interface Elements</title>
+<tgroup cols="2">
+<thead>
+<row><entry>Class</entry><entry>Description</entry></row>
+</thead>
+<tbody>
+<row><entry>ActionExecutor</entry><entry>Responsible for executing
+ActionInvocation             requests. This is implemented both by
+CPOF to execute CPOF             actions, and by the PAL Bridge to
+execute Lumen procedures             by forwarding them on to Lumen
+itself.</entry></row>
+<row><entry>ActionExecutionStatusListener</entry><entry>Implemented
+by CPOF to monitor status of             ActionInvocation requests.</entry>
+</row>
+<row><entry>ActionLoader</entry><entry>Implemented by CPOF to load
+procedures from the             CoMotion repository.</entry></row>
+<row><entry>GlobalActionListener</entry><entry>Implemented by CPOF
+to receive notifications of any             actions (or procedures)
+which begin execution.</entry></row>
+<row><entry>PALStatusListener</entry><entry>Implemented by CPOF to
+receive notification when             the PAL system becomes unavailable.</entry>
+</row>
+<row><entry>ActionModel</entry><entry>Provides access to the definitions
+of types and             actions which are known to the PAL system.</entry>
+</row>
+<row><entry>Bridge</entry><entry>The main entry point for CPOF into
+the PAL Bridge             API.</entry></row>
+<row><entry>Learner</entry><entry>Provides access to LAPDOG's learning
+            capabilities.</entry></row>
+</tbody>
+</tgroup>
+</table>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+</section>
+</section>
+<?Pub *0000013116?>

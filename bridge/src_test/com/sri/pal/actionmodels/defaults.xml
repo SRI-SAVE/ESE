@@ -1,0 +1,95 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--  $Id: defaults.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="thing">
+        <description>A thing represented by a string</description>
+        <equivalentTo>string</equivalentTo>
+    </type>
+    <type id="thingList">
+        <description>A list of things</description>
+        <list>
+            <ref typeRef="thing"/>
+        </list>
+    </type>
+    <type id="thingSet">
+        <description>A set of things</description>
+        <set>
+            <ref typeRef="thing"/>
+        </set>
+    </type>
+    <type id="struct1">
+        <description>A struct</description>
+        <struct>
+            <ref typeRef="thing"/>
+            <ref typeRef="thing"/>
+        </struct>
+    </type>
+
+    <action id="getThing1">
+        <description>Default value for a thing</description>
+        <inputParam id="input1" defaultValue="">
+            <description/>
+            <typeRef typeId="thing"/>
+        </inputParam>
+        <inputParam id="input2" defaultValue="default for param #2">
+            <description/>
+            <typeRef typeId="thing"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingList1">
+        <description>Default value for a list of things</description>
+        <inputParam id="input1" defaultValue="[]">
+            <description/>
+            <typeRef typeId="thingList"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingList2">
+        <description>Default value for a list of things</description>
+        <inputParam id="input1" defaultValue="[&quot;a&quot;, &quot;b&quot;]">
+            <description/>
+            <typeRef typeId="thingList"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingSet1">
+        <description>Default value for a set of things</description>
+        <inputParam id="input1" defaultValue="setGen()">
+            <description/>
+            <typeRef typeId="thingSet"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingSet2">
+        <description>Default value for a set of things</description>
+        <inputParam id="input1" defaultValue="setGen(&quot;c&quot;, &quot;d&quot;)">
+            <description/>
+            <typeRef typeId="thingSet"/>
+        </inputParam>
+    </action>
+
+    <action id="getStruct">
+        <description>Default value for a struct</description>
+        <inputParam id="input1"
+                    defaultValue="structureGen(&quot;struct1&quot;, &quot;e&quot;, &quot;f&quot;)">
+            <description/>
+            <typeRef typeId="struct1"/>
+        </inputParam>
+    </action>
+</actionModel>

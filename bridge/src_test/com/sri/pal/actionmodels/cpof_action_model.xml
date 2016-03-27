@@ -1,0 +1,277 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- Note that this data is not actually from cpof - it is test
+    data based on the types of structures that cpof uses. -->
+<actionModel version="1.0">
+    <!--
+     TYPES
+    -->
+    <type id="ID">
+        <description>Unique Identifier</description>
+        <custom>
+            <javaType>com.sri.pal.types.ID</javaType>
+        </custom>
+	</type>
+
+    <type id="IDs">
+		<description>A group of IDs.</description>
+		<list permutable="true">
+			<ref typeRef="ID"/>
+		</list>
+	</type>
+
+	<type id="Property">
+		<description>A property</description>
+        <equivalentTo>string</equivalentTo>
+	</type>
+
+    <type id="StringList">
+        <description>A list of strings.</description>
+        <list>
+            <ref typeRef="string"/>
+        </list>
+    </type>
+
+    <type id="Position">
+        <description>Represents an x-y position</description>
+        <struct>
+            <ref typeRef="real" name="X"/>
+            <ref typeRef="real" name="Y"/>
+        </struct>
+    </type>
+
+    <type id="PositionList">
+        <description>A list of Positions.</description>
+        <list>
+            <ref typeRef="Position"/>
+        </list>
+	</type>
+
+    <!--
+     ACTIONS
+    -->
+    <action id="createFromCustomized">
+        <description>
+            Makes something new from a custom item
+        </description>
+        <inputParam id="template">
+            <description>
+                The ID of an entity template
+            </description>
+            <typeRef typeId="ID" />
+        </inputParam>
+        <outputParam id="created">
+            <description>
+                The ID of the newly created entity
+            </description>
+            <typeRef typeId="ID" />
+        </outputParam>
+    </action>
+
+    <action id="createFromGeneralized">
+        <description>
+            Makes something new from a general item
+        </description>
+        <inputParam id="template">
+            <description>
+                The ID of an entity template.
+            </description>
+            <class class="constant"/>
+            <typeRef typeId="string" />
+        </inputParam>
+        <outputParam id="created">
+            <description>
+                The ID of the newly create entity
+            </description>
+            <typeRef typeId="ID" />
+        </outputParam>
+    </action>
+
+    <action id="selectItemsByValue">
+        <description>
+            Selects items in a collection or the content of a frame based on the value of a
+            property.
+        </description>
+        <inputParam id="source">
+            <description>
+                The ID of the set from which to select items.
+            </description>
+            <typeRef typeId="IDs" />
+        </inputParam>
+        <inputParam id="relation">
+            <description>
+                The relation from which to select all members.
+            </description>
+            <class class="constant"/>
+            <typeRef typeId="Property" />
+        </inputParam>
+        <inputParam id="selection_property">
+            <description>
+                The property whose value will be used to select the items.
+            </description>
+            <class class="constant"/>
+            <typeRef typeId="Property" />
+        </inputParam>
+        <inputParam id="selection_value">
+            <description>
+                The expected value of the specified property.
+            </description>
+            <typeRef typeId="string" />
+        </inputParam>
+        <outputParam id="selected_items">
+            <description>
+                The IDs of all items in the set that match the selection criteria.
+            </description>
+            <typeRef typeId="IDs" />
+        </outputParam>
+    </action>
+
+    <action id="selectAllItem">
+        <description>
+            Select all entities in a relation.
+        </description>
+        <inputParam id="source">
+            <description>
+                The collection from which to select items.
+            </description>
+            <typeRef typeId="IDs" />
+        </inputParam>
+        <inputParam id="relation">
+            <description>
+                The relation from which to select all members.
+            </description>
+            <class class="constant"/>
+            <typeRef typeId="Property" />
+        </inputParam>
+        <outputParam id="selected_items">
+            <description>The UUIDs of all items in the specified relation.
+            </description>
+            <typeRef typeId="IDs" />
+        </outputParam>
+    </action>
+
+    <action id="setTitle">
+        <description>
+            Set the title of a thing.
+        </description>
+        <inputParam id="thing">
+            <description>
+                The ID of the thing.
+            </description>
+            <typeRef typeId="ID" />
+        </inputParam>
+        <inputParam id="title">
+            <description>
+                The new title for the thing.
+            </description>
+            <typeRef typeId="string" />
+        </inputParam>
+    </action>
+
+    <action id="coagulate">
+        <description>
+            Creates a new data entity from a generic thing.
+        </description>
+        <inputParam id="prefix">
+            <description>
+                The first part of the string.
+            </description>
+            <typeRef typeId="string" />
+        </inputParam>
+        <inputParam id="suffix">
+            <description>
+                The second part of the string.
+            </description>
+            <typeRef typeId="string" />
+        </inputParam>
+        <outputParam id="text">
+            <description>
+                The resultant text</description>
+            <typeRef typeId="string" />
+        </outputParam>
+    </action>
+
+    <action id="iterateOverAListOfStrings">
+        <description>
+            Takes a list of strings
+        </description>
+        <inputParam id="stringList">
+            <typeRef typeId="StringList" />
+        </inputParam>
+        <outputParam id="id">
+            <description>
+                The ID of the newly created list
+            </description>
+            <typeRef typeId="ID" />
+        </outputParam>
+    </action>
+
+    <action id="sendInPrimitives">
+        <description>
+            Make something primitive
+        </description>
+        <inputParam id="int">
+            <typeRef typeId="integer" />
+        </inputParam>
+        <inputParam id="bool">
+            <typeRef typeId="boolean" />
+        </inputParam>
+        <inputParam id="double">
+            <typeRef typeId="real" />
+        </inputParam>
+        <inputParam id="long">
+            <typeRef typeId="timestamp" />
+        </inputParam>
+        <outputParam id="created">
+            <description>
+                The ID of the newly created entity
+            </description>
+            <typeRef typeId="ID" />
+        </outputParam>
+    </action>
+
+    <action id="TupleOfDoubles">
+        <description>
+            Represents a Position
+        </description>
+        <inputParam id="position">
+            <typeRef typeId="Position" />
+        </inputParam>
+        <outputParam id="created">
+            <description>
+                The ID of the newly created entity
+            </description>
+            <typeRef typeId="ID" />
+        </outputParam>
+    </action>
+
+    <action id="ListOfTupleOfDoubles">
+        <description>
+            Represents a List of Positions
+        </description>
+        <inputParam id="positions">
+            <typeRef typeId="PositionList" />
+        </inputParam>
+        <outputParam id="created">
+            <description>
+                The ID of the newly created entity
+            </description>
+            <typeRef typeId="ID" />
+        </outputParam>
+    </action>
+
+</actionModel>

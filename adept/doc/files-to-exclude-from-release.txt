@@ -1,0 +1,4 @@
+itl-ui\itl-ui-core\doc\*
+itl-ui\itl-ui-editor\dist\Procedure_Editor.app\Contents\Resources\English.lproj\* [may be gone by release time]
+lapdog\lib\jtidy-r938.jar
+lapdog-mediator\lib\jtidy-r938.jar

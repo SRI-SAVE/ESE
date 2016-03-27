@@ -1,0 +1,4 @@
+Test return value is list
+Make sure output values can be a list
+#########################################################
+action189[param108=source; param157=item44; param170=[entity1]; ]

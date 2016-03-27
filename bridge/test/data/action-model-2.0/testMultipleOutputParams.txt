@@ -1,0 +1,6 @@
+Test multiple output parameters
+Ensure that we can learn procedures with multiple output parameters
+#########################################################
+action144[param133=item5item2; param185=item1ID; ]
+action144[param133=Mapitem5; param185=mapCA; ]
+action170[param114=mapCA; param157=item16; param119=[item1ID]; ]

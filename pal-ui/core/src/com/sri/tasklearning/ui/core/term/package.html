@@ -1,0 +1,37 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+  <head>
+  </head>
+  <body>
+  Contains models and views that support 'term-level' entities in a procedure. 
+  Term-level means anything that descends from ATRTerm. Therefore, this 
+  namespace includes all PUTR (PAL UI Task Representation - an implementation of ATR)
+  classes that implement interfaces beneath and including ATRTerm. Appropriate
+  views exist for each model. 
+  <br />
+  <br />
+  Terms are generally visualized as menu buttons. The menu options provided 
+  by the button allow for general term-level edits such as referencing a
+  variable, providing a constant (fixed) value or creating a new procedure 
+  input.
+  <br />
+  <br />
+  All functions, which implement ATRFunction and descend from ATRTerm, are
+  implemented in the subpackage {@code com.sri.tasklearning.ui.core.term.function}.  
+  </body>
+</html>

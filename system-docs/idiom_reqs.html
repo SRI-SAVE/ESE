@@ -1,0 +1,308 @@
+
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  </head>
+  <body text="#000000" bgcolor="#ffffff">
+    <pre>$Id: idiom_reqs.html 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $</pre>
+    <b>Requirements for gesture alignment</b><br>
+    <ul>
+      <li> There are two forms of alignment that must occur - intragesture and intergesture/multigesture.
+	Since the latter is somewhat of a contradiction
+	in terms, we will use the term <i>idiom</i> as the general term for what is aligned.</li>
+       <li>The high level goal is to compose a meaningful idiom, at the
+        semantic level the user thinks in, out of lower level actions.</li>
+      <li>In addition, we want to name and recognize the most common
+        idioms in order to make their visualization easier.</li>
+      <li>Less common idioms will be handled as well, though they may
+        not have custom names.</li>
+      <li>PROPOSED - we defer flagging malformed idioms which indicate gaps in
+        the application instrumentation or anti-patterns (see Rationale below).
+        Partial recognition of an idiom is the same as nonrecognition of it.
+        Idiom prototypes provide no way to inidcate that the idiom reflects an erroneous sequence of actions.</li>
+      <li> Intragesture idioms are recognized during demonstration, and visualized as a single unit in the demonstration viewer.
+        Multigesture idioms are recognized during learning; their component actions are visualized 
+        individually in the demonstration viewer.</li>
+    </ul>
+    Following are some examples of idioms we need to be able to
+    identify. These are intended to be representative, not
+    comprehensive:
+    <table border=1>
+      <tr>
+        <td><b>Input actions</b></td>
+        <td><b>Output actions</b></td>
+        <td><b>Output description</b></td>
+      </tr>
+      <tr>
+        <td>add [A] to C
+          <br>remove [A] from D</td>
+        <td><i>same</i></td>
+        <td>move [A] from D to C</td>
+      </tr>
+      <tr>
+        <td>create A
+          <br>add [A] to C</td>
+        <td><i>same</i></td>
+        <td>dispense a new A-type named A into C</td>
+      </tr>
+      <tr>
+        <td><i>0 or more actions, but nothing that adds A to a
+            container</i>
+          <br>remove [A] from C
+          <br><i>0 or more actions</i></td>
+        <td><i>TBD</i></td>
+        <td>invalid idiom</td>
+      </tr>
+      <tr>
+        <td>addPerson [A] to Z
+          <br>addVehicle [B] to Z
+          <br>remove [A,B] from X</td>
+        <td>add* [A,B] to Z
+          <br>remove [A,B] from X</td>
+        <td>move [A,B] from X to Z</td>
+      </tr>
+    </table>
+    <br>
+
+    <b>Data structures</b><br>
+    <ul>
+      <li>Idioms take three forms: Idiom prototypes used to identify
+        idioms, idiom instances as part of a demonstration, and
+        idiom annotations as part of a procedure.</li>
+      <li>Idiom prototypes can be represented both in action model XML
+        and in ATR. Idiom instances in a demonstration can be
+        represented in both Bridge API objects and in ATR. Idiom
+        annotations in a procedure can be represented in both Bridge API
+        objects (at runtime) and in ATR (as part of the procedure
+        definition).</li>
+      <li>CPOF will include, in its action model, definitions of idiom
+        prototypes which are well known. Not every possible idiom
+        prototype is listed here.</li>
+      <li>The action model will also allow each action to belong to zero
+        or more action classes. Each mapping from an action to an action
+        class includes a mapping of parameters as well. TBD whether
+        action classes will be defined explicitly or implicitly.<br>
+      </li>
+      <li>Idiom prototypes allow arbitrary metadata in the form of
+        string-string key-value pairs. One likely metadata item could be
+        a "malformed" tag to note a idiom as an anti-pattern.</li>
+      <li>A idiom prototype consists of a set of action classes,
+        action parameters, ordering constraints, and rewriting rules.
+        The following examples must be expressible:</li>
+      <ul>
+        <li>add [A] to C1, remove [A] from C2 -&gt; "move [A] from C1 to
+          C2" (Add a meaningful description to a idiom.)<br>
+        </li>
+        <li>set text to A, set text to B, set text to C -&gt; set text
+          to C (Collapse redundant actions.)<br>
+        </li>
+        <li>add [A] to C1, add [B] to C1, remove [A,B] from C2, add [D]
+          to C1, remove [D] from C2 -&gt; add [A,B,D] to C1, remove
+          [A,B,D] from C2, "move [A,B,D] from C1 to C2" (Consolidate
+          different subtypes of add and remove action classes, unify
+          parameter lists, and add a meaningful description.)</li>
+        <li>remove [A] from C1, where A is not supported by a previous
+          add action -&gt; "invalid idiom" (Recognize a pattern or
+          anti-pattern, involving lack of supports, within a
+          idiom.)</li>
+      </ul>
+      <li>A idiom instance contains a series of action instances with
+        parameter bindings. It may optionally contain idiom-level
+        parameter bindings and name. It contains no metadata.<br>
+      </li>
+      <li>A idiom annotation in a procedure contains an optional name,
+        a set of parameter bindings, and a sequence of action calls. It
+        contains no metadata.<br>
+      </li>
+    </ul>
+    <br>
+    
+    <b>Idiom recognition</b><br>
+
+    Here are some specific requirements for idiom recognition:
+    <ul>
+     <li> Idiom prototypes need not support extraneous actions within idioms.
+       That is, arbitrary actions may not be interspersed with the actions that define the idiom.
+       Put another way, any action specified in the idiom is part of the idiom.
+       It follows that an extraneous action serves to delimit a multigesture idiom.</li>
+     <li> Idiom prototypes have an integer property indicating precedence order.
+          Higher precedences are matched first; ties are broken arbitrarily.
+          Default precedence is 1000 * the number of actions in the template.</li>
+     <li> PROPOSED - Assuming idioms will be recognized at demonstration and at execution time, idiom prototypes
+       will provide a way to specify that that idiom should be recognized only at demonstration time, or
+       only at learn time. Default behavior is to recognize at either time.</li>
+     <li> Idiom prototypes specify the individual actions that may comprise the idiom. </li>
+     <li> Idiom prototypes specify that certain action parameters must <i>match</i> certain other action parameters.
+       This means that the corresponding action arguments must match for the idiom including those actions to be recognized: </li>
+       <ul>
+	 <li> Matching ignores parameter modes, though it's not expected that any useful idioms will match outputs to outputs
+	   or an output to a subsequent input.</li>
+	 <li> To match, parameter types must be compatible. Two types are compatible if they are identical or
+	   are hierarchically related.</li>
+	 <li> Two arguments must be either Java equals() to match, with the exception that a singleton collection of
+	   an element <i>e</i> matches <i>e</i>. </li>
+       </ul>
+     <li> Idiom prototypes identify the parameters of the idiom itself, by designating parameters of its actions
+       as idiom parameters. Any parameters that must match for the idiom to be recognized are idiom parameters.</li>
+     <li> An idiom prototype is specified to be either <i>ordered</i> or <i>unordered</i>.
+       In an ordered idiom, the actions must appear in the demonstration in order.
+       In ann unordered idiom, the actions may appear in any order.</li>
+     <li> TBD - Should idioms be permitted to be nested, so a prototype could contain a mix of actions and idioms?
+       <br> PROPOSED - Don't require support for this, but don't forbid, and support if easy to do so for recognition,
+       visualization, and execution.
+       Nested idiom recognition would permit, for example, an unordered idiom being included in an ordered idiom,
+       allowing a lot more recognition flexibility.</li>
+     <li> The intragesture idiom recognition API returns the standard representation for the idiom, including identification of its
+       parameters and naming it appropriately. Similarly, learned procedures contain the standard representation
+       for recognized idioms intermixed appropriately with actions and loops within the procedure body.</li>
+     <li> Idiom recognition must assure that matching values are type-compatible.</li>
+     <li> Idiom construction determines types for all arguments of the idiom. These types derive from
+           the arguments in the actions comprising the idiom. If a set of arguments match and have different
+          types, their closest supertype is used.
+     </li>
+    </ul>
+    <br>
+    
+    <b>Idiom visualization</b><br>
+
+    Here are some specific requirements for idiom visualization:
+    <ul>
+     <li> All paramaters of all component actions are included in the parameters of the idiom.
+           Action parameters that are not parameters to the idiom itself are hidden.</li>
+    </ul>
+    <br>
+    
+    <b>Idiom execution</b><br>
+
+    Here are some specific requirements for idiom execution:
+    <ul>
+     <li> TBD - Should execution report execution completion of an entire idiom, or of its
+       component actions?</li>
+    </ul>
+    <br>
+    
+    <b>CPOF/Bridge demonstration API</b><br>
+    <ul>
+      <li>CPOF will send partial demonstrations to the Bridge so that
+        idioms can be identified. This is called at the end of each
+        idiom.<br>
+      </li>
+      <li>CPOF will demarcate the start and end of each idiom, as well
+        as the constituent actions.</li>
+      <li>The Bridge will send back a modified version of the same
+        partial demonstration. Actions may be removed or replaced, and
+        idiom-level input and output parameters will be listed.
+        Idiom-level parameters include parameter name and value. (TBD
+        how to avoid duplicating the parameter values in both the
+        idiom and individual actions.)<br>
+      </li>
+      <li>If the idiom matches a known prototype, the Bridge will also
+        include the name of the idiom prototype. In this case, idiom
+        parameter names will be based on predefined, meaningful names
+        associated with the idiom prototype.</li>
+      <li>If the idiom matches a known anti-pattern, it's CPOF's
+        responsibility to recognize this condition (presumably based on
+        idiom prototype metadata) and respond appropriately.</li>
+    </ul>
+    <br>
+    <b>CPOF/Bridge learning API</b><br>
+    <ul>
+      <li>CPOF will pass a demonstration including idiom instances.</li>
+      <li>The Bridge will return a procedure including idiom
+        annotations.</li>
+      <li>Redundant actions will be eliminated or consolidated in this
+      step, rather than as part of the demonstration API.</li>
+    </ul>
+    <br>
+    <b>CPOF/Bridge execution API</b><br>
+    <ul>
+      <li>Each execution request from the Bridge to CPOF will optionally
+        be associated with a unique idiom instance ID and optional
+        idiom prototype name.</li>
+      <li>If an action failure occurs, the Bridge will abort the
+        procedure (and idiom). It's CPOF's responsibility to decide
+        how to handle a partially-completed idiom.<br>
+      </li>
+    </ul>
+    <b><br>
+      Bridge/LAPDOG demonstration API</b><br>
+    <ul>
+      <li>Just prior to this call, the Bridge passes LAPDOG all relevant
+        idiom, action, and action class definitions in ATR form.<br>
+      </li>
+      <li>The Bridge passes in the ATR equivalent of the partial
+        demonstration received from CPOF.</li>
+      <li>LAPDOG returns an appropriately modified partial
+        demonstration.</li>
+
+    </ul>
+    <br>
+    <b>Bridge/LAPDOG learning API</b><br>
+    <ul>
+      <li>Just prior to this call, the Bridge passes LAPDOG all relevant
+        idiom, action, and action class definitions in ATR form.<br>
+      </li>
+      <li>The Bridge passes in the ATR structures representing the
+        demonstration with idiom instances.</li>
+      <li>LAPDOG returns an ATR procedure with idiom annotations.<br>
+      </li>
+    </ul>
+    <br>
+    <b>Bridge/Lumen execution API</b><br>
+    <ul>
+      <li>Before requesting execution of a procedure, the Bridge passes
+        Lumen all relevant idiom, action, and action class definitions
+        in ATR form, in addition to the definition of the procedure
+        itself.<br>
+      </li>
+      <li>For each execution request from Lumen to the Bridge, Lumen
+        includes a unique idiom instance ID. If the idiom is backed
+        by a known prototype, the name of that prototype is included as
+        well.<br>
+      </li>
+    </ul>
+
+<h2> Representing gesture boundaries </h2>
+
+We need to work out whether gesture boundaries are represented in the demonstration in each
+relevant interface - CPOF->Bridge , Bridge<->IdiomRecognizer, Bridge<->Learner (ie. retain them in the procedure?).
+
+<h2>Rationale</h2>
+
+<h3>Regarding not detecting erroneous idioms</h3>
+
+Discussions with Tim Cummings indicate that, even with significant metadata,
+it will be difficult to do robust checking for data loss (aka "poof") action sequences. The main reason is it's
+difficult to determine whether the actions are true inverses; there are add/remove action pairs that
+are valid idioms but are not "poof" cases:<BR>
+ <p>
+The following actions take two parameters, the items being added/removed, and the item added to / removed from:
+<ul>
+<li>addToInbox
+<li>removeFromInbox
+<li>addItemsToPublish
+<li>removeItemsToPublish
+</ul>
+These actions are modeled as distinct from addTo/removeFromCollection because they have different privilege constraints or role restrictions than the default. Given a gesture that contains an ADD followed by a REMOVE, will the REMOVE be invoked with parameters that make it the opposite of the ADD? The answer to this question requires insight in to the relationships between actions, in terms of their effects. Without that, no amount of insight into privileges or Roles will be of any use.
+<p>
+We could still do a partial job of detecting data loss from malformed idioms, but it seems better to leave that
+work as GD's responsibility.
+  </body>
+</html>

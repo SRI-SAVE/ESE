@@ -1,0 +1,171 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: tuples.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="String">
+        <description>simple string type</description>
+        <equivalentTo>string</equivalentTo>
+        <metadata key="string key 1" value="string value 1"/>
+    </type>
+
+    <type id="tuple1">
+        <description>simple tuple type</description>
+        <metadata key="tuple 1 key 1" value="tuple 1 value 1"/>
+        <metadata key="tuple 1 key 2" value="tuple 1 value 2"/>
+        <struct>
+            <ref typeRef="String"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="tuple2">
+        <description>simple tuple type</description>
+        <metadata key="tuple 2 key 1" value="tuple 2 value 1"/>
+        <metadata key="tuple 2 key 2" value="tuple 2 value 2"/>
+        <struct opaque="true">
+            <ref typeRef="String"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="tuple3">
+        <description>simple tuple type</description>
+        <metadata key="tuple 3 key 1" value="tuple 3 value 1"/>
+        <metadata key="tuple 3 key 2" value="tuple 3 value 2"/>
+        <struct opaque="false">
+            <ref typeRef="String"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="tuple4">
+        <description>tuple with named fields</description>
+        <struct>
+            <ref name="field1" typeRef="String"/>
+            <ref name="foo" typeRef="String"/>
+            <ref name="bar" typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="tuple5">
+        <description>tuple with 4 named fields</description>
+        <struct>
+            <ref name="A" typeRef="string"/>
+            <ref name="B" typeRef="string"/>
+            <ref name="C" typeRef="string"/>
+            <ref name="D" typeRef="string"/>
+        </struct>
+    </type>
+
+    <type id="enum1">
+        <description/>
+        <enum>
+            <value>value1</value>
+            <value>value2</value>
+        </enum>
+    </type>
+
+    <type id="tuple6">
+        <description/>
+        <struct>
+            <ref name="field1" typeRef="enum1"/>
+            <ref name="field2" typeRef="string"/>
+        </struct>
+    </type>
+
+    <type id="tuple7">
+        <description/>
+        <struct>
+            <generalizeUnsupported preference="construct"/>
+            <ref typeRef="string"/>
+            <ref typeRef="string"/>
+            <ref typeRef="string" constant="true"/>
+        </struct>
+    </type>
+
+    <action id="action0">
+        <description>non-tuple action</description>
+        <inputParam id="arg1">
+            <description>arg 1</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action1">
+        <description>action #1</description>
+        <inputParam id="arg1">
+            <description>Arg #1</description>
+            <typeRef typeId="tuple1"/>
+        </inputParam>
+    </action>
+
+    <action id="action2">
+        <description>action #2</description>
+        <inputParam id="arg1">
+            <description>Arg #1 (action #2)</description>
+            <typeRef typeId = "tuple2"/>
+        </inputParam>
+    </action>
+
+    <action id="action3">
+        <description>action #3</description>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <typeRef typeId="tuple3"/>
+        </inputParam>
+    </action>
+
+    <action id="action4">
+        <description>action #4</description>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <typeRef typeId="tuple4"/>
+        </inputParam>
+    </action>
+
+    <action id="action5">
+        <description>action #5</description>
+        <outputParam id="out1">
+            <description>output</description>
+            <typeRef typeId="tuple5"/>
+        </outputParam>
+    </action>
+
+    <action id="action6">
+        <description>action #6</description>
+        <inputParam id="in1">
+            <description>input</description>
+            <typeRef typeId="tuple5"/>
+        </inputParam>
+    </action>
+
+    <action id="action7">
+        <description/>
+        <inputParam id="input1">
+            <description/>
+            <typeRef typeId="tuple6"/>
+        </inputParam>
+    </action>
+
+    <action id="action8">
+        <description/>
+        <inputParam id="input1">
+            <description/>
+            <typeRef typeId="tuple7"/>
+        </inputParam>
+    </action>
+</actionModel>

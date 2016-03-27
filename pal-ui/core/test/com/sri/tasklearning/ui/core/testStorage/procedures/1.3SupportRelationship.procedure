@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^1.3SupportRelationship'
+ execute:{
+  do 'arda^1.0^CreateString'('$output 1');
+  do 'arda^1.0^UseString'('$output 1');}
+ properties:{expected_output:"CREATE STRING\nUSE STRING: string\n", isTransient:"true"}</bodySource>
+</TaskModel>

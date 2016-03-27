@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise>
+  <name>PE TMB6F07PE</name>
+  <description>Prepare a Shared Battle Plan Using CPOF</description>
+  <problem>
+      <task id="task-2">
+        <name>Task 2</name>
+        <description>Create a 2d Mission Plan for 3/2/99 IN</description>
+        <sub_task id="sub1">
+          <prompt>Create a Unit</prompt>
+        </sub_task>
+        <sub_task id="sub2">
+          <prompt>Create a Task</prompt>
+        </sub_task>
+        <sub_task id="sub3">
+          <prompt>Place the Task on a Map</prompt>
+        </sub_task>
+        <sub_task id="sub4">
+          <prompt>Type a description of the Task (who, what, when, where, why, sub_task details) in the Comments region of the Task profile</prompt>
+        </sub_task>
+        <sub_task id="sub5">
+          <prompt>Create graphics as necessary.</prompt>
+        </sub_task>
+        <sub_task id="sub6">
+          <prompt>Display the plan on a Schedule</prompt>
+        </sub_task>                       
+      </task>  
+  </problem>
+</exercise>

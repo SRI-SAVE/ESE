@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise id="c8860930-79e3-11e1-b0c4-0800200c9a66">
+  <name>PE TMB6F03PE</name>
+  <description>Organize Data Products Using the CPOF 2D/3D Applications</description>
+  <problem>
+      <task id="task-1">
+        <name>Task 1</name>
+        <description>Plot Situational Awareness Producs</description>
+        <sub_task id="sub1">
+           <prompt>Create a new Pasteboard and name it Student # PE A03.</prompt>
+         </sub_task>
+         <sub_task id="sub2">
+           <prompt>Nest a new map in the Pasteboard. Zoom in on an area to show the Operational Environment and create a Map preset.  Name the Preset Student# OE (example: Student01 OE).</prompt>
+         </sub_task>
+         <sub_task id="sub3">
+           <prompt>Draw a boundary line showing brigade designator for your OE.</prompt>
+         </sub_task>
+         <sub_task id="sub4">
+           <prompt>Create and display one or two subordinate units for your OE.</prompt>
+         </sub_task>
+         <sub_task id="sub5">
+           <prompt>Create and Monitor three Mosques in your OE</prompt>
+         </sub_task>
+         <sub_task id="sub6">
+           <prompt>Create and name an Effort for the Unit and Mosque</prompt>
+        </sub_task>                        
+      </task>  
+  </problem>
+</exercise>

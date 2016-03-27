@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+
+<section id="PAL">
+<title>PAL</title>
+
+<para> This document describes various charactersitics shared among modules,
+and behaviors involving multiple modules,
+comprising the PAL functionality of the CPOF-PAL system.</para>
+
+<section>
+<title>Module Interoperation</title>
+<para> This section contains brief descriptions and sequence diagrams of the principal
+operations of PAL that involve one or more PAL modules. </para>
+
+<section>
+<title>Definition of a type</title>
+<para>
+ Bridge --> LAPDOGMediator --> LAPDOG
+</para>
+</section>
+
+<section>
+<title>Definition of an action</title>
+<para>
+ Bridge --> Spine --> LAPDOGMediator --> LAPDOG
+</para>
+<para>
+ Bridge --> Spine --> LumenMediator --> Lumen
+</para>
+</section>
+
+<section>
+<title>Request learning</title>
+<para>
+CPOF --> Bridge --> Spine --> LAPDOGMediator --> LAPDOG
+</para>
+</section>
+
+<section>
+<title></title>
+<para></para>
+</section>
+
+
+</section> </section>

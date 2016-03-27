@@ -1,0 +1,123 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--  $Id: alltypes.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="thing">
+        <description>A thing represented by a string</description>
+        <equivalentTo>string</equivalentTo>
+    </type>
+    <type id="thingBag">
+        <description>A bag of things</description>
+        <bag>
+            <ref typeRef="thing"/>
+        </bag>
+    </type>
+    <type id="thingList">
+        <description>A list of things</description>
+        <list>
+            <ref typeRef="thing"/>
+        </list>
+    </type>
+    <type id="thingSet">
+        <description>A set of things</description>
+        <set>
+            <ref typeRef="thing"/>
+        </set>
+    </type>
+    <type id="struct1">
+        <description>A struct</description>
+        <struct>
+            <ref typeRef="thing"/>
+            <ref typeRef="thing"/>
+        </struct>
+    </type>
+
+    <action id="getThing">
+        <description/>
+        <outputParam id="output1">
+            <description/>
+            <typeRef typeId="thing"/>
+        </outputParam>
+    </action>
+    <action id="setThing">
+        <description/>
+        <inputParam id="output1">
+            <description/>
+            <typeRef typeId="thing"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingBag">
+        <description/>
+        <outputParam id="output1">
+            <description/>
+            <typeRef typeId="thingBag"/>
+        </outputParam>
+    </action>
+    <action id="setThingBag">
+        <description/>
+        <inputParam id="output1">
+            <description/>
+            <typeRef typeId="thingBag"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingList">
+        <description/>
+        <outputParam id="output1">
+            <description/>
+            <typeRef typeId="thingList"/>
+        </outputParam>
+    </action>
+    <action id="setThingList">
+        <description/>
+        <inputParam id="output1">
+            <description/>
+            <typeRef typeId="thingList"/>
+        </inputParam>
+    </action>
+
+    <action id="getThingSet">
+        <description/>
+        <outputParam id="output1">
+            <description/>
+            <typeRef typeId="thingSet"/>
+        </outputParam>
+    </action>
+    <action id="setThingSet">
+        <description/>
+        <inputParam id="output1">
+            <description/>
+            <typeRef typeId="thingSet"/>
+        </inputParam>
+    </action>
+
+    <action id="getStruct1">
+        <description/>
+        <outputParam id="output1">
+            <description/>
+            <typeRef typeId="struct1"/>
+        </outputParam>
+    </action>
+    <action id="setStruct1">
+        <description/>
+        <inputParam id="output1">
+            <description/>
+            <typeRef typeId="struct1"/>
+        </inputParam>
+    </action>
+</actionModel>

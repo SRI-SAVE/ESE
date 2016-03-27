@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+<?Pub Inc?>
+<section id="spine_module">
+<title>Spine</title>
+<section>
+<title>Introduction</title>
+<figure>
+<title>Spine Module View</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/SpineJMSSpineModuleView.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+<para>             The Spine provides communication services to the
+components of CPOF-PAL.             The Spine Interface is a communication
+API that defines the connunication contract             for the PAL
+components (PAL Bridge, Lumen, Lapdog). This specifies how they can
+            communicate with each other. Implementations of the Spine
+Interface, such as the             JmsSpine, are designed to hide
+the implementation details.             This ensures that changing
+from one Spine Interface Implementation to another             will
+have no impact on the PAL component usage of the Spine interface.
+            The JmsSpine implementation is based on Java Messaging
+Service (JMS)             and uses the Apache Active MQ package. 
+       </para>
+<section>
+<title>Context Diagram</title>
+<figure>
+<title>Context Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PAL_Architecture.png" scale="100"/></imageobject>
+</mediaobject>
+</figure>
+</section>
+</section>
+            <section>
+                        <title>Structural View</title>
+            <section>
+<title>Element Catalog</title>
+<section>
+<title>Elements and their properties</title>
+<section>
+<title>Message Type Details</title>
+<para>The core of the Spine Interface is the Message Types that it
+supports.                     These are used by the PAL components
+to send messages that are                     intended for other specific
+PAL components. Each PAL component knows                     which
+topics it should subscribe to in order to receive the messages   
+                 it requires to perform its role. Each topic, or message
+type, has a                     required payload. This payload contains
+the information specific to                     that topic type. The
+payload, in most cases, is an instance of one of                 
+   the classes listed in the Message Hierachy section.           
+     </para>
+<table>
+<title>Spine Topic List</title>
+<tgroup cols="3">
+<thead>
+<row><entry>Topic</entry><entry>Payload</entry><entry>Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Learn Request</entry><entry>LearnRequest class</entry>
+<entry>This message is sent from the PAL Bridge to Lapdog to ask it
+to                                     learn a procedure</entry></row>
+<row><entry>Learn Result</entry><entry>LearnResult class</entry><entry
+>This message is in response to the Learn Request message and    
+                                is send from Lapdog to the PAL Bridge
+with the learned procedure. </entry></row>
+<row><entry>Execute Request</entry><entry>ExecuteRequest class</entry>
+<entry>This message is send from the PAL Bridge to Lumen, or, from
+Lumen                                     to the CPOF to ask the receiver
+to execute a request</entry></row>
+<row><entry>Execution Status</entry><entry>A subclass of the ExecutionStatus
+class</entry><entry>This message is sent from CPOF to Lumen, or, from
+Lumen to CPOF                                     to inform the receiver
+as to how the execution of a a requested                         
+           execution is progressing. This may be STARTED, SUCCEEDED
+or CANCELLED                                     or ERROR</entry></row>
+<row><entry>Cancel</entry><entry>CancelRequest class</entry><entry
+> This message is sent from CPOF to Lumen, or, from Lumen to CPOF
+                                    to inform the receiver to cancel
+the execution of a previously                                    
+requested execution.</entry></row>
+<row><entry>Type Query</entry><entry>TypeQuery class</entry><entry
+>This message is sent from Lumen or LAPDOG to CPOF to request a  
+                                  types definition. This will be preceeded
+by a learn request or an                                     execution
+request from CPOF.</entry></row>
+<row><entry>TypeResult</entry><entry>TypeResult class</entry><entry
+>This message is sent from CPOF to Lumen or LAPDOG in response to
+                                    a Type Query message.</entry></row>
+<row><entry>Custom PAL Bridge Message</entry><entry>Any Java Object</entry>
+<entry>This is a message channel that any client can use to send messages
+                                    to the PAL Bridge. The PAL Bridge
+client at a minimum will be listening on this                    
+                topic for messages. The payload is any Object that
+is Serializable. The                                     PAL Bridge
+is responsible for deserializing the object and understanding    
+                                its contents.</entry></row>
+<row><entry>Custom LAPDOG Message</entry><entry>Any Java Object</entry>
+<entry>This is a message channel that any client can use to send messages
+                                    to LAPDOG. The LAPDOG client at
+a minimum will be listening on this                              
+      topic for messages. The payload is any Object that is Serializable.
+                                    LAPDOG is responsible for deserializing
+the object and understanding                                     its
+contents.</entry></row>
+<row><entry>Custom Lumen Message</entry><entry>Any Java Object</entry>
+<entry>This is a message channel that any client can use to send messages
+                                    to Lumen. The Lumen client at
+a minimum will be listening on this                              
+      topic for messages. The payload is any Object that is Serializable.
+Lumen                                     is responsible for deserializing
+the object and understanding                                     its
+contents.</entry></row>
+<row><entry>Custom Shell Message</entry><entry>Any Java Object</entry>
+<entry>This is a message channel that any client can use to send messages
+                                    to the Shell. The Shell client
+at a minimum will be listening on this                           
+         topic for messages. The payload is any Object that is Serializable.
+The                                     Shell is responsible for deserializing
+the object and understanding                                     its
+contents.</entry></row>
+</tbody>
+</tgroup>
+</table>
+</section>
+</section>
+<section>
+<title>Relations and their properties</title>
+<para>The primary relation displayed in the Primary Presentation is
+the uses                 relation, which is a specialization of the
+depends-on relation. This                 relation asserts that the
+correctness of one element depends on that of                 another
+element. Generalization is also shown where appropriate, asserting
+                one element is a subclass of another. Realizations
+are shown where                 appropriate for contextual establishment
+of program flow; it should be                 noted that not all realizations
+are displayed where they do not help with                 the understanding
+of flow control for the interactions.</para>
+</section>
+<section>
+<title>Element interface</title>
+<section>
+<title>The Spine Interface</title>
+<para>                     The Spine Interface has three methods,
+subscribe(), send() and                     getNextUID(). The JmsSpine
+which implements the Spine Interface must                     satisfy
+these three methods in order to be considered a valid            
+        implementation. The subscribe() method is called by a client
+that                     wishes to be called back, when a message
+of the type specified is                     sent into the Spine.
+The send() method allows clients to inject                     messages
+of a specific type into the Spine. The getNextUid()              
+      method ensures that each                     PAL component that
+injects messages into the Spine Interface,                     uses
+a unique TransactionUID when sending a new                     message
+- the Spine Interface manages the creation of these UID's. For a 
+                   system component such as Lumen to use the Spine
+Interface, it first creates                     an instance of the
+Spine Interface Implementation, tells it the types of            
+        messages it would like to receive and then sends messages
+into the system                     through that same instance of
+the Spine Interface Implementation.                     In the diagrams
+that follow, the Spine Interface is represented as a single module.
+                    In the case of the JMSSpine implmentation, each
+module in the system maintains                     its own instance
+of the JmsSpine.                     These JmsSpine instances all
+use a common Message Broker to send and receive                  
+  messages.                 </para>
+</section>
+<section>
+<title>Message Hierarchy</title>
+<para>                     The types of messages that a client of
+the the Spine Interface can send                     through the system
+is shown in the class diagram below. The                     Spine
+Interface uses the class type of the received message to determine
+                    which Message type it belongs to. This in turn
+is used to decide                     if a PAL component should be
+given the message that was posted into the                     Spine
+Interface, i.e. did the PAL component subscribe to that          
+          message type. Note that all message objects are extensions
+of                     the BroadcastMessage class - this is because
+all the messages                     are delivered on a topic, not
+a channel (broadcast, not point to point).                 </para>
+<figure>
+<title>Spine Message Hierarchy</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/SpineMessageTypesDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Message Type Subscription</title>
+<para>This diagram shows which system components are creators and
+consumers                     of the various message types.</para>
+<figure>
+<title>Message Type Subscriptions Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/SpineMessageTypeSubscriptions.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Transaction UID</title>
+<para>The TransactionUID, an instance of which is associated with
+each Spine message,                     is responsible for tracking
+and identifying interactions between the PAL                     components.
+When an interaction is initiated, such as a Learn interaction,   
+                 for example, The PAL Bridge will create a LearnRequest
+object and give it                     a TransactionUID that uniquely
+identifies this request. The TranactionUID                     consists
+of an integer and a PAL Component identifier. When the LAPDOG Mediator
+receives                     the Learn Request and processes a response,
+it will use the TransacionUID                     given to it by the
+PAL Bridge. This allows the PAL Bridge to distinguish            
+        between multiple responses. The TransactionUID is included
+in all Spine messages.                     To compliment this, there
+are various subclasses of the Message class                     (see
+the Message Class Diagram above for more details)                
+    that allow extra information about the request or respone to be
+embedded in the                     message, such as parentUID, if
+the current request is a nested request                     for instance.
+                </para>
+</section>
+</section>
+<!-- Include table and brief intro to elements in the top-level PAL architecture -->
+</section>
+            </section>
+<section>
+<title>Behavioral View</title>
+<para>The JmsSpine, since it is the message-passer for CPOF-PAL, plays
+a role in                 most of the principal system operations,
+which are shown in the following sequence                 diagrams.
+            </para>
+<figure>
+<title>Sequence Diagram Key</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALSequenceDiagramKey.png" scale="60"/></imageobject>
+</mediaobject>
+</figure>
+<section>
+<title>Learning Sequence</title>
+<para>This diagram shows the interactions between CPOF and LAPDOG
+during                     the learning process. The TransactionId's
+for each message are included                     in braces. For instance,
+(Lumen:1) is the first message generated by Lumen.               
+     It is used to identify future components of this exchange.</para>
+<figure>
+<title>Learning Sequence Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALLearningSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Successful Execution</title>
+<para>This diagram shows the interactions between CPOF and Lumen during
+                    the procedure execution process. The TransactionId's
+for each message                     are included in braces. For instance,
+(PALBridge:2) is the first message                     generated by
+the CPOF Bridge. It is used to identify future components        
+            of this exchange. In this case the execution is successful.</para>
+<figure id="spine-success-exec-seq">
+<title>Successful Execution Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALSuccessfulExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Failed Execution</title>
+<para>This diagram shows the interactions between CPOF and Lumen during
+                    the procedure execution process. The TransactionId's
+for each message                     are included in braces. For instance,
+(PALBridge:3) is the first message                     generated by
+the CPOF Bridge. It is used to identify future components        
+            of this exchange. In this case the execution fails.</para>
+<figure id="spine-failed-exec-seq">
+<title>Failed Execution Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALFailedExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Cancelled Execution</title>
+<para>This diagram shows the interactions between CPOF and Lumen during
+                    the procedure execution process. The TransactionId's
+for each message                     are included in braces. For instance,
+(PALBridge:4) is the first message                     generated by
+the CPOF Bridge. It is used to identify future components        
+            of this exchange. In this case the execution is cancelled.</para>
+<figure id="spine-cancel-exec-seq">
+<title>Cancelled Execution Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALCanceledExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Nested Execution</title>
+<para>This diagram shows the interactions between CPOF and Lumen during
+                    the procedure execution process. The TransactionId's
+for each message                     are included in braces. For instance,
+(PALBridge:5) is the first message                     generated by
+the CPOF Bridge. It is used to identify future components        
+            of this exchange. In this case the execution is nested
+and successful.</para>
+<figure id="spine-nested-exec-seq">
+<title>Nested Execution Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALNestedExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+<figure>
+<title>Nested Execution Diagram Continued</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALNestedExecutionSequenceDiagramContinued.png"
+scale="50"/></imageobject></mediaobject>
+</figure>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+</section>
+            
+<section>
+<title>Quality Attributes</title>
+<section>
+<title>JmsSpine Functionality</title>
+<para>The JmsSpine is the messaging center for all components of the
+PAL system.                 Currently, all messages are broadcast
+(posted to a topic, in JMS speak).                 Clients use this
+module by subscribing with interest in particular message        
+        types. When a message of that topic arrives in the Spine,
+the message is                 sent to the handler that the client(s)
+used to subscribe for that message                 type. It is the
+responsibility of the clients to ignore their own messages       
+         if they are subscribed on topics into which they send messages.
+For example,                 both Lumen and the PAL Bridge send execution
+requests into the system but                 they are only interested
+in messages from each other, not themselves, so                 they
+must filter their own out. When a Client sends a message into the
+                Spine, the message type is examined by using the isInstance()
+method.                 Depending on the type of the message, it is
+sent on a particulr topic or                 rejected if it is not
+recognised.             </para>
+<para>The JmsSpine has two operation modes,                 REMOTE
+and LOCAL. The LOCAL mode creates and hosts the Jms Message Broker,
+                so there can only be one instance on a machine (it
+uses 127.0.0.1) that                 can be running in LOCAL mode.
+Attempts to create a second LOCAL instance                 will generate
+a SpineException. The REMOTE mode is used to allow clients       
+         in the same or other JVM to communicate and use the Jms Message
+Broker                 managed by the LOCAL Spine. The LOCAL instance
+MUST be started before the                 REMOTE instance or it will
+throw a SpineException.             </para>
+<para>In the future, the use of localhost to manage the Message Broker
+will likely                 have to be addressed if the system is
+deployed on a multi system setup. This                 will also require
+the opening of ports on these machines to allow Jms Messages to  
+              pass between them.</para>
+</section>
+<section>
+<title>Adding New JmsSpine Messages</title>
+<para>The JmsSpine provides for customized messages to be sent between
+the                 PAL Components. These custom message types do
+not require a specific                 message payload. Any serializable
+Java object is acceptable. However, the                 receiving
+PAL component must know how to deserialize and handle the custom 
+               payload.             </para>
+<para>In the future, to add new message types to the JmsSpine, the
+code will need                 to be altered to handle new payload
+types. This is due to the nature of the message                 handling.
+When a message arrives in the JmsSpine for delivery, the instance
+of the                 payload is examined to determine its message
+type. New message type handling code will                 be required
+to exhibit new behavior.</para>
+<para>The code that would need to change to handle a new message type
+is mostly isolated                 to two places in the JmsSpine package.
+A new message type class will need to be created                 to
+represent                 the new message type. This allows the message
+handling code to uniquely identify that                  message type
+when it arrives. A new message type enumeration<?Pub Caret?> instance
+will also need                 to be added. Outside the JmsSpine package,
+the client code that sends the new message                 type and
+the client code that subscribes to the new message type will need
+to use the                 new message type object and message type
+enumeration respectively.</para>
+</section>
+</section>
+<section>
+<title>Architecture Background</title>
+<para>The JMS protocol was chosen for the messaging layer due to the
+need for message         order delivery integrity. The previous message
+delivery system allowed messages from         individual PAL components
+to become chronologically compromised as they travelled through  
+      the messaging layer, causing havoc. The JMS protocol guarantees
+that any two messages         posted into the messaging layer from
+one client are guaranteed to be delivered in the         order they
+are sent.         </para>
+</section>
+<section>
+<title>Other information</title>
+<section>
+<title>Affected Subsytems</title>
+<para>None.</para>
+</section>
+<section id="references" xreflabel="References">
+<title>References</title>
+<para>None.</para>
+</section>
+</section>
+<section>
+<title>Related Views</title>
+<para>None.</para>
+</section>
+</section>
+<?Pub *0000021329?>

@@ -1,0 +1,55 @@
+What is this file for?
+======================
+This file is a readme that describes how to set up your environment
+for building packaged Adept installers for the Windows and
+Mac environment. A different packaging tool is used for each of
+the platforms.
+
+
+Windows Packager
+================
+The tool used to create the Windows Adept installer is Nullsoft
+(NSIS - Nullsoft Scriptable Install System). Nullsoft is a Windows
+only application, so do not go any further if you are on a non
+Windows platform!                                                              
+
+0) Run tasklearning/adept/installer> ant setup
+1) Download the Nullsoft software from http://nsis.sourceforge.net/Main_Page
+and install the application.
+2) Put the install directory for Nullsoft on your PATH environment
+variable (or enter the entire path to the makensis.exe
+executable when generating the installer)
+3) At a dos prompt, cd to the 'trunk\Adept\installer\' directory where
+'Adept' is the directory that contains this project.
+4) Run the following command:
+
+  > makensis installer.nsi
+
+This will grab the appropriate jars and script files and produce an
+installer.exe. When run, the installer.exe will check for required
+software, prompt the user to download and install it if necessary, and
+then install Adept.
+The installer.nsi file is the script that specifies how to build the installer,
+edit this using any test editor to make adjustments to how it works.
+
+
+Macintosh Packager
+==================
+The tool used to create the Macintosh Adept installer is IzPack. IzPack
+can be installed on any platform to create an installer for any platform.
+Currently, only the mac installer has been scripted but it would be
+trivial to add support for other platforms (all that is needed is the
+correct shortcut/startup script for the target platform).
+
+1) Run tasklearning/adept/installer> ant izpack
+
+This will grab the appropriate jars and script files and produce an
+installer.jar. When run, as follows:
+
+  > java -jar dist/adept-installer.jar
+
+the installer.jar tells the user what third party applications are required
+but will not detect if they are present or not, or prompt them to download 
+them - this will be added at a later time.
+The installer.xml file is the script that specifies how to build the installer,
+edit this using any text editor to make adjustments to how it works.

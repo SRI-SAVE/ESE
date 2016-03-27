@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^2.6EquivalentTypes'
+ execute:{
+  do 'arda^1.0^CreateString'('$output 1');
+  do 'arda^1.0^CreateArdaString'('$output 2');
+  do 'arda^1.0^CreateEquivalentString'('$output 3');
+  do 'arda^1.0^UseArdaString'('$output 2');}
+ properties:{expected_output:"CREATE STRING\nCREATE STRING\nCREATE STRING\nUSE STRING: string\n", isTransient:"true"}</bodySource>
+</TaskModel>

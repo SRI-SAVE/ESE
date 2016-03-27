@@ -1,0 +1,1 @@
+java -Xmx800m -jar pal-ui-adept.jar

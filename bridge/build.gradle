@@ -1,0 +1,108 @@
+/*
+ * Copyright 2016 SRI International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// $Id: build.gradle 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+description = "Presents a task learning API to an application"
+
+apply plugin: 'SriJava'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+    test {
+        java {
+            srcDir 'src_test'
+        }
+        resources {
+            srcDir 'src_test'
+        }
+    }
+    test2 {
+        java {
+            srcDir 'src_test2'
+        }
+        resources {
+            srcDir 'src_test2'
+        }
+    }
+}
+
+archivesBaseName = "pal-bridge"
+
+// Test code needs to compile against test2.jar, but not run against it.
+task test2Jar(type: Jar, dependsOn: test2Classes) {
+    archiveName = 'test2.jar'
+    destinationDir = buildDir
+    from sourceSets.test2.output
+}
+dependencies {
+    testCompile files(test2Jar.archivePath)
+}
+compileTestJava.dependsOn(test2Jar)
+test.doFirst {
+    classpath = classpath - files(test2Jar.archivePath)
+}
+// Make a configuration that references test2.jar so we can exclude it
+// from Eclipse classpath generation.
+configurations {
+    test2
+}
+dependencies {
+    test2 files(test2Jar.archivePath)
+}
+eclipse.classpath {
+    minusConfigurations += [ configurations.test2 ]
+}
+
+task xjc {
+    doLast {
+        // Delete the old generated java files.
+        def files = fileTree("src") {
+            include "com/sri/pal/jaxb/*.java"
+        }
+        delete(files)
+
+        // Regenerate them from the XSD.
+        // xjc -d src -p com.sri.pal.jaxb action_model.xsd
+        exec {
+            executable "xjc"
+            setArgs(["-d", "src", "-p", "com.sri.pal.jaxb",
+                     "src/com/sri/pal/ActionModel.xsd"])
+        }
+    }
+}
+
+docZip {
+    into('doc') {
+        from file('doc')
+    }
+}
+
+dependencies {
+    compile project(':lapdog-mediator')
+    source project(path: ':lapdog-mediator', configuration: 'source')
+    docs project(path: ':lapdog-mediator', configuration: 'docs')
+    testCompile project(path: ':common', configuration: 'testCompile')
+    testCompile project(path: ':spine', configuration: 'testCompile')
+    testCompile(group: 'org.easymock', name: 'easymock', version: '3+')
+    testRuntime(group: 'sri', name: 'lapdog-agave', version: 'latest.integration')
+}

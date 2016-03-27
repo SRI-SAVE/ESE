@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd" [
+<!ENTITY % xinclude SYSTEM "http://www.docbook.org/xml/4.4/xinclude.mod" >
+%xinclude;
+<!ENTITY % local.common.attrib "xml:base CDATA #IMPLIED" >
+]>
+
+<!-- <!ENTITY % cdrl.ent PUBLIC "-//CDRL//ENTITIES//EN" "cdrl.ent"> -->
+<!-- %cdrl.ent; -->
+<!-- ]> -->
+
+<book>
+<title>PAL Task Learning for CPOF</title>
+
+<!-- These tags provide "front matter" for the book, like the
+     title page and table of contents -->
+
+<!-- <bookinfo><productname>TODO</productname> -->
+<!-- <pubsnumber>TODO</pubsnumber> -->
+<!-- <corpname>TODO</corpname>TODO -->
+<!-- </bookinfo> -->
+<toc></toc>
+
+
+<!-- A book consists of a set of chapters. Some of the chapters in the
+     SDD document are fully complete files on their own. We insert them
+     via the XInclude mechanism. We have not provided complete
+     chapters here, but you can see the content in the PDF.
+     They are the "boilerplate" for the document, and are
+     included like this:
+-->
+
+
+<!-- A chapter can also be constructed of a set of sections. This chapter
+     is the heart of the SDD document, and it is constructed by including
+     (again, with Xinclude) a set of individual sections.
+
+     This is how the material you provide will be included in the larger
+     document. When you deliver the files to us, we will place them into
+     our CMS, and then write the include tags that will allow them to
+     be processed with material coming from a variety of sources.
+
+     Each view you provide to us should consist of a directory containing
+     * The XML view document with a name like
+       "cpof_add_module_view_<moduleName>.xml 
+     * A subdirectory (called "graphaics") containing the graphics referenced
+       by the view document.
+
+     (We have included the directory for the cpof_sdd_module_view_map_provider
+     as an example. See the "sample_view_package" directory for details.
+     That is the view you see in the PDF included here.)
+
+     As you can see from the Xinclude statements, the directory structure
+     mimics the package structure of the source code. The view documents
+     are included in an "xml" subdirectory of the source tree, and the
+     "xml" directory contains a "graphics" subdirectory. We have found
+     this to be a useful convention for maintaining consistency, so
+     we recommend it.
+-->
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../PAL-outline.xml"/>
+
+<chapter>
+<title>Views</title>
+
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../bridge/ModuleView/bridge-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../spine/ModuleView/spine-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../lapdog/ModuleView/lapdog-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../lumen/ModuleView/lumen-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../lapdog-mediator/ModuleView/lapdog-mediator-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../lumen-mediator/ModuleView/lumen-mediator-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../ctr/ModuleView/ctr-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../editor/ModuleView/editor-module.xml"/>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../../shell/ModuleView/shell-module.xml"/>
+
+</chapter>
+
+<!-- A book can also include appendices and "end matter" like glossaries,
+     indices, and so on. They are also included using Xinclude:
+
+     We have provided copies of the glossary and list of acronyms so you
+     can see (and use) the terms that are already defined. If you wish
+     to add terms, please see the "to_add" files for instructions.
+-->
+
+<xi:include href="../PAL-glossary.xml"/>
+
+<!-- And that's the end of the book file. -->
+</book>

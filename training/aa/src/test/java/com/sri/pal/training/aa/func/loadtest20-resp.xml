@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<response>
+    <id>resp-86</id>
+    <exercise_id>ex-1</exercise_id>
+    <task_response>
+        <demo>$demonstration {
+  'LoadTest^1.0^selectAll' "4876259815374874111", ["-853797892032814018", "9045626642373050884", "-4457598077793154225"];
+  'LoadTest^1.0^removeFromContainer' "-853797892032814018", "-4457598077793154225";
+  'LoadTest^1.0^removeFromContainer' "-4457598077793154225", "-8087249939387254325";
+  'LoadTest^1.0^removeFromContainer' "-4457598077793154225", "-4457598077793154225";
+  'LoadTest^1.0^addToContainer' "-4457598077793154225", "-8385925302281719600";
+  'LoadTest^1.0^selectAll' "5266412757219118428", ["1871889285729093581", "2667119328902452966", "-2571918618936147587"];
+  'LoadTest^1.0^removeFromContainer' "-4457598077793154225", "-6898699644808977700";
+  'LoadTest^1.0^selectAll' "1871889285729093581", ["-5012826878949537587", "-274598422434978183", "-7079397373284705020"];
+  'LoadTest^1.0^selectAll' "-853797892032814018", ["1871889285729093581", "2667119328902452966", "-2571918618936147587"];
+  'LoadTest^1.0^makeItem' "1799026257066951872", "-974498088761034485";
+  'LoadTest^1.0^removeFromContainer' "-8602416628938151655", "-974498088761034485";
+  'LoadTest^1.0^removeFromContainer' "4257647455298920090", "4257647455298920090";
+  'LoadTest^1.0^removeFromContainer' "-853797892032814018", "-4457598077793154225";
+  'LoadTest^1.0^removeFromContainer' "-5012826878949537587", "-5012826878949537587";
+  'LoadTest^1.0^makeItem' "6715877816188970309", "8811496575267576139";
+  'LoadTest^1.0^selectAll' "-2571918618936147587", ["8139487390662357944", "9108021103002326471", "4357583864714276487"];
+  'LoadTest^1.0^addToContainer' "-5012826878949537587", "-4457598077793154225";
+  'LoadTest^1.0^removeFromContainer' "-8602416628938151655", "2189906524380387779";
+  'LoadTest^1.0^makeItem' "1871889285729093581", "2896326783745813296";
+  'LoadTest^1.0^selectAll' "4357583864714276487", ["4417955631890825125", "6753542623302162182", "-2854815101018550018"];
+  'LoadTest^1.0^makeItem' "8139487390662357944", "-4558365095374206121";
+  'LoadTest^1.0^selectAll' "-853797892032814018", ["2896326783745813296", "-3986725786519145898", "9006646159497223584"];
+  'LoadTest^1.0^makeItem' "-7079397373284705020", "-5734534202924190951";
+  'LoadTest^1.0^selectAll' "4417955631890825125", ["2624462170766369472", "-6593681352277263315", "2855149209273122109"];
+  'LoadTest^1.0^addToContainer' "2855149209273122109", "-2571918618936147587";}
+ properties:{}</demo>
+        <seconds_elapsed>0</seconds_elapsed>
+    </task_response>
+</response>
+<!-- Change param #2 of step #9 from [4257647455298920090, 8597767935748282882, -8602416628938151655] to [1871889285729093581, 2667119328902452966, -2571918618936147587] -->
+<!-- Change param #2 of step #19 from 38420132861891810 to 2896326783745813296 -->

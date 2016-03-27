@@ -1,0 +1,6 @@
+RELEASE NOTES
+
+This build of the PAL UI Editor and possibly other UI components is intended for use 
+with the Java FX 2.0 runtime. It can be obtained here:  
+
+http://www.javafx.com/downloads

@@ -1,0 +1,1232 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 12 (filtered)">
+<title>Adept Procedure Editor Guide</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:24.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#345A8A;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#4F81BD;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#4F81BD;}
+h4
+	{mso-style-link:"Heading 4 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.6in;
+	margin-bottom:.0001pt;
+	text-indent:-.6in;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#4F81BD;
+	font-style:italic;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:12.0pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:24.0pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Cambria","serif";}
+p.MsoTocHeading, li.MsoTocHeading, div.MsoTocHeading
+	{margin-top:24.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#365F91;
+	font-weight:bold;}
+p.Style2, li.Style2, div.Style2
+	{mso-style-name:Style2;
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Calibri","sans-serif";
+	color:black;
+	font-style:italic;}
+span.Heading4Char
+	{mso-style-name:"Heading 4 Char";
+	mso-style-link:"Heading 4";
+	font-family:"Calibri","sans-serif";
+	color:#4F81BD;
+	font-weight:bold;
+	font-style:italic;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Calibri","sans-serif";
+	color:#345A8A;
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Calibri","sans-serif";
+	color:#4F81BD;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Calibri","sans-serif";
+	color:#4F81BD;
+	font-weight:bold;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+.MsoChpDefault
+	{font-size:12.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<h1><a name="_Toc306798624">Adept Procedure Editor Guide</a></h1>
+
+<p class=MsoTocHeading>Table of Contents</p>
+
+<p class=MsoToc1><a href="#_Toc306798624">Adept Procedure Editor Guide<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798625">Overview<span style='color:windowtext;
+display:none;text-decoration:none'>... </span><span
+style='color:windowtext;display:none;text-decoration:none'>1</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798626">Key Benefits<span style='color:windowtext;
+display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>2</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798627">A Tour of the Procedure Editor<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>2</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798628">Opening Procedures<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>3</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798629">Exploring Procedures<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>5</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798630">General Editing Tools<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>7</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798631">A Simple Edit Scenario<span
+style='color:windowtext;display:none;text-decoration:none'>.. </span><span
+style='color:windowtext;display:none;text-decoration:none'>8</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798632">Rewiring Values in Steps<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>11</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798633">Editing Procedure Inputs<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>13</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798634">Adding Steps (Actions) from a Library<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>15</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798635">Moving Steps<span style='color:windowtext;
+display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>18</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798636">Deleting Steps<span style='color:
+windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>19</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798637">Warnings, Errors, and Fixes<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>20</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798638">Loops<span style='color:windowtext;
+display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>21</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798639">Structures and Collections<span
+style='color:windowtext;display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>24</span></a></p>
+
+<p class=MsoToc3><a href="#_Toc306798640">Limitations<span style='color:windowtext;
+display:none;text-decoration:none'>. </span><span
+style='color:windowtext;display:none;text-decoration:none'>25</span></a></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc306798625">Overview</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Procedure Editor allows Adept users to view, edit and
+create procedures.  Without the ability to visualize a procedure, a user may struggle
+to comprehend the flow of a procedure, its inputs and outputs and its overall effect
+on client applications. The Editor addresses these problems by presenting
+procedures in a human-readable manner. Once a user is able to understand his or
+her procedure, they may wish to modify the procedure to better match their
+intent or to conform to changing requirements. The Editor addresses these
+needs. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=904 height=602
+src="images/editor_guide/image001.png"></p>
+
+<p class=MsoNormal><i>The Procedure Editor opened to the ‘Resize’ procedure
+from the Adept User Guide.</i></p>
+
+<h3><a name="_Toc306798626">Key Benefits</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Procedure Editor allows procedures to be understood and
+modified.  This provides the following key benefits:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>The ability to understand how a procedure will affect client
+applications</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>The ability to modify a learned procedure to better match the user’s
+intent</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>The ability to maintain a procedure as requirements change</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>The ability to derive new procedures from existing procedures without
+demonstration</p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>The ability to share and collaboratively develop procedures</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>These benefits are facilitated by specific features in the
+Editor, each of which is discussed in subsequent sections of this document. </p>
+
+<h3><a name="_Toc306798627">A Tour of the Procedure Editor</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The following image depicts the main components of the
+Procedure Editor application. A key is provided below the image that identifies
+each component and describes its purpose.</p>
+
+<h3>&nbsp;</h3>
+
+<p class=MsoNormal><img width=910 height=718
+src="images/editor_guide/image002.png"></p>
+
+<p class=MsoNormal><i>Main components of the Procedure Editor.</i></p>
+
+<ol start=1 type=1>
+ <li class=MsoNormal><i>The Toolbar</i>: Allows users to open procedures,
+     create new procedures, save changes and undo/redo edit operations. </li>
+ <li class=MsoNormal><i>The Library</i>: Organizes all actions and procedures
+     that could be added as a new step during an edit session. </li>
+ <li class=MsoNormal><i>The Info. Panel</i>: Provides detailed information
+     about the action currently selected in the Library, including its name,
+     description and information regarding its inputs and outputs.</li>
+ <li class=MsoNormal><i>The Procedure Header</i>: Displays the name and
+     description of the currently open procedure. Displays and allows for
+     configuration of the procedure’s inputs.</li>
+ <li class=MsoNormal><i>The Procedure Body</i>: Shows the steps taken by a
+     procedure. Allows for steps to be added, deleted or moved.</li>
+ <li class=MsoNormal><i>The Value Panel</i>: Lists the variables used in a
+     procedure and provides discovery mechanisms.</li>
+ <li class=MsoNormal><i>The Procedure Footer</i>: Shows the published results of
+     a procedure and allows for their modification.</li>
+</ol>
+
+<h3><a name="_Toc306798628">Opening Procedures</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Procedures are opened using the “Open” button on the
+Editor’s main toolbar. The “Open” button also allows for the creation of new
+procedures and procedure import. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=316 height=142
+src="images/editor_guide/image003.png"></p>
+
+<p class=MsoNormal><i>The options available from the “Open” button.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Selecting to “Open” a procedure will cause a new window
+called the “Procedure Browser” to open. The Procedure Browser displays all
+known procedures and allows for one to be selected for opening in the main
+Editor window. Several management functions are also available from the
+procedure browser’s “Actions” button: delete, rename, export and import of
+procedures. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=673 height=436 id="Picture 20"
+src="images/editor_guide/image004.jpg"></p>
+
+<p class=MsoNormal><i>The Procedure Browser window. </i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Upon selecting a procedure and pressing the “Open” button,
+the selected procedure will open in the main Editor window.  The <i>Values
+Panel</i> on the right will become populated with the variables used by the
+procedure.  Note that the Editor window can be resized to allow for more space
+for the procedure’s visualization.  Users may wish to hide the <i>Library Panel
+</i>on the left by clicking the “Hide Library” button on the toolbar.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=379 height=214
+src="images/editor_guide/image005.jpg"></p>
+
+<p class=MsoNormal><i>The “Hide Library” Button.</i></p>
+
+<h3><a name="_Toc306798629">Exploring Procedures</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Adept users have several tools available to aid in exploring
+a procedure.  The title, description and inputs to a procedure are displayed
+clearly in the <i>Procedure Header</i> and serve as the primary introduction to
+a procedure. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=576 height=288 id="Picture 1"
+src="images/editor_guide/image006.jpg"></p>
+
+<p class=MsoNormal><i>A close-up of the header of the ‘Resize’ procedure.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Users can then scroll through the individual steps taken by
+a procedure and inspect the details of each step. Each step has a title which
+will contain the most useful inputs to that step. Each step furthermore has an
+“Information” button which will expand the details of that step including a formal
+name, description and any inputs not mentioned in the title. If the step
+produces any outputs they are listed at the bottom of the step, regardless of
+whether the Information panel is expanded.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=525 height=109 id="Picture 2"
+src="images/editor_guide/image007.png"></p>
+
+<p class=MsoNormal><i>An unexpanded step from the ‘Resize’  procedure. Notice
+the Information button (marked by the red arrow).</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal><i><img width=513 height=150 id="Picture 3"
+src="images/editor_guide/image008.png"></i></p>
+
+<p class=MsoNormal><i>The same step with its Information Panel expanded.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Each procedure and step input is represented by a <i>variable</i>,
+which has a name (e.g., file_1) and a <i>value</i> (e.g., tree.png). Procedure
+and step outputs are similarly represented by variables. Each variable is
+clickable to reveal a menu of options for that particular variable. Every
+variable provides an option to “Highlight all occurrences” of the variable
+within the procedure. This option is useful when attempting to understand a
+variable’s role in a procedure as any visible occurrences of the variable will
+become highlighted and any steps that reference the variable will become
+selected. The latter behavior of step selection is useful in the event that the
+variable is referenced by a step but the reference is either hidden by the
+Information panel for that step, or because the variable reference is nested
+within a structure or collection. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=511 height=132 id="Picture 4"
+src="images/editor_guide/image009.png"></p>
+
+<p class=MsoNormal><i>The “Highlight all occurrences” option that appears on
+all variables.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal><i><img width=551 height=289 id="Picture 6"
+src="images/editor_guide/image010.png"></i></p>
+
+<p class=MsoNormal><i>Upon selecting “Highlight all occurrences”, references to
+image_1 become highlighted. Notice that step 2 is highlighted because of a
+reference to image_1 hidden within the Information Panel.</i></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Another useful tool for exploring procedures is the <i>Values
+Panel</i>, which illustrates all of the variables that appear in the procedure
+either as procedure inputs or outputs from individual steps. This panel allows
+variables to be accessed without finding references to them within the
+procedure. The buttons in the <i>Values Panel </i>provide Highlight
+functionality, as well as the ability to drill-down to the origin of a variable
+or rename it. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=161 height=217 id="Picture 7"
+src="images/editor_guide/image011.png"></p>
+
+<p class=MsoNormal><i>The menu options available for variables in the Values
+Panel.</i></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc306798630"><span style='font-size:13.0pt'>General Editing
+Tools</span></a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Before describing the specific editing features provided by
+the Editor, it is necessary to describe the general mechanisms it provides to
+make editing easier. A familiar feature to most users is the ability to undo
+and redo their edits as necessary. This is accomplished in the Editor using the
+Undo and Redo buttons on the main <i>Toolbar. </i>Hovering the mouse over these
+buttons will provide a description of the action that will be retracted or
+reenacted. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=466 height=108 id="Picture 8"
+src="images/editor_guide/image012.png"></p>
+
+<p class=MsoNormal><i>The Undo and Redo buttons.</i></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Editor also makes it easy to save a backup of a procedure
+before making any edits by clicking the “Save As” button. Clicking this button allows
+the procedure to be saved under a new name. When the save dialog is dismissed
+by clicking the “Save” button, the Editor will be opened to a newly created
+copy of the procedure.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=597 height=398 id="Picture 9"
+src="images/editor_guide/image013.png"></p>
+
+<p class=MsoNormal><i>The Save Procedure dialog triggered by the “Save As”
+button.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Modified procedures can also be saved under new names using
+the “Save As” button. This makes it easy to test changes without affecting the
+baseline. This feature also makes it easy to derive new procedures from
+existing procedures. </p>
+
+<h3><a name="_Toc306798631">A Simple Edit Scenario</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Exploring a procedure assists in understanding it, which
+makes it possible to edit the procedure to achieve a wide range of goals. Some
+edit operations supported by the Editor affect the operation of a procedure
+while others serve to increase the readability of a procedure. A readable
+procedure is generally easier to edit and share with others. Thus, readability
+edits serve as a good introduction to editing. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The editor provides three editing functions in support of
+readability:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><i>Procedure Rename:</i> Renames a procedure as well as any references
+to it from other procedures. A good name briefly describes a procedure and
+distinguishes it from similar procedures.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><i>Procedure Description Editing:</i> Allows a user to specify a textual
+description for a procedure. Good descriptions will describe the intent of the
+procedure as well as an overview of its operations. </p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><i>Variable Rename:</i> Allows variables to be renamed to better reflect
+their purpose in the procedure. Although Adept uses information from the action
+model to generate appropriate variable names, a user may be able to provide a
+more descriptive name.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The readability of the ‘Resize’ procedure from the Adept
+User Guide could easily be improved. First, let’s rename it ‘Resize Image’ so
+that other users know what is being resized. A procedure can be renamed from
+the Procedure Browser window that opens when the “Open” button on the main <i>Toolbar</i>
+is pressed. A quicker way to rename a procedure is using the rename link that
+appears in the procedure header. Clicking the rename link will open a dialog
+similar to the one triggered by the “Save As” button. However, rather than
+creating a copy, the rename link will rename the procedure in place. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=428 height=270 id="Picture 11"
+src="images/editor_guide/image014.jpg"></p>
+
+<p class=MsoNormal><i>The rename link, which opens the “Rename Procedure”
+dialog.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Note that the rename is immediately reflected in the
+application window title and the procedure header. Renaming a procedure
+implicitly saves it, and if the procedure being renamed is referenced by other
+procedures as a step, those references are automatically updated. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Next, let’s rename the input variables “file_1” and “file_2”
+to the more descriptive “input_file” and “output_file”. Variables can be
+renamed from anywhere they are referenced, except when nested inside of structures
+or collections. To rename the inputs, simply click on them in the procedure
+header or somewhere where they appear in the body of the procedure and select
+the “Rename” option.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=443 height=137 id="Picture 18"
+src="images/editor_guide/image015.png"></p>
+
+<p class=MsoNormal><i>The Rename option that appears on variables.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal><i><img width=401 height=154 id="Picture 19"
+src="images/editor_guide/image016.png"></i></p>
+
+<p class=MsoNormal><i>The Rename Dialog. The dialog will ensure that all
+variable names are unique. </i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Lastly, let’s provide a description so that if we export
+this procedure and share it with another Adept user they can quickly understand
+its intent. To provide or edit a description, simply place the cursor in the
+Description textbox that appears in the <i>Procedure Header</i> and enter the
+appropriate text. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=576 height=129 id="Picture 21"
+src="images/editor_guide/image017.jpg"></p>
+
+<p class=MsoNormal><i>The procedure description textbox.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Now that we’ve finished our readability edits, it’s time to
+save our changes. Simply click the “Save” button on the main <i>Toolbar</i> to
+save the procedure in place. </p>
+
+<h3><a name="_Toc306798632">Rewiring Values in Steps</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Rewiring values refers to modifying how values and variables
+are used and referenced in a procedure. There are three ways to rewire values,
+where a value is defined as a procedure input variable, a step output variable
+or a fixed (constant) value:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Replace
+a value with a reference to an existing variable (procedure input or step
+output)</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>“Ask
+the user for this value” which has the effect of creating a new procedure input
+for that value</p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>“Use
+a fixed value” which allows a fixed (constant) value to be specified for a
+single input on a specific instance of a step. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The ability to rewire values is useful in many situations.
+Consider the case where a mistake is made during demonstration that causes
+Adept to miss an intended generalization. Option 1 from above can be used to
+create the missing generalization.  Another use case is when Adept makes an
+incorrect generalization that needs to be repaired. Options 2 or 3 can be used
+to repair the generalization. Options to rewire values only appear on values
+contained within specific steps, not from the <i>Procedure Header </i>or <i>Values
+Panel, </i>because rewiring a value only operates on a single instance of a
+value or variable at a time<i>. </i>The “Highlight All Occurrences” and “Show
+First Occurrence” are very useful when rewiring values.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>For example, consider the ‘Resize Image’ procedure. Perhaps
+the demonstration was intended to demonstrate a procedure where the resized
+image was square, but due to a mistake it is rectangular. This problem can be
+addressed by replacing the reference to ‘resolution-y_1’ with ‘resolution-x_1’.
+This will cause ‘resolution-x_1’ to be used for both the length and width of
+the resized image. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=514 height=193 id="Picture 22"
+src="images/editor_guide/image018.png"></p>
+
+<p class=MsoNormal><i>Changing a reference to resolution-y_1 to resolution-x_1.</i></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>After rewiring resolution-y_1 to point to resolution-x_1, a
+warning icon will appear next to the procedure input resolution-y_1 indicating
+that it is no longer used by any step in the procedure. You can choose to
+either leave it intact or remove it by clicking the warning icon. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=476 height=188 id="Picture 23"
+src="images/editor_guide/image019.png"></p>
+
+<p class=MsoNormal><i>A warning indicating that resolution-y_1 is no longer
+used.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>If you remove the resolution-y_1 input, but later wish to
+make it possible to resize the image to be rectangular again, you can easily
+recreate the procedure input by going to the ‘Resize Image’ step and choosing
+to ‘Ask the user for this value’ for one of the references to resolution-x_1.
+This will create a new procedure input called something like ‘resolution-y 1’
+which allows for the length and width of the resized image to be resized
+independently. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=512 height=172 id="Picture 24"
+src="images/editor_guide/image020.png"></p>
+
+<p class=MsoNormal><i>Replacing a value with a new procedure input. The current
+value may already be a procedure input as in this example. </i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>For our last example, let’s assume that you want to simplify
+the Resize Image procedure to always resize images to be 100 x 200 and no
+longer want to accept the length and width as procedure inputs. This is
+accomplished by providing fixed values. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=511 height=188 id="Picture 25"
+src="images/editor_guide/image021.png"></p>
+
+<p class=MsoNormal><i>Changing a value to be a fixed value.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Upon choosing “Use a fixed value”, a dialog will appear that
+allows for a constant value to be specified.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=400 height=165 id="Picture 26"
+src="images/editor_guide/image022.png"></p>
+
+<p class=MsoNormal><i>Fixed value configuration dialog.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>If this is done for both inputs to the Resize image action,
+there will no longer be a need for the size procedure inputs. Once again a
+warning icon will appear next to them in the <i>Procedure Header</i> that
+allows for their removal. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc306798633">Editing Procedure Inputs</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Procedure inputs can be edited in several ways to improve
+the usability of a procedure. Each procedure input has the concept of a
+‘default value’. The default value of a procedure input will be provided to the
+user when they run the procedure from the Adept UI. Users can either accept the
+default value or override it with their own value. It is possible from the
+Editor to toggle between providing a default value or not. You may wish to omit
+a default value for an important procedure input that should always be specified
+by the user.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>To clear the default value of a procedure input, simply
+select ‘Always ask the user for this value’ from the input’s context menu.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=439 height=201 id="Picture 33"
+src="images/editor_guide/image023.png"></p>
+
+<p class=MsoNormal><i>Clearing the default for a procedure input.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>You can also modify the default value for a procedure input.
+The way in which this is accomplished differs based on the type of the input
+being configured. For instance, if you want to configure the default value of
+the ‘input_file’ input, click the Browse button to open a file chooser dialog.
+If you want to change the default width of the resized image from 400 to some
+other value, simply edit the value 400 in the textbox. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>If you have cleared the default value for an input and now
+wish to reinstate it, choose the ‘Provide a default value’ option from the
+input’s context menu. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=445 height=205 id="Picture 34"
+src="images/editor_guide/image024.png"></p>
+
+<p class=MsoNormal><i>Providing a default value for an input that doesn’t have
+one.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>It is also possible to reorder the inputs to a procedure.
+This is indicated by the “knurling” which appears on the right of each
+procedure input. Knurling is used throughout the Editor to indicate that
+something is interactive and can be dragged. You may wish to reorder the inputs
+to a procedure to have a more logical flow. For the purposes of this example,
+let’s move the output_file input directly below input_file. Click and drag the
+input on its knurling or any other vacant space on the procedure input to begin
+reordering the inputs. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=449 height=202 id="Picture 35"
+src="images/editor_guide/image025.png"></p>
+
+<p class=MsoNormal><i>Reordering procedure inputs.</i></p>
+
+<h3><a name="_Toc306798634">Adding Steps (Actions) from a Library</a> </h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Adding new steps is a useful way to adapt a procedure to
+changing requirements, or derive new procedures from existing procedures
+without the need for demonstration. Steps are added from the Library Panel
+which appears on the left side of the Editor application window. The library
+groups actions that can be added as steps by whether or not they are procedures
+and also by application. If we select “imageloader” under the “Applications”
+menu, then we will only see the actions known to Image Loader. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=312 height=207 id="Picture 27"
+src="images/editor_guide/image026.png"></p>
+
+<p class=MsoNormal><i>The Library Panel displaying only Image Loader actions.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>For an example of adding a step, let’s assume that we want
+to modify the Resize Image procedure so that in addition to saving a resized
+copy of the input image, we also want it to save the resized image to the input
+file directly. To do this, we need to add another ‘Save image’ step at the end
+of the procedure. Notice that if you select ‘Save image’ in the library,
+knurling will appear on its right side indicating that it can be dragged. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=300 height=169 id="Picture 28"
+src="images/editor_guide/image027.png"></p>
+
+<p class=MsoNormal><i>The ‘Save image’ action selection.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Begin dragging and a step visualization will appear and
+follow your mouse. Drag the new step to the bottom of the procedure. If the
+location you wish to drop the step on is not visible you can cause the
+procedure scroll pane to scroll by moving your mouse to the extreme top or
+bottom of the procedure view pane to cause it to scroll up or down
+respectively. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=575 height=309 id="Picture 29"
+src="images/editor_guide/image028.jpg"></p>
+
+<p class=MsoNormal><i>Dragging a new step in to a procedure. </i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>If the step being added does not require any inputs, you
+simply release the mouse and you’re done adding the step. If the step does
+contain inputs, such as ‘Save image’ the Editor will provide a step
+configuration dialog when the mouse button is released to finish the drag.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=515 height=437 id="Picture 32"
+src="images/editor_guide/image029.jpg"></p>
+
+<p class=MsoNormal><i>A step configuration dialog.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>The options presented by the step configuration dialog
+should appear familiar from the value-rewiring example. For each input of the
+new step you can either use an existing variable if there are any, ask the user
+to provide the variable as a new procedure input, or provide a fixed value. To
+achieve the desired effect, we should use ‘resized-image_1’ for the first input
+and ‘input_file’ for the second input, which is the file to be saved. Once each
+input is configured, click OK to finish adding the step.  </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The last editing example is a good example of where it might
+be better to save your changes under a new name rather than modifying the
+procedure in place. Doing so will provide two useful procedures: one for
+resizing an image and saving the result to a copy, and one that performs the
+same actions and also saves the original image in place. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>It is worth noting that entire procedures can be added as
+steps without any additional burden as compared to adding normal steps. To add
+a procedure as a step, open the ‘Procedures’ group in the <i>Library Panel</i>
+and drag the procedure as you would a normal step. Utilization of this feature,
+in conjunction with running procedures during demonstration, allows reuse of
+procedures, which can save significant time and lead to a less redundant and
+more maintainable library of procedures. </p>
+
+<p class=MsoNormal><b>&nbsp;</b></p>
+
+<h3><a name="_Toc306798635">Moving Steps</a> </h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Steps can easily be moved and therefore reordered using the
+Editor. This is indicated by the knurling in the upper right-hand corner of
+each step. A step can be dragged either by its knurling or any unoccupied space
+in its header. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=576 height=134 id="Picture 36"
+src="images/editor_guide/image030.jpg"></p>
+
+<p class=MsoNormal><i>Hover the mouse over a step’s knurling to see that it can
+be moved.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>It is possible to move multiple steps at once. In order to
+do this you must select multiple steps. This can be accomplished by holding the
+Control key while clicking multiple steps, or by clicking in the whitespace of
+the procedure view and starting a selection rectangle. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=576 height=153 id="Picture 37"
+src="images/editor_guide/image031.jpg"></p>
+
+<p class=MsoNormal><i>Selecting multiple steps with a selection rectangle.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Once you have selected multiple steps, choose one of them
+and begin dragging it as you would a single step. The steps will be collapsed
+in to a single step visualization as you drag them. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=578 height=332 id="Picture 38"
+src="images/editor_guide/image032.png"></p>
+
+<p class=MsoNormal><i>Dragging multiple steps. </i></p>
+
+<h3><a name="_Toc306798636">Deleting Steps</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Deleting steps is similar to moving them. However, you have
+a choice in how you delete steps. Steps can either be deleted by dragging them
+off of the procedure view pane, or by selecting them and clicking the delete
+button on the main <i>Toolbar</i>. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=909 height=687
+src="images/editor_guide/image033.png"></p>
+
+<p class=MsoNormal><i>Deleting a step by dragging it off of the procedure view
+pane. The step will be deleted if the procedure view pane is no longer
+reserving space for it between steps. </i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal><i><img width=576 height=454 id="Picture 42"
+src="images/editor_guide/image034.jpg"></i></p>
+
+<p class=MsoNormal><i>Deleting a step explicitly with the Delete button.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Similar to moving steps, multiple steps may be deleted
+through either the drag mechanism or the delete button by selecting multiple
+steps using the Control key or a selection rectangle. </p>
+
+<h3><a name="_Toc306798637">Warnings, Errors, and Fixes</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Errors can occur when the deletion or movement of a step
+causes illegal variable references; where a variable is referenced that either
+does not exist or has not been created yet. If this happens, error icons
+promptly appear on any steps with problems, and a notification appears on the
+Editor’s main toolbar. However,  it is not necessary to resolve the errors
+immediately  since the errors may be temporary as multiple editing steps are
+taken. Upon clicking a step’s error icon, a description of the problem is
+displayed as well as a list of possible solutions including undoing the last
+action. In this way, it is easy to recover from errors but is still possible to
+delete and move steps fluidly. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>To see an example of an error correction dialog, move step
+#3 ‘Save image’ from the Resize Image procedure to the second step position in
+the procedure, before the ‘Resize Image’ step. This causes a problem because
+‘Save image’ relies on the output of Resize Image. Clicking the error icon on
+‘Save image’ will cause an error correction dialog to appear.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=553 height=432 id="Picture 43"
+src="images/editor_guide/image035.jpg"></p>
+
+<p class=MsoNormal><i>An error correction dialog, triggered by clicking the
+error icon in the upper right-hand corner of the step.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>The Editor disallows saving a procedure until all errors
+have been resolved.  However, it is possible to save the procedure if only
+warnings exist in the procedure. A warning indicates a problem or inconsistency
+in a procedure that is probably benign and need not be corrected. The most
+common type of warning is an unused procedure input. Such inputs can either be
+removed by clicking the warning icon, or left intact for possible future use. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc306798638">Loops</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>As described in the Adept User Guide, it is possible to
+learn procedures that contain loops. Loops are very powerful tools and can be
+configured in the Editor. It is also possible to add a loop from the Editor if
+a collection type variable exists in the procedure. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>To see how a loop looks in a procedure, let’s look at the
+‘Resize All’ procedure described in the Adept User Guide. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=457 height=434 id="Picture 46"
+src="images/editor_guide/image036.jpg"></p>
+
+<p class=MsoNormal><i>A loop step from the ‘Resize All’ procedure.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Loop steps can be moved and deleted just like normal steps.
+If you select a loop step, all of its sub-steps are implicitly selected. A loop
+can be configured by clicking on the Configuration button that is circled in
+red in the above image. From there you can configure which collection variable
+is looped over.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=519 height=253 id="Picture 47"
+src="images/editor_guide/image037.jpg"></p>
+
+<p class=MsoNormal><i>A loop configuration dialog.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>Note that by changing the collection variable being looped
+over you may change the type of the <i>iterand</i>, which is the variable that
+represents each item from the collection as the loop is running. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Adding a new loop is accomplished in the same way as adding
+any other new step: by dragging from the Library Panel. The loop is located in
+the ‘Toolkit’ portion of the library. Drag the loop just like you would any
+other step and configure it upon dropping it in the procedure view pane. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=1006 height=671 id="Picture 48"
+src="images/editor_guide/image038.png"></p>
+
+<p class=MsoNormal><i>Adding a new loop from the library</i></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3><a name="_Toc306798639">Structures and Collections</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Previously in this guide we discussed providing fixed values
+for step inputs as well as procedure input default values. One detail that was
+not discussed is editing fixed values for structure and collection data types.
+Given the additional complexity of structure and collection types, editing them
+requires a few additional steps. Both structures and collections are
+represented by buttons in procedure inputs. The button will give a preview of
+the contents of the structure or collection, but in order to view all of the
+details you must click the button. For example, consider the following
+procedure that creates a Tree assembly in the Novo sample application.; here, piece_1
+is a structure input. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=484 height=211 id="Picture 51"
+src="images/editor_guide/image039.jpg"></p>
+
+<p class=MsoNormal><i>A procedure with a structure input.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal><i><img width=479 height=210 id="Picture 52"
+src="images/editor_guide/image040.jpg"></i></p>
+
+<p class=MsoNormal><i>A structure editing dialog that shows all details of a
+structure and allows them to be edited.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal>For an example of a collection input, consider the ‘formats_1’
+input of the Resize All image loader procedure. It also appears as a button in
+the Procedure Header. </p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><img width=460 height=261 id="Picture 53"
+src="images/editor_guide/image041.jpg"></p>
+
+<p class=MsoNormal><i>A collection input.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<p class=MsoNormal><img width=469 height=351 id="Picture 54"
+src="images/editor_guide/image042.jpg"></p>
+
+<p class=MsoNormal><i>A collection editor dialog. Notice the link for adding
+new values.</i></p>
+
+<p class=MsoNormal><i>&nbsp;</i></p>
+
+<h3><a name="_Toc306798640">Limitations</a></h3>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>While the Editor is a powerful tool for task learning and
+end-user programming, there are a number of useful features that have yet to be
+implemented. The following is a list of unimplemented features and limitations:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Provide the user with the ability to print a procedure</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Allow the user to configure loops over collections that they create,
+rather than existing collection values in a procedure</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Provide more UI widget support for common data types</p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in'>-<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Allow the user to configure their own function calls on collections and
+structures</p>
+
+</div>
+
+</body>
+
+</html>

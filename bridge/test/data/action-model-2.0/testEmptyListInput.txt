@@ -1,0 +1,4 @@
+testEmptyListInput
+Ensure lists can be empty
+#########################################################
+action170[param114=entity1; param157=item16s; param119=[]; ]

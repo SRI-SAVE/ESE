@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^7.3IdiomWithUnboundSubActionArgs'
+ execute:{
+  do 'arda^1.0^CreateString'($output);
+  do 'arda^1.0^use_twice_int_between/template1'($output)
+   by:{
+    do 'arda^1.0^UseString'($output);
+    do 'arda^1.0^UseInteger'(5);
+    do 'arda^1.0^UseString'($output);};}
+ properties:{expected_output:"CREATE STRING\nUSE STRING: string\nUSE INTEGER 5\nUSE STRING: string\n", isTransient:"true"}</bodySource>
+</TaskModel>

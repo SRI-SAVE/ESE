@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<?Pub Inc?>
+<table>
+<title>CPOF-PAL Architecture Overview: Top-Level Elements<?Pub Caret?></title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Common Task Representation (CTR)</entry><entry>An API
+used principally to construct a representation of a learned procedure
+  that is shareable among PAL modules, and to decompose it into its
+component objects.</entry></row>
+<row><entry>CPOF Client (CoMotion, 2D)</entry><entry>The principal
+front end of the CPOF / PAL system. Is   variously referred to as
+CPOF, CoMotion, or 2D.</entry></row>
+<row><entry>LAPDOG</entry><entry>Performs task learning by converting
+a     demonstration trace into an executable, parameterized procedure
+that     reproduces the demonstrated task as well as generalizing
+it so     that the demonstrated task may be executed in the future
+to perform     tasks similar to the one that is demonstrated. </entry>
+</row>
+<row><entry>LAPDOG Mediator</entry><entry>Invokes LAPDOG API methods
+in response to messages originating from other components, and   
+ sends messages to other compnents in response to return from LAPDOG
+API methods.     Doing so isolates LAPDOG from the message-passing
+aspects of CPOF-PAL.</entry></row>
+<row><entry>Lumen</entry><entry>Executes compoundActions implemented
+by procedures       and provides procedure analysis services to the
+Procedure Editor.</entry></row>
+<row><entry>Lumen Mediator</entry><entry>Invokes Lumen API methods
+in response to messages originating from other components, and   
+ sends messages to other components in response to return from Lumen
+API methods.     Doing so isolates Lumen from the message-passing
+aspects of CPOF-PAL.</entry></row>
+<row><entry>PAL Bridge</entry><entry>Encapsulates the cumulative API
+of the other PAL (non-CPOF)   components. Exists in the CPOF JVM,
+and mediates all traffic to the   PAL components in their JVM.</entry>
+</row>
+<row><entry>Procedure Viewer/Editor</entry><entry>The CPOF-PAL procedure
+viewer/editor is a CPOF user affordance that provides         support
+users to visualize and to create new procedure by editing an extant
+        procedure.</entry></row>
+<row><entry>Remote Admin</entry><entry>Part of the CPOF system responsible
+for monitoring system   state.</entry></row>
+<row><entry>Shell</entry><entry>Container for the PAL components.
+The entry point for the PAL   JVM, it starts the other PAL components
+(Spine, LAPDOG, Lumen,   mediators). It exchanges status information
+with the PAL Bridge   inside the CPOF JVM, and also with Remote Admin.</entry>
+</row>
+<row><entry>Spine</entry><entry>Message delivery system for communication
+between Lapdog, Lumen,   Shell and PAL Bridge</entry></row>
+</tbody>
+</tgroup>
+</table>
+<?Pub *0000003150?>

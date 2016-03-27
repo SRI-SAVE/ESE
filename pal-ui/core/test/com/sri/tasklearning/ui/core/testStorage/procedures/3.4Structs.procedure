@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.4Structs'(+'$input tuple 1' = structureGen("arda^1.0^parentStruct", "some text", structureGen("arda^1.0^struct", 1, "strVal")), -'$output tuple 1')
+ argtypes:["arda^1.0^parentStruct", "arda^1.0^struct"]
+ execute:{
+  do 'arda^1.0^UseParentStruct'('$input tuple 1');
+  do 'arda^1.0^UseStruct'(structureGet('$input tuple 1', "child", 1));
+  do 'arda^1.0^CreateStruct'('$output tuple 1');
+  do 'arda^1.0^UseStruct'('$output tuple 1');
+  do 'arda^1.0^UseStruct'(structureGen("arda^1.0^struct", 1, "strVal"));}
+ properties:{expected_output:"USE PARENT STRUCT: [some text,[1, strVal]]\nUSE STRUCT: [1,strVal]\nCREATE STRUCT\nUSE STRUCT: [1,text]\nUSE STRUCT: [1,strVal]\n", isTransient:"true"}</bodySource>
+</TaskModel>

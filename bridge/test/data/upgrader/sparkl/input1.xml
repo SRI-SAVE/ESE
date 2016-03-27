@@ -1,0 +1,34 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TaskModel version="0.1.4"><cueSource>{defaction (ee15b7ef9ba7443089a6c0c0f8bdd1db +$title_1 +$display_2 +$windowPositionX_3 +$windowPositionY_4 +$windowPositionWidth_5 +$windowPositionHeight_6 +$snl_7 +$dataProps_8 +$contextProps_9 +$title_10 +$display_11 +$windowPositionX_12 +$windowPositionY_13 +$windowPositionHeight_14 +$snl_15 +$dataProps_16 +$contextProps_17 +$laDepth_18 +$laObjectKey_19 -$windowID_20 -$dsName_21 -$windowID_22 -$dsName_23 )
+argtypes: [ "WebTAS_ns_windowTitleType" "WebTAS_ns_displayType" "WebTAS_ns_windowPositionXType" "WebTAS_ns_windowPositionYType" "WebTAS_ns_windowPositionWidthType" "WebTAS_ns_windowPositionHeightType" "WebTAS_ns_snlType" "WebTAS_ns_displayDataPropsType" "WebTAS_ns_displayContextPropsType" "WebTAS_ns_windowTitleType" "WebTAS_ns_displayType" "WebTAS_ns_windowPositionXType" "WebTAS_ns_windowPositionYType" "WebTAS_ns_windowPositionHeightType" "WebTAS_ns_snlType" "WebTAS_ns_displayDataPropsType" "WebTAS_ns_displayContextPropsType" "WebTAS_ns_depthType" "WebTAS_ns_primaryKeyType" "WebTAS_ns_windowIDType" "WebTAS_ns_dsNameType" "WebTAS_ns_windowIDType" "WebTAS_ns_dsNameType" ]
+properties: `[(user_visible) (uri "tasks:ee15b7ef9ba7443089a6c0c0f8bdd1db") (parents "tasks:Task") (terse_task_description "ee15b7ef9ba7443089a6c0c0f8bdd1db") (default_value "title_1" "Person Table 1") (default_value "display_2" "Table") (default_value "windowPositionX_3" "250.0") (default_value "windowPositionY_4" "114.0") (default_value "windowPositionWidth_5" "1024.0") (default_value "windowPositionHeight_6" "236.0") (default_value "snl_7" "SHOW Person Where Target\\ Name = *ilkin*") (default_value "dataProps_8" "Person Table") (default_value "contextProps_9" "Person Table") (default_value "title_10" "Person LinkAnalysis 1") (default_value "display_11" "LinkAnalysis") (default_value "windowPositionX_12" "252.0") (default_value "windowPositionY_13" "351.0") (default_value "windowPositionHeight_14" "647.0") (default_value "snl_15" "") (default_value "dataProps_16" "Person Link Analysis") (default_value "contextProps_17" "Link Analysis") (default_value "laDepth_18" "2") (default_value "laObjectKey_19" "EXTRN:Person:Report+Key=975311B5-BFDB-C299-672EF6DC449605EB") (display_params "title" "display" "windowPositionX" "windowPositionY" "windowPositionWidth" "windowPositionHeight" "snl" "dataProps" "contextProps" "title" "display" "windowPositionX" "windowPositionY" "windowPositionHeight" "snl" "dataProps" "contextProps" "laDepth" "laObjectKey" "windowID" "dsName" "windowID" "dsName")]}
+export: ee15b7ef9ba7443089a6c0c0f8bdd1db
+</cueSource><bodySource>{defprocedure do_ee15b7ef9ba7443089a6c0c0f8bdd1db
+cue: [do: (ee15b7ef9ba7443089a6c0c0f8bdd1db +$title_1 +$display_2 +$windowPositionX_3 +$windowPositionY_4 +$windowPositionWidth_5 +$windowPositionHeight_6 +$snl_7 +$dataProps_8 +$contextProps_9 +$title_10 +$display_11 +$windowPositionX_12 +$windowPositionY_13 +$windowPositionHeight_14 +$snl_15 +$dataProps_16 +$contextProps_17 +$laDepth_18 +$laObjectKey_19 -$windowID_20 -$dsName_21 -$windowID_22 -$dsName_23 )]
+precondition: (True)
+body: [seq: [do: (WebTAS_ns_newWindow $title_1 $display_2 $windowPositionX_3 $windowPositionY_4 $windowPositionWidth_5 $windowPositionHeight_6 NULL NULL NULL $windowID_20)] [do: (WebTAS_ns_addDataSource $snl_7 $dataProps_8 $contextProps_9 $windowID_20 NULL NULL $dsName_21)] [do: (WebTAS_ns_newWindow $title_10 $display_11 $windowPositionX_12 $windowPositionY_13 $windowPositionWidth_5 $windowPositionHeight_14 NULL NULL NULL $windowID_22)] [do: (WebTAS_ns_addDataSource $snl_15 $dataProps_16 $contextProps_17 $windowID_22 $laDepth_18 $laObjectKey_19 $dsName_23)]]
+properties: `[(creator "user unknown") (learner "LAPDOG") (registration_date "20110201T152313Z") (demonstrated_variable_bindings [(windowID_20 "Person Table 1") (contextProps_9 "Person Table") (title_1 "Person Table 1") (windowID_22 "Person LinkAnalysis 1") (laObjectKey_19 "EXTRN:Person:Report+Key=975311B5-BFDB-C299-672EF6DC449605EB") (snl_15 "") (dataProps_16 "Person Link Analysis") (windowPositionWidth_5 "1024.0") (windowPositionHeight_6 "236.0") (dataProps_8 "Person Table") (windowPositionHeight_14 "647.0") (snl_7 "SHOW Person Where Target\\ Name = *ilkin*") (title_10 "Person LinkAnalysis 1") (windowPositionY_13 "351.0") (display_2 "Table") (dsName_21 "SHOW Person Where Target Name = '*ilkin*'") (laDepth_18 "2") (windowPositionX_3 "250.0") (dsName_23 "Link Analysis (Ilkin SULEYMANNOV / US officials believe he was a pivotal participant in the operations of the group, saying he appeared to have \"far more extensive\" ties to the entire SAPA network than previously thought. He was at the center of the e-mail and telephone conversations among the men arrested for bombings in Baku and Clilabad that the authorities had been monitoring for months.
+
+Suspected Involvement:
+
+1999 - bombing of government buildings in Clilabad 52 people killed
+
+2001- bombing of Defense Ministry in Baku 14 people killed
+) depth:2") (display_11 "LinkAnalysis") (windowPositionY_4 "114.0") (contextProps_17 "Link Analysis") (windowPositionX_12 "252.0")])]
+}
+</bodySource></TaskModel> 

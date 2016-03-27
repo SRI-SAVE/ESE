@@ -1,0 +1,44 @@
+"The action model of a collection of applications is a centrally
+located common dynamic repository of action model pieces, written in
+XML."
+
+Requirements:
+
+* Must be able to identify what application a given action is
+  associated with.
+
+  Use some kind of namespace. Preferably not full-fledged XML
+  namespaces.
+
+* Must keep track of type compatibility between different
+  applications.
+
+  Where will common types be stored? Probably in a new module of the
+  Bridge's source tree.
+
+* Hierarchical type system, to allow IS-A relationship
+  testing. Multiple inheritance.
+
+  We also need to support type equivalence and multiple ways of
+  expressing the same data. Dates are an excellent example of
+  something that can be expressed in many different ways.
+
+* Inheritable actions. A child action inherits properties and
+  parameters from its parent. Single inheritance.
+
+* Complex types' member types need to be named, to identify what can
+  be compared with what. Or maybe just the complex types themselves
+  need names: Point != Rectangle
+
+* LAPDOG will need to be able to unify parameters based on either the
+  elements of complex types or the entire complex objects.
+
+* Learned procedures get added to the action model.
+
+"Nice to have" features:
+
+* Name-value mappings in tuples. (As opposed to an ordered, typed list
+  of objects.) Could also call this maps vs. tuples.
+
+* Pass the type of each object along with the object itself, so SPARK
+  can reason about "is-a" relationships.

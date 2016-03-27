@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TaskModel version="0.4">
+    <bodySource>action SPARK_ns_b3936411d29b47bba5736b9fe989b753(+$title_1 = "Map 1", +$display_2 = "Map", +$windowPositionX_3 = "21.0", +$windowPositionY_4 = "110.0", +$windowPositionWidth_5 = "755.0", +$windowPositionHeight_6 = "692.0", +$mapCenterLat_7 = "39.0", +$mapCenterLon_8 = "50.0", +$mapScale_9 = "1.6006525E7", +$snl_10 = "SHOW CIDNE\\ Ops\\ Report Where [ MGRS DISTANCE within\\ 500\\ Meters\\ of\\ 390000.000N\\ 0500000.000E ]", +$dataProps_11 = "CIDNE Ops Report Map", +$contextProps_12 = "(default)", +$pointName_13 = "REFUGEE CAMP", +$locationStr_14 = "390000.000N 0500000.000E", +$icon_15 = "/SQUARES/L_RED.GIF", -$windowID_16, -$dsName_17)
+ argtypes:["WebTAS_ns_windowTitleType", "WebTAS_ns_displayType", "WebTAS_ns_windowPositionXType", "WebTAS_ns_windowPositionYType", "WebTAS_ns_windowPositionWidthType", "WebTAS_ns_windowPositionHeightType", "WebTAS_ns_mapCenterLatType", "WebTAS_ns_mapCenterLonType", "WebTAS_ns_mapScaleType", "WebTAS_ns_snlType", "WebTAS_ns_displayDataPropsType", "WebTAS_ns_displayContextPropsType", "WebTAS_ns_stringType", "WebTAS_ns_locationType", "WebTAS_ns_iconStringType", "WebTAS_ns_windowIDType", "WebTAS_ns_dsNameType"]
+ execute:{
+  do WebTAS_ns_newWindow($title_1, $display_2, $windowPositionX_3, $windowPositionY_4, $windowPositionWidth_5, $windowPositionHeight_6, $mapCenterLat_7, $mapCenterLon_8, $mapScale_9, $windowID_16);
+  do WebTAS_ns_addDataSource($snl_10, $dataProps_11, $contextProps_12, $windowID_16, NULL, NULL, $dsName_17);
+  do WebTAS_ns_plotQuickPoint($pointName_13, $locationStr_14, $icon_15, $windowID_16);}
+ properties:{creator:"user unknown", demonstrated_variable_bindings:{contextProps_12:"(default)", dataProps_11:"CIDNE Ops Report Map", display_2:"Map", dsName_17:"SHOW CIDNE Ops Report Where [ MGRS DISTANCE within 500 Meters of 390000.000N 0500000.000E ]", icon_15:"/SQUARES/L_RED.GIF", locationStr_14:"390000.000N 0500000.000E", mapCenterLat_7:"39.0", mapCenterLon_8:"50.0", mapScale_9:"1.6006525E7", pointName_13:"REFUGEE CAMP", snl_10:"SHOW CIDNE\\ Ops\\ Report Where [ MGRS DISTANCE within\\ 500\\ Meters\\ of\\ 390000.000N\\ 0500000.000E ]", title_1:"Map 1", windowID_16:"Map 1", windowPositionHeight_6:"692.0", windowPositionWidth_5:"755.0", windowPositionX_3:"21.0", windowPositionY_4:"110.0"}, learner:"LAPDOG", registration_date:"20110201T153049Z", terse_task_description:"b3936411d29b47bba5736b9fe989b753"}</bodySource>
+</TaskModel>

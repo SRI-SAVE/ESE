@@ -1,0 +1,106 @@
+Requirements for the aggregate system: LAPDOG+SPARK+Bridge+ITL+CPOF+Editor+TA
+
+- Dynamic action model: Adding new functionality to CPOF requires
+  modifying XML files. Supporting non-SPARK executors requires adding
+  new actions for their procedures. When we receive an undeclared
+  action, implicitly define it before sending the instance to LAPDOG.
+
+  Use case #1: UPL scripts declare SPARK actions so that LAPDOG can
+  learn procedures using those UPL actions.
+
+  #2: CPOF loads a module at runtime, using a new annex to the action
+   model. Declare these new actions to SPARK and LAPDOG.
+
+  #3: (AKA 2.5) When the procedure is shared to a different client,
+   the new client needs a way to know how to load the module that
+   implements this previously unknown action.
+
+- Dynamically typed action model: We're worried about aggressive
+  unification. The current workaround is to declare some parameters as
+  ungeneralizable. It might be nice to have a parameter object carry
+  its type with it. Tim C. and Melinda G. will discuss offline.
+
+- LAPDOG inferences. LAPDOG can query objects to find out if two
+  observed objects are related in some way. There's currently no
+  support provided by CPOF for this kind of activity. Should we have a
+  common language for CPOF to declare queries LAPDOG can perform on an
+  object? Should LAPDOG be able to query CPOF for information that's
+  cached locally? Can we improve the "context generating actions" that
+  CPOF generates?
+
+- Documentation: 5+1 deliverable documents:
+
+  - System Requirements Specification. Using Enterprise Architect @
+    GD.
+
+  - System Subsystem Design Document. Every piece of software required
+    in a functioning CPOF. All the different running processes.
+
+  - Software Design Document. One doc per aspect of the software,
+    which could be contributed from multiple features. DocBook and EA.
+
+  - DataBase Description Document.
+
+  - Interface Control Document. Enumeration of all "external"
+    interfaces.
+
+  + Software itself.
+
+  Also:
+
+  - Admin Guide
+
+  - User Guide
+
+  For each of our PAL processes:
+
+  - Requirements Doc.
+
+  - Name.
+
+  - Scope of responsibility.
+
+  - Interfaces and dependencies between them and dependencies on third
+    party software.
+
+- Minimize resource usage:
+
+  - Heap memory
+
+  - Direct memory (# of network sockets)
+
+  - # of threads
+
+- No GPL software
+
+- Maybe use Java Web Start
+
+- Install as admin, run as non-admin.
+
+- Common data structures for ActionDefinition and
+  ActionInstance. Serializable.
+
+- Rename our backend Java processes so they show up as other than
+  "Java" in the task manager.
+
+- Multi-threaded LAPDOG learning. Each thread independently
+  cancelable. Can probably make a separate LAPDOG instance for each
+  learn request, instead of having a LAPDOG singleton.
+
+- Separate APIs for instrumentation, learning, persistence.
+
+- An action aggregator which serves the role of List<ActionInstance>
+  and follows the lifespan of a particular demonstration as it is
+  built.
+
+- Backwards compatibility for old procedure serialization formats.
+
+- No software or libraries written by suspicious people.
+
+- Logging that makes it clear what execution request a given callback
+  is associated with.
+
+- Management APIs to throttle execution and prevent runaway processes
+  from using too many resources.
+
+- Automated performance tests would be very nice, but not mandatory.

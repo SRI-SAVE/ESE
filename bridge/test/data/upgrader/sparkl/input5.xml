@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TaskModel version="0.1.4"><cueSource>{defaction (c4a148736f8c4e9588d0e8cc27cf747b +$title_1 +$display_2 +$windowPositionX_3 +$windowPositionY_4 +$windowPositionWidth_5 +$windowPositionHeight_6 +$title_7 +$display_8 +$windowPositionX_9 +$windowPositionY_10 +$windowPositionWidth_11 +$windowPositionHeight_12 +$mapCenterLat_13 +$mapCenterLon_14 +$mapScale_15 +$snl_16 +$dataProps_17 +$contextProps_18 +$idoXML_19 +$ldpName_20 +$title_21 +$display_22 +$windowPositionY_23 +$windowPositionWidth_24 +$windowPositionHeight_25 +$snl_26 +$dataProps_27 +$contextProps_28 -$windowID_29 -$windowID_30 -$dsName_31 -$windowID_32 -$dsName_33 )
+argtypes: [ "WebTAS_ns_windowTitleType" "WebTAS_ns_displayType" "WebTAS_ns_windowPositionXType" "WebTAS_ns_windowPositionYType" "WebTAS_ns_windowPositionWidthType" "WebTAS_ns_windowPositionHeightType" "WebTAS_ns_windowTitleType" "WebTAS_ns_displayType" "WebTAS_ns_windowPositionXType" "WebTAS_ns_windowPositionYType" "WebTAS_ns_windowPositionWidthType" "WebTAS_ns_windowPositionHeightType" "WebTAS_ns_mapCenterLatType" "WebTAS_ns_mapCenterLonType" "WebTAS_ns_mapScaleType" "WebTAS_ns_snlType" "WebTAS_ns_displayDataPropsType" "WebTAS_ns_displayContextPropsType" "WebTAS_ns_idoXMLType" "WebTAS_ns_ldpNameType" "WebTAS_ns_windowTitleType" "WebTAS_ns_displayType" "WebTAS_ns_windowPositionYType" "WebTAS_ns_windowPositionWidthType" "WebTAS_ns_windowPositionHeightType" "WebTAS_ns_snlType" "WebTAS_ns_displayDataPropsType" "WebTAS_ns_displayContextPropsType" "WebTAS_ns_windowIDType" "WebTAS_ns_windowIDType" "WebTAS_ns_dsNameType" "WebTAS_ns_windowIDType" "WebTAS_ns_dsNameType" ]
+properties: `[(user_visible) (uri "tasks:c4a148736f8c4e9588d0e8cc27cf747b") (parents "tasks:Task") (terse_task_description "c4a148736f8c4e9588d0e8cc27cf747b") (default_value "title_1" "CPOF Infrastructure Table 1") (default_value "display_2" "") (default_value "windowPositionX_3" "") (default_value "windowPositionY_4" "") (default_value "windowPositionWidth_5" "") (default_value "windowPositionHeight_6" "") (default_value "title_7" "CPOF Infrastructure Map 1") (default_value "display_8" "Map") (default_value "windowPositionX_9" "379.0") (default_value "windowPositionY_10" "381.0") (default_value "windowPositionWidth_11" "1026.0") (default_value "windowPositionHeight_12" "517.0") (default_value "mapCenterLat_13" "39.516266") (default_value "mapCenterLon_14" "48.721172") (default_value "mapScale_15" "4.6E7") (default_value "snl_16" "") (default_value "dataProps_17" "CPOF Infrastructure Map") (default_value "contextProps_18" "(default)") (default_value "idoXML_19" "<DataObjectSet xmlns=\"http://www.issinc.com/gateway/domain\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> 
+<CPOFInfrastructure> 
+<Affiliation></Affiliation> 
+<Color></Color> 
+<CreatedTime>2005-04-28T19:19:43.000Z</CreatedTime> 
+<FacilityType>Bridge</FacilityType> 
+<GridCoords>39SUD 04104 76549</GridCoords> 
+<Latitude>39</Latitude> 
+<Location lat=\"39.516265869140625\" lon=\"48.72117233276367\">393059N 0484316E</Location> 
+<Location_Latitude>39.516265869140625</Location_Latitude> 
+<Location_Longitude>48.72117233276367</Location_Longitude> 
+<Longitude>48</Longitude> 
+<MGRSLocation>39SUD 04104 76549</MGRSLocation> 
+<MGRSLocation_MGRS>39SUD 04104 76549</MGRSLocation_MGRS> 
+<Name>Bridge</Name> 
+<TextComments><![CDATA[]]></TextComments> 
+<Uuid>03795252-CA96-4046-9B7C-43F32BCBC58C</Uuid> 
+<Zone></Zone> 
+</CPOFInfrastructure> 
+</DataObjectSet> 
+") (default_value "ldpName_20" "CPOF Infrastructure Map") (default_value "title_21" "Chat Messages Table 1") (default_value "display_22" "Table") (default_value "windowPositionY_23" "140.0") (default_value "windowPositionWidth_24" "511.0") (default_value "windowPositionHeight_25" "241.0") (default_value "snl_26" "SHOW Chat\\ Messages") (default_value "dataProps_27" "Chat Messages Table") (default_value "contextProps_28" "Chat Messages Table") (display_params "title" "display" "windowPositionX" "windowPositionY" "windowPositionWidth" "windowPositionHeight" "title" "display" "windowPositionX" "windowPositionY" "windowPositionWidth" "windowPositionHeight" "mapCenterLat" "mapCenterLon" "mapScale" "snl" "dataProps" "contextProps" "idoXML" "ldpName" "title" "display" "windowPositionY" "windowPositionWidth" "windowPositionHeight" "snl" "dataProps" "contextProps" "windowID" "windowID" "dsName" "windowID" "dsName")]}
+export: c4a148736f8c4e9588d0e8cc27cf747b
+</cueSource><bodySource>{defprocedure do_c4a148736f8c4e9588d0e8cc27cf747b
+cue: [do: (c4a148736f8c4e9588d0e8cc27cf747b +$title_1 +$display_2 +$windowPositionX_3 +$windowPositionY_4 +$windowPositionWidth_5 +$windowPositionHeight_6 +$title_7 +$display_8 +$windowPositionX_9 +$windowPositionY_10 +$windowPositionWidth_11 +$windowPositionHeight_12 +$mapCenterLat_13 +$mapCenterLon_14 +$mapScale_15 +$snl_16 +$dataProps_17 +$contextProps_18 +$idoXML_19 +$ldpName_20 +$title_21 +$display_22 +$windowPositionY_23 +$windowPositionWidth_24 +$windowPositionHeight_25 +$snl_26 +$dataProps_27 +$contextProps_28 -$windowID_29 -$windowID_30 -$dsName_31 -$windowID_32 -$dsName_33 )]
+precondition: (True)
+body: [seq: [do: (WebTAS_ns_newWindow $title_1 $display_2 $windowPositionX_3 $windowPositionY_4 $windowPositionWidth_5 $windowPositionHeight_6 NULL NULL NULL $windowID_29)] [do: (WebTAS_ns_newWindow $title_7 $display_8 $windowPositionX_9 $windowPositionY_10 $windowPositionWidth_11 $windowPositionHeight_12 $mapCenterLat_13 $mapCenterLon_14 $mapScale_15 $windowID_30)] [do: (WebTAS_ns_addDataSource $snl_16 $dataProps_17 $contextProps_18 $windowID_30 NULL NULL $dsName_31)] [do: (WebTAS_ns_findOnMap $windowID_30 $idoXML_19 NULL $ldpName_20)] [do: (WebTAS_ns_zoomToData $windowID_30 NULL)] [do: (WebTAS_ns_newWindow $title_21 $display_22 $windowPositionX_9 $windowPositionY_23 $windowPositionWidth_24 $windowPositionHeight_25 NULL NULL NULL $windowID_32)] [do: (WebTAS_ns_addDataSource $snl_26 $dataProps_27 $contextProps_28 $windowID_32 NULL NULL $dsName_33)]]
+properties: `[(creator "user unknown") (learner "LAPDOG") (registration_date "20110201T154342Z") (demonstrated_variable_bindings [(mapCenterLat_13 "39.516266") (dataProps_27 "Chat Messages Table") (snl_16 "") (windowID_29 "CPOF Infrastructure Table 1") (windowPositionWidth_5 "") (windowPositionHeight_12 "517.0") (windowPositionX_9 "379.0") (display_8 "Map") (ldpName_20 "CPOF Infrastructure Map") (display_2 "") (windowID_32 "Chat Messages Table 1") (windowPositionX_3 "") (windowID_30 "CPOF Infrastructure Map 1") (mapScale_15 "4.6E7") (contextProps_18 "(default)") (windowPositionWidth_11 "1026.0") (snl_26 "SHOW Chat\\ Messages") (dsName_31 "Find On Map :") (dsName_33 "SHOW Chat Messages") (windowPositionY_10 "381.0") (title_1 "CPOF Infrastructure Table 1") (dataProps_17 "CPOF Infrastructure Map") (windowPositionHeight_6 "") (windowPositionHeight_25 "241.0") (idoXML_19 "<DataObjectSet xmlns=\"http://www.issinc.com/gateway/domain\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> 
+<CPOFInfrastructure> 
+<Affiliation></Affiliation> 
+<Color></Color> 
+<CreatedTime>2005-04-28T19:19:43.000Z</CreatedTime> 
+<FacilityType>Bridge</FacilityType> 
+<GridCoords>39SUD 04104 76549</GridCoords> 
+<Latitude>39</Latitude> 
+<Location lat=\"39.516265869140625\" lon=\"48.72117233276367\">393059N 0484316E</Location> 
+<Location_Latitude>39.516265869140625</Location_Latitude> 
+<Location_Longitude>48.72117233276367</Location_Longitude> 
+<Longitude>48</Longitude> 
+<MGRSLocation>39SUD 04104 76549</MGRSLocation> 
+<MGRSLocation_MGRS>39SUD 04104 76549</MGRSLocation_MGRS> 
+<Name>Bridge</Name> 
+<TextComments><![CDATA[]]></TextComments> 
+<Uuid>03795252-CA96-4046-9B7C-43F32BCBC58C</Uuid> 
+<Zone></Zone> 
+</CPOFInfrastructure> 
+</DataObjectSet> 
+") (windowPositionY_23 "140.0") (display_22 "Table") (contextProps_28 "Chat Messages Table") (mapCenterLon_14 "48.721172") (windowPositionWidth_24 "511.0") (title_21 "Chat Messages Table 1") (title_7 "CPOF Infrastructure Map 1") (windowPositionY_4 "")])]
+}
+</bodySource></TaskModel> 

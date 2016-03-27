@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+
+    <action id="action151">
+        <description>No descr.</description>
+        <inputParam id="mapID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="gridCoords">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="action144Flag">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="geoStickieID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+    <action id="action192">
+        <description>No descr.</description>
+        <inputParam id="mapID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="scale">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type140"/>
+        </inputParam>
+    </action>
+
+    <action id="action127">
+        <description>No descr.</description>
+        <inputParam id="mapID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="entityIDs">
+            <description>No descr.</description>
+            <typeRef typeId="type112"/>
+        </inputParam>
+    </action>
+
+    <action id="action124">
+        <description>No descr.</description>
+        <inputParam id="mapID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="parentIDs">
+            <description/>
+            <!-- This could be a set. -->
+            <typeRef typeId="type112"/>
+        </inputParam>
+        <inputParam id="depth">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="Integer"/>
+        </inputParam>
+    </action>
+
+    <action id="action105">
+        <description>No descr.</description>
+        <inputParam id="mapID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="parentIDs">
+            <description/>
+            <!-- This could be a set. -->
+            <typeRef typeId="type112"/>
+        </inputParam>
+        <inputParam id="depth">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="Integer"/>
+        </inputParam>
+    </action>
+
+    <action id="action107">
+        <description>No descr.</description>
+        <inputParam id="mapID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="gridCoords">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type136"/>
+        </inputParam>
+        <inputParam id="scale">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type140"/>
+        </inputParam>
+    </action>
+</actionModel>

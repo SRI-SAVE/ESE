@@ -1,0 +1,36 @@
+/*
+    Document   : Novo.css
+    Author     : Kyle
+-*/
+
+.root {
+    -novo-disabled-text: rgba(87,87,87, 1.0);
+    -novo-selection: rgba(25, 49, 82,1.0);
+
+    -novo-SystemLightGray: rgba(239,239,239,1.0);
+    -novo-SystemGray: rgba(204,204,204,1.0);
+    -novo-SystemDarkGray: rgba(103,103,103,1.0);
+
+    /* gradients for buttons  */
+    -novo-SytemGrayDient:           linear-gradient(from 0% 0% to 0% 90%, white, -novo-SystemGray);
+    -novo-SytemDarkGrayPushedDient: linear-gradient(from 0% -30% to 0% 120%, -novo-SystemDarkGray, -novo-SystemGray);
+}
+
+.button.toggle, .button.toggle:focused {
+    -fx-background-color: -novo-SystemDarkGray, -novo-SytemGrayDient;
+    -fx-text-fill: black;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0, 0 .5 0 .5;
+    -fx-font: 10pt "Tahoma";
+}
+
+.button.toggle:hover {
+    -fx-background-color: -novo-SystemDarkGray, -novo-SystemLightGray;
+}
+.button.toggle:pressed {
+    -fx-background-color: -novo-SystemDarkGray, -novo-SytemDarkGrayPushedDient;
+}
+
+.label {
+    -fx-font: 10pt "Tahoma";
+}

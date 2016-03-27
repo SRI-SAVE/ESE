@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^2.3Enum'(+'$input 1' = typed("Option 1", "arda^1.0^ardaEnum"))
+ argtypes:["arda^1.0^ardaEnum"]
+ execute:{
+  do 'arda^1.0^CreateEnum'('$output 1');
+  do 'arda^1.0^UseEnum'('$output 1');
+  do 'arda^1.0^UseEnum'('$input 1');
+  do 'arda^1.0^UseEnum'(typed("Option 4", "arda^1.0^ardaEnum"));}
+ properties:{expected_output:"CREATE ENUM\nUSE ENUM Option 2\nUSE ENUM Option 1\nUSE ENUM Option 4\n", isTransient:"true"}</bodySource>
+</TaskModel>

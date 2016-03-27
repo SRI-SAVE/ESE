@@ -1,0 +1,4 @@
+Test null input parameter
+Ensure that we recognize the 'null' token for input parameters
+#########################################################
+action144[param133=null; param185=entityID; ]

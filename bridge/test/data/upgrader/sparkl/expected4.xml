@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TaskModel version="0.4">
+    <bodySource>action SPARK_ns_488992dc983442f08a478cd8ca993faa(+$title_1 = "CIDNE Ops Report Map 3", +$display_2 = "Map", +$windowPositionX_3 = "296.0", +$windowPositionY_4 = "161.0", +$windowPositionWidth_5 = "1024.0", +$windowPositionHeight_6 = "768.0", +$mapCenterLat_7 = "39.92663", +$mapCenterLon_8 = "47.96347", +$mapScale_9 = "757510.44", +$snl_10 = "SHOW CIDNE\\ Ops\\ Report", +$dataProps_11 = "CIDNE Ops Report Map", +$contextProps_12 = "(default)", +$visibleFlg_13 = "FALSE", +$snl_14 = "SHOW Area Where Name = AO\\ KNIGHTS", -$windowID_15, -$dsName_16, -$dsName_17)
+ argtypes:["WebTAS_ns_windowTitleType", "WebTAS_ns_displayType", "WebTAS_ns_windowPositionXType", "WebTAS_ns_windowPositionYType", "WebTAS_ns_windowPositionWidthType", "WebTAS_ns_windowPositionHeightType", "WebTAS_ns_mapCenterLatType", "WebTAS_ns_mapCenterLonType", "WebTAS_ns_mapScaleType", "WebTAS_ns_snlType", "WebTAS_ns_displayDataPropsType", "WebTAS_ns_displayContextPropsType", "WebTAS_ns_booleanType", "WebTAS_ns_snlType", "WebTAS_ns_windowIDType", "WebTAS_ns_dsNameType", "WebTAS_ns_dsNameType"]
+ execute:{
+  do WebTAS_ns_newWindow($title_1, $display_2, $windowPositionX_3, $windowPositionY_4, $windowPositionWidth_5, $windowPositionHeight_6, $mapCenterLat_7, $mapCenterLon_8, $mapScale_9, $windowID_15);
+  do WebTAS_ns_addDataSource($snl_10, $dataProps_11, $contextProps_12, $windowID_15, NULL, NULL, $dsName_16);
+  do WebTAS_ns_zoomToData($windowID_15, NULL);
+  do WebTAS_ns_setDataSourceVisible($windowID_15, $dsName_16, $visibleFlg_13);
+  do WebTAS_ns_addDataSource($snl_14, $dataProps_11, $contextProps_12, $windowID_15, NULL, NULL, $dsName_17);}
+ properties:{creator:"user unknown", demonstrated_variable_bindings:{contextProps_12:"(default)", dataProps_11:"CIDNE Ops Report Map", display_2:"Map", dsName_16:"SHOW CIDNE Ops Report", dsName_17:"SHOW Area Where Name = 'AO KNIGHTS'", mapCenterLat_7:"39.92663", mapCenterLon_8:"47.96347", mapScale_9:"757510.44", snl_10:"SHOW CIDNE\\ Ops\\ Report", snl_14:"SHOW Area Where Name = AO\\ KNIGHTS", title_1:"CIDNE Ops Report Map 3", visibleFlg_13:"FALSE", windowID_15:"CIDNE Ops Report Map 3", windowPositionHeight_6:"768.0", windowPositionWidth_5:"1024.0", windowPositionX_3:"296.0", windowPositionY_4:"161.0"}, learner:"LAPDOG", registration_date:"20110201T153332Z", terse_task_description:"488992dc983442f08a478cd8ca993faa"}</bodySource>
+</TaskModel>

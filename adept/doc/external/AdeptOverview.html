@@ -1,0 +1,162 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+  <title> Adept Task Learning System </title>
+</head>
+
+
+<body>
+<h1> Adept Task Learning System</h1>
+
+<p>The
+<A HREF="http://pal.sri.com">PAL</A>
+Task Learning component,
+called Adept, provides<em> learning-by-demonstration</em>
+technology to enable the automation of routine or time-consuming tasks, thus
+freeing users to focus on more cognitively demanding activities. </p>
+
+<p>The core of the Adept task learning component system is a module called LAPDOG (Learning
+Assistant Procedures from Demonstration, Observation, and Generalization).
+Given a demonstration consisting of a sequence of actions performed by a user
+to achieve a particular task, LAPDOG generalizes the action sequence into an
+executable procedure for achieving similar tasks in the future. LAPDOG
+subscribes to a <em>dataflow model</em> in which actions are characterized by
+their inputs and outputs, and action outputs serve as inputs to succeeding
+actions. Procedure generalization includes ensuring that every action input is
+supported by a previous output.</p>
+
+<p>LAPDOG performs <em>parameter generalization</em>, generating a replacement
+of constants with variables or (accessor/construction) expressions over variables that reflect the dataflow observed in the
+demonstration. This generalization enables procedures to be reused in different
+situations and to different effect. LAPDOG also performs <em>structure
+generalization</em>, inducing loops over collections of objects by identifying
+and generalizing the repeated sequences of actions in the demonstration.
+LAPDOG's loop-induction algorithm supports advanced features such as learning
+loops over both ordered and unordered collections of objects and loops that
+process multiple lists simultaneously. Parameter and structure generalization
+are performed synchronously, so LAPDOG can learn loops over collections nested to arbitrary depth, and loops over collections that are the output of
+previous loops.</p>
+
+<p>LAPDOG can learn from a single example, through the use of heuristics for
+filtering the set of alternative generalization hypotheses to a single best
+generalization. But it can also exploit the availability of multiple
+demonstrations to improve the quality of the learned procedure.</p>
+
+<p>Learned procedures are executed by the Lumen agent framework, which is derived from the SRI Procedural Agent
+Realization Kit (SPARK).  Lumen's hierarchical
+representation of tasks combined with instrumentation of task execution makes it possible to teach
+procedures that in turn invoke other learned procedures. This task
+composition enables incremental development of modular libraries of interdependent
+procedures.</p>
+
+ <P> Adept includes an interactive editor that enables users to visualize and modify learned procedures.
+   The editor facilitates understanding and sharing of procedures by providing the means for a user to inspect a procedure's structure before executing it. It also permits users to adapt learned procedures quickly rather than demonstrating them again from scratch to incorporate changes. </P>
+
+<P>
+Adept is application-independent.
+Its use within a particular application requires the definition of an <em>action
+model</em> that provides a semantic specification of individual actions in the
+application along with implementation of corresponding mechanisms for instrumenting and
+automating those actions. In essence, the action model provides the basic
+building blocks from which learned procedures are created. Applications
+interact with the task learning technologies via a <em>bridge</em> module through
+which all communication (i.e., instrumentation events and automation
+requests) flows.</p>
+
+<p><img border="0" width="610" height="357" src="images/TaskLearningFramework.png" alt="Task Learning Figure" /></p>
+
+<p>&nbsp;</p>
+
+
+<h2><span style="mso-fareast-font-family:"Times New Roman"">Prerequisites</span></h2>
+
+<ul type="square">
+ <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo2;tab-stops:list .5in"><span style="mso-fareast-font-family:
+     "Times New Roman"">Java 1.6.0_26 or higher</span></li>
+</ul>
+
+<ul type="square">
+ <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo2;tab-stops:list .5in"><span style="mso-fareast-font-family:
+     "Times New Roman"">Java FX 2.0 or higher</span></li>
+</ul>
+
+<!-- MacOS support will be provided when JavaFX support for MacOS becomes available. -->
+<ul type="square">
+ <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo2;tab-stops:list .5in"><span style="mso-fareast-font-family:
+     "Times New Roman"">Windows 7 or Windows XP (Service Pack 2 or higher). Future MacOS support is dependent on JavaFX support for MacOS.</span></li>
+</ul>
+
+<ul type="square">
+ <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo2;tab-stops:list .5in">The target application must
+     define an action model, provide the instrumentation of user actions, and support
+     automation that enables Lumen to initiate execution of those actions.
+     This is further described in the Adept 
+     <A HREF="ClientApplicationGuide.html">Client Application Guide</A>.</li>
+</ul>
+
+<h2><span style="mso-fareast-font-family:"Times New Roman"">Limitations</span></h2>
+
+<p>
+Because of its dataflow model, the PAL task learning
+component is well suited to applications whose actions can be framed as
+operating on objects in the environment, and the effects of the actions can be
+captured in terms of action outputs that generally serve as inputs to succeeding
+actions. In its current form, the PAL task learning component is not well suited to
+applications whose actions are best captured in terms of their effects on the environment
+rather than in terms of the data they produce and consume. This is discussed in the
+<A HREF="ClientApplicationGuide.html#ActionModelOverview">Client Application Guide - Action Model</A> section.
+</p>
+
+<H2><a name="Documentation"></a> Documentation </H2>
+<ul>
+  <li>The <A HREF="InstallationGuide.html">Installation Guide</A> describes system requirements and installation procedures.</li>
+  <li>The <A HREF="UserGuide.html">User Guide</A> describes how to operate the various user interfaces presented by Adept to learn, execute, and manage procedures.</li>
+  <li>The <a href="EditorGuide.html">Editor Guide</a> describes the Procedure Editor application, which allows for visualization as well as editing (enduser programming) of procedures</li>
+  <li>The <A HREF="ClientApplicationGuide.html">Client Application Guide</A> describes how to enable Adept for an application or set of applications.</li>
+</ul>
+
+<H2><a name="References"></a> References </H2>
+<OL>
+<LI> Eker, S., Lee, T., and Gervasio, M. 2009. Iteration Learning by Demonstration. In Proceedings of the AAAI Spring Symposium <I>Agents that Learn from Human Teachers</I>. AAAI Press.
+  
+<LI> Garvey, T., Gervasio, M., Lee, T., Myers, K., Angiolillo, C., Gaston, M., Knittel, J. and Kolojejchick, J. July 2009.  <I>Learning by Demonstration to Support Military Planning and Decision Making</I>.  In Proceedings of the Twenty-first Conference on Innovative Applications of Artificial Intelligence. AAAI Press.
+
+<LI> Gervasio, M., Lee, T., and Eker, S. 2008. Learning Email Procedures from the Desktop. In Proceedings of the AAAI Workshop <I>Enhanced Messaging</I>. AAAI Press.
+
+<LI> Gervasio, M. and Murdock, J. 2009. <I>What Were You Thinking? Filling in Missing Dataflow Through Inference in Learning from Demonstration</I>. In Proceedings of the International Conference on Intelligent User Interfaces. ACM Press. 
+
+<li> Morley, D. and Myers, K. 2004. <i>The SPARK Agent Framework</i>.
+  In Proceedings of the Third International Joint Conference on Autonomous Agents and Multi Agent Systems. ACM Press. 
+
+<LI> Myers, K., Kolojejchick, J., Angiolillo, C., Cummings, T., Garvey, T., Gervasio, M., Haines, W., Jones, C., Knittel, J., Morley, D., Ommert, W. and Potter, S. 2011. <I>Learning by Demonstration Technology for Military Planning and Decision Making: A Deployment Story.</I> In Proceedings of the 23rd Conference on Innovative Applications of Artificial Intelligence.
+
+<LI> Spaulding, A., Blythe, J., Haines, W., and Gervasio, M. 2009. <I>From Geek to Sleek: Integrating Task Learning Tools to Support End Users in Real-World Applications</I>. In Proceedings of the International Conference on Intelligent User Interfaces. ACM Press. 
+</OL>
+
+<br />
+
+
+<iframe src="distar-task-learning.html" frameborder="0" align="center" width="100%"></iframe>
+
+            
+</body> 
+</html>

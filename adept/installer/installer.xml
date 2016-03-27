@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--
+    Adept Install Script   
+-->
+
+<installation version="1.0">
+
+    <info>
+        <appname>Adept</appname>
+        <appversion>1.0</appversion>
+        <authors>
+            <author name="Tom Lee" email="tomlee@ai.sri.com"/>
+        </authors>
+    </info>
+
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="yes"/>
+
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="LicencePanel.licence" src="docs/Licence.txt"/>
+        <res id="InfoPanel.info" src="docs/Readme.txt"/>
+    </resources>
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <variables>
+        <variable name="itl-ui-dir" value="../../itl-ui"/>
+        <variable name="remote-xml-dir" value="../../remotexml-mediator"/>
+    </variables>
+
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Scripts And Misc" required="yes">
+            <description>Script and Misc file</description>
+            <file src="docs/Readme.txt" targetdir="$INSTALL_PATH"/>
+            <file src="docs/Licence.txt" targetdir="$INSTALL_PATH"/>
+            <file src="scripts/Adept.command" targetdir="$INSTALL_PATH"/>
+            <executable targetfile="$INSTALL_PATH/Adept.command"/>
+            <file src="scripts/title.sh" targetdir="$INSTALL_PATH"/>
+            <executable targetfile="$INSTALL_PATH/title.sh"/>
+            <file src="scripts/ImageLoader.command" targetdir="$INSTALL_PATH/Applications"/>
+            <executable targetfile="$INSTALL_PATH/Applications/ImageLoader.command"/>
+        </pack>
+        <pack name="ApplicationData" required="yes">
+            <description>The base files</description>
+            <file src="$itl-ui-dir/action_models" targetdir="$USER_HOME/Library/Application Support/AdeptTaskLearning/"/>
+        </pack>
+        <pack name="Required Jars" required="yes">
+            <description>The base files</description>
+            <fileset dir="@{dir.stage}" targetdir="${INSTALL_PATH}"/>
+        </pack>
+    </packs>
+
+</installation>

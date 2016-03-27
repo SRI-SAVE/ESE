@@ -1,0 +1,192 @@
+$Id: ReleaseNotes.txt 6810 2012-08-27 18:24:43Z kmcintyre $
+
+Major API changes since July 2010:
+
+rev 3178: Renamed many jar files. In general, "itl" was replaced with
+"pal," such as itl-bridge.jar -> pal-bridge.jar.
+
+rev 3178: Renamed ActionLoader to TypeLoader to better reflect its
+purpose. Updated javadoc accordingly. Also renamed ActionLibrary to
+TypeLibrary.
+
+rev 3281: Renamed Bridge.addActionLoader() --> addTypeLoader(), and
+getActionLoaders() --> getTypeLoaders().
+
+rev 3424: Moved CallbackHandler and RequestCanceler into the common
+jar file and the com.sri.pal.common package.
+
+rev 3426: Moved TypeName into the common jar file and the
+com.sri.pal.common package.
+
+rev 3439: Replaced many instances of Throwable with the new ErrorInfo
+class. This is used to signal errors in a way that's less fragile to
+classpath differences.
+
+rev 3507: Changed APIs from CTR to ATR. This affects:
+SparkProcedureDef.toXmlText()
+SparkProcedureDef.sourceToProc()
+SparkProcedureDef.procToSource()
+new overload of SparkProcedureDef.copyAndRename()
+SparkProcedureExecutor.load()
+Also, procedure properties are no longer mutable. In other words,
+setMetadata() and removeMetadata() in SparkProcedureDef will throw
+UnsupportedOperationException.
+
+rev 3736: The version attribute of the <actionModel> element is now
+required, not optional.
+
+rev 4323: Upgrader-related functionality has moved to its own package,
+com.sri.pal.upgrader. The main entry point here is the
+ProcedureUpgrader class, which used to live in com.sri.pal.
+
+rev 4359: Support for system properties lapdog.output.directory
+and lapdog.naming.variable.separator.
+
+rev 4425: Clarified how action canceling works. The ActionExecutor is
+expected to mark the invocation as FAILED.
+
+rev 4434: Added PALSerializationVersionException as a subclass of
+PALException to indicate specific error conditions.
+
+rev 4446: Changed TypeName to take a version field in addition to
+namespace and name. This allows more explicit identification of old
+procedures, but it forces old procedures to be upgraded using
+ProcedureUpgrader.
+
+Also changed the procedure serialization format version from 0.3 to
+0.4.
+
+rev 4539: TypeLoader and TypeCatalog have been deprecated. Their
+functionality has been folded into TypeStorage. More importantly,
+there is now only one TypeStorage in the system. Action models are
+registered once when an application is installed, at which time they
+will be persistently stored. The application should not load its
+action model every time it starts; the action model should already be
+available.
+
+Agave will no longer be automatically enabled if it's
+available. Instead, call ActionModel.registerAgave() to enable Agave
+in persistent action model storage.
+
+rev 4738: Renamed TypeStorage.Result.getActionDef() to getTypeDef().
+
+rev 4748: Bridge.newInstance() was deprecated in favor of
+Bridge.newInstance(String).
+
+rev 4865: TypeStorage.load() is now expected to only send back the
+string representation of the desired type, not call back to the Bridge
+to instantiate the type. Also, this method takes only a single
+TypeName instead of Set<TypeName>. Multiple requests may be issued in
+parallel. TypeStorage.Result was removed entirely.
+
+rev 5208: The type system has been redesigned.
+
+AggregateTypeDef was replaced with CollectionTypeDef.
+
+SparkProcedureDef and SparkProcedureExecutor were renamed to
+LumenProcedureDef and LumenProcedureExecutor. This change shouldn't be
+externally visible.
+
+Tuples are now called Structs. This affects classes TupleDef and
+Tuple, which are now called StructDef and Struct; and it also affects
+the action model XML files. <tuple> elements are now <struct>.
+
+PListDef no longer exists. Permutable lists are handled by the ListDef
+class and <list> element, with a boolean permutable=true.
+
+The root of the hierarchy containing actions and types is
+ActionModelDef. It has a child class named TypeDef which is the
+ancestor of all types. TypeDef used to handle atomic types, but it is
+now an abstract class. Atomic types are now handled by
+PrimitiveTypeDef or CustomTypeDef.
+
+Primitive types are predefined; they don't need to be declared in the
+action model before being used. Their names are integer, real,
+boolean, string, timestamp, and duration.
+
+Custom types can use arbitrary Java classes as their representation
+for instances. A custom type should have a corresponding
+CustomTypeFactory which is registered using
+ActionModel.registerCustomTypeFactory(). This factory is responsible
+for translating between instances of the type and their string
+representations.
+
+Enumerated types have been added. They can be declared using
+<enum><value>1</value><value>2</value></enum>. The corresponding Java
+class is EnumeratedTypeDef.
+
+Collections now include list, set, bag, and nullable. A nullable
+collection contains either zero or one instance of its element
+type. Collections can be specified in the action model explicitly with
+type declarations, or they can be referred to implicitly with syntax
+like list<MyType> or set<nullable<MyType>>, and they will be created
+on demand as long as the required types (MyType in this example)
+exist.
+
+TypeName is now an abstract class with two concrete child
+classes. SimpleTypeName is a (namespace, version, name) triplet
+representing a type or action. TypeNameExpr is an expression like
+"list<MyType>" representing a dynamically created collection
+type. Instances of TypeName may be created using TypeNameFactory.
+
+Fields of an ActionDef are now referenced using getParamType() and
+similar methods rather than getFieldType().
+
+Only custom types and structs may inherit from other types. Actions
+may also inherit from other actions. Multiple inheritance is not
+allowed.
+
+A type may be an alias for another type. Declare this using a normal
+type declaration with no <custom>, <enum>, or similar element, but
+with an <equivalentTo> element.
+
+ActionModel.getType() has been augmented by the addition of
+getSimpleType(); the former will construct collection types like
+list<MyType>, and the latter uses more specific classes in its
+signature.
+
+rev 5280: Renamed ActionInvocation.getParentInvocation() to
+getCaller(), and moved it to new superclass ActionStreamEvent. Also
+added were IdiomDef, GestureStart, GestureEnd, and ActionFamilyDef.
+
+rev 5369: Setting the system property "lapdog.disable-loop-learning"
+before starting the PAL backend will prevent LAPDOG from learning
+loops in procedures.
+
+rev 5600: Removed the "zombie cache" and associated system property
+PAL.invocationCacheSize.
+
+rev 5656: Changed the semantics of ActionExecutor.cancel(). It now
+notifies of a possibly top-level procedure or action which should be
+canceled. The implementor is expected to cancel any current or future
+action invocations which are called, directly or indirectly, by the
+canceled action.
+
+rev 5685: Added support for LAPDOG's handling of constant struct
+fields. Such fields will not be variablized when a struct need to be
+constructed.
+
+rev 5712: Added a new parameter, extraTypes, to Learner.learn(). This
+is a set of additional types or actions that LAPDOG should be made
+aware of before learning occurs. This allows us to support external
+completer actions.
+
+rev 5901: Re-enabled ActionDef.setDefaultValue(), but its name was
+changed to newDefaultValue and its semantics were changed so that it
+copies the action (or procedure) definition. Default values, like
+other action attributes, are immutable.
+
+rev 6107: Moved the PAL backend status monitoring functionality into a
+static class so that it will function before or after the Bridge is
+started. This affects the Bridge methods addStatusListener(),
+isTaskLearningRunning(), and isAdeptRunning(). The functionality now
+exists in PALStatusMonitor.
+
+rev 6168: In the action model XML schema, each template of an idiom
+must have an id attribute to distinguish it from other templates of
+the same idiom.
+
+rev 6803: Added a new com.sri.pal.Validator class which can be used by
+Editor-like software to call Lumen's procedure validator. The old
+technique, ProcedureInfo.getProcedureInfo(proc, actionModel), will no
+longer work.

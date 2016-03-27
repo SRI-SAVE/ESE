@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd" >
+<section id="shell_module">
+<title>Shell</title>
+<section>
+<title>Introduction</title>
+<para>The PAL Shell is a thin layer for startup and monitoring of
+    the various components of the PAL system. It is responsible for
+    determining which PAL modules to start, starting them, monitoring
+    their status, verifying the continued presence of CoMotion, and
+    shutting down the PAL JVM.</para>
+<section>
+<title>Context Diagram</title>
+<para>The Shell exists in the PAL JVM, communicating primarily   
+ between RemoteAdmin, the CPOF Bridge via the Spine, and its own 
+   Shell Bridge.</para>
+<figure>
+<title>PAL System Context Diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PAL_Architecture.png" scale="100"/></imageobject>
+</mediaobject>
+</figure>
+</section>
+</section>
+ <section>
+  <title>Structural View</title>
+ <section>
+<title>Element Catalog</title>
+<para></para>
+<table>
+<title>Shell Elements</title>
+<tgroup cols="2">
+<thead>
+<row><entry>Element</entry><entry>Description</entry></row>
+</thead>
+<tbody>
+<row><entry>ITLShell</entry><entry>Responsible for starting all services
+provided by             the Shell.</entry></row>
+<row><entry>RAReporter</entry><entry>Communicates with RemoteAdmin,
+sending current             information and receiving shutdown commands.</entry>
+</row>
+<row><entry>ShellToBridgeCallbackHandler</entry><entry>Receives execution
+events from the Bridge and             compiles statistics based on
+them.</entry></row>
+<row><entry>CPOFWatchdog</entry><entry>Monitors the status of CoMotion
+via the Bridge in             the CPOF JVM.</entry></row>
+<row><entry>ModuleWatchdog</entry><entry>Monitors the status of a
+PAL module (LAPDOG or             Lumen).</entry></row>
+<row><entry>StatsWatchdog</entry><entry>Collects information about
+the PAL JVM             health.</entry></row>
+<row><entry>LAPDOG stub</entry><entry>Stub implementations of the
+LAPDOG Mediator's             functionality which are used when LAPDOG
+is not enabled,             but Lumen is.</entry></row>
+</tbody>
+</tgroup>
+</table>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+ </section>
+ 
+<section>
+<title>Behavioral View</title>
+<section>
+<title>ITLShell</title>
+<para>The ITLShell class's main method is the entry point into   
+     the Shell. This class does the following:         <orderedlist>
+<listitem><para>Configure logging if           necessary.</para>
+</listitem>
+<listitem><para>Scrape jar manifests and log their           details.
+Specifically, the version information can be useful           in analyzing
+bug reports.</para></listitem>
+<listitem><para>Parse command line options, including which      
+    learning modules to start.</para></listitem>
+<listitem><para>Connect to RemoteAdmin.</para></listitem>
+<listitem><para>Start the PAL modules (Spine, LAPDOG, Lumen)     
+     if configured to do so.</para></listitem>
+<listitem><para>Start watchdogs corresponding to the PAL         
+ modules.</para></listitem>
+<listitem><para>Start the Shell Bridge.</para></listitem>
+</orderedlist>         </para>
+</section>
+<section>
+<title>RAReporter</title>
+<para>Responsible for responding to RemoteAdmin pings, this      
+  class is streamlined in order to report status information     
+   even if the rest of the PAL JVM is not operating correctly. It
+        builds its ping response based on atomic values (boolean,
+int,         etc.) which are updated asynchronously by the watchdogs
+in         other threads.</para>
+</section>
+<section>
+<title>ShellToBridgeCallbackHandler</title>
+<para>This callback handler receives execution events from the   
+     Shell Bridge. In other words, it is informed every time a   
+     procedure or action has a significant lifecycle event. Those
+        events are start execution, successful completion, completion
+        with error, and cancel. Using those events, this class creates
+        aggregate statistics and delivers them to RAReporter.</para>
+</section>
+<section>
+<title>CPOFWatchdog</title>
+<para>This watchdog sends ping requests via the Spine to the     
+   Bridge which is attached to CoMotion. If a ping request is not
+        answered soon enough, RAReporter is notified. If a longer
+        timeout passes without hearing from CoMotion, this watchdog
+        initiates a shutdown of the PAL JVM.</para>
+</section>
+<section>
+<title>ModuleWatchdog</title>
+<para>One instance of this watchdog exists for each PAL module   
+     which is running. The watchdog periodically checks that its 
+       corresponding module is running, and reports that status to
+        RAReporter.</para>
+</section>
+<section>
+<title>StatsWatchdog</title>
+<para>While not a watchdog per se, this class performs a         similar
+function in monitoring indicators of JVM health and         reporting
+those to RAReporter. These indicators include heap         size and
+thread count.</para>
+</section>
+<section>
+<title>LAPDOG stub</title>
+<para>If neither LAPDOG nor Lumen is enabled, the Shell will     
+   shut down shortly after startup. However, if Lumen is enabled 
+       but LAPDOG isn't, then the classes comprising the LAPDOG stub
+        will be started. These give appropriate responses to the 
+       LAPDOG ModuleWatchdog.</para>
+</section>
+</section>
+<section>
+<title>Quality Attributes</title>
+<para>The Shell operates in one of three configurations. Most    
+commonly, LAPDOG and Lumen are both enabled and run     normally.
+Alternatively, Lumen may be enabled but LAPDOG disabled,     in which
+case the LAPDOG stub will be activated. Finally, in     extreme circumstances
+all modules may be disabled, in which case     the Shell will exit
+shortly after starting up.</para>
+</section>
+<section>
+<title>Related Views</title>
+<itemizedlist>
+<listitem><para><xref linkend="bridge_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="spine_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+</itemizedlist>
+</section>
+</section><?Pub Caret?>
+<?Pub *0000006211?>

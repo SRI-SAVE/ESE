@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<response>
+    <id>resp-56</id>
+    <exercise_id>ex-1</exercise_id>
+    <task_response>
+        <demo>$demonstration {
+  'LoadTest^1.0^selectAll' "3976907182565075821", ["-7655531735057883895", "-1376106163701356133", "5319121538509955468"];
+  'LoadTest^1.0^makeItem' "1962472980982719500", "267086071228070257";
+  'LoadTest^1.0^makeItem' "5758181802263083851", "1962472980982719500";
+  'LoadTest^1.0^removeFromContainer' "1962472980982719500", "3976907182565075821";
+  'LoadTest^1.0^selectAll' "-3976145799197686985", ["-7655531735057883895", "-1376106163701356133", "5319121538509955468"];
+  'LoadTest^1.0^addToContainer' "-739624917119404603", "-2784568359871400867";
+  'LoadTest^1.0^makeItem' "7232836378479854840", "2859440257880616151";
+  'LoadTest^1.0^removeFromContainer' "3701373041842547077", "3976907182565075821";
+  'LoadTest^1.0^selectAll' "7515284590920634438", ["-7655531735057883895", "-1376106163701356133", "5319121538509955468"];
+  'LoadTest^1.0^removeFromContainer' "3124678233071954777", "-7548105403985651491";
+  'LoadTest^1.0^makeItem' "3429111363938333768", "3701373041842547077";
+  'LoadTest^1.0^selectAll' "-7548105403985651491", ["-7655531735057883895", "-1376106163701356133", "5319121538509955468"];
+  'LoadTest^1.0^makeItem' "879181861876119863", "-4212278092871748334";
+  'LoadTest^1.0^makeItem' "7083838104669309951", "1290922811639437803";
+  'LoadTest^1.0^makeItem' "8650317626277966266", "-7548105403985651491";
+  'LoadTest^1.0^makeItem' "5468990462979920085", "5758181802263083851";
+  'LoadTest^1.0^addToContainer' "-5860071974895116163", "-3057617863876449432";
+  'LoadTest^1.0^addToContainer' "-8765039943413183781", "-345645873014264736";
+  'LoadTest^1.0^makeItem' "2881981351650115884", "-1954568968947695799";
+  'LoadTest^1.0^addToContainer' "2633260264556752768", "-7198670483734927223";}
+ properties:{}</demo>
+        <seconds_elapsed>0</seconds_elapsed>
+    </task_response>
+</response>
+<!-- Change step 10 from SimpleTypeName[LoadTest^1.0^selectAll] to SimpleTypeName[LoadTest^1.0^makeItem] -->

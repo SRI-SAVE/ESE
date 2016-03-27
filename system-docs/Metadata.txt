@@ -1,0 +1,117 @@
+// Note: AsciiDoc format <http://www.methods.co.nz/asciidoc/>, handy cheatsheet http://powerman.name/doc/asciidoc
+
+Metadata In Task Learning
+=========================
+
+The task learning action model may include various pieces of 'metadata' that affect various operations
+of the system. Metadata may be specified for actions, action parameters, and types. Metadata is in the form
+of key/value pairs.
+
+
+Actions
+-------
+
+TODO describe and fully populate table.
+
+TODO is it "name" or "simpleName" or are these distinct keys? The latter occurs in CPOF.
+
+.Action Metadata
+[cols="1,1,1,1,6",options="header"]
+|=============================================================================
+|Key  |Value  |Applicable to |Component(s) |Notes       
+|name |string |all types | Editor | A simple description of the action.
+|fancyName  |string |all types | Editor | A formatting string, that may contain references to
+                                    action parameters of the form ',#paramName', e.g.,
+				    "'Copy ,#from to ,#to'".
+|icon       |resource |all types | Editor | Graphic that is shown alongside the action;
+                                            typically a URI referencing a resource in a .jar file.
+|=============================================================================
+
+Action parameters
+-----------------
+
+TODO describe and fully populate table.
+
+.Parameter Metadata
+[cols="1,1,1,1,6",options="header"]
+|=============================================================================
+|Key  |Value  |Applicable to |Component(s) |Notes       
+|userDescription |string |all types | Editor | A user-oriented description of the parameter.
+|=============================================================================
+
+
+
+Idioms
+------
+
+TODO
+
+Types
+-----
+
+Types may have a number of metadata keys that affect how procedures are learned.
+For definitions of the terms herein, see the
+link:design/types_in_task_learning.html[Types in Task Learning]
+design document.
+
+A structured type may be 'opaque'. This indicates that, as part of
+the generalizations performed during task learning, values of
+this type may not be constructed from constituent parts, nor may
+values be destructured to find 'support relationships'.
+An opaque structure type has the same set of values as the identical
+nonopaque structure type, i.e., they are comparable.
+
+A 'permutable' list is a list whose element order is
+ignored during generalization. In this sense they behave like bags.
+In particular:
+
+* A permutable list may 'support' another if they contain the same bag of elements.
+* Element order is irrelevant when finding loops over permutable lists.
+
+Types may have a number of metadata keys for use in improving the 
+learning or visualization of procedures. These are defined in the external editor:
+
+* Plural: the type's plural (e.g. emails)
+
+* Demonstrative: the type's demonstrative form (e.g. this email)
+
+* Indefinite: the type's with an indefinite article (e.g. an email)
+
+TODO are these defined in the CPOF editor?
+
+* Hidden: a flag indicating that neither this type nor its values
+  should be shown in any user interfaces.
+
+* Unit: the type's unit of measurement, if applicable (e.g. ft.)
+
+* Icon: a representative icon for the type
+
+* Editor widget: the type of widget that should be used to edit a constant 
+  value of this type (e.g. a text box for a string). Built in widgets include:
+
+** Text box
+
+These default could be supplemented through a custom registration system for editors.
+
+
+.Type Metadata
+[cols="1,1,1,1,6",options="header"]
+|=============================================================================
+|Key  |Value  |Applicable to |Component(s) |Notes       
+|pluralName |string |all types| Editor | The plural of the type  (e.g. emails).
+|aName      |string |all types| Editor | The type preceded by its indefinite article  (e.g. an email).
+|thisName   |string |all types| Editor | The indefinite form of the type (e.g. this email).
+|editor_disallowAskUser | boolean |all types| Editor | Disables the '"Ask the user for this value"' option on terms of this type 
+|editor_disallowFixedValue | boolean |all types| Editor | Disables the '"Use a fixed value"' option on terms of this type 
+|editor_disallowExistingValue | boolean |all types| Editor | Disables the ability to reference other variables on terms of this type
+|opaque     |boolean |structures |Editor,
+                                  Learning     |Indicates that, as part of
+	     			    	   the generalizations performed during task learning, values of
+				    	   this type may not be constructed from constituent parts, nor may
+				    	   values be destructured to find 'support relationships'.
+				    	   An opaque structure type has the same set of values as the identical
+				    	   nonopaque structure type, i.e., they are comparable.
+|permutable  |boolean |lists | Learning | Element order is ignored when finding 'support relationships' 
+	     	      	       		  between, and loops over, values of permutable types. For other purposes,
+					  permutable lists are identical to ordinary lists.
+|=============================================================================

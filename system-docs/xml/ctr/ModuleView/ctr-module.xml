@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd" >
+<?Pub Inc?>
+<section id="ctr_module">
+<title>Common Task Representation</title>
+<section>
+<title>Introduction</title>
+<para> Common Task Representation (CTR) is an API used principally
+to construct   a representation of a learned procedure   that is shareable
+among PAL modules, and to decompose it into its component objects.
+  This representation is used as the exchange format of procedures
+and actions across several   interfaces between PAL modules.</para>
+<para> CTR is packaged as part of the Lumen library lumen.jar. CTR
+does not, however,   depend on Lumen in order to operate. Lumen has
+no dependency upon CTR.</para>
+<figure id="ctr-primary"
+xreflabel="Common Task Representation Primary Presentation">
+<title>Common Task Representation Primary Presentation</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/CTRPrimaryPresentation.png" scale="50"/></imageobject>
+</mediaobject>
+</figure>
+<para></para>
+<figure id="ctr-primary-key"
+xreflabel="Common Task Representation Primary Presentation Key">
+<title>Common Task Representation Primary Presentation Key</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/CTRPrimaryPresentationKey.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+<section>
+<title>Context Diagram</title>
+<para>The architecture of the PAL-enabled CPOF system is shown in
+Figure <xref linkend="ctr-cpof-pal-architecture"/> </para>
+<figure id="ctr-cpof-pal-architecture" xreflabel="CPOF-PAL Architecture">
+<title>CPOF-PAL Architecture</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PAL_Architecture.png" scale="80"/></imageobject>
+</mediaobject>
+</figure>
+</section>
+</section>
+ <section>
+  <title>Structural View</title>
+ <section>
+<title>Element Catalog</title>
+<para> The Common Task Representation elements consist of the various
+pieces that comprise a learned procedure that is executable by Lumen. </para>
+<section>
+<title>Elements and their properties</title>
+<para> Elements in the top-level package of CTR provide elements that
+are used in several of its subpackages. </para>
+<table>
+<title>Elements in com.sri.ai.lumen.util.ctr</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Argument</entry><entry>Class representing a formal parameter
+of a Sig. Includes name, mode (input or output),     and optionally
+a default value. </entry></row>
+<row><entry>LumenUtil</entry><entry>Class providing static utility
+methods, used mainly for conversions between     representational
+variants. </entry></row>
+<row><entry>Sig</entry><entry>Class representing the signature of
+a learned procedure. </entry></row>
+</tbody>
+</tgroup>
+</table>
+<para> CTR participates in many interfaces by providing a consistent
+representation of   primitive action specificatons and learned procedures
+via the ActionDeclaration class.</para>
+<table>
+<title>Elements in com.sri.ai.lumen.util.ctr.decl</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>ActionDeclaration</entry><entry>Class representing learned
+procedures, as well as actions that comprise the action model.   
+ Objects of this class are exchanged at several points of interface
+of PAL components.      Every ActionDeclaration has a signature represented
+by a Sig element. Learned procedures     also have an executable component
+represented as a TaskExpression element.</entry></row>
+<row><entry>Decl</entry><entry>Class providing a map from the name
+of a procedure to its ActionDeclaration.     Optionally checks for
+name clashes upon construction of an ActionDeclaration;     checking
+is be disabled by CPOF-PAL to prevent spurious warnings. </entry></row>
+</tbody>
+</tgroup>
+</table>
+<para>A term in CTR and Lumen represents something that evaluates
+to a value. That value may   be scalar, a list, or a map. </para>
+<table>
+<title>Elements in com.sri.ai.lumen.util.ctr.term</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>CTRList</entry><entry>Class representing an ordered list
+of terms. </entry></row>
+<row><entry>CTRMap</entry><entry>Class representing a mapping of a
+string or a symbol key to a term. </entry></row>
+<row><entry>CTRSymbol</entry><entry>Class representing a Lumen symbol,
+used internally and in some API methods     to represent names of
+actions and arguments.</entry></row>
+<row><entry>CTRTerm</entry><entry>Interface fulfilled by all CTR terms.
+Primarily a marker interface.</entry></row>
+<row><entry>Function</entry><entry>Class representing a function invocation.
+Consists of a function name     and an ordered list of terms that
+are its parameters. </entry></row>
+<row><entry>Literal</entry><entry>Class representing a primitive constant
+term. </entry></row>
+<row><entry>Variable</entry><entry>Class representing a named variable
+term. </entry></row>
+</tbody>
+</tgroup>
+</table>
+<para>A task expression in CTR and Lumen represents something that
+is executable. </para>
+<table>
+<title>Elements in com.sri.ai.lumen.util.ctr.task</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Action</entry><entry>Class representing the Action task
+of Lumen. </entry></row>
+<row><entry>Forall</entry><entry>Class representing the basic Lumen
+primitive for looping. </entry></row>
+<row><entry>Forin</entry><entry>Class representing a Lumen primitive
+for looping over lists, sets, or bags.  </entry></row>
+<row><entry>Sequence</entry><entry>Class representing an ordered sequence
+of Lumen tasks. </entry></row>
+<row><entry>TaskExpression</entry><entry>Superclass of all task expressions. </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<!-- Include table and brief intro to elements in the top-level PAL architecture -->
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+<section>
+<title>Relations and their properties</title>
+<para>The primary relation displayed in the Primary Presentation is
+the uses      relation, which is a specialization of the depends-on
+relation. This      relation asserts that the correctness of one element
+depends on that of      another element. Generalization is also shown
+where appropriate, asserting      one element is a subclass of another.
+Realizations are shown where      appropriate for contextual establishment
+of program flow; it should be      noted that not all realizations
+are displayed where they do not help with      the understanding of
+flow control for the interactions.</para>
+</section>
+<section>
+<title>Element interface</title>
+<para>Common Task Representation provides a data interface in the
+numerous system operations that pass procedures or actions among components.</para>
+<para>The software interfaces of Common Task Representation are fairly
+simple constructors and accessors of the elements shown in the Primary
+Presentation.</para>
+</section>
+<!-- END Element interface subsection -->
+<!-- END Element Catalog section -->
+</section>
+ </section>
+<section>
+<title>Behavioral View</title>
+<para>CTR elements provide constructors and accessors for the objects
+represented.   They do little or no other processing of data. It serves
+as a representation of procedures   that are passed at various points
+of interface among the PAL components of   the CPOF-PAL architecture.</para>
+<!-- END Element behavior subsection -->
+</section>
+ 
+<section>
+<title>Quality Attributes</title>
+<section>
+<title>Language support</title>
+<para> CTR is adequate for representing nearly the full Lumen language.
+Only a subset is currently used by CPOF-PAL. If additional language
+constructs (e.g., conditionals) are required by CPOF-PAL, CTR will
+likely be usable without modification. </para>
+</section>
+</section>
+<section>
+<title>Architecture Background</title>
+<para>CTR was designed to provide an efficient representation of learned
+procedures and actions that is usable by all CPOF-PAL components.
+It also provides nearly complete coverage of Lumen, which is repsonsible
+for executing procedures represented in CTR.</para>
+</section>
+<section>
+<title>Other information</title>
+<section>
+<title>Affected Subsytems</title>
+<para> None.</para>
+</section>
+</section>
+<section>
+<title>Related Views</title>
+<itemizedlist><?Pub Caret1?>
+<listitem><para><xref linkend="bridge_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lumen_mediator_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lapdog_mediator_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+</itemizedlist>
+</section>
+</section>
+<?Pub *0000009290?>

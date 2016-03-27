@@ -1,0 +1,39 @@
+Requirements for the documentation we need to produce:
+
+This is an n x m matrix, where we have a set of modules that each
+require a set of documents. Modules:
+
+- SPARK Lite
+- LAPDOG
+- ITL/Bridge
+- Editor UI
+- Editor backend
+- Task Assistant
+- Top Level
+
+Documents:
+
+- Requirements
+- Architecture overview
+- Use cases
+- Package diagram?
+- Class diagrams
+- Interfaces with other modules
+- Third-party libraries
+- Lifecycle of the module, as well as important objects.
+- Scope of responsibility
+- Metrics
+
+Also:
+
+- Unit tests
+- End-to-end tests
+- Regression test suite and test builder
+- Interface docs and approval from partners
+- Functional requirements
+- Non-functional requirements
+- Static analysis
+- Code coverage
+- Performance tests
+- Bug tracker
+- Javadoc or API doc

@@ -1,0 +1,2022 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+  <title> Adept Client Application Guide </title>
+<!--  dsc {margin-left:50px;margin-right:50px}  -->
+<style type="text/css">
+pre {
+ background: #faf8f0;
+ border: 1px solid #bebab0;
+}
+</style>
+</head>
+
+
+<body>
+<center><h1> Adept Client Application Guide </h1></center>
+
+ <br>
+<h2>Table of Contents</h2>
+
+<UL>
+<a href="#Overview"> Overview </a><br>
+<UL>
+<a href="#ActionModelOverview">Action Model </a><br>
+<a href="#Learning"> Creating Learned Procedures  </a><br>
+<a href="#ProcedureExecution"> Executing Learned Procedures </a><br>
+<A href="#Architecture">Architecture </a><br>
+</UL>
+
+<a href="#TaskLearning"> Task Learning  </a><br>
+<UL>
+<A href="#ParameterGeneralization"> Parameter Generalization </a><br>
+<a href="#Support"> Support Relationships </a><br>
+<A href="#Ambiguous Supports"> Ambiguous Supports </a><br>
+<A href="#Collections, Structures and Functions"> Collections, Structures and Functions </a><br>
+<a href="#LoopLearning">Loop Learning </a><br>
+<a href="#DataflowCompletion"> Dataflow Completion </a><br>
+</UL>
+
+<a href="#ActionModelCreation"> Creating the Action Model  </a><br>
+<UL>
+<A href="#The Action Model File"> The Action Model File </a><br>
+<a href="#DataTypes">Data Types </a><br>
+<A href="#Actions"> Actions </a><br>
+<A href="#Action Modeling for Multiple Applications"> Action Modeling for Multiple Applications </a><br>
+<A href="#Design Guidelines"> Design Guidelines </a><br>
+</UL>
+
+<a href="#EnablingClient"> Enabling the Client Application  </a><br>
+<UL>
+<A href="#Logging and Debugging"> Logging and Debugging </a><br>
+<A href="#Initialization"> Initialization </a><br>
+<A href="#Instrumentation"> Instrumentation </a><br>
+<A href="#Automation"> Automation </a><br>
+<A href="#Instrumentation and Automation of Learned Procedures"> Instrumentation and Automation of Learned Procedures </a><br>
+<A href="#Persistence of Learned Procedures"> Persistence of Learned Procedures </a><br>
+</UL>
+</UL>
+
+
+<br><HR>
+<h2><a name="Overview"></a> Overview </h2>
+
+<P>
+This guide describes how to enable software applications for use with the Adept task learning system.
+In short, an Adept-enabled application must provide instrumentation to log steps that are performed by the user
+within the application along with corresponding automation for subsequently recreating those steps when
+learned procedures are executed. The current APIs in Adept support interaction with Java software only.
+ <P>
+Adept supports interactions with both individual client applications and suites of complementary client applications,
+with the latter resulting in the learning of multi-application procedures.
+ <P>
+
+<H3><a name="ActionModelOverview">Action Model</H3>
+
+<P>
+The key requirement for enabling a client application to work with Adept is the creation of an <I>action model</I>.
+The action model specifies the application's operations in a form suitable for task learning.
+Each action in the action model has a name and parameters (input and output),
+and represents a single conceptual operation within the application.
+ <P>
+The action model that an application presents to Adept fulfills several important roles.
+1) The elements of the action model constitute the building blocks for task learning.
+As such, the design of the action model significantly affects learning and generalization.
+2) Actions in the action model are executed from learned procedures;
+   hence the action model serves as an API between Adept and the application.
+3) The action model specifies the level at which the user views and manipulates learned procedures.
+As such, the action model should be defined in terms to match the users'
+conceptualization of their interactions with the application.
+ <P>
+A sequence of actions is modeled as a <I>dataflow</I>,
+where the effects of executing an action are characterized by its inputs and outputs.
+In a strict dataflow model, input and output parameters must be distinct
+(i.e., a parameter cannot be both an input and an output)
+and all relevant state changes resulting from executing an action must be captured by the action outputs.
+ <P>
+A core assumption in the dataflow model is that data is immutable: it is produced (output) and consumed (input), but it is not changed.  This is similar to the notion of pipes in Unix, where the output of one command is passed in as input to the next.  Adept is thus best-suited to applications where actions involve data passing between actions&mdash;for example, scientific workflows that process and analyze data.  It is not designed for applications better captured through a state-based model, where actions primarily involve changes to the state of objects or the environment. For example, a mobile robot whose actions include carrying objects and moving them between rooms would be natural to model in terms of state changes to its current location and to what it is carrying. Modeling such actions using pure dataflow is problematic because there is no way to specify a state change; only input and output of data objects may be expressed.
+<P>
+
+<h3><a name="Learning"></a> Creating Learned Procedures </h3>
+ <P>
+Adept is a <I>programming by demonstration</I> or <I>learning by demonstration</I> system.
+In systems of this type, applications provide
+<I>instrumentation</I> that notifies Adept of executed user actions.
+Thus, Adept learns from user actions as the user normally operates applications,
+with the only added requirement being that the user indicate the start and end of the demonstration.
+The resulting sequence of actions is called the <I>demonstration</I>.
+<P>
+The action model specifies the actions for capture as well as their parameters.
+These actions are collected and passed to the Adept learning component,
+which generalizes them into a parameterized procedure that may be
+subsequently executed, with the same or with different parameters.
+Capturing and delivering these instrumentation notifications is one
+principal task involved in enabling Adept for a client.
+
+<h3><a name="ProcedureExecution"></a> Executing Learned Procedures </h3>
+ <P>
+Adept provides a user interface for executing learned procedures.
+This invokes Adept's execution component on the procedure, which
+sends <I>automation</I> requests to the application to execute the individual
+actions contained within the procedure.
+ <P>
+The client application services these requests by executing its normal
+semantics for that action, and then returning the values for any output parameters
+of that action. Listening for and responding to automation requests is
+the other principal task involved in enabling Adept for a client.
+
+
+<H3><A name="Architecture"></A>Architecture</H3>
+
+<div class="image">
+<IMG SRC="images/Adept 1.1 Architecture.png" align=middle height=420 width=650 border=3>
+<div><I>Adept Task Learning Architecture</I></div>
+
+ <P>
+LAPDOG is the task learning component of Adept.
+LAPDOG creates learned procedures from actions demonstrated
+by the end user and collected by instrumentation in the client applications.
+ <P>
+Lumen is the execution component of Adept.
+It executes learned procedures on demand from the end user.
+ <P>
+The Procedure Library is a data store on the client file system for persisting learned procedures.
+It resides in the platform-specific location that is conventional for storing application data.
+ <P>
+The JMS Spine Server is a message-passing service that connects all Adept components.
+It utilizes Java Messaging Service (JMS), providing a server that conveys all message
+traffic in the system.
+ <P>
+The Bridge is an API layer that provides access to Adept functionality for learning, executing,
+and visualizing procedures. It also insulates client applications from the details of JMS
+message passing.
+ <P>
+Adept Control is invoked by the UI to start several Adept components and
+provides some core facilities used by Adept applications.
+ <P>
+The Adept UI provides the user interface for Adept. The UI supports control of learning sessions,
+initiation of the execution of learned procedures, and 
+management of procedures in the Procedure Library.
+ <P>
+The Procedure Editor allows Adept users to view, edit and create procedures.
+<P>
+Image Loader and Novo are simple Java applications that are Adept enabled, providing
+a sample application illustrating instrumentation and automation for an Adept client,
+and operation of the Adept UI as shown in the <A HREF="UserGuide.html">User Guide</A>.
+
+
+<br><HR>
+<h2><a name="TaskLearning"></a> Task Learning </h2>
+
+Task learning&mdash;the creation of procedures that perform user tasks&mdash;is done by Adept's LAPDOG module. LAPDOG performs task learning by converting a demonstration trace into an executable, parameterized procedure that reproduces the demonstrated activity and generalizes it so that the demonstrated task may be executed in the future to perform a range of similar tasks. This section discusses some considerations for the effective use of LAPDOG for Adept applications. 
+ <P>
+The specifics of the action model significantly affect the generalizations that are performed. To discuss this, we use a simplified notation for actions in the action model, suppressing some implementation details. In demonstration examples, to highlight dataflow, input arguments are preceded by a "+"; while a "-" precedes output arguments. Similarly, in procedure examples, input and output parameters are designated by "+" and "-", respectively. Variables in procedures, including parameter variables, are designated with a leading dollar sign. Argument types are omitted unless typing is significant to the example, in which case they are notated as ":TypeName" after the action argument. The procedure resulting from learning is notated as
+
+<PRE width="50">
+ProcedureName(<I>parameters</I>) {
+   action1(<I>arguments</I>)
+   action2(<I>arguments</I>)
+   ...
+   actionN(<I>arguments</I>)
+}
+</PRE>
+
+Action models specify the action name as well as the name and mode (i.e., input or output) of each parameter.
+For example:
+
+<PRE  width="50">
+Convert(+Infile, +Format, -Outfile)
+Delete(+File)
+GetCreationDate(+File, -Date)
+List(+Directory, -FileList) 
+</PRE>
+
+<h3><A NAME="ParameterGeneralization"></A> Parameter Generalization </h3>
+
+It is possible to learn parameterless procedures (i.e., macros)
+that perform the exact same sequence of operations every time they are executed.
+Consider a one-action demonstration:
+
+<PRE width="50">
+deleteFile(+"MyFile.txt")
+</PRE>
+
+From this demonstration, Adept can learn a parameterless procedure that always deletes the file "MyFile.txt".
+However, the true power of Adept is to learn procedures with parameters, such that the procedure can be
+applied to a range of tasks similar to the demonstrated task, as opposed to only that specific, verbatim task.
+The process by which parameters are created and associated with demonstrated values
+is called <I>parameter generalization</I>.
+
+ <P>
+For the action model
+
+<PRE  width="50">
+Convert(+Infile, +Format, -Outfile)
+Delete(+File)
+GetCreationDate(+File, -Date)
+List(+Directory, -FileList) 
+</PRE>
+
+consider the following execution trace for a demonstration within a file system:
+
+<PRE  width="50">
+Convert(+manual.pdf, +"HTML", -manual.html)
+GetCreationDate(+manual.html, -2009-03-23)
+</PRE>
+
+LAPDOG generalizes a demonstration by converting the arguments in the demonstration to variables in the learned procedure.
+Further, LAPDOG analyzes the dataflow in the demonstration, looking for support relationships&mdash;cases
+in which an output of an action is used as an input in one or more subsequent actions.
+In a support relationship, the supporting argument and all supported arguments are replaced
+or co-designated with a common variable in the learned procedure:
+
+<PRE  width="50">
+Convert($Infile, "HTML", $File)
+GetCreationDate($File, $Date)
+</PRE>
+
+The effect of this co-designation is to force all support-related inputs and outputs to have the same value when the learned procedure is executed.
+ <P>
+This example illustrates the basic generalization performed via learning by demonstration.
+Values in the sequence of demonstrated actions are replaced with variables; this is termed <I>variablization</I>.
+If no support is found for an argument, then this is made an input parameter to the learned procedure,
+obliging the user to provide it upon execution.  This process of support analysis and variablization is termed
+<I>parameter generalization</I>.
+ <P>
+Limiting variablization by designating action model parameters as <I>ungeneralizable</I> is possible.
+Such parameters are never variablized but rather remain as constants in the learned procedure.
+For example, if the Format parameter of the Convert action is made ungeneralizable,
+learned procedures containing it will always convert to the demonstrated format ("HTML" in this example).
+Additionally, certain constants&mdash;the null value, the empty string, empty list, and empty set&mdash;are never generalized.
+All other values are variablized. 
+
+ <P>
+The action model affects the expressive power of learned procedures. For example, an alternative formulation of the action model might model file deletion as
+
+<PRE  width="50">
+deleteFile(+"MyFile" +"txt")
+</PRE>
+
+which allows learning a variety of procedures with various parameterizations, controllable from the Adept UI.  For example, a two-parameter version looks like
+
+<PRE  width="50">
+DeleteFile(+$basename +$extension) {
+   deleteFile($basename $extension)
+}
+</PRE>
+
+If the underlying system allows wildcards, one could execute
+
+<PRE  width="50">
+DeleteFile("*" "txt")
+</PRE>
+
+to delete all text files in some unspecified context.
+
+ <P>
+In some cases, learning will create an unintended input parameter.  For example, a demonstration that increments a number by one:
+
+<PRE  width="50">
+add(+23 +1 -24)
+</PRE>
+
+might generalize to
+
+<PRE  width="50">
+AddTwoNumbers(+$number1 +$number2 -$result) {
+   add($number1 $number2 $result)
+}
+</PRE>
+
+when the actual intent is to always increment a number by one.
+As an alternative, the application could make a more specific action available:
+
+<PRE  width="50">
+addConstant(+$number +$constant -$result)
+</PRE>
+
+in which <CODE>$constant</CODE> is designated as an ungeneralizable parameter. This forces the corresponding value
+in the demonstration to be retained as a constant:
+
+<PRE  width="50">
+IncrementNumber(+$number1 -$result) {
+   add($number1 1 $result)
+}
+</PRE>
+
+The tradeoff is that the application must make this additional primitive available, and the user must know to use it.  Such tradeoffs are typical of action model design considerations.
+
+
+<h3><a name="Support"> Support Relationships</h3>
+
+During parameter generalization, LAPDOG determines which values support other values. For a learned procedure to be valid, all inputs to all its actions must be supported. For an action, an input value is supported if the value is available to the learned procedure when that action is executed, either as input to the procedure, as output by a previous action, or as a known function (discussed in detail below) of supported values. 
+ <P>
+Support determination depends on the types of the values involved.
+<UL>
+<LI> A simple value <i>u</i> supports another value <i>v</i> if <i>u</i> equals <i>v</i>, and <i>u</i>'s type is either the same as <i>v</i>'s type or a subtype of it.
+
+<LI> A list <i>u</i> supports another list <i>v</i> if each element of <i>u</i> supports the corresponding element in <i>v</i>.
+
+<LI> A set supports another set if it contains exactly the same elements as that set.
+
+<LI> A bag supports another bag if it contains exactly the same number of copies of each element in that bag, and no other elements.
+
+<LI> A structure (discussed in detail below) <i>u</i> supports a structure <i>v</i> if <i>u</i> and <i>v</i> are the same type, and each element of <i>u</i> supports the corresponding element of <i>v</i>.
+</UL>
+Support relationships for compound values are defined recursively, permitting an element of an arbitrarily structured data value to support another if their types are compatible.
+ <P>
+For example, given a demonstration of some string-manipulation actions:
+
+<PRE  width="80">
+concatenate(+"the quick " +"brown fox" -"the quick brown fox")
+removeBlanks(+"the quick brown fox" -"thequickbrownfox")
+uppercase(+"the quick brown fox" -"THE QUICK BROWN FOX")
+</PRE>
+
+the learned procedure is
+
+<PRE  width="80">
+P(+$string1 +$string2 -$out1 -$out2 -$out3) {
+   concatenate($string1 $string2 $out1)
+   removeBlanks($out1 $out2)
+   uppercase($out1 $out3)      
+}
+</PRE>
+
+Because the first occurrence of "the quick brown fox" supports values in the second and third actions, they are all co-designated with the same variable. Further, because the first occurrence is computed, it need not, and should not, be an input parameter. 
+
+
+<h3><A NAME="Ambiguous Supports"></A> Ambiguous Supports </h3>
+
+Ambiguity occurs when two or more supports are available for a given value.  In the demonstration
+
+<PRE  width="50">
+findZipCode(+"alice" -"12345")
+findZipCode(+"bob" -"12345")
+printZip(+"12345")
+</PRE>
+
+the support for the "12345" in printZip is ambiguous.  LAPDOG resolves such ambiguities during generalization by using the most recent supporting value:
+
+<PRE  width="50">
+findZipCode($name1 $zip1)
+findZipCode($name2 $zip2)
+printZip($zip2)
+</PRE>
+
+Using distinct data types can help prevent unwanted generalizations from arising from ambiguous supports. For example, the demonstration (with relevant argument types made explicit):
+
+<PRE  width="50">
+findZipCode(+"bob" -"12345":Zip)
+findEmployeeId(+"bob" -"12345":Id)
+printZip(+"12345":Zip)
+</PRE>
+
+contains two potential supports for "12345" in the last action.  However, it generalizes uniquely to
+
+<PRE  width="50">
+findZipCode($name $zip)
+findEmployeeId($name $id)
+printZip($zip)
+</PRE>
+
+due to the types of the action parameters.
+
+
+<h3><A NAME="Collections, Structures and Functions"></A> Collections, Structures and Functions </h3>
+
+The action model may define arguments as <I>collections</I> of values that are all of the same type.
+For example, we can define an action that finds the names of all employees of a company:
+
+<PRE width="85">
+getAllEmployeeNames(-["alice" "bob" "carl"])
+</PRE>
+
+Collections may be designated as lists, sets, or bags. 
+ <P>
+The action model may define arguments as <I>structures</I>, which are arbitrarily structured data similar to records or structures in programming languages.  For example, we can define a structure to represent an employee, containing their first name, last name, and employee ID:
+
+<PRE width="85">
+findEmployee(+12345 -&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+</PRE>
+
+The elements of a structure are named.  Each element may be of any type, including lists, sets, and other structures.  Supports and variablization are computed both for the structure itself, and for each element.  Like any other value, one structure can support another in its entirety:
+
+<PRE width="85">
+findEmployee(+12345 -&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+printEmployee(+&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+</PRE>
+
+generalizes to:
+
+<PRE width="85">
+findEmployee($id $employee)
+printEmployee($employee)
+</PRE>
+
+
+Structure elements can support other values.
+The following demonstration of constructing a full name from first and last names:
+
+<PRE width="85">
+findEmployee(+12345 -&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+concatenate(+"Ames" +"," -"Ames,")
+concatenate(+"Ames," +"Alice" -"Ames,Alice")
+</PRE>
+
+generalizes to:
+
+<PRE width="85">
+findEmployee($id $employee)
+concatenate((mapGet $employee "firstName") "," $string1)
+concatenate($string1 (mapGet $employee "lastName") "Ames,Alice")
+</PRE>
+
+Note the generalization of the argument "Ames" to the function <CODE>(mapGet $employee "firstName")</CODE>. This means that the element named "firstName" of the structure associated with $employee is used as the argument of the action. The functional notation is internal to Adept procedures; in the Adept UI, the <CODE>mapGet</CODE> appears as
+'Field <I>firstName</I> in <I>$employee</I>'.
+ <P>
+Besides structures, the accessor functions <CODE>first($List)</CODE> and <CODE>last($List)</CODE> are available for lists.  Thus, a demonstration
+
+<PRE width="85">
+getAllEmployeeNames(-["alice" "bob" "carl"]: list&lt;string&gt;)
+findZipCode(+"alice" -"12345")
+printZip(+"12345")
+findZipCode(+"carl" -"67890")
+printZip(+"67890")
+</PRE>
+
+generalizes to:
+
+<PRE width="85">
+getAllEmployeeNames($people)
+findZipCode(first($people) $zip1)
+printZip($zip1)
+findZipCode(last($people) $zip2)
+printZip($zip2)
+</PRE>
+
+If a list has only one element, both <CODE>first($List)</CODE> and
+<CODE>last($List)</CODE> are valid generalizations for element references.
+For example, consider an organization in which an employee typically has one supervisor,
+but in unusual cases could have several. The demonstration
+
+<PRE width="85">
+findSupervisorNames(+"bob" -["dan"] )
+findEmail(+"dan" -"dan@xyz.com")
+</PRE>
+
+could generalize to either
+
+<PRE width="85">
+findSupervisorNames($employee $supervisorList)
+findEmail(<B>first</B>($supervisorList) $email)
+</PRE>
+
+or
+
+<PRE width="85">
+findSupervisorNames($employee $supervisorList)
+findEmail(<B>last</B>($supervisorList) $email)
+</PRE>
+
+with equal validity. Instead of arbitrarily choosing one, in the case of such singleton lists, a third generalization is preferred
+by default:
+
+<PRE width="85">
+findSupervisorNames($employee $supervisorList)
+findEmail(<B>only</B>($supervisorList) $email)
+</PRE>
+
+The <CODE>only</CODE> function means: use the sole element of the list; it causes an error if
+the list does not contain exactly one element. List types allow a generalization preference to
+be specified as to whether to use <CODE>only</CODE>, <CODE>first</CODE>, or <CODE>last</CODE> in the case of singleton lists. For other collections (sets
+and bags), <CODE>only</CODE> is always used.
+
+ <P>
+
+In addition to accessor functions, constructor functions exist, which support a list, set, or structure by constructing it from individually supported parts.  For example, the demonstration
+
+<PRE width="85">
+inputEmployeeName(-"Bob" -"Baker")
+generateNewEmployeeId(-67890)
+createNewEmployee(+&lt;firstName="Bob" lastName="Baker" id=67890&gt;)
+</PRE>
+
+generalizes to
+
+<PRE width="85">
+inputEmployeeName($firstName $lastName)
+generateNewEmployeeId($id)
+createNewEmployee((mapGen "firstName" $firstName "lastName" $lastName "id" $id))
+</PRE>
+
+with <CODE>mapGen </CODE>being the Adept-internal name for the structure-constructor function;
+in the Adept UI it is shown as a structured value rather than a function invocation.
+Structures obey strict typing with regard to support determination.  One structure value does not support another unless they are of identical types, even if the names and the values of their components exactly match.
+
+ <P>
+Structures and collections may be partially supported. For example, in the demostration:
+
+<PRE width="85">
+inputEmployeeName(-"Bob" -"Baker")
+createNewEmployee(+&lt;firstName="Bob" lastName="Baker" id=67890&gt;)
+</PRE>
+
+the fields "Bob" and "Baker" are supported, but the field 67890 is not. LAPDOG by default treats the
+structure or collection as unsupported; in this example, the structure argument in whole would be
+generalized to a procedure parameter, ignoring the partial supports:
+
+<PRE width="85">
+P(+$employee) {
+    inputEmployeeName($firstName $lastName)
+    createNewEmployee($employee)
+}
+</PRE>
+
+
+However, a structure or collection type may specify a generalization preference permitting
+<I>generalization by construction </I>from partial supports. This permits the generalization to:
+
+<PRE width="85">
+P(+$id) {
+    inputEmployeeName($firstName $lastName)
+    createNewEmployee((mapGen "firstName" $firstName "lastName" $lastName "id" $id))
+}
+</PRE>
+
+The resulting procedure takes only the unsupported field of the structure as an input, rather than the entire structure,
+and constructs the structure from it and the supported fields. The user of the procedure may now enter
+one field value instead of three when running the procedure.
+ <P>
+Using the generalize-by-construction preference can lead to many input parameters
+for the procedure. This is particularly true for collections, which may have an unlimited number
+of elements. For this reason, this preference allows an optional limit on the number of inputs allowed
+(default is to allow unlimited inputs);
+if this limit is exceeded, the structure or collection in whole is made a procedure
+parameter instead.
+
+
+
+<h3><a name="LoopLearning">Loop Learning</h3>
+
+If the action model contains lists or sets, Adept may learn loop generalizations.  For example, consider the demonstration:
+
+<PRE WIDTH=80>
+getAllEmployeeNames(-["alice" "bob" "carl"]:list<string>)
+findZipCode(+"alice" -"12345")
+printZip(+"12345")
+findZipCode(+"bob" -"12345")
+printZip(+"12345")
+findZipCode(+"carl" -"67890")
+printZip(+"67890")
+</PRE>
+
+Here, list values are delimited with [ ], and the list type is made explicit. The demonstration contains a pattern of repetitions of the findZipCode and printZip actions.  The first argument to findZipCode refers in turn to each element of the list supported by the first action in the demonstration.  Moreover, the support relationships within the repeated actions are consistent--the output of findZipCode is used consistently as the input to the subsequent printZip.  This action pattern forms a valid iteration over a list and generalizes to a procedure containing a loop:
+
+<PRE WIDTH=80>
+getAllEmployeeNames($people)
+for $person in $people do
+   findZipCode($person $zip)
+   printZip($zip)
+od
+</PRE>
+
+LAPDOG is constrained to finding loops over collections (lists, sets, bags) that are explicit within the demonstration.  In the case of lists, the elements of the list be iterated over in order, and the sequence of repeated actions (the loop body) must be identical except for the references to (including functions over) those elements.
+<P>
+LAPDOG can detect parallel iteration over multiple lists if the lists are of the same length and their elements are accessed consistently within the loop body.
+Loops may also generate list values that support subsequent lists.  The outputs of a repeated action that form a loop body form a list that can be used to support list inputs later in the demonstration.  Here is a richer example of loop learning, using abstract actions:
+
+<PRE WIDTH=80>
+A(-[1 2 3])
+B(-[a b c])
+C(+a +1 -a1) 
+C(+b +2 -b2)
+C(+c +3 -c3)
+D(+[a1 b2 c3])
+</PRE>
+
+This generalizes to
+
+<PRE WIDTH=80>
+A(-X)
+B(-Y)
+for U in X, V in Y building Z do
+   C(+U +V -W)
+   W accumulate Z
+od
+D(+Z)
+</PRE>
+
+
+<H3><a name="DataflowCompletion"></a> Dataflow Completion</H3>
+
+Ideally, instrumentation will capture all of the user's actions.  However, certain actions may be awkward to demonstrate (for example, indicating that an email address is that of the host of a meeting) or they may be mental actions with no associated physical gesture (for example, choosing to add one's initials to a document name).  This leads to an <I>implicit</I> dataflow, where inputs to succeeding actions are not directly supported by outputs of preceding actions.  For example, a demonstration where the user appends the current date to the name of a file:
+
+<PRE WIDTH=80>
+selectFile(-"Report")
+renameFile(+"Report" +"Report20101215")
+</PRE>
+
+would be generalized to a procedure requiring both the original and new names to be input:
+
+<PRE WIDTH=80>
+RenameFile(+$oldfile +$newfile) {
+   selectFile($oldfile)
+   renameFile($oldfile $newfile)
+}
+</PRE>
+
+However, given an appropriate library of <I>information-producing actions</I>, LAPDOG can infer the actions necessary to complete the dataflow.  For example, given actions to retrieve today's date and to concatenate strings, the demonstration can be extended to:
+
+<PRE WIDTH=80>
+selectFile(-"Report")
+todaysDate(-"20101215")
+appendString(+"Report" +"20101215" -"Report20101215">
+renameFile(+"Report" +"Report20101215")
+</PRE>
+
+and a more general procedure that captures the rationale behind the new name can be learned:
+
+<PRE WIDTH=80>
+RenameFile(+$oldfile -$newfile) {
+   selectFile($oldfile)
+   todaysDate($date)
+   appendString($oldfile $date $newfile)
+   renameFile($oldfile $newfile)
+}
+</PRE>
+
+There are two categories of information-producing actions: <I>completers</I> and <I>supporters</I>.
+Completer actions are just like regular actions except
+that they have no instrumentation counterpart: they cannot be demonstrated and can only be inferred.
+Supporter actions are both demonstrable (and hence must be instrumented)
+and inferrable for dataflow completion.
+Information-producing actions are considered by LAPDOG as part of the parameter generalization process
+as it searches for a maximally general procedure.
+<P>
+There is another category of actions that can be used to infer implicit dataflow: <I>context</I> actions.
+They are not demonstrated, nor are they added by LAPDOG, but may be proactively inserted by the application into the
+demonstration for possible use in dataflow completion.
+Such actions are intended to capture properties of the environment within which the demonstration is performed.
+For example, context actions might be used to provide information such as the current user, the user's home directory, the operating system version, and the current date and time.  If the context information is used to support actions in the demonstration, the learned procedure retains the corresponding context actions.  Otherwise, if an inserted context action does not support any dataflow, it may be removed
+by Adept from the learned procedure (although Adept currently does not do so) or by the user through the Editor, without affecting
+the procedure's behavior.
+<P>
+Information-producing actions and context actions serve to capture more dataflow connections between the actions of the demonstration, providing greater generalization and resulting in procedures with fewer input parameters. However, dataflow completion can be an expensive search process, so care must be taken to define only information-producing actions and context actions that are useful and to ensure their proper application through strong parameter typing.
+
+
+<br><HR>
+<h2><a name="ActionModelCreation"></a> Creating the Action Model  </h2>
+
+ <P>
+The action model for a client application fulfills several important roles:
+<OL>
+<LI> The elements of the action model constitute the building blocks for task learning:
+as such, the design of the action model significantly affects learning and generalization.
+<LI> The actions in the action model are instrumented and automated,
+serving as an API between Adept and the application.
+<LI> The action model characterizes the level at which the user views and manipulates learned procedures.
+</OL>
+ <P>
+The action model is expressed as an XML file. For full examples, see the
+<A HREF="imageloader_model.xml">Image Loader action model file</A>
+and the
+<A HREF="novo_model.xml">Novo action model file</A>.
+ <P>
+This section discusses the various semantic options for expressing actions and the data types of their arguments,
+as well as how to define them in the action model XML file. This is followed by design guidelines in
+formulating an action model for an application.
+
+<H3><A NAME="The Action Model File"></A> The Action Model File </H3>
+
+An action model file has the following structure:
+
+<PRE WIDTH=80>
+&lt;?xml version="1.0"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="./am-to-html.xslt"?&gt;
+&lt;actionModel version="2.1.a"&gt;
+
+&lt;!-- Types and Actions --&gt;
+
+&lt;/actionModel&gt;
+</PRE>
+
+ <P>
+The action model file contains specifications for types, actions, and action parameters.
+The action model contains a version designator on the <CODE>actionModel</CODE> tag.
+This assists the application in action model maintenance. It is also used internally by
+Adept, as a part of every action and type name. This allows Adept to detect and prevent
+execution of procedures using any action model version other than the one currently registered.
+ <P>
+In addition to the various element-specific tags (described in the following subsections),
+the action model may contain various
+<CODE>metadata</CODE> tags of the form:
+
+ <p><pre width=80>&lt;metadata key="foo" value="bar"/&gt;</pre>
+ 
+Metadata enables markup of the action model to improve user understanding of the
+ actions and types displayed in the user interface. Keys and values for each
+ action model element are described in the following subsections.
+ Any metadata whose key is not listed in this document is silently ignored.
+Metadata is optional; that is, leaving out metadata will not adversely impact Adept's
+ functionality, only the UI display.</p>
+
+The stylesheet <A HREF="am-to-html.xslt">am-to-html.xslt</A> is provided to enhance action model readability.
+The action model version is required.  It is used internally by Adept to version each
+element of the action model, and to detect inconsistencies across action model versions.
+Also, it is available to the application to help manage revisions.
+ <P>
+The action model of an application may be split into several XML files by using
+the <CODE>require</CODE> tag. For example:
+
+<PRE WIDTH=80>
+  ...
+  &lt;require url="./common-types.xml" /&gt;
+  ...
+</PRE>
+
+
+
+
+<H3><a name="DataTypes"></a>Data Types</H3>
+
+ <P>
+
+All action parameters have a data type. The typed approach to data representation is done for a number of reasons:
+1) the semantics of actions are clearer,
+2) strong typing can greatly enhance learning by constraining generalization and, in some cases,
+   dramatically pruning the space of potential procedures,
+3) the API is clearer, and
+4) input values are more natural to enter when executing a learned procedure. There are several classes of data types supported in Adept:
+
+<ul>
+  <li>Built-in Primitive Types</li>
+  <li>Application Types</li>
+  <li>Enumeration Types</li>
+  <li>Collection Types</li>
+  <li>Structure Types</li>
+</ul>
+
+<h4>Built-in Primitive Types</h4>
+ <p>Adept provides several primitive data types that can be referenced immediately in an action model:</p>
+ <ul>
+   <li><code>string</code>: A string data type built on java.lang.String</li>
+   <li><code>boolean</code>: A boolean data type built on java.lang.Boolean</li>
+   <li><code>integer</code>: An integer data type built on java.lang.Integer</li>
+   <li><code>real</code>: A real data type built on java.lang.Double</li>
+ </ul>
+
+<p>The following example, taken from the Novo action model, illustrates referencing a primitive type in an action declaration:</p>
+
+<pre width="80">
+    &lt;action id="dispenseShapes"&gt;
+        &lt;inputParam id="numShapes"&gt;
+            &lt;typeRef typeId="integer"/&gt;
+        &lt;/inputParam&gt;
+        ...
+    &lt;/action&gt;
+</pre>
+
+<p>Note that if a primitive type is used by multiple action parameters that have different semantics, Adept will not know about the semantic differences between the usages of the type and may generalize values that are semantically unrelated. For example, if an action parameter is declared that represents a person's age and uses the primitive type <code>integer</code>, another parameter intended to represent the number of days in a month also declared as an <code>integer</code> will result in an incorrect generalization if a value such as "30" is provided for both parameter values, regardless of whether the parameters are declared in the same action. In order to prevent this, it may be necessary to use "application types" where semantic differences exist.</p>
+
+<h4>Application Types</h4>
+
+<p>
+  Application types are used to define custom semantic types in a client application. 
+Generally an application type is built on a simple primitive type from Java,
+but any class fulfilling the following requirements may be used:
+
+<UL>
+<LI> It must be convertible to a <CODE>java.lang.String</CODE> by providing a
+<CODE>toString()</CODE> method.
+<LI> It must be convertible from a <CODE>java.lang.String</CODE> by providing either
+<UL>
+<LI> A constructor that takes a single argument of type java.lang.String, or
+<LI> A static valueOf method which takes a single argument of type <CODE>java.lang.String</CODE>
+and returns an object of this class.
+</UL>
+<LI> The conversions to and from string must be reversible and unique.
+<LI> Its <CODE>equals()</CODE> method must be consistent with the support relationships
+and generalizations expected. Essentially this means that if two objects are <CODE>equals()</CODE>
+and of compatible Adept types, designating them with the same
+variable in the learned procedure is valid.
+</UL>
+  
+Adept provides the class <CODE>com.sri.pal.CustomTypeFactory</CODE>
+and a default implementation <CODE>ToStringFactory</CODE>
+to manage converting between string and object representations of custom types,
+though no examples of their usage are provided. </p>
+
+<p>The following type declarations declare application types built on <code>java.lang.Integer</code> and <code>java.lang.String</code> respectively. These types are semantically separate from the built-in <code>integer</code> and <code>string</code> primitive types respectively, even though the underlying representation of the data values are identical with the primitive types.
+Note that application types cannot be declared with the same name as a built-in primitive type, such as <code>integer</code>.</p>
+
+<pre width=80>
+    &lt;type id="myInteger"&gt;
+        &lt;description&gt;An integer value&lt;/description&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.Integer&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+ </pre>
+
+<pre width=80>
+    &lt;type id="myString"&gt;
+        &lt;description&gt;A string value&lt;/description&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.String&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+ </pre>
+
+
+<p>Several application types that reference the same javaType may be specified.
+For example, an application
+using postal codes may not want to confuse those with other strings:</p>
+
+<pre width=80>
+    &lt;type id="ZipCode"&gt;
+        &lt;description&gt;A U.S. postal code&lt;/description&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.String&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+ </pre>
+
+ <P>
+Generally, the values of distinct types do not support each other.
+An exception is that a hierarchy of primitive types may be specified:
+
+<pre width=80>
+    &lt;type id="ZipCodeShort"&gt;
+        &lt;description&gt;A 5-digit U.S. postal code&lt;/description&gt;
+	&lt;inherit parent="ZipCode"/&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.String&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+
+    &lt;type id="ZipCodeLong"&gt;
+        &lt;description&gt;A 9-digit U.S. postal code&lt;/description&gt;
+	&lt;inherit parent="ZipCode"/&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.String&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+ </pre>
+
+The values of child types may support the values of their direct parent type, or
+those of any ancestor type.
+Such a hierarchy enables actions that take only short,
+only long, or either variant of zip code as parameters.
+
+<h4>Enumeration Types</h4>
+<p>Enumeration types allow for a fixed set of string values. Use of an enumeration type will cause the Adept UI and Editor to display values of that types as drop-down lists. For example:</p>
+
+<pre width=80>
+    &lt;type id="SizeEnum"&gt;
+        &lt;description&gt;Enumeration of size types&lt;/description&gt;
+        &lt;enum&gt;
+            &lt;value&gt;Small&lt;/value&gt;
+            &lt;value&gt;Medium&lt;/value&gt;
+            &lt;value&gt;Large&lt;/value&gt;
+        &lt;/enum&gt;
+    &lt;/type&gt;        
+</pre>
+
+<h4>Collection Types</h4>
+ <P>
+Data types can be aggregated into sets, lists, or bags,
+which have an arbitrary number of elements, all of the same type.
+For example:
+
+<PRE WIDTH=80>
+    &lt;type id="set(string)"&gt;
+        &lt;description&gt;A set of strings&lt;/description&gt;
+        &lt;set&gt;
+	    &lt;ref typeRef="string"/&gt;
+        &lt;/set&gt;
+    &lt;/type&gt;
+</PRE>
+
+This type describes a set with elements of type string. In general, the element type may be any other type.
+
+
+<h4>Structure Types</h4>
+ <P>
+Data types can also be aggregated into <I>structures</I>.
+A structure has a fixed number of named elements of varying types.
+An element type may be any other type.
+For example:
+
+<PRE WIDTH=80>
+    &lt;type id="file"&gt;
+        &lt;description&gt;
+            A file on a file system, consisting of a directory,
+            a base file name, and an extension indicating file type
+        &lt;/description&gt;
+        &lt;struct&gt;
+            &lt;ref name="directory" typeRef="directory"/&gt;
+            &lt;ref name="file name" typeRef="basefilename"/&gt;
+            &lt;ref name="extension" typeRef="extension"/&gt;
+        &lt;/struct&gt;
+    &lt;/type&gt;
+</PRE>
+
+This type describes a reference to a file, consisting of a containing directory, the base name
+of the file, and its file extension.
+ <P>
+A structure can be made <I>opaque</I>. For example:
+
+<PRE WIDTH=80>
+    &lt;type id="coordinate" opaque="true"&gt;
+        &lt;description&gt;
+            An x,y coordinate
+        &lt;/description&gt;
+        &lt;struct&gt;
+            &lt;ref name="x" typeRef="real"/&gt;
+            &lt;ref name="y" typeRef="real"/&gt;
+        &lt;/struct&gt;
+    &lt;/type&gt;
+</PRE>
+
+Making a structure opaque affects parameter generalization as follows:
+<OL>
+<LI> An opaque structure is never constructed from its component elements;
+  it is either supported in whole by another structure, or is made an input parameter.
+
+<LI> An opaque structure's elements may never support any other values;
+  that is, no generalizations will include accessors to opaque structure elements.
+</OL>
+
+ <P>
+
+<H4>Compound types and generalization control</H4>
+ <P>
+As noted earlier, certain types permit specifying generalization preferences for their values.
+List types allow specifying a preference for generalizing element access of a singleton value
+to either <CODE>only($List)</CODE>, <CODE>first($List)</CODE>, or <CODE>last($List)</CODE>,
+with <CODE>only</CODE> being the default:
+
+<PRE width="80">
+    &lt;type id="sortedList"&gt;
+        &lt;description/&gt;
+        &lt;list&gt;
+            &lt;generalizeSingleton method="first"/&gt;
+            &lt;ref typeRef="string"/&gt;
+        &lt;/list&gt;
+    &lt;/type&gt;
+</PRE>
+
+Structure and collection types may specify a generalization preference for
+unsupported and partially supported values:
+
+<PRE width="80">
+    &lt;type id="aStruct"&gt;
+        &lt;description/&gt;
+        &lt;struct&gt;
+            &lt;generalizeUnsupported preference="construct" maxInputs="2"/&gt;
+            &lt;ref typeRef="string" name="field1"/&gt;
+            &lt;ref typeRef="string" name="field2"/&gt;
+            &lt;ref typeRef="string" name="field3"/&gt;
+        &lt;/struct&gt;
+    &lt;/type&gt;
+</PRE>
+
+The default preference is <CODE>parameterize</CODE>, which means to generalize by making the entire value
+a parameter to the procedure rather than constructing it from its parts. If 
+<CODE>maxInputs</CODE> is not specified, procedure parameters will be added for each element of the collection or structure, regardless of number.
+
+
+
+<H4>Metadata for data types</H4>
+
+Allowable keys and values for type metadata are shown in the following table.
+ <P>
+
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<caption class="title"><B>Metadata for data types</B> </caption>
+<thead>
+<tr>
+<th align="left" valign="top">Key  </th>
+<th align="left" valign="top">Value  </th>
+<th align="left" valign="top">Applicable to </th>
+<th align="left" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">pluralName</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">all types</p></td>
+<td align="left" valign="top"><p class="table">The plural of the type  (e.g. <I>"emails"</I>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">aName</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">all types</p></td>
+<td align="left" valign="top"><p class="table">The type preceded by its indefinite article  (e.g. <I>"an email"</I>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">thisName</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">all types</p></td>
+<td align="left" valign="top"><p class="table">The indefinite form of the type (e.g. <I>"this email"</I>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">editor_disallowAskUser</p></td>
+<td align="left" valign="top"><p class="table">boolean</p></td>
+<td align="left" valign="top"><p class="table">all types</p></td>
+<td align="left" valign="top"><p class="table">Disables the <code>"Ask the user for this value"</code> option on terms of this type (see the section "Rewiring Values in Steps" in the <A HREF="EditorGuide.html">Editor Guide</A>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">editor_disallowFixedValue</p></td>
+<td align="left" valign="top"><p class="table">boolean</p></td>
+<td align="left" valign="top"><p class="table">all types</p></td>
+<td align="left" valign="top"><p class="table">Disables the <code>"Use a fixed value"</code> option on terms of this type (see the section "Rewiring Values in Steps" in the <A HREF="EditorGuide.html">Editor Guide</A>).</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">editor_disallowExistingValue</p></td>
+<td align="left" valign="top"><p class="table">boolean</p></td>
+<td align="left" valign="top"><p class="table">all types</p></td>
+<td align="left" valign="top"><p class="table">Disables the ability to reference other variables on terms of this type (see the section "Rewiring Values in Steps" in the <A HREF="EditorGuide.html">Editor Guide</A>).</p></td>
+</tr>
+</tbody>
+</table>
+
+
+<H3><A NAME="Actions"></A> Actions </H3>
+
+ <P>
+An action consists of
+<OL>
+<LI> a name that uniquely identifies the action,
+<LI> input and output parameters,
+<LI> [optional] a description of the action,
+<LI> [optional] metadata,
+<LI> [optional] an action category.
+</OL>
+For example:
+<PRE WIDTH=80>
+    &lt;action id="OpenImageFile"&gt;
+        &lt;description&gt;
+           Opens an image file in the Image Viewer.
+        &lt;/description&gt;
+        &lt;metadata key="name" value="Open image in ,#file"/&gt;
+        &lt;metadata key="fancyName" value="Open ,#file"/&gt;
+        &lt;metadata key="icon" value="./fapps/image.jpg"/&gt;
+        &lt;inputParam id="file"&gt;
+            &lt;description&gt;
+                The image file to open
+            &lt;/description&gt;
+            &lt;typeRef typeId="file"/&gt;
+        &lt;/inputParam&gt;
+        &lt;outputParam id="image"&gt;
+            &lt;description&gt;
+               Identifies the in-memory image currently being manipulated
+            &lt;/description&gt;
+            &lt;typeRef typeId="imageID"/&gt;
+        &lt;/outputParam&gt;
+    &lt;/action&gt;
+</PRE>
+
+The identifier is used internally to identify the action.
+If no naming metadata is supplied, the identifier is used in user interfaces to
+depict the action as well.
+  <P>
+The input parameters describe the data needed by the action
+to execute. The output parameters describe the data that is computed
+or produced by the action.
+Put another way, they describe the dataflow of the action.
+An action with no outputs is permissible.
+This indicates that no relevant dataflow for the action exists,
+i.e., there are no significant data side effects.
+An action may also have no inputs.
+For example, an action to report the current date might have as output parameters the year, month, and day. 
+
+  <H4>Parameters and dataflow completion</H4>
+
+Input parameters may specify an optional <I>class</I>. The default value is <I>generalizable</I>,
+which may be explicitly specified if desired.
+<P>
+Input parameters may be specified as ungeneralizable.
+This means that the value used for that parameter in a learned procedure
+will be identical to the corresponding value in the demonstration from which it is learned.
+For example, with the <CODE>class="constant"</CODE> attribute on the "Format" parameter,
+the following action definition specifies that the format of the file produced by this action
+in a learned procedure will always be the same as the format observed
+in the demonstration. 
+
+<PRE WIDTH=80>
+  &lt;action id="Convert"&gt;
+    &lt;description&gt;
+      Converts a file to the given format, producing a file with that extension.
+    &lt;/description&gt;
+    &lt;inputParam id="Infile"&gt;
+      &lt;description&gt; The file being converted &lt;/description&gt;
+      &lt;typeRef typeId="string"/&gt;
+    &lt;/inputParam&gt;
+    &lt;inputParam id="Format"&gt;
+      &lt;description&gt; The format the file is converted to. &lt;/description&gt;
+      &lt;class class="constant"/&gt;
+      &lt;typeRef typeId="string" /&gt;
+    &lt;/inputParam&gt;
+    &lt;outputParam id="Outfile"&gt;
+      &lt;description&gt; The converted file. &lt;/description&gt;
+      &lt;typeRef typeId="string"/&gt;
+    &lt;/outputParam&gt;
+  &lt;/action&gt;
+</PRE>
+
+
+<H4>Metadata for actions</H4>
+ <P>
+Allowable keys and values for action metadata are shown in the following table.
+The action model schema expects that all metadata tags be located
+ after the <CODE>description</CODE> tag.</p>
+
+ <p>
+ 
+<div class="tableblock">
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<caption class="title"><B>Metadata for actions</B></caption>
+<thead>
+<tr>
+<th align="left" valign="top">Key  </th>
+<th align="left" valign="top">Value  </th>
+<th align="left" valign="top">Applicable to </th>
+<th align="left" valign="top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">name</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">all actions</p></td>
+<td align="left" valign="top"><p class="table">A short descriptive name for the action, suitable for display for the
+    user (e.g. <I>"Open document"</I>) </p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">fancyName</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">all actions</p></td>
+<td align="left" valign="top"><p class="table">A descriptive name for the action that may contain references to action parameters of the form
+<em>,#paramName</em>, (e.g., "<em>Copy ,#from, to ,#to</em>").
+    The <I>paramName</I> must either be followed by a comma, or must appear at the end of the string.
+    When displaying the demonstration, each parameter reference is replaced with the corresponding demonstrated value.
+    When displaying the learned procedure,
+    each parameter reference is replaced with the corresponding variable or expression assigned by LAPDOG.
+</p></td>
+</tr>
+<tr>
+<td align="left" valign="top"><p class="table">icon</p></td>
+<td align="left" valign="top"><p class="table">resource</p></td>
+<td align="left" valign="top"><p class="table">all actions</p></td>
+<td align="left" valign="top"><p class="table">A path to a resource that is an icon file that depicts this action (e.g., <I>"./resources/image.jpg"</I>).  Note that this file must be available on the classpath.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+ <P>
+Allowable keys and values for action parameter metadata are shown in the following table.
+ <P>
+
+<table rules="all"
+frame="border"
+cellspacing="0" cellpadding="4">
+<caption class="title"><B>Metadata for parameters of actions</B> </caption>
+<thead>
+</thead>
+<tbody>
+<tr>
+<th align="left" valign="top">Key  </th>
+<th align="left" valign="top">Value  </th>
+<th align="left" valign="top">Applicable to </th>
+<th align="left" valign="top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="top"><p class="table">userDescription</p></td>
+<td align="left" valign="top"><p class="table">string</p></td>
+<td align="left" valign="top"><p class="table">all actions</p></td>
+<td align="left" valign="top"><p class="table">A user-oriented description of the parameter.</p></td>
+</tr>
+</tbody>
+</table>
+
+<H4>Action categories and dataflow completion</H4>
+
+Actions may specify an optional <I>category</I>. The default value is <I>effector</I>,
+which may be explicitly specified if desired.
+The category may also be <I>completer</I>, <I>supporter</I>, or <I>context</I>.
+This allows specification of dataflow completion actions as discussed in the
+<A HREF="#DataflowCompletion">Dataflow Completion</A> section. For example,
+this action is from the action model of Image Loader:
+
+<PRE width=100>
+    &lt;action id="DefaultFolder" category="completer"&gt;
+        &lt;description&gt;
+            Add this action automatically when the designated default directory is demonstrated.
+	    This means the learned procedure has one less parameter, but one more action.
+        &lt;/description&gt;
+        &lt;metadata key="name" value="Use default Imageloader folder"/&gt;
+        &lt;metadata key="fancyName" value="Use default Imageloader folder"/&gt;
+        &lt;metadata key="icon" value="./fapps/image.jpg"/&gt;
+        &lt;outputParam id="defaultFolder"&gt;
+            &lt;description&gt;
+                The directory designated as the default folder for Imageloader
+            &lt;/description&gt;
+            &lt;typeRef typeId="directory"/&gt;
+        &lt;/outputParam&gt;
+    &lt;/action&gt;
+</PRE>
+
+With this action, the system can infer support for the use of this default directory in the demonstration and add an instance of this action
+to the learned procedure to support that value.
+The net effect is that the default directory does not become a procedure parameter.
+
+
+<H3><A NAME="Action Modeling for Multiple Applications"></A> Action Modeling for Multiple Applications </H3>
+
+When using Adept to create learned procedures that span multiple applications,
+each application must have its own action model, organized in separate files.
+The action models are independent of each other, except in those cases in which it is desirable
+to share dataflow across applications.
+ <P>
+Sharing dataflow between two applications A and B means that the output of an action of A
+is used as an input to an action of B. As discussed in the
+<A HREF="#Support">Support Relationships</A> section, this means that the types of this output
+and input must be compatible. This is a problem because by default the types of different action models
+are disjoint. However, Adept permits types in different action models to be specified
+as equivalent to each other, which makes them compatible for determining support relationships.
+For example, if application A's action model defines a type <CODE>url</CODE>:
+
+<PRE width="100">
+    &lt;type id="url"&gt;
+        &lt;description&gt;A url such as http://www.yahoo.com&lt;/description&gt;
+	&lt;!-- Allow URL params from application B to support and be supported by our URLs --&gt;
+	&lt;equivalentTo&gt;B.url&lt;/equivalentTo&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.String&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+</PRE>
+
+the <CODE>equivalentTo</CODE> specification permits the
+<CODE>url</CODE> type of application B to support and be supported by the
+<CODE>url</CODE> type of application A. The javaType of equivalent types
+<B>must be identical</B>. 
+
+
+<H3><A NAME="Design Guidelines"></A> Design Guidelines </H3>
+
+The action model is central to integrating an application with Adept.
+Guidelines for creating an effective action model are provided in this section. 
+
+<h4>Granularity</h4>
+
+Representing actions at an appropriate level is key to creating understandable and manageable learned procedures.
+Actions should be modeled at the level at which humans would typically describe their own
+interactions with the client.
+For example, in an email application, capturing the actions
+<I>Open Compose Window</I>, <I>Add Email Attachment</I>, <I>Send Email</I>, etc. is preferable to
+<I>Click on Compose Button</I>, <I>Pop Up Compose Window</I>, <I>Click on Attach Button</I>, etc.,
+and even more so to <I>Drag Mouse from (X1,Y1) to (X2,Y2)</I>, <I>Left-Click on Mouse at (X2,Y2)</I>, etc.
+ <P>
+The system need not necessarily be directly instrumented/automated at a human-friendly level
+if a well-defined mapping exists between the system's native instrumentation and the
+higher-level conceptualization of actions used in the action model.
+For example, an email application might use an internal operation <I>SendMail</I>
+that handles sending a new message, replying, and forwarding all in one API, by providing the
+appropriate parameters for to and cc lists, message bodies, etc.
+An action model designer might prefer separate actions for <I>Send</I>,
+<I>Reply</I>, and <I>Forward</I>. This is accomplished by capturing
+<I>SendMail</I> calls for instrumentation, determining which of the three actions apply
+given the parameters of the <I>SendMail</I>, and appropriately mapping the parameters
+to the action's parameters. The reverse would be done for automation.
+
+
+<H4>Complex Objects as Parameters</H4>
+
+An arbitrary Java object is a bad candidate for a parameter for an action.
+The Adept UI does not support display and input of arbitrary Java objects.
+Also, the Java class of any object passed as a parameter in an action must fulfill the following:
+
+<UL>
+<LI> It must be convertible to a <CODE>java.lang.String</CODE> by providing a
+<CODE>toString()</CODE> method.
+<LI> It must be convertible from a <CODE>java.lang.String</CODE> by providing either
+<UL>
+<LI> A constructor that takes a single argument of type java.lang.String, or
+<LI> A static valueOf method which takes a single argument of type <CODE>java.lang.String</CODE>
+and returns an object of this class.
+</UL>
+<LI> The conversions to and from string must be reversible and unique.
+<LI> Its <CODE>equals()</CODE> method must be consistent with the support relationships
+and generalizations expected. Essentially this means that if two objects are <CODE>equals()</CODE>
+and of compatible Adept types, designating them with the same
+variable in the learned procedure is valid.
+</UL>
+
+For these reasons, an alternative to complex objects as parameters might be desirable.
+One alternative is to define a unique identifier string for each object of a given class,
+and then map the object to its identifier when
+producing instrumentation and vice versa when processing automation. 
+ <P>
+Another alternative is to model the complex object as a structure.
+This is particularly appropriate if the object has visible data fields,
+as opposed to being a "black box" for which only the internals of the client application
+can access its components. 
+
+
+<h4>Dataflow Model</h4>
+
+The effects of executing an action are characterized by
+their inputs and outputs. That is, in a strict dataflow model, the only meaningful state
+changes that occur within an application as a result of executing an action
+are those changes reported in its output parameters.
+ <P>
+The dataflow model can pose problems in those cases in which an action changes a parameter
+or an attribute of a parameter, rather than producing a distinct output.
+If expressing the operations of a client application in terms of dataflow is infeasible,
+then the generalizations performed by task learning will be of limited value.
+
+
+<H4>Iteration</H4>
+
+Adept has the powerful capability to learn procedures with loops.
+Specifically, Adept can learn loops over lists, sets, and bags
+of values by recognizing patterns of actions that use their elements
+in a consistent way. This is discussed in the previous section under
+<A HREF="#LoopLearning">Loop Learning</A>.
+ <P>
+In order to learn loops at all, at minimum a list, set, or bag must
+appear in a demonstration as the output of an action. If iteration
+is important for an application, then its action model must provide
+the aggregates to be iterated over.
+ <P>
+To learn a loop over a list of values, those values must appear
+in the demonstration in the same order in which they appear in the list.
+This may affect decisions on whether to model certain parameters
+as lists versus sets or bags.
+
+
+<h4>Instrumentation and Automation Duality</h4>
+
+With the exception of completer and context actions, every action in the action model must enable both
+reporting when the user performs that action (instrumentation)
+and executing that same action (automation) from a learned procedure.  (Completer and context actions need only provide automation.)
+The effect of automation for an action should be exactly the same as
+executing the corresponding command natively in the client application. 
+
+
+<!--
+<h4>Declarative semantics</h4>
+
+Besides specification of input and output parameters, the action model
+permits specification of a number of other action attributes.
+ <P>
+Parameter types: All parameters must have a type.
+Parameter typing leads to more understandable actions. Strong
+typing also can greatly enhance learning by constraining generalization and,
+in some cases, dramatically pruning the search space of candidate procedures. 
+ <P>
+Control of generalization: An action parameter may be designated
+as <I>ungeneralizable</I>, which is useful for restricting generalization when
+a parameter value should remain a constant (that is, never be made a procedure parameter
+or be derived from another action's output).
+ <P>
+Metadata: In order to enhance GUIs for task and procedure
+launching, the action model may contain <I>metadata</I> properties that give user-friendly
+display names to tasks, procedures, and parameters. Default values may be
+specified for input parameters, obviating the need to explicitly enter values.
+-->
+
+
+<br><HR>
+<h2><a name="EnablingClient"></a> Enabling the Client Application  </h2>
+<p>
+This section explains how to create a module that allows a client application
+to exchange instrumented events and automated actions with the Adept task learning system.
+Conceptually, we will be using the Bridge APIs to make a connection between the client application
+and Adept. The JMS messaging spine used by Adept provides the communication between the two.
+</p> <P>
+The APIs referenced in this section are implemented in the various files in the <CODE>lib</CODE>
+directory provided in the Adept installation. All files in this directory must be on the classpath
+of the client application to compile and execute it.
+</p> <P>
+Numerous excerpts from sample Adept-enabled applications are provided. The complete source code of the 
+<A HREF="../../applications/imageloader">Image Loader</A>
+and
+<A HREF="../../applications/novo">Novo</A>
+sample applications is provided as well.
+
+
+<H3><A NAME="Logging and Debugging"></A> Logging and Debugging </H3>
+
+Adept uses <A HREF="http://logging.apache.org/log4j/1.2/manual.html">log4j</A> to create debugging logs.
+The client application may wish to enable log4j logging as well. This may be done by invoking the following
+Adept API static method in the package <CODE>com.sri.tasklearning.util</CODE>
+in its startup code, before any other Adept API methods are executed:
+
+ <P>
+<pre width="85">
+void LogUtil.configureLogging(String moduleName, Class<?> baseClass)
+
+Configure the log4j system with a config file. A series of config file names are searched for in the current directory, followed by looking for resources on the classpath relative to baseClass. Config files can be named moduleName.ext, where ext is one of xml, properties, or ini. As a fallback, log4j.ext will be searched for. If all else fails, this will try to use org.apache.log4j.BasicConfigurator.
+
+Parameters:
+moduleName - base name of the config file to be searched for
+baseClass - class to search for resources relative to
+</pre>
+
+ <P>
+For example, the Image Loader configures logging as follows:
+ <P>
+<pre width="85">
+  // use log4j.xml as logging config file.
+  LogUtil.configureLogging("imageloader_log", Imageloader.class); 
+  LogUtil.configureLogging("log4j", AdeptShell.class); 
+</pre>
+ <P>
+This initialization allows a configuration file <CODE>imageloader_log.xml</CODE> to be included as a resource
+in its JAR file, or placed in its current working directory.
+
+
+<h3><A NAME="Initialization"></A> Initialization </h3>
+<p>
+First, we first create a class that is responsible for connecting to Adept and loading the action model.
+A typical class definition might look something like this:
+<pre width="85">
+import com.sri.pal.ActionModel;
+import com.sri.pal.Bridge;
+import com.sri.pal.PALException;
+/**
+ * AdeptWrapper acts as an interface to Adept, allowing access to functionality
+ * such as instrumentation, type instantiation, and setting up the initial state
+ * of Adept by loading an action model.
+ */
+public class AdeptWrapper {
+    // Objects related to loading the actionmodel and executing
+    // procedures
+    public static final String NAMESPACE = "imageloader";
+    public static final String APP_NAME = "imageloader";
+    public static final String XML_PATH = "imageloader_model.xml";
+    private static ActionModel actionModel;
+    private static AdeptExecutor executor;
+    public static Bridge bridge;
+    private static boolean bridgeStarted = false;
+
+    public AdeptWrapper() {
+        loadActionModel();
+    }
+...
+}</pre>
+
+The <CODE>NAMESPACE</CODE> constant defines the name space in which the
+type and action names for this application's action model reside.
+The <CODE>APP_NAME</CODE> constant identifies the application.
+The <CODE>XML_PATH</CODE> is used to read the action model, which is done by
+the lone constructor.
+ <P>
+The <CODE>loadActionModel()</CODE> method is used to load the action model from an XML file.
+A simple implemenation might look like this:
+<pre width="85">
+    private void loadActionModel() {
+        try {
+            Bridge bridge = Bridge.newInstance(APP_NAME);
+            actionModel = bridge.getActionModel();
+            URL url = SomeClass.class.getResource(XML_PATH);
+            executor = new AdeptExecutor();
+            do {
+                bridge = Bridge.newInstance(APP_NAME);
+                actionModel = bridge.getActionModel();
+                Set<ActionModelDef> types = actionModel.load(url, NAMESPACE);
+                for (ActionModelDef type : types) {
+                    if (type instanceof ActionDef
+                            && !(type instanceof ProcedureDef)) {
+                        actionModel.registerExecutor(
+                                (SimpleTypeName)type.getName(), executor);
+                     }
+                }
+           } while (!Bridge.isTaskLearningRunning());
+         } catch (PALException e) {
+            log.error("Failed to load action model: ", e);
+         }
+    }
+</pre>
+
+ <P>
+In this example, the class loader <CODE>getResource()</CODE> method
+is used to access the action model file.
+This means that the action model should be either in the application's classpath
+or contained in the module's jar file.
+Another option is to load the model from a common directory location.
+Next we call the <CODE>actionModel.load()</CODE> method passing in our XML file URL, the ActionExecutor (more on this later),
+and the application's namespace. The net effect is to connect to Adept via its Bridge interface
+and to initialize the action model from a file.
+</p> <P>
+  The application is responsible for indicating to Adept that it is responsible for
+executing each of its primitive actions. This is done by the loop after
+   <CODE>actionModel.load()</CODE> by calling <CODE>actionModel.registerExecutor()</CODE>
+for each action in the loaded action model.
+</p> <P>
+One shortcoming of this example is that it fails if Adept is not executing.
+The application may require a standalone mode,
+in which it operates normally but without any Adept interactions.
+The following example illustrates how to do so. 
+
+<pre width="88">
+    /**
+     * Attempts to establish the Image loader as a client to Adept. If it fails
+     * Image loader can still continue running.
+     */
+    public void loadActionModel() {
+        if (bridge == null) {
+            Thread t = new Thread() {
+                public void run() {
+                    try {
+                        Bridge.setConnectAttemptDuration(15);
+                        Bridge.setConnectRetryInterval(5);
+
+                        URL url = AdeptWrapper.class.getResource(XML_PATH);
+                        executor = new AdeptExecutor();
+                        do {
+                            bridge = Bridge.newInstance(APP_NAME);
+                            actionModel = bridge.getActionModel();
+                            Set<ActionModelDef> types = actionModel.load(url, NAMESPACE);
+                            for (ActionModelDef type : types) {
+                                if (type instanceof ActionDef
+                                        && !(type instanceof ProcedureDef)) {
+                                    actionModel.registerExecutor(
+                                            (SimpleTypeName)type.getName(), executor);
+                                }
+                            }
+                            Thread.sleep(5000);
+                        } while (!Bridge.isTaskLearningRunning());
+                        bridgeStarted = true;
+                    } catch (PALException e) {
+                        log.error("Failed to load action model: ", e);
+                    } catch (InterruptedException e) {
+                        log.error("Thread interrupted: ", e);
+                    }
+                }
+            };
+            t.start();
+        }
+    }
+</pre>
+
+The technique used is to time out if repeated connections to the Bridge fail.
+This example attempts a connection every five seconds, giving up after 15 tries. 
+ <P>
+<CODE>loadActionModel()</CODE> should be executed when the client application starts executing.
+Adept must be running at this time in order to connect to it.
+
+<h3><A NAME="Instrumentation"></A> Instrumentation </h3>
+
+The purpose of instrumentation is to report actions to Adept that capture all operations of the client application
+that are covered by the action model. Several coding styles are appropriate for doing so.
+ <P>
+One style is to implement an event loop that responds to events generated by the application
+that correspond to user operations, dispatching on individual events.
+This is appropriate when a convenient event loop already exists in the client application,
+or if its interface to Adept resides in another process or thread.
+For example, an event capturing the opening of a URL by the Mozilla Firefox browser
+is represented by the following action: 
+
+<pre width="75">
+    &lt;action id="OpenUrlEvent"&gt;
+        &lt;description&gt;Firefox open url event&lt;/description&gt;
+        &lt;metadata key="name" value="Open URL"/&gt;
+		&lt;metadata key="fancyName" value="Open: ,#url"/&gt;
+        &lt;metadata key="icon" value="./fapps/icon_firefox.png"/&gt;
+        &lt;inputParam id="url"&gt;
+            &lt;description&gt;URL&lt;/description&gt;
+            &lt;typeRef typeId="url"/&gt;
+        &lt;/inputParam&gt;
+    &lt;/action&gt;
+</pre>
+Instrumentation code must
+extract the relevant data from the event and invoke the correct action with the Adept system.
+Here is an example of the event handling:
+<pre width="95">
+        if (event instanceof IOpenUrlEvent) {
+            IOpenUrlEvent openUrlEvent = (IOpenUrlEvent) event;
+            String url = openUrlEvent.getUrl();
+            TypeName openUrlName = new TypeName("OpenUrlEvent", NAMESPACE);
+            ActionDef openUrlActionDef = (ActionDef) actionModel.getType(openUrlName);
+            try {
+                // Create an action invocation with no parent invocation,
+                //   and a single URL parameter.
+                ActionInvocation openUrlAction = openUrlActionDef.invoke(null, url);
+                // Output parameters would be set here, if there were any.
+                // Indicate action has completed.
+                openUrlAction.setStatus(ActionInvocation.Status.ENDED);
+            } catch (PALException e) {
+                log.error("Failed to invoke open url action", e);
+            }
+        }
+</pre>
+The IOpenUrlEvent is passed from the application to Adept.
+It has one input parameter, namely the URL that was opened.
+It does not have any direct relationship with the action model;
+the instrumentation code must map it to the OpenUrlEvent action.
+ <P>
+First, we dispatch on the event's class. Next, we cast our event as the correct type. Then, we extract the URL parameter from the event. Finally, we create an action definition and invoke it. The action definition is obtained from the action model by calling the <CODE>getType()</CODE> method. Note that the type name is a combination of the event name from our XML file and the namespace used above. After we have our action definition, we call the <CODE>invoke()</CODE> method, passing in the URL. Note that this method takes a variable number of arguments and that order is important. The order of the arguments should correspond to the order of the corresponding parameters in the action model. After invoking the action, we need to set the status to <CODE>ENDED</CODE>.
+</p>
+ <P>
+A second alternative is to intersperse code, similar to the above, for each action
+throughout the client application at the point at which its execution occurs.
+</p>
+ <P>
+A third alternative requires invoking a utility method such as the following
+at each point in the client application at each point of action execution.
+<pre width="85">
+    /**
+     * Takes an action name along with its arguments and invokes it so that
+     * its instrumentation is collected by Adept. Input variables should come 
+     * before output variables. This function does not accept null arguments or fewer
+     * arguments than what is defined for the given action in the actionmodel.
+     */
+    public void instrumentAction(String name, Object... argVals) {
+        if(!bridgeStarted) {
+            log.warn("Could not instrument {}: learning not running.", name);
+            return;
+        }
+        ActionDef def = (ActionDef) getType(name);
+        ActionInvocation action = null;
+
+        // set input arguments
+        Object[] inputs = new Object[def.numInputFields()];
+        int index = 0;
+        for (; index < def.numInputFields(); index++) {
+            inputs[index] = argVals[index];
+        }
+
+        try {
+            action = def.invoke(null, inputs);
+        } catch (PALException e) {
+            log.error("Action invocation failed: ", e);
+            return;
+        }
+
+        // set output arguments
+        for (; index < argVals.length; index++) {
+            action.setValue(index, argVals[index]);
+        }
+        action.setStatus(ActionInvocation.Status.ENDED);
+    }
+</pre>
+
+The client application calls this method with the appropriate arguments at each point
+that instrumentation is to be captured. A call looks like:
+ <P>
+<pre width="85">
+    if (instrumentation) {
+	...
+	someObject.instrumentAction("SelectImageFiles", dirPath, formatSet, fileSet);
+    }
+</pre>
+
+<P>
+All of these instrumentation techniques rely on the <CODE>com.sri.pal.ActionDef</CODE> class and its <CODE>invoke()</CODE>
+method:
+
+<pre width="85">
+   /**
+     * Creates a new invocation of this action definition.
+     *   parent - always null when creating instrumentation
+     *   args - input arguments, in the order in which they
+     *          appear in the action model
+     */
+    public ActionInvocation invoke(ActionInvocation parent,
+                                   List<? extends Object> args)
+            throws PALException;
+</pre>
+
+An <CODE>ActionDef</CODE> represents all the information pertaining to an action that is
+specified in the action model for it. The <CODE>invoke()</CODE> method creates an invocation,
+indicating to Adept that the client has executed that action with the given input parameters.
+If the action has outputs, those values are filled in one at a time with the <CODE>setValue()</CODE>
+method. The first output goes after the last input, and must be in the order in which they
+appear in the action model. Finally, the status of the action is updated, indicating to Adept
+that its execution is complete. This completes instrumentation for this action.
+
+
+<H4>Adept Types</H4>
+
+There are two families of <I>types</I> in Adept, namely data types and action types.
+Each data type and action in the action model has a corresponding Adept type.
+An Adept type is represented by the <CODE>com.sri.pal.TypeDef</CODE> class.
+ <P>
+To use several API methods, the client application needs to map the type names specified as IDs
+in the action model to the object representing that type. The following helper method
+may be used to do so for both data types and action types:
+
+<pre width="85">
+    /**
+     * Requests a type from Adept given a type name.
+     */
+    public TypeDef getType(String typeName) {
+        return actionModel.getType(new TypeName(typeName, NAMESPACE));
+    }
+</pre>
+
+
+<h4>Creating Adept Parameter Values</h4>
+
+To create instrumentation, mapping the Java objects used by the application
+to their Adept counterparts is necessary. These are then passed to <CODE>ActionDef.invoke()</CODE>.
+If the Adept type is an atomic type, then no conversion is needed. For example, if the
+Adept type of an action parameter is
+
+<pre width="85">
+    &lt;type id="integer"&gt;
+        &lt;description&gt;An integer value&lt;/description&gt;
+        &lt;custom&gt;
+            &lt;javaType&gt;java.lang.Integer&lt;/javaType&gt;
+        &lt;/custom&gt;
+    &lt;/type&gt;
+</pre>
+
+then any <CODE>java.lang.Integer</CODE> object is valid.
+ <P>
+To use the various structured types of Adept&mdash;sets, lists, bags, and structures&mdash;care
+must be taken to create values with the proper structure. Sets, lists, and bags
+can use any of the <CODE>Set</CODE> or <CODE>List</CODE> implementations
+in the <CODE>java.util.Collection</CODE> framework. For example, in this
+method that creates a set of strings, a <CODE>HashSet&lt;String&gt;</CODE>
+is used to represent a set of strings:
+
+<pre width="85">
+   /**
+     * Returns a Set of Strings, suitable for use as an action argument,
+     * given the type name and a list of its elements.
+     */
+    public Set&lt;String&gt; createStringSet(String name, ArrayList&lt;String&gt; args) {
+        if(!bridgeStarted) {
+            log.error("Could not create set {}: learning not running.", name);
+            return null;
+        }
+        Set&lt;String&gt; setValue = new HashSet&lt;String&gt;();
+
+        for (String arg : args) {
+            setValue.add(arg);
+        }
+        return setValue;
+    }
+</pre>
+
+To create structures, the <CODE>com.sri.pal.StructDef</CODE> class is used,
+which represents the information in the action model about a structure type.
+The structure value is represented by <CODE>com.sri.pal.Struct</CODE>.
+For example:
+
+<pre width="85">
+    import com.sri.pal.Struct;
+    import com.sri.pal.StructDef;
+    /**
+     * Returns a Struct, suitable for use as an action argument,
+     * given a type name and values for each structure field.
+     * Arguments must be in the order the fields appear in
+     * in the action model.
+     */
+    public Struct createStruct(String name, Object... args) {
+        if(!bridgeStarted) {
+            log.warn("Could create structure {}: learning not running.", name);
+            return null;
+        }
+        StructDef structDef = (StructDef) getType(name);
+        Struct structureValue = new Struct(structureDef);
+        for (int i = 0; i &lt; structureDef.size() && i &lt; args.length; i++) {
+            structureValue.setValue(i, args[i]);
+        }
+        return structureValue;
+    }
+</pre>
+
+Creating a set of structures is similar to creating a set of some primitive type:
+
+<pre width="85">
+    /**
+     * Returns a Set of Structs, suitable for use as an action argument,
+     * given a type name, and a list of Struct values.
+     */
+    public Set&lt;Struct&gt; createStructSet(String name, ArrayList&lt;Struct&gt; args) {
+        if(!bridgeStarted) {
+            log.warn("Could not create set {}: learning not running.", name);
+            return null;
+        }
+        Set&lt;Struct&gt; setValue = new HashSet&lt;Struct&gt;();
+
+        for (Struct arg : args) {
+            setValue.add(arg);
+        }
+        return setValue;
+    }
+</pre>
+
+
+<h3><A NAME="Automation"></A> Automation </h3>
+ <P>
+To implement automation, a class is created that implements the
+<CODE>com.sri.pal.ActionExecutor</CODE> interface.
+This interface requires
+a method that executes any incoming execution requests delivered by Adept.
+Adept delivers these requests in the form of an <CODE>ActionInvocation</CODE>,
+which is simply an action with its input parameters filled in. The <CODE>execute()</CODE>
+method dispatches on the action name, invoking the appropriate client-application
+code for each action and computing the values of any output parameters of the action.
+These output parameter values are then copied into the <CODE>ActionInvocation</CODE>.
+When <CODE>execute()</CODE> completes, Adept passes the completed
+<CODE>ActionInvocation</CODE> back to the requestor.
+
+ <P>
+Here is the body of an example executor class.
+Note the idiosyncratic construction of the action names.
+
+<pre width="85">
+/**
+ * AdeptExecutor implements the ActionExecutor interface in order to act as a
+ * listener for when actions are executed from Adept. It handles five types of
+ * actions from imageloader_model.xml: SaveImageFile, OpenImageFile,
+ * ResizeImage, SelectImageFiles, and OpenNextImageFile. When it receives one of
+ * these actions it extracts the input arguments, if any, sends the arguments to
+ * ImageloaderGUI to execute, and then sets the output arguments generated, if
+ * any.
+ */
+public class AdeptExecutor implements ActionExecutor {
+    private static final Logger log = LoggerFactory
+            .getLogger(AdeptExecutor.class);
+
+    private ImageloaderGUI gui;
+    public static final String NAMESPACE = AdeptWrapper.NAMESPACE;
+
+    // Action names
+    private static final String SAVE = "TypeName[" + NAMESPACE
+            + ".SaveImageFile]";
+    private static final String OPEN = "TypeName[" + NAMESPACE
+            + ".OpenImageFile]";
+    private static final String RESIZE = "TypeName[" + NAMESPACE
+            + ".ResizeImage]";
+    private static final String SELECT = "TypeName[" + NAMESPACE
+            + ".SelectImageFiles]";
+    private static final String NEXT = "TypeName[" + NAMESPACE
+            + ".OpenNextImageFile]";
+
+    public AdeptExecutor() {
+        gui = ImageloaderGUI.getInstance();
+    }
+}
+</pre>
+
+ <P>
+Here is its <CODE>execute()</CODE> method. Note the use of
+<CODE>gui.endInstrumentation()</CODE> and <CODE>gui.startInstrumentation()</CODE>
+methods to disable instrumentation during execution, which simply reset and set a flag in the
+client application:
+
+<pre width="85">
+    @Override
+    public void execute(ActionInvocation arg0) throws PALException {
+        if (arg0.getParentInvocation() == null) {
+            log.error("Action execution failed: no parent invocation. ", arg0
+                    .getDefinition().getName());
+        }
+
+        // make sure action demonstrations are not duplicated
+        gui.endInstrumentation();
+
+        int size = arg0.getDefinition().size();
+        ArrayList&lt;Object&gt; items = new ArrayList&lt;Object&gt;();
+        for (int i = 0; i &lt; size; i++) {
+            items.add(arg0.getValue(i));
+        }
+
+        // SaveImageFile
+        if (SAVE.equals(arg0.getDefinition().getName().toString())) {
+            String imageID = (String) items.get(0);
+            
+            Struct image = (Struct) items.get(1);
+            String str0 = (String) image.getValue(0);
+            String str1 = (String) image.getValue(1);
+            String str2 = (String) image.getValue(2);
+            String path = str0 + "/" + str1 + "." + str2;
+
+            gui.saveImageEvent(new Integer(imageID), new File(path));
+        // OpenImageFile
+        } else if (OPEN.equals(arg0.getDefinition().getName().toString())) {
+            Struct image = (Struct) items.get(0);
+            String str0 = (String) image.getValue(0);
+            String str1 = (String) image.getValue(1);
+            String str2 = (String) image.getValue(2);
+            String path = str0 + "/" + str1 + "." + str2;
+            
+            int ID = gui.openImageEvent(new File(path));
+            arg0.setValue(1, Integer.toString(ID));
+        // ResizeImage
+        } else if (RESIZE.equals(arg0.getDefinition().getName().toString())) {
+            String imageID = (String) items.get(0);
+            Integer x = (Integer) items.get(1);
+            Integer y = (Integer) items.get(2);
+
+            int newID = gui.resizeImageEvent(new Integer(imageID), x, y);
+            arg0.setValue(3, Integer.toString(newID));
+        // SelectImageFiles
+        } else if (SELECT.equals(arg0.getDefinition().getName().toString())) {
+            String directory = (String) items.get(0);
+            Set&lt;String&gt; formats = (Set&lt;String&gt;) items.get(1);
+            ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();
+            list.addAll(formats);
+
+            ArrayList&lt;Struct&gt; files = gui.selectImagesEvent(directory, list);
+            arg0.setValue(2, files);
+        // OpenNextImageFile
+        } else if (NEXT.equals(arg0.getDefinition().getName().toString())) {
+            Set&lt;Struct&gt; structureSet = (Set&lt;Struct&gt;) items.get(0);
+            ArrayList&lt;File&gt; files = new ArrayList&lt;File&gt;();
+            for (Struct t : structureSet) {
+                String str0 = (String) t.getValue(0);
+                String str1 = (String) t.getValue(1);
+                String str2 = (String) t.getValue(2);
+
+                String path = str0 + "/" + str1 + "." + str2;
+                files.add(new File(path));
+            }
+            
+            Struct image = (Struct) items.get(1);
+            String str0 = (String) image.getValue(0);
+            String str1 = (String) image.getValue(1);
+            String str2 = (String) image.getValue(2);
+            String path = str0 + "/" + str1 + "." + str2;
+            
+            int imageID = gui.nextImageEvent(files, new File(path));
+            arg0.setValue(1, Integer.toString(imageID));
+        } else {
+            log.debug("Action {} ignored.", arg0.getDefinition().getName());
+        }
+
+        gui.startInstrumentation();
+}
+</pre>
+
+
+<H3><A NAME="Instrumentation and Automation of Learned Procedures"></A> Instrumentation and Automation of Learned Procedures </H3>
+
+Learned procedures are modeled as actions by Adept and are processed
+in exactly the same way as the primitive actions within
+an action model. In particular, these <I>learned actions</I> may be demonstrated
+during learning and consequently may be included in a learned procedure.
+ <P>
+The application delivers instrumentation to Adept for all modeled actions that are executed,
+including actions that are executed from within a learned procedure.
+The application need not perform special processing to handle this case;
+Adept recognizes when an action originates from within a learned procedure and excludes that
+action from the demonstration, but includes instrumentation for all top-level learned procedures.
+
+
+<H3><A NAME="Persistence of Learned Procedures"></A> Persistence of Learned Procedures </H3>
+
+Adept stores learned procedures in the client file system under the conventional, system-dependent directory for application data. For Windows systems, this is the user's "Application Data" folder
+(that is, wherever <CODE>%APPDATA%</CODE> refers to):
+
+<UL>
+<LI> [Windows XP] <BR>
+  <I>C:\Documents and Settings\[your user name]\Application Data\AdeptTaskLearning</I>
+<LI> [Windows 7]  <BR>
+  <I> C:\Users\[your user name]\AppData\Roaming\AdeptTaskLearning</I> <B>or</B> <BR>
+  <I> C:\Users\[your user name]\AppData\Local\AdeptTaskLearning</I>
+</UL>
+
+<!-- For Mac OS systems, this is "Library/Application Support". The subdirectory used is "AdeptTaskLearning", which contains a "procedures" directory for learned procedures and an "action_model" directory for action models.  -->
+ <P>
+Adept handles all details of saving procedures from its user interface.
+No client programming is needed to enable it.
+
+
+<iframe src="distar-task-learning.html" frameborder="0" align="center" width="100%"></iframe>
+
+
+</body> 
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.6FirstLast'
+ execute:{
+  do 'arda^1.0^CreateList'('$output list 1');
+  do 'arda^1.0^UseString'(first('$output list 1'));
+  do 'arda^1.0^UseString'(last('$output list 1'));}
+ properties:{expected_output:"CREATE LIST\nUSE STRING: list value 1\nUSE STRING: list value 2\n", isTransient:"true"}</bodySource>
+</TaskModel>

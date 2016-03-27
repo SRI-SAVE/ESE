@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^2.1Integers'(+'$input 1' = 1)
+ argtypes:["integer"]
+ execute:{
+  do 'arda^1.0^CreateInteger'('$output 1');
+  do 'arda^1.0^UseInteger'('$output 1');
+  do 'arda^1.0^UseInteger'('$input 1');
+  do 'arda^1.0^UseInteger'(2);}
+ properties:{expected_output:"CREATE INTEGER\nUSE INTEGER -1\nUSE INTEGER 1\nUSE INTEGER 2\n", isTransient:"true"}</bodySource>
+</TaskModel>

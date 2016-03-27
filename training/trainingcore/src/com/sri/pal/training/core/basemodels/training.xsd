@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    elementFormDefault="qualified">
+
+    <xs:element name="exercise"   type="Exercise"/>
+    <xs:element name="response"   type="Response"/>
+    <xs:element name="assessment" type="Assessment"/>
+    <xs:element name="option"     type="Option"/>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+                                 EXERCISE TYPES
+       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <xs:complexType name="Exercise">
+        <xs:sequence>
+            <xs:element name="name"                type="xs:string"  minOccurs="1" maxOccurs="1" />
+            <xs:element name="description"         type="xs:string"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="extra_step_warnings" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+            <xs:element name="datafile"            type="Datafile"   minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="action_model"        type="xs:anyURI"  minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="editor_data"         type="EditorData" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="html"                type="xs:string"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="problem"             type="Problem"    minOccurs="1" maxOccurs="1" />
+            <xs:element name="setup_procedure"     type="xs:string"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="solution"            type="Solution"   minOccurs="0" maxOccurs="1" />
+            <xs:element name="success_html"        type="xs:string"  minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="Datafile">
+        <xs:simpleContent>
+            <xs:extension base="xs:anyURI">
+                <xs:attribute name="auto" type="xs:boolean" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="EditorData">
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Problem">
+        <xs:sequence>
+            <xs:element name="task" type="Task" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>    
+    </xs:complexType>
+
+    <xs:complexType name="Task">
+        <xs:sequence>
+            <xs:element name="name"           type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="description"    type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="html"           type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="webview_height" type="xs:int"    minOccurs="0" maxOccurs="1" />
+            <xs:element name="sub_task"       type="SubTask"   minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="SubTask">
+        <xs:sequence>
+            <xs:element name="help_link"     type="Link"         minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="hint_sequence" type="HintSequence" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="hints_delay"   type="xs:int"       minOccurs="0" maxOccurs="1" />
+            <xs:element name="prompt"        type="xs:string"    minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="HintSequence">
+        <xs:sequence>
+            <xs:element name="hint"  type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Link">
+        <xs:sequence>
+            <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="url"  type="xs:string" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+        
+    <xs:complexType name="Solution">
+        <xs:sequence>
+            <xs:element name="constant"      type="Value"        minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="task_solution" type="TaskSolution" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>    
+    </xs:complexType>
+        
+    <xs:complexType name="TaskSolution">
+        <xs:sequence>
+            <xs:element name="option" type="Option" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="task" type="xs:IDREF" use="required" />
+    </xs:complexType>    
+        
+    <xs:complexType name="Step">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="atom"       type="Atom"      minOccurs="1" maxOccurs="1" />
+                <xs:element name="option_set" type="OptionSet" minOccurs="1" maxOccurs="1" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required" />
+        <xs:attribute name="subtask" type="xs:string" use="optional" />
+        <xs:attribute name="optional" type="xs:boolean" use="optional" />
+    </xs:complexType>
+    
+    <xs:complexType name="OptionSet">
+        <xs:sequence>
+            <xs:element name="option" type="Option" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Option">
+        <xs:sequence>
+            <xs:element name="demonstration" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="step"                type="Step"               minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="equality_constraint" type="EqualityConstraint" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="ordering_constraint" type="OrderingConstraint" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="query_constraint"    type="QueryConstraint"    minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="state_constraint"    type="StateConstraint"    minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="value_constraint"    type="ValueConstraint"    minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Atom">
+        <xs:sequence>
+            <xs:element name="parameter" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="functor" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:complexType name="Parameter">
+        <xs:sequence>
+            <xs:element name="sub_param" type="Parameter" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="demonstrated_value" type="DemonstratedValue" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="id"       type="xs:string" use="required" />
+        <xs:attribute name="accessor" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="DemonstratedValue">
+        <xs:attribute name="type"  type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="Value">
+      <xs:sequence>
+        <xs:element name="ctrs" type="xs:string" minOccurs="1" maxOccurs="1" />      
+        <xs:element name="type" type="xs:string" minOccurs="1" maxOccurs="1" />
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="optional" />
+    </xs:complexType>
+    
+    <xs:complexType name="ValueConstraint">
+        <xs:sequence>
+            <xs:element name="parameter" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="value"     type="Value"     minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="ref"       type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />  
+    </xs:complexType>
+    
+    <xs:complexType name="EqualityConstraint">
+        <xs:sequence>
+            <xs:element name="parameter" type="xs:string" minOccurs="2" maxOccurs="unbounded" />
+            <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>  
+        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
+        <xs:attribute name="support" type="xs:boolean" use="optional" default="false" />
+    </xs:complexType>
+    
+    <xs:complexType name="OrderingConstraint">
+        <xs:sequence>
+            <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="predecessor" type="xs:string" use="optional" />
+        <xs:attribute name="successor"   type="xs:string" use="optional" /> 
+    </xs:complexType>
+    
+    <xs:complexType name="ConstraintArgument">
+        <xs:choice>
+          <xs:element name="ref"   type="xs:string" />
+          <xs:element name="value" type="Value" />
+        </xs:choice>
+    </xs:complexType>
+     
+    <xs:complexType name="QueryConstraint">
+        <xs:sequence>
+            <xs:element name="arg" type="ConstraintArgument" minOccurs="1" maxOccurs="unbounded" /> 
+            <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="functor" type="xs:string"  use="required" />
+        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
+    </xs:complexType>
+    
+    <xs:complexType name="StateConstraint">
+        <xs:sequence>
+            <xs:element name="arg" type="ConstraintArgument" minOccurs="1" maxOccurs="unbounded" /> 
+            <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
+        <xs:attribute name="functor" type="xs:string"  use="required" />
+    </xs:complexType>
+    
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+                                 RESPONSE TYPES
+       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+      
+    <xs:complexType name="Response">
+        <xs:sequence>
+            <xs:element name="id"            type="xs:string"    minOccurs="1" maxOccurs="1" />
+            <xs:element name="exercise_id"   type="xs:string"    minOccurs="1" maxOccurs="1" />
+            <xs:element name="task_response" type="TaskResponse" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="TaskResponse">
+        <xs:sequence>
+            <xs:element name="demo"            type="xs:string"          minOccurs="1" maxOccurs="1" />
+            <xs:element name="seconds_elapsed" type="xs:int"             minOccurs="1" maxOccurs="1" />
+            <xs:element name="delineation"     type="SubTaskDelineation" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="SubTaskDelineation">
+        <xs:attribute name="sub_task_id" type="xs:string" use="required" />
+        <xs:attribute name="start_index" type="xs:int"    use="required" />
+        <xs:attribute name="end_index"   type="xs:int"    use="required" />
+    </xs:complexType>
+    
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+                                  ASSESSMENT TYPES
+       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+           
+    <xs:complexType name="Assessment">
+        <xs:sequence>
+            <xs:element name="id"              type="xs:string"      minOccurs="1" maxOccurs="1" />
+            <xs:element name="response_id"     type="xs:string"      minOccurs="1" maxOccurs="1" />
+            <xs:element name="task_assessment" type="TaskAssessment" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="TaskAssessment">
+        <xs:sequence>
+            <xs:element name="response_indexes"   type="AssessedResponseIndexes" minOccurs="1" maxOccurs="1" />
+            <xs:element name="equality_issue"     type="EqualityIssue"           minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="extra_atoms_issue"  type="ExtraAtomsIssue"         minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="missing_atom_issue" type="QueryIssue"              minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="ordering_issue"     type="OrderingIssue"           minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="query_issue"        type="QueryIssue"              minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="state_issue"        type="StateIssue"              minOccurs="0" maxOccurs="unbounded" />            
+            <xs:element name="value_issue"        type="ValueIssue"              minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="AssessedResponseIndexes">
+        <xs:sequence>
+            <xs:element name="index" type="xs:int" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ArgumentLocation">
+        <xs:sequence>
+            <xs:element name="atom_index" type="xs:int"    minOccurs="1" maxOccurs="1" />
+            <xs:element name="accessor"   type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ExtraAtomsIssue">
+        <xs:sequence>
+            <xs:element name="start_atom_index" type="xs:int" minOccurs="1" maxOccurs="1" />
+            <xs:element name="end_atom_index"   type="xs:int" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="MissingAtomIssue">
+        <xs:sequence>
+            <xs:element name="functor"            type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="max_display_index"  type="xs:int"    minOccurs="0" maxOccurs="1" />
+            <xs:element name="min_display_index"  type="xs:int"    minOccurs="0" maxOccurs="1" />
+            <xs:element name="pref_display_index" type="xs:int"    minOccurs="1" maxOccurs="1" />
+            <xs:element name="step"               type="xs:string" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="EqualityIssue">
+        <xs:sequence>
+            <xs:element name="location1" type="ArgumentLocation" minOccurs="1" maxOccurs="1" />
+            <xs:element name="location2" type="ArgumentLocation" minOccurs="1" maxOccurs="1" />
+            <xs:element name="constraint" type="EqualityConstraint" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />        
+        <xs:attribute name="support" type="xs:boolean" use="optional" default="false" />
+    </xs:complexType>
+    
+    <xs:complexType name="OrderingIssue">
+        <xs:sequence>
+            <xs:element name="predecessor_index" type="xs:int" minOccurs="1" maxOccurs="1" />
+            <xs:element name="successor_index"   type="xs:int" minOccurs="1" maxOccurs="1" />
+            <xs:element name="constraint" type="OrderingConstraint" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="QueryIssue">
+        <xs:sequence>
+            <xs:element name="location" type="ArgumentLocation" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="constraint" type="QueryConstraint" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="StateIssue">
+        <xs:sequence>
+            <xs:element name="location" type="ArgumentLocation" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="constraint" type="StateConstraint" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ValueIssue">
+        <xs:sequence>
+            <xs:element name="location" type="ArgumentLocation" minOccurs="1" maxOccurs="1" />
+            <xs:element name="constraint" type="ValueConstraint" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

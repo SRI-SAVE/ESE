@@ -1,0 +1,196 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: tuple_test.xml 1033 2009-06-17 17:10:56Z cjones $ -->
+<actionModel version="1.0">
+    <require url="types_test.xml"/>
+
+    <type id="String">
+        <description>Basic string type</description>
+        <equivalentTo>string</equivalentTo>
+    </type>
+
+    <type id="orderStruct">
+        <description>Test struct object</description>
+        <struct>
+            <ref typeRef="friendlyObject"/>
+            <ref typeRef="oidList"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="opaqueStruct">
+        <description>Test opaque struct object</description>
+        <struct opaque="true">
+            <ref typeRef="friendlyObject"/>
+            <ref typeRef="oidList"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="aType">
+        <description>custom type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="bType">
+        <description>custom type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="cType">
+        <description>custom type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="generalizableStruct">
+        <description>generalizable struct type</description>
+        <struct opaque="false">
+            <ref typeRef="aType"/>
+            <ref typeRef="bType"/>
+            <ref typeRef="cType"/>
+        </struct>
+    </type>
+
+    <type id="ungeneralizableStruct">
+        <description>ungeneralizable struct type</description>
+        <struct opaque="true">
+            <ref typeRef="aType"/>
+            <ref typeRef="bType"/>
+            <ref typeRef="cType"/>
+        </struct>
+    </type>
+
+    <type id="generalizableList">
+        <description>list type</description>
+        <list>
+            <ref typeRef="aType"/>
+        </list>
+    </type>
+
+    <action id="produceList">
+        <description>Outputs a list
+        </description>
+        <outputParam id="listOut">
+            <typeRef typeId="generalizableList"/>
+        </outputParam>
+    </action>
+
+    <action id="consumeList">
+        <description>Consumes a list
+        </description>
+        <inputParam id="listIn">
+            <typeRef typeId="generalizableList"/>
+        </inputParam>
+    </action>
+
+    <action id="produceStruct">
+        <description>Takes in three atoms and makes a struct out of them
+        </description>
+        <inputParam id="p1">
+            <typeRef typeId="aType"/>
+        </inputParam>
+        <inputParam id="p2">
+            <typeRef typeId="bType"/>
+        </inputParam>
+        <inputParam id="p3">
+            <typeRef typeId="cType"/>
+        </inputParam>
+
+        <outputParam id="structOut">
+            <typeRef typeId="generalizableStruct"/>
+        </outputParam>
+    </action>
+
+    <action id="produceUngenStruct">
+        <description>Takes in three atoms and DOES NOT MAKE a struct out of them
+        </description>
+        <inputParam id="p1">
+            <typeRef typeId="aType"/>
+        </inputParam>
+        <inputParam id="p2">
+            <typeRef typeId="bType"/>
+        </inputParam>
+        <inputParam id="p3">
+            <typeRef typeId="cType"/>
+        </inputParam>
+
+        <outputParam id="structOut">
+            <typeRef typeId="ungeneralizableStruct"/>
+        </outputParam>
+    </action>
+
+    <action id="takesOne">
+        <description>takes in a value</description>
+        <inputParam id="in">
+            <typeRef typeId="aType"/>
+        </inputParam>
+    </action>
+
+
+   <action id="takesOneBType">
+       <description>takes in a value</description>
+       <inputParam id="in">
+           <typeRef typeId="bType"/>
+       </inputParam>
+
+   </action>
+
+    <action id="takesOneGivesOne">
+        <description>takes in a value and gives out a different value
+        </description>
+        <inputParam id="in">
+            <typeRef typeId="aType"/>
+        </inputParam>
+        <outputParam id="out">
+            <typeRef typeId="bType"/>
+        </outputParam>
+    </action>
+
+    <action id="takesThree">
+        <description>takes in three valuese</description>
+        <inputParam id="in1">
+            <typeRef typeId="aType"/>
+        </inputParam>
+        <inputParam id="in2">
+            <typeRef typeId="bType"/>
+        </inputParam>
+        <inputParam id="in3">
+            <typeRef typeId="cType"/>
+        </inputParam>
+    </action>
+
+    <action id="takesAGenStruct">
+        <description>takes a non-opaque struct</description>
+        <inputParam id="in">
+            <typeRef typeId="generalizableStruct"/>
+        </inputParam>
+    </action>
+
+    <action id="takesAnUngenStruct">
+        <description>takes a non-opaque struct</description>
+        <inputParam id="in">
+            <typeRef typeId="ungeneralizableStruct"/>
+        </inputParam>
+    </action>
+
+</actionModel>

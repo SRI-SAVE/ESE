@@ -1,0 +1,6 @@
+Test action model 2.0
+A simple combination of actions
+#########################################################
+action144[param133=item5item2; param185=item1-test-1234; ]
+action202[param185=item1-test-1234; param198=name; param143=My New item2 Name; ]
+action143[param108=s.309 output table; param157=sigacts?; param198=type; param143=IED; param170=[entity1]; ]

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^1.6InputAndOutput'(+'$input 1' = "scalar", -'$output 1')
+ argtypes:["string", "string"]
+ execute:{
+  do 'arda^1.0^UseString'('$input 1');
+  do 'arda^1.0^CreateString'('$output 1');}
+ properties:{expected_output:"USE STRING: scalar\nCREATE STRING\n", isTransient:"true"}</bodySource>
+</TaskModel>

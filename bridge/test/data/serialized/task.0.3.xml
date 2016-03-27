@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TaskModel version="0.4">
+    <cueSource></cueSource>
+    <bodySource>action 'lumen^0.4^bridgeRecordAndPlayback'(+$classID_1 = "7", +$object_2 = "7", -$object_3, -$method_4)
+ execute:{
+  do 'testApp^1.0^createObject'("Type A", $object_3);
+  do 'testApp^1.0^getClass'($classID_1, $method_4);
+  do 'testApp^1.0^destroyObject'($object_2);}
+ argtypes:["testApp^1.0^oid", "testApp^1.0^destroyArg", "testApp^1.0^createArg", "testApp^1.0^friendlyObject"]
+ properties:{creator:"user unknown", demonstrated_variable_bindings:{classID_1:"7", method_4:[["f0", "f1"], ["7", "friendlyobject arg"]], object_2:"7", object_3:"7"}, learner:"LAPDOG", learner_version:"Beta 5.0", registration_date:"20100115T003110Z"};</bodySource>
+</TaskModel>

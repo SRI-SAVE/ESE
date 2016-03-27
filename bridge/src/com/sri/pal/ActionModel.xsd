@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: ActionModel.xsd 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:include schemaLocation="ConstraintBinding.xsd"/>
+
+    <xs:element name="actionModel" type="ActionModelType"/>
+    <xs:element name="TaskModel" type="TaskType"/>
+
+    <xs:complexType name="ActionModelType">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="require" type="RequireType">
+                <xs:annotation>
+                    <xs:documentation>
+                        The require element specifies another action model file which is a
+                        requirement for this one. The referenced file, specified usually as a
+                        relative URL, will be loaded and processed before this one.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="metadata" type="MetadataType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="type" type="TypeType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="constraintDecl" type="ConstraintDeclarationType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="family" type="FamilyType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="action" type="ActionType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="idiom" type="IdiomType"/>
+        </xs:sequence>
+        <xs:attribute use="required" name="version" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    The version is an optional string for the application to use to track
+                    different versions of the same action model fragment.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="TaskType">
+        <xs:sequence>
+            <xs:element name="cueSource" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="bodySource" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+
+        <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="RequireType">
+        <xs:attribute name="url" type="xs:string" use="optional"/>
+        <xs:attribute name="name" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="TypeType">
+        <xs:annotation>
+            <xs:documentation>
+                Specifies a type, which represents either an atomic value such as a string
+                or number, or a collection such as a list or structure.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="equivalentTo" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="metadata" type="MetadataType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0">
+                <xs:element name="custom" type="CustomType"/>
+                <xs:element name="enum" type="EnumType"/>
+                <xs:element name="nullable" type="NullableType"/>
+                <xs:element name="list" type="ListType"/>
+                <xs:element name="set" type="SetType"/>
+                <xs:element name="bag" type="BagType"/>
+                <xs:element name="struct" type="StructType"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ConstraintDeclarationType">
+        <xs:annotation>
+            <xs:documentation>
+                Declares the existence of a constraint that can be bound to an action.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="metadata" type="MetadataType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="param" type="ConstraintDeclParamType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ActionType">
+        <xs:annotation>
+            <xs:documentation>
+                Represents a type of action which the user can perform in the application.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="inherit" type="InheritType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Gives the name of another action which this one inherits from. This
+                        action will inherit all input/output parameters and other properties
+                        or attributes from its parent(s).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="metadata" type="MetadataType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="idiomFamily" type="ActionIdiomFamilyType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element type="ParamType" name="inputParam" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Input parameters are values which are provided to this action,
+                        required in order for it to operate.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="ParamType" name="outputParam" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Output parameters are values which result from this action being
+                        performed.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="collapsible" type="CollapsibleType" minOccurs="0"/>
+            <xs:element ref="constraints" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="category">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="effector"/>
+                    <xs:enumeration value="completer"/>
+                    <xs:enumeration value="context"/>
+                    <xs:enumeration value="supporter"/>
+                    <xs:enumeration value="query"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="benign" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="MetadataType">
+        <xs:annotation>
+            <xs:documentation>
+                Contains a key-value pair of strings with additional information about
+                the containing element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="key" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="CustomType">
+        <xs:annotation>
+            <xs:documentation>
+                Represents an atomic value in the application, such as a string or a
+                number. This semantic type is backed by an application-defined class
+                which is the representation type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="inherit" type="InheritType"/>
+            <xs:element name="javaType" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The underlying Java type which this represents. The Java class must
+                        support serialization using a combination of toString() and either a
+                        static valueOf() method or a constructor which takes a single String.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="EnumType">
+        <xs:annotation>
+            <xs:documentation>An enumerated list of string values.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="value" type="xs:string" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        One or more acceptable values for this enumerated type.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="NullableType">
+        <xs:annotation>
+            <xs:documentation>
+                Holds an element which may optionally be null.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:all>
+            <xs:element name="ref" type="MemberType"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="ListType">
+        <xs:annotation>
+            <xs:documentation>
+                Holds a series of 0 or more objects of the same type. These objects may be
+                atoms, lists, or tuples.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="generalizeUnsupported" type="GeneralizeUnsupportedType" minOccurs="0"/>
+            <xs:element name="generalizeSingleton" type="GeneralizeSingletonType" minOccurs="0"/>
+            <xs:element name="ref" type="MemberType"/>
+        </xs:sequence>
+        <xs:attribute name="permutable" type="xs:boolean"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="SetType">
+        <xs:annotation>
+            <xs:documentation>
+                Holds an unordered set of 0 or more objects of the same type. These objects
+                may be atoms, lists, or tuples. A set does not keep duplicate entries.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="generalizeUnsupported" type="GeneralizeUnsupportedType" minOccurs="0"/>
+            <xs:element name="ref" type="MemberType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="BagType">
+        <xs:annotation>
+            <xs:documentation>
+                Holds an unordered collection of 0 or more objects of the same type. These
+                objects may be atoms, lists, or tuples. A bag allows duplicate entries.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="generalizeUnsupported" type="GeneralizeUnsupportedType" minOccurs="0"/>
+            <xs:element name="ref" type="MemberType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StructType">
+        <xs:annotation>
+            <xs:documentation>
+                Holds a fixed-length, ordered list of objects, each of a distinct type. The
+                contained objects may be atoms, lists, or tuples.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="inherit" type="InheritType" minOccurs="0"/>
+            <xs:element name="generalizeUnsupported" type="GeneralizeUnsupportedType" minOccurs="0"/>
+            <xs:element name="ref" type="StructMemberType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="opaque" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>
+                    'opaque' means that LAPDOG cannot try to unify the individual elements of this tuple.
+                    It has to consider the entire tuple as one atomic value.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="GeneralizeUnsupportedType">
+        <xs:annotation>
+            <xs:documentation>
+                Indicates how to generalize the construction of this
+                compound type. Should it be taken as one intact
+                argument to the procedure (parameterize)? Should it be
+                constructed from its component elements (construct)?
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="preference" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="parameterize"/>
+                    <xs:enumeration value="construct"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="maxInputs" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="GeneralizeSingletonType">
+        <xs:annotation>
+            <xs:documentation>
+                Indicates how to generalize the construction of a
+                singleton from a compound type. Should we take the
+                first element, take the last element, or require a
+                size of 1 and take the only element?
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="method" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="first"/>
+                    <xs:enumeration value="last"/>
+                    <xs:enumeration value="only"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="ParamType">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="metadata" type="MetadataType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="class" type="ParamClassType" minOccurs="0"/>
+            <xs:element name="typeRef" type="TypeRef"/>
+            <xs:element name="idiomParam" type="ActionIdiomParamType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="defaultValue" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="ParamClassType">
+        <xs:attribute name="class" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="generalizable"/>
+                    <xs:enumeration value="constant"/>
+                    <xs:enumeration value="distinct"/>
+                    <xs:enumeration value="local"/>
+                    <xs:enumeration value="external"/>
+                    <xs:enumeration value="internal"/>
+                    <xs:enumeration value="intermediate"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="violable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="ConstraintDeclParamType">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="MemberType">
+        <xs:attribute name="typeRef" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="StructMemberType">
+        <xs:attribute name="name" type="xs:string" use="optional"/>
+        <xs:attribute name="typeRef" type="xs:string" use="required"/>
+        <xs:attribute name="dynamic" type="xs:boolean"/>
+        <xs:attribute name="constant" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="InheritType">
+        <xs:attribute name="parent" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TypeRef">
+        <xs:attribute name="typeId" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="FamilyType">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="inputParam" type="ActionFamilyParamType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="outputParam" type="ActionFamilyParamType"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="benign" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="ActionFamilyParamType">
+        <xs:attribute name="role" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomType">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="metadata" type="MetadataType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="inputParam" type="IdiomParamType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="outputParam" type="IdiomParamType"/>
+            <xs:element maxOccurs="unbounded" name="template" type="IdiomTemplateType"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="benign" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomParamType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="matchIf">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="equals"/>
+                    <xs:enumeration value="singleton"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomTemplateType">
+        <xs:choice minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="action" type="IdiomTemplateActionType"/>
+            <xs:element name="namedAction" type="IdiomTemplateNamedActionType"/>
+        </xs:choice>
+        <xs:attribute name="precedence" type="xs:integer"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomTemplateActionType">
+        <xs:sequence>
+            <xs:element name="idiomParam" type="IdiomTemplateActionParamType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="family" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomTemplateActionParamType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="role" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomTemplateNamedActionType">
+        <xs:sequence>
+            <xs:element name="idiomParam" type="IdiomTemplateNamedActionParamType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="IdiomTemplateNamedActionParamType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="actionParam" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ActionIdiomFamilyType">
+        <xs:attribute name="family" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ActionIdiomParamType">
+        <xs:attribute name="family" type="xs:string" use="required"/>
+        <xs:attribute name="role" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="CollapsibleType">
+        <xs:sequence>
+            <xs:element name="param" type="CollapsibleParamType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="insideGesture" type="CollapsibleOptionType"/>
+        <xs:attribute name="outsideGesture" type="CollapsibleOptionType"/>
+    </xs:complexType>
+
+    <xs:simpleType name="CollapsibleOptionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="all"/>
+            <xs:enumeration value="contiguous"/>
+            <xs:enumeration value="none"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="CollapsibleParamType">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="keep" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="first"/>
+                    <xs:enumeration value="last"/>
+                    <xs:enumeration value="merge"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>

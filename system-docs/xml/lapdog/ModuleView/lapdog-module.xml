@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+<section id="lapdog_module">
+<title>LAPDOG Module View</title>
+<section>
+<title>Primary Presentation</title>
+<para> LAPDOG (Learning Assistant Procedures from Demonstration, Observation
+and Generalization) performs task learning by converting a demonstration
+trace into an executable, parameterized procedure that reproduces
+the demonstrated task as well as generalizing it so that the demonstrated
+task may be executed in the future to perform similar tasks. </para>
+<para> A <emphasis>demonstration trace</emphasis>, or simply <emphasis
+>demonstration</emphasis>, consists of a sequence of actions corresponding
+to user actions performed in CPOF. Each action has a number of input
+and output parameters, each of which is bound to a constant, which
+may be scalar or structured. The learned procedure contains generalized
+actions. This means that their parameters may be bound to constants,
+variables, or a function invocations, and the procedure may also contain
+loops over groups of actions. </para>
+<para> The learned procedure is expressed in the Common Task Representation
+(CTR) that is specified by the Lumen module. By creating this representation
+through various learning algorithms, LAPDOG fulfills its principal
+contract with the CPOF-PAL system to respond to a learning request
+by producing a learned procedure executable by Lumen that reproduces
+the given demonstration. </para>
+<para> For a more complete discussion of LAPDOG, see <emphasis>Eker
+et al. </emphasis> and <emphasis>Gervasio et al.</emphasis> in the <xref
+linkend="lapdog-references"/> section. </para>
+<figure id="lapdog-primary-1">
+<title>LAPDOG Primary Presentation</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/LapdogPrimaryPresentation.png" scale="30"/>
+</imageobject></mediaobject>
+</figure>
+<para></para>
+<figure id="lapdog-primary-key">
+<title>LAPDOG Primary Presentation Key</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/LapdogPrimaryPresentationKey.png" scale="25"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Element Catalog</title>
+<para></para>
+<section>
+<title>Elements and their properties</title>
+<!-- TODO add external elements from Context diagram -->
+<para>   LAPDOG consists of three submodules. The Generalization submodule
+is responsible for creation of the learned procedure, for detecting
+loops over actions, and for deciding how, and whether, to generalize
+the values occurring in each action of the demonstration. The Dataflow
+Completion submodule is responsible for determining which input parameters
+are required in the procedure signature; it interacts with Generalization
+in order to do so. The Learning Control submodule performs many operations,
+providing type and action specification and representation, procedure
+completion, and the interface to the larger system. </para>
+<section>
+<title>Generalization Submodule</title>
+<para>Generalization converts the input demonstration into a compact
+representation of the set of all procedures consistent with the demonstration.
+This representation is called a GeneralizedProgram. Producing a GeneralizedProgram
+from a demonstration fulfills the principal interface between the
+Learning Control and Generalization submodules. </para>
+<table>
+<title>Generalization elements (com.sri.ai.taskleraning.lapdog.looprat)</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Argument</entry><entry>Root of an interface hierarchy
+representing a demonstrated value and     generalizations of it.</entry>
+</row>
+<row><entry>ArgumentStatus</entry><entry>Class that provides an efficient
+persistent stack, or association list,     representation in support
+of Search.</entry></row>
+<row><entry>Constant</entry><entry>Subinterface of Argument/Expression
+representing a single ungeneralized demonstrated value.     May be
+scalar or structured. Structured constants are composed of one or
+more Constant elements.     For further discussion, see <xref
+linkend="values-and-types"/>. </entry></row>
+<row><entry>Expression</entry><entry>Subinterface of Argument representing
+a single alternative generalization of an Argument. </entry></row>
+<row><entry>ExpressionChoices</entry><entry>Subinterface of Argument
+representing multiple alternative generalizations of an Argument. </entry>
+</row>
+<row><entry>Search</entry><entry>Class that produces a GeneralizedProgram
+from a demonstration.</entry></row>
+</tbody>
+</tgroup>
+</table>
+</section>
+<section>
+<title>Dataflow Completion Submodule</title>
+<para>The Dataflow Completion submodule is responsible for determining
+which   input parameters are required in the procedure signature;
+it interacts   with Generalization in order to do so. </para>
+<table>
+<title>Dataflow completion elements (com.sri.ai.taskleraning.lapdog.pecari)</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>Pecari</entry><entry>Class that determines how to support
+values that are not supportable     through direct parameter and structure
+generalization. Currently, this     is done by making those values
+input parameters to the procedure.</entry></row>
+<row><entry>SearchState</entry><entry>[Currently unused.] Class that
+represents a point in the search space     of support alternatives
+for given unsupported values.</entry></row>
+</tbody>
+</tgroup>
+</table>
+</section>
+<section>
+<title>Learning Control Submodule</title>
+<para>  The Learning Control submodule provides the interface between
+LAPDOG and the CPOF-PAL system,   which is mediated by the LAPDOG
+Mediator.   APIs are provided for action model specification, demonstration
+construction, and learning. </para>
+<para> This element postprocesses the learned GeneralizedProgram,
+performing several transformations   in order to make it executable
+by the Lumen executor module. </para>
+<table>
+<title>Learning control - externally visible elements (com.sri.ai.tasklearning.lapdog) </title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>ActionModel</entry><entry> Class representing a single
+action specification within the action model.     Each primitive action
+in the CPOF Action Model has an ActionModel.     Also, an ActionModel
+is created for each learned procedure;     that is, LAPDOG represents
+primitive and learned actions equivalently.     Note that in other
+contexts the term "action model" refers      to a set of actions rather
+than a single action. </entry></row>
+<row><entry>ActionInstance</entry><entry>Class representing a single
+demonstrated action, including its     input and output parameters. </entry>
+</row>
+<row><entry>ActionInstanceList</entry><entry>Class representing an
+ordered list of ActionInstance objects,     used to represent a sequence
+of actions demonstrated by a user. </entry></row>
+<row><entry>CommonTaskRepresentation</entry><entry>Class representing
+the various elements of a Lumen executable procedure     and its associated
+action specification. Provides interfaces to Lumen CTR and     for
+any event involving data represented in Lumen CTR. </entry></row>
+<row><entry>Demonstration</entry><entry>Class representing a refinement
+of the ActionInstanceList class     that includes provenance data
+for the demonstration. </entry></row>
+<row><entry>ITaskManager</entry><entry>Interface specifying the details
+of the executor and execution language in use.     In CPOF-PAL this
+is Lumen.</entry></row>
+<row><entry>Language</entry><entry>Interface that isolates all dependencies
+on the execution language.     Architectural purpose is to keep LAPDOG
+independent of the executor, except for     those elements that fulfill
+this interface. </entry></row>
+<row><entry>LapdogLearner</entry><entry>Core class for learning control. </entry>
+</row>
+<row><entry>Lapdog.Type</entry><entry>Interface representing the characteristics
+of a LAPDOG type that are visible     to other modules. </entry></row>
+</tbody>
+</tgroup>
+</table>
+<para> Upon learning a procedure, LAPDOG returns that procedure, as
+well as the associated declaration (signature) of the procedure, to
+its caller. It is directly executable by Lumen, the PAL executor.
+LAPDOG uses static classes of Lumen's CommonTaskRepresentation package
+to represent the procedure and its declaration. </para>
+<table>
+<title>Lumen externally visible CommonTaskRepresentation elements
+in com.sri.ai.lumen.util.ctr.decl</title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>ActionDeclaration</entry><entry>Class representing the
+procedure declaration and executable component     output by LAPDOG
+and executable by Lumen.     Also represents each ActionModel declaration
+input to LAPDOG by the PAL Bridge.</entry></row>
+</tbody>
+</tgroup>
+</table>
+<para>The following elements are not visible external to LAPDOG, but
+participate in interfaces among LAPDOG's submodules.</para>
+<table>
+<title>Learning control - internal elements (com.sri.ai.tasklearning.lapdog) </title>
+<tgroup cols="2">
+<thead>
+<row><entry valign="top">Element</entry><entry valign="top">Description</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>GeneralizedProcedure</entry><entry> Class representing
+a procedure with no alternative structures,     but with possibly
+multiple alternatives for the arguments contained therein. </entry>
+</row>
+<row><entry>GeneralizedProgram</entry><entry>Class representing multiple
+alternative generalizations of a demonstration,     that is, multiple
+GeneralizedProcedure objects. </entry></row>
+<row><entry>Statement</entry><entry>Interface representing the various
+components of the body of a GeneralizedProcedure. </entry></row>
+<row><entry>TypedValue</entry><entry>Root class, implementing the
+Constant interface,     representing the hierarchy of the various
+kinds of demonstrated values. </entry></row>
+<row><entry>ValueType</entry><entry>Root class, implementing the Lapdog.Type
+interface,     representing the hierarchy of supported types. </entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<!-- Include table and brief intro to elements in the top-level PAL architecture -->
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+</section>
+<section>
+<title>Relations and their properties</title>
+<para>The primary relation displayed in the Primary Presentation is
+the uses      relation, which is a specialization of the depends-on
+relation. This      relation asserts that the correctness of one element
+depends on that of      another element. Generalization is also shown
+where appropriate, asserting      one element is a subclass of another.
+Realizations are shown where      appropriate for contextual establishment
+of program flow; it should be      noted that not all realizations
+are displayed where they do not help with      the understanding of
+flow control for the interactions.</para>
+</section>
+<section>
+<title>Element interface</title>
+<para></para>
+<section>
+<title>External interfaces</title>
+<para>All points of interface between LAPDOG and other CPOF-PAL components
+are encapsulated within the Learning Control submodule. A blowup of
+Learning Control showing interface points is shown in <xref
+linkend="lapdog-interface"/>.</para>
+<figure id="lapdog-interface">
+<title>LAPDOG Interface</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/LapdogInterface.png" scale="40"/></imageobject>
+</mediaobject>
+</figure>
+<para></para>
+<figure id="lapdog-primary-key2">
+<title>LAPDOG Interface Key</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/LapdogInterfaceKey.png" scale="25"/></imageobject>
+</mediaobject>
+</figure>
+<section>
+<title>Define datatype </title>
+<para>In order to use LAPDOG for learning, an action model consisting
+of its actions   and datatypes of the parameters of those actions
+must be provided.   Datatypes used by CPOF-PAL are simple scalar types,
+permutable lists, and tuples.    Datatypes are conveyed using   the
+LapdogLearner element's defineType(), definePermutableListType(),
+and defineTupleType()   methods. In addition, there are auxiliary
+methods for determining if an action has   already been defined, and
+to undefine an action.</para>
+</section>
+<section>
+<title>Define action</title>
+<para>Actions specified by the action model are conveyed to LAPDOG
+  using the Language element's defineAction()   method, which is instantiated
+by the CommonTaskRepresentation element. This   responsibility is
+assigned to the Language element because the action specification
+  that is input is in the language of the executor, and references
+to language specifics   are encapsulated in those elements instantiating
+the Language interface.</para>
+</section>
+<section>
+<title>Construct demonstration </title>
+<para>In order to use LAPDOG for learning, an input demonstration
+must be constructed.   The interface for doing so is provided by the
+LapdogLearner element's createInstance() methods   that construct
+an ActionInstance for a given action,   and the ActionInstance element's
+bindArgument() methods, which allow specification of its   input and
+output arguments.</para>
+<para>Each fully-instantiated action is collected,   in the order
+in which the user provided the corresponding CPOF-PAL actions,   which
+forms the demonstration used for task learning.</para>
+</section>
+<section>
+<title>Learn procedure </title>
+<para> Learning of a procedure from a demonstration is provided by
+the Language element's   learn(name, demonstration) method which returns
+a CTR ActionDeclaration.   This responsibility is encapsulated in
+the Language element because the    return value is expressed in the
+language of the executor, and references to language specifics   are
+restricted to subclasses of the Language abstract class. </para>
+</section>
+<section>
+<title>Construct procedure </title>
+<para> Construction of a procedure from the results of LAPDOG learning
+  is provided by numerous methods of the Language element. These methods
+convert the various   components of a LAPDOG GeneralizedProcedure,
+  including its signature and its executable body,   to their corresponding
+representation in the executor language.   This responsibility is
+encapsulated in the Language element because the conversions   are
+to the language of the executor, and references to language specifics
+  are restricted to subclasses of the Language abstract class.</para>
+</section>
+</section>
+<section>
+<title>Internal interfaces</title>
+<para> Producing a generalized program from a demonstration and the
+action model in which it is expressed   fulfills the principal interface
+between the Learning Control and Generalization submodules.   In doing
+so it also fulfills a key part of the responsibility of the principal
+external interface   of LAPDOG -- to produce an executable procedure
+from these inputs. </para>
+<para>Determining whether one Argument supports another is a key subproblem
+of Generalization and a   responsibility of Learning Control. Learning
+Control provides a supports() API method to do so.</para>
+<para> Resolution of support failure fulfills the principal interface
+between the   Generalization and Dataflow Completion submodules. 
+ When generalization fails to find support for one or more values,
+it invokes   dataflow completion as a last resort. </para>
+</section>
+</section>
+<!-- END Element interface subsection -->
+<section><?Pub Caret?>
+<title>Element behavior</title>
+<para> Behaviors involving other system components are shown first,
+using sequence diagrams depicting methods and messages that cross
+component boundaries. Behaviors of key LAPDOG internal operations
+are then described. </para>
+<figure>
+<title>Sequence diagram key</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALSequenceDiagramKey.png" scale="60"/></imageobject>
+</mediaobject>
+</figure>
+<section>
+<title>Datatype definition</title>
+<para>Datatypes are defined for LAPDOG during CPOF-PAL initialization.
+  This is driven by the load of the action model.</para>
+<figure id="lapdog-type-def-sequence-diagram">
+<title>Type Definition sequence diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALDatatypeDefinitionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Action definition</title>
+<para>Like datatypes, primitive actions are defined for LAPDOG when
+the action model is loaded.   Unlike datatypes, actions are also defined
+for Lumen.</para>
+<figure id="lapdog-action-def-sequence-diagram">
+<title>Action Definition sequence diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALActionDefinitionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Demonstration construction and procedure learning</title>
+<para> During learning, user actions are captured and collected in
+CPOF. When the demonstration is indicated as being complete by the
+CPOF user, the actions are sent to the Brige via its Learner.learn()
+method.  They are converted to a single DemoAction object and passed
+via the Spine to the LAPDOG Mediator inside a LearnRequest message.
+ Requisite types and actions are then loaded.  The DemoAction is converted
+into LAPDOG ActionInstance objects, and passed to LAPDOG's CommonTaskRepresentation.learn()
+method.  The learned procedure that is represented in CTR is returned
+to the LAPDOG Mediator, then passed back to the PAL Bridge via the
+Spine. From there it is conveyed to Lumen and then back to CPOF. </para>
+<figure id="lapdog-learning-sequence-diagram">
+<title>Demonstration construction and procedure learning sequence
+diagram</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALLearningSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section id="values-and-types">
+<title>Values and types</title>
+<para> The Learning Control submodule provides representations of
+data values and types that are   used by all submodules.</para>
+<para>A <emphasis>value</emphasis> refers to any constant, scalar
+or structured, manipulated   by LAPDOG. The terms value and constant
+are used interchangeably.   Typically values originate in the demonstration
+input to LAPDOG.   Values are represented by the TypedValue class.
+This class implements the Constant   interface, which hides some of
+the implementation details of values.   All values have a type. It
+is explicit in the TypedValue representation. </para>
+<para>A <emphasis>type</emphasis> is a property of a value, an expression,
+or a parameter   of an action or a learned procedure.   It specifies
+operations allowed on values of that type, as well as indicating which
+values are valid   for that type.   It is represented with the ValueType
+class.   This class implements the Lapdog.Type   interface, which
+hides some of the implementation details of types.   The types provided
+to LAPDOG as part of the action model in general form a type hierarchy.
+  This hierarchy is conventional in the sense that any value of a
+given type is compatible   with all of its supertypes. </para>
+<para>LAPDOG defines the supports() relation between any two constants.
+  In order for two demonstrated values to be codesignated with the
+same variable,   the first must support the second. Since variablization
+is a core operation of   LAPDOG, the supports() relation is a core
+capability. </para>
+<para> A number of primitive scalar types are predefined. These types
+may be used directly   in the action model. Each application-defined
+primtive type has a required property that is   one of these primitive
+types. The representation type specifies how input/output is performed,
+  as well as indicating how equals() and supports() operations (see
+below) are performed.</para>
+<para>The maySupport() relation among types indicates whether two
+types are compatible with   respect to the supports() relation. If
+maySupport(T1,T2) is false, then a value of type T1   does not support
+a value of type T2, even if those values are equals().</para>
+<para>Values may be scalar or structured. Structured values contain
+one or more elements, each of which   is a value. The structure of
+a value is indicated by its type. Structured types include tuples
+  which contain a fixed number of named elements of varying types,
+  and permutable lists, which contain an arbitrary   number of elements,
+all of the same type.</para>
+</section>
+<section>
+<title>Generalization</title>
+<para> Two classes of generalization are performed. Parameter generalization
+determines whether to leave each action's parameter as is in the analogous
+action in the GeneralizedProgram, or to replace it with a variable
+or functional expression. Structure generalization determines whether
+a block of repeated actions should be replaced with a loop over a
+generalization of these actions. </para>
+<para>Generalization implements novel and sophisticated algorithms
+to perform   parameter and structure generalization. These algorithms
+are described in detail   in the LAPDOG references in the <xref
+linkend="lapdog-references"/> section. </para>
+<para><emphasis>Variablization</emphasis> is a fundamental generalization
+operation.   It involves replacing one or more occurrences of equivalent
+constants   in a demonstration with a single variable.   This is the
+most common form of <emphasis>parameter generalization</emphasis>.
+  More generally, parameter generalization can replace a constant
+with an expression that   evaluates to that constant.   These expressions
+include first/last element access of a list, tuple element access,
+and tuple   and list construction. </para>
+<!-- TODO Possibly introduce the Sequence class as a list of actions+loops, rewriting the below para and -->
+<!-- replacing GeneralizedProcedure with Sequence as appropriate throughtout. -->
+<para><emphasis>Structure generalization</emphasis> replaces a sequence
+of actions with   a related action sequence supplemented with control
+structure actions. Currently   the only form of structure generalization
+done is loop formulation.   <emphasis>Loop formulation</emphasis> recognizes
+patterns of actions   that iterate over structured constants occurring
+in the demonstrations,   transforming them into equivalent loops.
+The transformation includes introduction of   a loop variable, which
+iterates over the elements of the structured constant.</para>
+<para> In general, the structured constants iterated over may be lists,
+sets, or bags.   CPOF-PAL uses only a variant of   lists called permutable
+lists. Permutable lists are order-independent for the purposes of
+  loop formulation; that is, if the permutable list is [a b c] and
+an action sequence contains   Act(b), Act(c), Act(a) in that order,
+a loop may be detected. This is in contrast to regular lists,   which
+for a loop to be detected require elements to be used in order.  
+Note that no other forms of loops, such as counting loops or while
+loops, are learned.</para>
+<para> Parameter and structure generalization interact. For example,
+an action parameter may be generalized to a variable that is iterating
+over a list, or to a list that is constructed by a loop. </para>
+<para> The Generalization submodule searches for all valid parameter
+and structure generalizations   simultaneously. A pass is made through
+the demonstration looking for parameter generalizations.   The method
+that does so is Search.processLinear().   If a prospective loop is
+detected, a search for loops is initiated at that point. The search
+for   loops recursively invokes Search.processLinear() to look for
+generalizations of the prospective   loop body. The search continues
+until a threshold of distinct procedure bodies are discovered or 
+ the search fails; the latter case is treated as an error.</para>
+</section>
+<section>
+<title>Dataflow Completion</title>
+<para> Dataflow completion in CPOF-PAL at this time   has no actions
+available to add to the procedure to establish supports, so it uses
+its   last resort of making each unsupported value an input parameter
+to the procedure. These   are designated by inserting an auxiliary
+action into the procedure. During   dataflow completion, these actions
+are merged into one procedure signature.</para>
+</section>
+<section>
+<title>Program Structures</title>
+<para>A GeneralizedProgram is produced by the Generalization submodule.
+It contains one or more   GeneralizedProcedures, each containing a
+different sequence of actions reflecting   a valid generalization
+of the demonstration. For example, a GeneralizedProgram may   contain
+one procedure with a loop, and one linear procedure.</para>
+<para>A GeneralizedProcedure contains a parameter signature and a
+sequence of statements.   The signature specifies the procedure name
+as well as inputs to and outputs from the procedure,   including type
+and name. Each statement is either an action or a loop.   Arguments
+of statements have one or more alternatives, represented by the ExpressionChoices
+element.   </para>
+</section>
+<section>
+<title>Producing an executable procedure</title>
+<para>Learning Control performs the following sequence of transformations
+on   the GeneralizedProgram produced by the Generalization submodule:</para>
+<orderedlist>
+<listitem><para>The GeneralizedProgram is converted into a GeneralizedProcedure.
+    This is done by selecting one of the contained procedures arbitrarily;
+    currently, the first one is selected.</para></listitem>
+<listitem><para>The parameter signature is extracted from individual
+input parameter specifications that are     added during generalization
+at various places within a GeneralizedProcedure.     These are gathered,
+removed, and converted into a TaskSignature object.</para></listitem>
+<listitem><para>The GeneralizedProcedure is reified.</para></listitem>
+<listitem><para>The GeneralizedProcedure statements and parameter
+signature are validated.</para></listitem>
+<listitem><para>The GeneralizedProcedure variable names are canonicalized.</para>
+</listitem>
+<listitem><para>The GeneralizedProcedure is converted into a Lumen-CTR
+ActionDeclaration.</para></listitem>
+</orderedlist>
+</section>
+<!-- END Element behavior subsection -->
+</section>
+<!-- END Element Catalog section -->
+</section>
+<section>
+<title>Context Diagram</title>
+<para>The architecture of the PAL-enabled CPOF system is shown in
+ <xref linkend="lapdog-cpof-pal-architecture"/> </para>
+<figure id="lapdog-cpof-pal-architecture">
+<title>CPOF-PAL Architecture</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PAL_Architecture.png" scale="40"/></imageobject>
+</mediaobject>
+</figure>
+</section>
+<section>
+<title>Variability Guide</title>
+<section>
+<title>Action Modeling</title>
+<para>LAPDOG is designed to be independent of the application or applications
+providing   actions to learn from. Hence it will work with any action
+model properly constructed through   the interface provided.</para>
+</section>
+<section>
+<title>Executor</title>
+<para>LAPDOG encapsulates all dependencies on the system executor
+within the Language element.   Only those elements that fulfill this
+Java interface are dependent upon the executor. The implication is
+  that all elements comprising its representation of learned procedures
+are executor-independent.   This encapsulation permits LAPDOG to use
+a different executor simply by   providing an instantiation of the
+Language interface for it.</para>
+</section>
+<section>
+<title>Ambiguity Resolution</title>
+<para>LAPDOG provides a default heuristic of preferring the most recent
+support   when choices are available. This is generally satisfactory.
+In the future, LAPDOG   may be easily extended to provide other means
+of ambiguity resolution, including   other preference heuristics as
+well as involving the user in the resolution process.</para>
+</section>
+<section>
+<title>Dataflow Completion</title>
+<para>Dataflow completion is currently used only to confirm that certain
+values   are only supportable by making them input parameters to the
+learned procedure.   In general, it has the capability to search for
+additional action sequences that   could be used to support values.
+  Using this capability requires specifying such <emphasis>information-producing
+actions</emphasis>   as part of the action model.</para>
+<para>In the future, such actions may be defined to enhance the  
+generalization capability of LAPDOG so that more useful and powerful
+procedures may be learned.   Potential benefits include reduction
+in the number of input parameters, and simpler   localization and
+import/export of procedures.</para>
+</section>
+<section>
+<title>Multidemonstration Learning</title>
+<para>The API currently used to invoke learning allows for a single
+demonstration.   LAPDOG will accept multiple demonstrations of the
+same task. The procedure it produces will   be consistent with each
+demonstration.</para>
+<para> It is generally thought that the user experience associated
+with learning from   multiple demonstrations is unsatisfactory. A
+user presenting multiple demonstrations   immediately moves from the
+mindset of naturally executing a workflow to crafting   several workflows
+together that illustrate possibly obscure differences between the
+tasks,   and mentally managing the different contexts. In short, the
+user needs to be much more aware   that learning is taking place.
+  If this view changes, multidemonstration learning is readily available.</para>
+</section>
+</section>
+<section>
+<title>Architecture Background</title>
+<para></para>
+<section>
+<title>Rationale</title>
+<section>
+<title>Type System</title>
+<para> LAPDOG uses a strongly typed action model, meaning that all
+action arguments   must conform to constraints on primitive data types
+permitted, and on how data is structured.   The action model is a
+central interface throughout the larger system.   The strong declarative
+semantics   within the action model are advantageous with respect
+to overall system reliability.   </para>
+<para> Another advantage of strong typing is in performance. Type
+specificity helps   constrain the search space during dataflow completion.</para>
+<para>A natural representation of extensible primitive types, for
+example, strings,   would be to define a parent type String and allow
+subtypes representing restricted   classes of strings to be created.
+LAPDOG takes a different approach.   Instead of inheriting a representation
+from a primitive type, a new type is created that   is hierarchically
+unrelated from String, but that contains a property that specifies
+  that the representation of values of that type is String. </para>
+<para> The reason for this design choice is historical. Older versions
+of LAPDOG   used a type system that was based on OWL/RDF.   In OWL/RDF,
+primitive types such as strings were not represented as classes with
+inheritance   semantics. Rather, they were represented as properties
+on classes. LAPDOG's type system   reflects this approach to type
+representation. </para>
+</section>
+<section>
+<title>Alternative Retention</title>
+<para>LAPDOG retains a number of alternative generalizations for each
+argument.   The representation simply uses a set rather than a single
+value for each alternative.   The alternatives are mutually independent,
+  so an efficient factored representation is sufficient.</para>
+<para>LAPDOG retains a number of alternative structural generalizations
+as well.   While there is some overhead in doing so, in practice the
+number is typically small, and the   advantages of simplicity and
+flexibility outweigh the overhead. A hard threshold is used to   prevent
+out-of-control growth of alternatives.</para>
+</section>
+</section>
+<section>
+<title>Assumptions</title>
+<para>LAPDOG is designed to be application independent, and makes
+few critical assumptions   on the nature of its inputs and environment.
+  It is expected that typical demonstrations are small, but performance
+scales reasonably well   with larger demonstrations, larger nonscalar
+arguments, and action size (number of arguments).</para>
+</section>
+</section>
+<section>
+<title>Other information</title>
+<section>
+<title>Affected Subsytems</title>
+<para> None.</para>
+</section>
+<section id="lapdog-references" xreflabel="References">
+<title>References</title>
+<itemizedlist>
+<listitem><para> Eker, S.; Lee, T.; and Gervasio, M. 2009. Iteration
+Learning by Demonstration. In Proceedings of the AAAI Spring Symposium
+on Agents that Learn from Human Teachers. AAAI Press.</para></listitem>
+<listitem><para> Gervasio, M.; Lee, T.; and Eker, S. 2008. Learning
+Email Procedures from the Desktop. In Proceedings of the AAAI Workshop
+on Enhanced Messaging. AAAI Press. </para></listitem>
+</itemizedlist>
+</section>
+</section>
+<section>
+<title>Related Views</title>
+<itemizedlist>
+<listitem><para><xref linkend="ctr_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lapdog_mediator_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+</itemizedlist>
+</section>
+</section>
+<?Pub *0000033601?>

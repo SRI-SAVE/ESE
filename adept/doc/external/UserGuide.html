@@ -1,0 +1,567 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+  <title> Adept User Guide </title>
+</head>
+
+
+<body>
+<h1> Adept User Guide </h1>
+
+ <P>
+This document describes how to interact with the Adept task learning system
+in order to automate tasks using Adept-enabled applications.
+The document provides an overview of the Adept user interface (UI)
+and describes the processes for learning, saving, and executing procedures.
+<P>
+Bundled with the Adept release are
+1) a simple application for image manipulation, and
+2) a simple puzzle game called Novo.
+
+<br>
+<h2>Table of Contents</h2>
+
+<a href="#QuickStart"> An Overview of the Adept UI </a> <br>
+<a href="#Apps"> Adept Sample Applications  </a> <br>
+<a href="#CreateNew"> Creating a New Learned Procedure  </a> <br>
+<a href="#Execute"> Executing a Learned Procedure  </a> <br>
+<a href="#Editing"> Viewing and Editing Learned Procedures </a> <br>
+<a href="#Persistence"> Managing Learned Procedures </a> <br>
+<a href="#ComplexData"> Structures and Collections </a> <br>
+<a href="#RepetitiveTasks"> Tasks with Repeated Actions </a> <br>
+
+
+
+
+<br><HR>
+<h2><a name="QuickStart"></a> An Overview of the Adept UI </h2>
+
+Adept provides a simple user interface (UI) to enable control and
+understanding of the task learning process. Task learning consists of 1)
+demonstrating a procedure step by step, 2) signaling the end of the
+demonstration to trigger the learning of the procedure, and 3) viewing and
+saving the resulting procedure. The Adept UI supports the subsequent
+execution of learned procedures, either during the same session or sometime
+in the future; the Adept UI also provides basic mechanisms for managing a library
+of learned procedures.
+ <P>
+Adept operates in parallel with one or more client applications that are
+<I>Adept-enabled</I>, meaning that they provide instrumentation and automation that
+are registered with Adept as an <I>action model</I>. (The
+<A HREF="ClientApplicationGuide.html">Adept Client Guide</A>
+provides additional details on specifying an action model.)
+Initiating task learning thus requires starting first Adept and then the
+Adept-enabled application(s) in which tasks are to be demonstrated.
+<P>
+Starting Adept brings up its main UI window, pictured below, which is referred 
+to as the Procedure Management window. 
+
+<P>
+<div class="image">
+<img width=650 src="./images/adept_screenshot11.PNG"/>
+<br/>
+<div><i>The Procedure Management window (initial state - no procedures have been learned)</i></div>
+</div>
+
+<P>
+As described in the section <a href="#Persistence"> Managing Learned Procedures</a>, this window 
+provides access to manage procedures that have been learned.
+Clicking the "Demonstrate" button will open a "Procedure 
+Demonstrator" window (pictured below) that provides the controls for teaching a 
+task to the system. [The process of creating a learned procedure 
+through demonstration of a task is described in the section <a href="#CreateNew">Creating a Learned 
+Procedure</a>.]
+
+<P>
+<div class="image">
+<img src="./images/adept_screenshot12.PNG"/>
+<br/>
+<i>The Procedure Demonstrator window (initial state - no actions have been demonstrated)</i>
+</div>
+
+<P>
+The "Run" button in the lower right-hand corner of the Procedure Management
+ window enables execution of a learned procedure, as described further in the section
+<A HREF="#Execute">Executing a Learned Procedure</A>.  It is disabled until you select a
+procedure in the Procedure Management window. Clicking the "Run" button 
+ opens a "Procedure Executor" window (pictured below) to enable user 
+ control of the execution process. 
+ 
+ <P>
+<div class="image">
+<img src="./images/Run-Open-All.PNG"/>
+<br/>
+<i>The Procedure Executor window (for the procedure "Resize All Images")</i>
+</div>
+
+<br><HR>
+<h2><a name="Apps"></a> Adept Sample Applications </h2>
+
+For tutorial purposes, the Adept release includes some examples of instrumented applications:
+<br />
+<ul>
+  <li><b>Image Loader</b>: A utility that allows for manipulation of image files in various formats. Image Loader is not intended to be a fully functional image manipulation system; rather, it provides a simple environment in which to illustrate how Adept works.</li>
+  <li><b>Novo</b>: A simple puzzle game in which the user is asked to configure pieces of various shapes and colors in to composite structures in as few steps as possible.</li>
+</ul>
+
+<H3>Image Loader</H3>
+
+Image Loader is a sample application that illustrates Adept's learning and execution functionality.
+Image Loader has five actions that can be demonstrated and learned: 1) opening an image; 2) opening a directory;
+3) saving an image; 4) selecting the next image in a directory; and 5) resizing an image.
+Although Image Loader can run as a standalone application, Adept must be running
+at the time Image Loader is started in order to perform learning-related behavior.
+ <P>
+Image Loader comes with a folder containing a few sample images. It is installed at:
+<UL>
+<LI> [Windows XP] <BR>
+  <I>C:\Documents and Settings\[your user name]\Application Data\AdeptImageLoader</I>
+<LI> [Windows 7]  <BR>
+  <I> C:\Users\[your user name]\AppData\Roaming\AdeptImageLoader</I> <B>or</B> <BR>
+  <I> C:\Users\[your user name]\AppData\Local\AdeptImageLoader</I>
+</UL>
+
+<P>
+
+<img src="./images/il_screenshot01.PNG"/>
+<br/>
+<i>Initial state when starting Image Loader</i>
+<P>
+<img src="./images/il_screenshot02.PNG"/>
+<br/>
+<i>Image opened</i>
+<P>
+<img src="./images/il_screenshot03.PNG"/>
+<br/>
+<i>Image resized</i>
+<P>
+
+<H3>Novo</H3>
+
+<h4>Overview</h4>
+<p>Novo is a simple puzzle game in which the user is asked to construct various objects and scenes from primitive game pieces. A piece is defined by its shape, size and color. Novo provides a few puzzles out of the box but also allows the user to play in an open-ended fashion and explore some of the capabilities of the task learning system. Be sure Adept is running and that you have a Demonstrator window open with the Record button pressed before trying to learn procedures for Novo.</p>
+ 
+<img src="images/novo_1.png" />
+<br />
+<i>Novo</i>
+
+<h4>Opening Puzzles</h4>
+<p>To open a puzzle in Novo, click the "Puzzles" button on the main toolbar and choose a puzzle to open. A good first puzzle to try is the 'Tree' puzzle. If you select 'Tree', Novo will open the starting configuration for the Tree puzzle and, in a popup window, display the goal of the puzzle.</p>
+<img src="images/novo_2.png" />
+<br />
+<i>The Starting configuration of the 'Tree' puzzle</i>
+
+<p>You can move the window that depicts the goal of the puzzle to the side so you can reference it while working on the puzzle. Or, you can dismiss it. If at any time you would like to view the goal depiction again, simply click the button that says 'Tree' on the main toolbar (circled in red in the above screenshot).</p>
+
+<p>If you just want to play with Novo and don't want to solve a specific puzzle, go to the Puzzles button on the main toolbar and select 'Blank Canvas'.</p>
+
+<h4>Solving a Puzzle</h4>
+
+<p>There are five tools to assist you in solving a puzzle. They are as follows:</p>
+
+<ul>
+<li>The Shape Factory: Creates new shapes</li>
+<li>The Filter Factory: Filters current game pieces based on specific criteria</li>
+<li>The Color Factory: Consumes a game piece and produces a copy with a different color</li>
+<li>The Size Factory: Consumes a game piece and produces a copy with a different size</li>
+<li>The Assembly Factory: Consumes two or three game pieces and outputs a composite structure with the pieces arranged on a vertical, horizontal or diagonal line.</li>
+</ul>
+
+<p>Every factory is available from the factory toolbar on the left side of the game window. Let's try solving the Tree puzzle.<p>
+
+<img src="images/novo_3.png" />
+<br />
+<i>The Factory toolbar is highlighted by a red rectangle in this image</i>
+
+<p>Clicking each button on the Factory Toolbar will cause the corresponding factory to open below. Let's begin with the Shape Factory. We know we'll need at least three triangles to solve the puzzle and we already have one. So let's generate two additional triangles:</p>
+
+<img src="images/novo_4.png" />
+<br />
+<i>Creating two additional triangles from the Shape Factory</i>
+
+<p>Once you have a factory configured correctly, press the 'Run Factory' to make things happen.</p> 
+
+<img src="images/novo_5.png" />
+<br />
+<i>Result of running the Shape Factory</i>
+
+<p>There are now enough triangles to solve the puzzle. However, the circle is a bit pesky and doesn't contribute to solving the puzzle. We can filter it out using the Filter Factory. Choose the Filter Factory by clicking the "Filter" button on the factory toolbar. Configure the Filter Factory as shown below to remove the circle:</p>
+
+<img src="images/novo_6.png" />
+<br />
+    
+<p>Next, let's make our three triangles green. First, open the Color Factory. Then, click and drag one of the triangles from the working area in to the "Input piece" socket in the Color Factory.<p> 
+
+<img src="images/novo_7.png" />
+<br />
+<i>Dragging a piece in to the Color Factory to produce a copy with a different color</i> 
+
+<p>Once the black triangle is in the socket, select 'Green' for the color of the new piece. Then press the 'Run Factory' button. Repeat this for all three triangles.</p> 
+<p>Next we need to make the triangles different sizes. To do this we'll use the Size Factory. Open the Size Factory, and drag one of the green triangles into the 'Input piece" socket. Choose 'Small' for the size and run the factory. Do this a second time but specify 'Large' to create a large green triangle. We don't need to create a medium green triangle since we already have one.</p> 
+<img src="images/novo_8.png" />
+<br />
+<i>Using the Size Factory to create differently sized pieces</i>
+
+<p>The last step required to solve the puzzle is to use the Assembly Factory to assemble our three triangle pieces in to a tree. First, open the Assembly Factory. Unlike the previous two factories, the Assembly Factory has three sockets for input pieces. Two or more input pieces are sufficient to run the Assembly Factory. First, configure the 'Direction' of the Assembly Factory to be vertical since that is how we want our pieces configured. Then, drag the three triangle pieces in to the input sockets of the factory in increasing size from top to bottom. Use the factory preview at the bottom of the Assembly Factory to verify that the tree is being constructed properly.</p> 
+
+<img src="images/novo_9.png" />
+<br />
+<i>Assembling three pieces in to a tree assembly</i>
+
+<p>Once the Factory Output Preview looks like a tree press the 'Run Factory' button to run the factory and create the tree.</p> 
+
+  
+<img src="images/novo_10.png" />
+<br />
+<i>The Tree puzzle solved</i>
+
+<p>Congratulations, you've solved your first puzzle in Novo!</p> 
+
+
+<P>
+
+<br><HR>
+<h2><a name="CreateNew"></a> Creating a Learned Procedure </h2>
+
+This section describes the process of creating a learned procedure, using the Image Loader application
+as an example.
+<P>
+New procedures are created by using the Procedure Demonstrator window, which
+is accessible from the main Adept UI window. To
+demonstrate a procedure, open the Procedure Demonstrator via the "Demonstrate"
+button and click "Record." This notifies Adept that it should accept actions
+from Adept-enabled applications and use them to create a procedure. Actions
+are tracked in the Procedure Demonstrator window as they are performed. For
+example, the window below shows a trace of three steps that have been performed as
+part of a demonstration within the Image Loader application.
+
+<P>
+<img src="./images/Demo3-Hopper.png"/>
+<br/>
+<i>Procedure Demonstrator window with an action trace for a demonstration with the Image Loader application</i>
+<P>
+
+Care should be taken to wait for an action to fully complete, and for its instrumentation to appear
+in the Procedure Demonstrator window, before demonstrating the next action (or before completing
+the demonstration with the "Finish" button). Otherwise, the actions could appear in an unintended
+order (or possibly be omitted from this demonstration and included in the next).
+ <P>
+Actions in the demonstration trace are deleted individually using the "Delete
+Action" button or are all deleted using the "Clear" button. Demonstration is
+temporarily paused by using the "Pause" button, which tells Adept to retain
+all already demonstrated actions but not to include any new ones until the
+"Record" button is again hit.
+<P>
+When done demonstrating a procedure, press the "Finish" button to cause the
+procedure to be learned. This produces a three-part display (see below) that summarizes the
+parameters, the generalized action sequence, and the outputs of the procedure.
+Each parameter is assigned as a default the value used in the demonstration; however, a user
+can modify those values before saving the procedure.
+Parameters are discussed further in the section <a href="#Execute"> Executing a Learned Procedure </a>below. 
+
+<P>
+<div class="image">
+<img src="./images/Learned-Hopper.png"/>
+<br/>
+<i>After Finish is pressed, a preview of the learned procedure is shown before saving.</i>
+</div>
+
+<p>
+If the procedure is satisfactory, the user can press the save button and a dialog window will appear where 
+the user can assign a meaningful name and save the procedure for subsequent execution. Prior to 
+pressing the save button, the user may choose to provide a description of the procedure in the text box
+at the top of the preview.
+</p>
+
+<P>
+When saved, the newly learned procedure appears in the list of available procedures in the 
+Procedure Management window. 
+<div class="image">
+<img width=650 src="./images/Persisted-Hopper.png"/>
+<br/>
+<i>Learned procedure appears in the list of executable procedures.</i>
+</div>
+
+<br><HR>
+<h2><a name="Execute"></a> Executing a Learned Procedure </h2>
+
+<P>
+Procedures are run using the Procedure Executor window, which is accessed by
+selecting a procedure and clicking "Run" from the main UI. From here, input
+parameters are specified before executing the procedure, or the procedure is
+simply run with the default values for parameters.
+
+ <P>
+<div class="image">
+<img src="./images/Run-Hopper.png"/>
+<br/>
+<i>Procedure Executor window with default editable input parameters. Input values can be changed before running.</i>
+</div>
+<P>
+
+If the default parameter values are accepted, then executing the procedure performs the 
+exact same task as when the procedure was demonstrated. However, if any default values 
+are changed, the executed procedure performs a task similar to, but not identical to, 
+the demonstration that created the procedure. This illustrates perhaps the most powerful 
+feature of Adept: <i>generalizing</i> the demonstrated behavior rather than re-executing it 
+verbatim.
+
+<P>
+Pressing the "Run" button executes the procedure.
+Pressing the "Cancel" button closes the window.
+<P>
+If an error occurs during the execution of a procedure, a popup window appears.
+For example, an error can occur if invalid inputs are entered, such as a nonnumeric value for a numeric parameter. 
+ <P>
+It is perfectly valid to execute a procedure during a demonstration. The procedure name appears in the demonstration
+window along with its parameters, similar to other actions. The resulting learned procedure will invoke it.
+This allows complex procedures to be built out of simpler ones.
+
+<br><HR>
+<h2><a name="Editing"></a>Viewing and Editing Learned Procedures</h2>
+<p>When a learned procedure is saved after a demonstration, it becomes available not only for execution but also 
+for visualization and editing. This functionality is accessed within the Adept UI window by clicking on the "Edit" 
+button. This launches another window called the "Procedure Editor".</p> 
+
+<div class="image">
+<img src="./images/Edit-Button.png"/>
+<br/>
+<i>Clicking the "Edit" button causes a new window called the Procedure Editor to open</i>
+</div>
+
+<p>If a procedure is selected at the time the "Edit" button is clicked, the Procedure Editor will open that procedure directly. 
+Otherwise, the Procedure Editor will open and the user may either create a new procedure (manually), or open 
+an existing procedure using the "Open" button in the Procedure Editor's toolbar.</p>
+<div class="image">
+<img src="./images/Editor-Glimpse.png"/>
+<br/>
+<i>The Procedure Editor after opening the "Resize" procedure. Notice the "Open" button in the top left which can be used to open another procedure without closing the window</i>
+</div>
+<p>The Procedure Editor is a powerful application. Its functionality is more fully described in the <a href="EditorGuide.html">Editor Guide</a>.</p> 
+<br />
+<hr />
+
+<h2><a name="Persistence"></a> Managing Learned Procedures </h2>
+
+Adept's main window includes a basic user interface to manage saved procedures.
+
+ <P>
+<div class="image">
+<img width=650 src="./images/Persisted-Hopper.png"/>
+<br/>
+<i>Main Adept UI window, showing the names of previously learned procedures</i>
+</div>
+
+ <P>
+Procedures are stored as individual files in the user's file system <I>persistence directory</I>.
+This directory is at an operating-system-dependent location:
+ <BR> <CODE>%APPDATA%\AdeptTaskLearning\lumen\0_4</CODE>
+(<CODE>%APPDATA%</CODE> refers to the location where the various Windows operating systems
+ store application data).
+
+<P>
+The file name of the procedure is &lt;procedure-name&gt;<CODE>.procedure</CODE>.
+Neither the persistence directory location nor the procedure file names need to be known to
+operate Adept. However, this information may be useful for system operations such as
+backing up and restoring files.
+
+<P>
+Selected procedures may be renamed or deleted through the "Manage" drop-down menu. 
+A procedure can be exported to another file location to facilitate 
+sharing procedures with other users. The import command brings a procedure exported 
+in this manner by another user into the user's persistence directory.
+
+ <P>
+<div class="image">
+<img width=650 src="./images/Actions-Menu.png"/>
+<br/>
+<i>The options given after clicking the "Manage" drop down menu with a given procedure selected.</i>
+</div>
+<P>
+
+<br><HR>
+<h2><a name="ComplexData"></a> Structures and Collections</h2>
+
+Each data value in an Adept action is either a single value or is composed of multiple values.
+There are two kinds of multiple values: <I>structures</I> and
+<I>collections</I>.
+
+<h3>Structures</h3>
+Structures and collections are designated in demonstrations by square brackets surrounding their
+values, which are called its <I>elements</I>. 
+<P>
+A structure has a fixed number of elements, each identified by a unique name.
+For example, an application might represent a postal address as a structure with
+elements for street number, street name, city, state, and postal code.
+A person might be represented as a structure with a first name, last name, sex, and age.
+When a structure is used as a parameter in a learned procedure,
+it appears as a button with preview text in the Procedure Executor window. Clicking the button will open a dialog that allows you
+to view and edit the individual values that comprise the structure.
+ <P>
+The Novo application uses a structure to represent a piece;
+its three elements are its shape, size and color. The following screenshot shows an example Novo
+procedure that accepts a game piece as input:
+
+ <P>
+<div class="image">
+<img src="./images/Structure-Input.png"/>
+<br/>
+<i>
+A sample Novo procedure in which the input "piece_1" is a structure that represents a game piece. Clicking the button expands the structure.
+</i>
+</div>
+<br />
+
+<div class="image">
+<img src="./images/Structure-Input-Expanded.png"/>
+<br/>
+<i>
+The structure input "piece_1" expanded to allow the user to view and edit its values.<br />
+The user can either confirm his edits by clicking "Save Changes" or abort them by clicking "Back".
+</i>
+</div>
+
+<h3>Collections</h3>
+<P>
+A collection may have any number of elements, including zero.
+All elements of a collection are of the same type. For example, an application could have a collection
+of persons and a collection of addresses, but could not have a collection containing both.
+ <P>
+When a collection is used as a procedure input, it appears as a button with preview text, similar
+to a structure input. Clicking the preview button results in a dialog appearing that allows for the following operations:
+<ul>
+  <li>Adding an element: By clicking the link in the bottom-left of the dialog</li>
+  <li>Removing an element: By clicking and dragging it off of the dialog</li>
+  <li>Reordering elements: By clicking and dragging an element to another position in the collection. Applies to lists only.</li>
+</ul>
+ <P>
+In Image Loader, the contents of a directory are represented as a collection of files,
+while the file extensions (such as "bmp" or "gif") used as format filters for selecting
+images are represented as a collection of strings. 
+
+ <P>
+<div class="image">
+<img src="./images/Collection-Input.PNG"/>
+<br/>
+<i>A sample Image Loader procedure in which the input formats1 is a collection of strings that denotes format filters.
+It may contain an arbitrary number of elements.</i>
+</div>
+<br />
+<div class="image">
+<img src="./images/Collection-Input-Expanded.PNG"/>
+<br/>
+<i>The collection input "formats1" expanded.</i>
+</div>
+
+
+ <P>
+There are three types of collections: lists, sets, and bags.
+The elements in a list are ordered while the elements of a set are not;
+as discussed in the next section, ordering can impact the structure of procedures learned by Adept.
+Bags are like sets except that they allow duplicate elements.
+The three collection types are displayed in a similar manner.
+
+
+<br><HR>
+<h2><a name="RepetitiveTasks"></a> Tasks with Repeated Actions (Loops)</h2>
+
+ <P>
+Suppose that you have a folder of image files, each of which you want to resize into a thumbnail-sized image.
+If the folder contains two image files (e.g., <CODE>John.jpg</CODE> and <CODE>Mary.jpg</CODE>),
+then Adept could learn a procedure for accomplishing this task from the following demonstration:
+
+<P>
+<div class="image">
+<img src="./images/NonLoopDemo.png"/>
+<br/>
+<i>A demonstration showing how to resize two image files into thumbnail-sized images.</i>
+</div>
+
+ <P>
+The learned procedure for this demonstration is: 
+
+<P>
+<div class="image">
+<img src="./images/NonLoopProcedure.png"/>
+<br/>
+<i>A procedure that resizes exactly two image files, specified as inputs, into thumbnails.</i>
+</div>
+
+ <P>
+This procedure, while correct for handling exactly two files, is not very versatile.
+A potentially more useful procedure would resize all image files in a directory,
+regardless of how many there are. Adept can learn a more general procedure of this type
+from the following demonstration.
+
+<P>
+<div class="image">
+<img src="./images/LoopDemo.png"/>
+<br/>
+<i>A demonstration that opens a folder and resizes all images files in the folder.</i>
+</div>
+
+ <P>
+The only difference between this demonstration and the previous one is that the folder containing
+the images is first opened. This action produces a data value that is a collection of all the image
+files in the folder. From this demonstration, Adept learns the following procedure: 
+
+<P>
+<div class="image">
+<img src="./images/LoopProcedure.png"/>
+<br/>
+<i>A procedure that opens and resizes each image file in a folder.</i>
+</div>
+
+ <P>
+Adept recognizes that each element in the collection is resized identically,
+and so learns a procedure that repeats the open and resize sequence for all of the images in the folder.
+(In computer programming, such repeated sequences of actions are called <I>loops</I>.)
+ <P>
+It is not necessary to tell Adept that you want to learn a repetitive task.
+Rather, Adept will recognize these tasks by the presence in the demonstration of
+repeated actions over the elements of a collection, providing the following
+conditions are met:
+
+<UL>
+<LI> <I>The collection must appear in the demonstration, prior to the repeated actions.</I>
+     Adept will attempt to recognize repeated action sequences only if a collection is present.
+     This requirement is met in the second example above by opening the folder
+     containing the files to be resized.  
+<LI> <I>The collection must contain at least two elements.</I>
+     Adept will not learn a repetition if the collection contains only one element.
+     However, if the learned procedure is executed with a collection containing only one
+     element, or no elements, it will execute properly
+<LI> <I>Every element in the collection must be operated upon.</I>
+      In the above example, if a folder contains three files and only two are opened and resized,
+      no repetition will be recognized.
+<LI> <I>The same actions must be repeated for each element in the collection, in the same order.</I>
+     For example, if the task is to copy each file in a folder to two different folders A and
+     B, then "copy to A" must always precede "copy to B". If for one file
+     "copy to B" precedes "copy to A", no repetition will be
+     recognized. Similarly, if only one copy is done for some files but both
+     copies are done for the others then no repetition will be recognized.
+<LI> <I>If the collection is a list, the order of its elements must be respected.</I>
+     That is, the elements must be used in the order that they appear in the list.
+</UL>
+
+
+<iframe src="distar-task-learning.html" frameborder="0" align="center" width="100%"></iframe>
+
+
+</body> 
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd" >
+<?Pub Inc?>
+<section id="lumen_mediator_module">
+<title>Lumen Mediator</title>
+<section>
+<title>Introduction</title>
+<para>The Lumen Mediator provides an interface between Lumen and 
+   the CPOF-PAL system, mapping incoming messages received via the
+Spine     to Lumen API method calls, and mapping results of these
+    calls to outgoing messages.     It supports bi-directional execution:
+Spine clients such as     CPOF can request Lumen to execute procedures,
+and Lumen can     request Spine clients to execute actions.</para>
+<figure id="Lumen-Mediator">
+<title>Structural View of the Lumen Mediator</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/Lumen_Mediator.png"/></imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Element Catalog</title>
+<table>
+<title>Lumen Mediator Elements</title>
+<tgroup cols="2">
+<thead>
+<row><entry>Element</entry><entry>Description</entry></row>
+</thead>
+<tbody>
+<row><entry>ExecutionHandler</entry><entry>Receives procedure execution
+requests from CPOF               2D</entry></row>
+<row><entry>CancelReceiver</entry><entry>Receives procedure cancel
+requests from CPOF               2D</entry></row>
+<row><entry>CustomReceiver</entry><entry>Receives procedure validationr
+equests from the               procedure editor</entry></row>
+<row><entry>ServerConnectionImpl</entry><entry>Receives requests from
+Lumen and routes them               appropriately to other components</entry>
+</row>
+<row><entry>LumenFacadeImpl</entry><entry>Encapsulates Lumen functionality.
+Makes calls               into Lumen on behalf of the Mediator.</entry>
+</row>
+<row><entry>SpineFacadeImpl</entry><entry>Encapsulates Spine functionality
+by making calls               into the Spine on behalf of the Mediator</entry>
+</row>
+<row><entry>LockingActionModel</entry><entry>Encapsulates the Mediator's
+view of Lumen's               action model, which is the set of types
+and actions               which Lumen knows about. As its name implies,
+              LockingActionModel manages locking to prevent actions
+              from being removed while references to them are    
+          active.</entry></row>
+<row><entry>LumenTaskResultListener</entry><entry>Tracks the status
+of a procedure execution which               Lumen is handling</entry>
+</row>
+<row><entry>TypeFetcher</entry><entry>Requests type information from
+other Spine               clients, such as the Bridge which proxies
+those requests               on behalf of CPOF 2D</entry></row>
+<row><entry>TypeConverter</entry><entry>Converts actions and types
+from the Spine's               representation into Lumen's representation</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+<section>
+<title>Context Diagram</title>
+<para>This diagram shows the Lumen Mediator's place in the     CPOF-PAL
+architecture.</para>
+<figure>
+<title>PAL Architecture</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PAL_Architecture.png"/></imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Architecture Background</title>
+<para>The architectural purpose of the Lumen Mediator is to provide
+an interface     between Lumen and the CPOF-PAL system that preserves
+the independence of Lumen     from CPOF-PAL. That is, all behaviors
+specific to CPOF-PAL are encapsulated in the     Lumen Mediator rather
+than Lumen itself.</para>
+</section>
+<section>
+<title>Related Views</title>
+<itemizedlist>
+<listitem><para><xref linkend="bridge_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lapdog_mediator_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="shell_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="spine_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lapdog_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lumen_module"
+xrefstyle="select: label title pageabbrev"/><?Pub Caret?></para>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+<?Pub *0000004626?>

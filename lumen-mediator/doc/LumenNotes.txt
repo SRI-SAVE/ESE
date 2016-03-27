@@ -1,0 +1,36 @@
+Lumen Jan 29 release
+
+Summary:
+========
+Contains the basic Lumen interpreter and interface code for communication with the CPOF bridge via ITL Server.
+
+
+Known Bugs:
+===========
+
+None
+
+
+Known Limitations:
+==================
+
+None that affect CPOF/PAL performance of procedures learned by LAPDOG.
+
+
+Future Improvements:
+====================
+- The locations of errors involving expressions should be reported in a more informative way.
+
+- Some problems in the interface to the bridge are logged as errors rather than throwing exceptions.
+
+- The Lumen runtime stack of failures needs to be reported (in an informative way).
+
+- Lumen currently implements a very simplistic, hard-wired meta-level that does not provide any reasoning
+  over missing or multiple procedures.
+
+- Some built-in operator declarations are weaker than they should be, resulting in code that passed
+  validation, but is found to be invalid at runtime.
+
+- Captured variables in closures are not currently implemented (and will be implemented in a different way
+  from SPARK).
+

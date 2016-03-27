@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<response>
+    <id>resp-59</id>
+    <exercise_id>ex-1</exercise_id>
+    <task_response>
+        <demo>$demonstration {
+  'LoadTest^1.0^removeFromContainer' "-6222500921411766371", "-281500529313377003";
+  'LoadTest^1.0^makeItem' "1655279500925905867", "-3052128090838976942";
+  'LoadTest^1.0^addToContainer' "6400815771586910984", "1655279500925905867";
+  'LoadTest^1.0^makeItem' "-8736549028648185456", "6062079179591025399";
+  'LoadTest^1.0^removeFromContainer' "-8582308344821633752", "2547303449281845571";
+  'LoadTest^1.0^removeFromContainer' "6400815771586910984", "-23355836537558703";
+  'LoadTest^1.0^removeFromContainer' "6962736768733975082", "-9097913653805205724";
+  'LoadTest^1.0^selectAll' "2547303449281845571", ["-6029273685826035494", "5382781079321256030", "-1225548982659701627"];
+  'LoadTest^1.0^selectAll' "-6439378459220884454", ["-6029273685826035494", "5382781079321256030", "-1225548982659701627"];
+  'LoadTest^1.0^selectAll' "8038511530156102170", ["-3515857136234550908", "-8736549028648185456", "-1690317135611382169"];
+  'LoadTest^1.0^addToContainer' "5943541855484393965", "-5734737803684422656";
+  'LoadTest^1.0^makeItem' "3992855473215201769", "-8736549028648185456";
+  'LoadTest^1.0^makeItem' "4680954139161793623", "-4262061721737183177";
+  'LoadTest^1.0^addToContainer' "-785029376220018426", "4096357888808475028";
+  'LoadTest^1.0^selectAll' "7781990891256473169", ["-3515857136234550908", "-8736549028648185456", "-1690317135611382169"];
+  'LoadTest^1.0^removeFromContainer' "-4188387249169629125", "-8860635928052840523";
+  'LoadTest^1.0^selectAll' "-5668766969897170988", ["-4876423763412961349", "-4125415275579794613", "-8277978421121343057"];
+  'LoadTest^1.0^removeFromContainer' "-509728291169462746", "-6745193231824471809";
+  'LoadTest^1.0^selectAll' "5293832809631283613", ["1655279500925905867", "-5574625439821998408", "5290382285491301293"];}
+ properties:{}</demo>
+        <seconds_elapsed>0</seconds_elapsed>
+    </task_response>
+</response>
+<!-- Delete step #7 -->

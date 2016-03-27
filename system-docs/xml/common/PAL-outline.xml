@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+<!-- $Id: PAL-outline.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<chapter id="pal-overview">
+<title>PAL Overview</title>
+<section>
+  <title>Introduction</title>
+<para>
+CPOF-PAL integrates CPOF with the Task Learning framework
+developed under DARPA's PAL (Personalized Assistant that Learns)
+research program.
+The PAL Task Learning framework employs learning by demonstration technology to enable user automation of routine or time-consuming tasks, thus freeing a user to focus on more cognitively demanding activities. This document describes the PAL software used in CPOF-PAL, the software architecture,
+and the interactions among CPOF and the components of PAL.
+</para>
+<para>
+The PAL Task Learning Framework provides a wide range of capabilities, including:
+  <itemizedlist>
+     <listitem> APIs that instrument a client application to enable recording and playback
+        of user action sequences, </listitem>
+     <listitem> learning procedures from recorded user actions,   </listitem>
+     <listitem> executing learned procedures,    </listitem>
+  <!-- TODO-Will TODO-David mention procedure validation and/or constraint checks? -->
+     <listitem> viewing learned procedures.    </listitem>
+   </itemizedlist>
+Task automation is accomplished by recording the sequence of user actions comprising the task,
+and generalizing this sequence to form a learned procedure.
+This procedure may be executed at a later time as needed.
+The procedure is parameterized, meaning that the procedure can be
+executed with the same parameters used to create it to produce
+identical results, or with different parameters to achieve similar
+objectives as indicated by those paramters.
+</para>
+
+<para>
+  The CPOF-PAL system architecture is shown in
+  <xref linkend="outline_PAL_Architecture" xrefstyle="select: label" /> .
+  Each of the principal components is described below. The purpose of the
+  architecture is to enable task learning that is integrated with the CPOF client
+  application. 
+</para>
+<para>
+  PAL interacts with CPOF through the CPOF Server and the Remote Admin
+  interface of CPOF. The CPOF Server controls learning and execution.
+<!-- TODO-Will Mention the how the Procedure Viewer is invoked? -->
+  Remote Admin permits monitoring of the PAL components
+  and their system resource utilization,
+  and permits shutting down of PAL components from CPOF.
+</para>
+<figure id="outline_PAL_Architecture">
+  <title>CPOF-PAL Architecture</title>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="graphics/PAL_Architecture.png" />
+    </imageobject>
+  </mediaobject>
+</figure>
+</section>
+
+    <section>
+        <title>LAPDOG</title>
+            <para>
+                LAPDOG performs task learning by converting a demonstration trace into an
+                executable, parameterized procedure that reproduces the demonstrated
+                activity as well as generalizing it so that the demonstrated task may be
+                executed in the future to perform tasks similar to the one that is
+                demonstrated. This section discusses some considerations in effective use
+                of LAPDOG for any application; many of these considerations have been
+		applied to CPOF-PAL. For a more complete discussion of LAPDOG,
+                see
+                <emphasis>Eker et al.</emphasis>
+                and
+                <emphasis>Gervasio et al.</emphasis>
+            </para>
+        <section>
+            <title>Action Model</title>
+	    <para>
+	      The action model defines the application operations that are available
+	      for observation and execution in a form suitable for task learning.
+	      Each action in the action model has a name and parameters (input and output),
+	      and represents a single operation within the application.
+	    </para>
+            <para>
+                The specifics of the action model significantly affect the generalizations
+                that are performed. To discuss this, we use a simplified notation for
+                actions in the action model, suppressing some implementation details. In
+                demonstration examples, input arguments are preceded by a +, and output
+                arguments by a -, to highlight the dataflow.
+	    </para>
+	    <para>
+	      For example, an action that performs a file conversion operation
+	      could be modeled as:
+                <programlisting>
+		  convert(+Infile, +Format, -Outfile)
+		</programlisting>
+	    </para>
+            <para>
+                Actions should be modeled at the level at which humans would typically
+                describe their own actions. For example, in an email application, it would
+                be preferable to capture the actions
+                <emphasis>Open Compose Window</emphasis>,
+                <emphasis>Add Email Attachment</emphasis>,
+                <emphasis>Send Email</emphasis>, etc. over the actions
+                <emphasis>Click on Compose Button</emphasis>,
+                <emphasis>Pop Up Compose Window</emphasis>,
+                <emphasis>Click on Attach Button</emphasis>, etc., and definitely over
+                <emphasis>Drag Mouse from (X1,Y1) to (X2,Y2)</emphasis>,
+                <emphasis>Left-Click on Mouse at (X2,Y2)</emphasis>,
+		etc. Note that this does not necessarily mean that the system be
+                instrumented/automated at the human level, only that there be a
+                well-defined mapping between the system's native instrumentation and the
+                human-level actions over which procedures will be learned. Representing
+                actions at this level is key to creating understandable and manageable
+                learned procedures.
+            </para>
+            <para>The action model of an application fulfills several
+                important roles. It significantly affects learning and generalization, the
+                topic of this section. Since actions in the action model are instrumented
+                and automated, it also serves as an API between PAL and the application.
+                Finally, it specifies the level at which the user will view and manipulate
+                learned procedures.</para>
+	    <para>
+	      A procedure resulting from task learning consists of a sequence of actions:
+                <programlisting>
+                    ProcedureName(<emphasis>parameters</emphasis>) {
+		      action1(<emphasis>parameters</emphasis>)
+		      action2(<emphasis>parameters</emphasis>)
+		      ...
+		      actionN(<emphasis>parameters</emphasis>) }
+                </programlisting>
+		Furthermore, these actions may be grouped into one or more loops
+		(loops and loop learning are discussed in a subsequent section).
+		As with action models, input and output parameters of the procedure
+		are designated by + and -
+                respectively. Variables in procedures, including parameter variables, are
+                designated with a leading dollar sign. Argument types are omitted unless
+                typing is significant to the example, in which case they are notated as
+                :TypeName after the action argument. 
+            </para>
+        </section>
+        <section>
+            <title>Macros vs. Parameterized Procedures</title>
+            <para>
+                It is possible to learn parameterless procedures (i.e., macros). Consider
+                a one-action demonstration:
+                <programlisting>
+		  deleteFile(+"MyFile.txt")
+		</programlisting>
+                PAL can learn a parameterless procedure that always deletes the file
+                "MyFile.txt". However, the true power of PAL is to learn procedures with
+                parameters, such that the procedure can be applied to tasks similar to the
+                demonstrated task, as opposed to only that specific, verbatim task.
+            </para>
+            <para>
+                The action model affects the expressive power of learned procedures. For
+                example, an alternative formulation of the action model might model file
+                deletion as
+                <programlisting>
+		  deleteFile(+"MyFile" +"txt")
+		</programlisting>
+                which allows learning a variety of procedures with various
+                parameterizations. For example, a
+                two-parameter version looks like
+                <programlisting>
+		  DeleteOneFile(+$basename +$extension) {
+		    deleteFile($basename $extension) }
+		</programlisting>
+                If the underlying system allows wildcards, one could execute the procedure
+                <programlisting>
+		  DeleteFile("*" "txt")
+		</programlisting>
+                to delete all text files in some unspecified context. In some cases,
+                learning will create an unintended input parameter. For example, a
+                demonstration that increments a number by one:
+                <programlisting>
+		  add(+23 +1 -24)
+		</programlisting>
+                might generalize to
+                <programlisting>
+		  AddTwoNumbers(+$number1 +$number2 -$result) {
+                    add($number1 $number2 $result) }
+		</programlisting>
+                when the user's actual intent was to always increment a number by one. By
+                clarifying the procedure in the ITL GUI, the user could change it to:
+                <programlisting>
+		  Increment(+$number -$result) {
+		    add($number 1 $result) }
+		</programlisting>
+                As an alternative, the application could make a more specific action
+                available:
+                <programlisting>
+		  addConstant(+$number +$constant -$result)
+		</programlisting>
+                in which <code>$constant</code> is designated as an ungeneralizable parameter. In this
+                case, LAPDOG can learn the Increment procedure without requiring the user to
+                clarify the parameters. The tradeoff is that the application must make
+                this additional primitive available, and the user must know to use it.
+                Such tradeoffs are typical of action model design considerations.
+            </para>
+        </section>
+        <section>
+            <title>Parameter Generalization</title>
+            <para>
+                For the action model
+                <programlisting>
+		  convert(+Infile, +Format, -Outfile)
+		  delete(+File)
+		  getCreationDate(+File, -Date)
+		  list(+Directory,-FileList)
+		</programlisting>
+                consider the following execution trace for a demonstration within a file
+                system:
+                <programlisting>
+		  convert(+manual.pdf, +"HTML", -manual.html)
+		  getCreationDate(+manual.html, -2009-03-23)
+		</programlisting>
+                LAPDOG generalizes a demonstration by converting arguments in the
+                demonstration to variables in the learned procedure. Furthermore, it
+                analyzes the dataflow in the demonstration looking for support
+                relationships-cases in which an output of an action is used as an input in
+                one or more subsequent actions. In a support relationship, the supporting
+                argument and all supported arguments are replaced or co-designated with a
+                common variable in the learned procedure:
+                <programlisting>
+		  convert($Infile, "HTML", $File)
+		  getCreationDate($File, $Date)
+		</programlisting>
+                The effect of this co-designation is to force all support related inputs
+                and outputs to have the same value when the learned procedure is executed.
+            </para>
+            <para>This example illustrates the basic generalization performed via learning
+                by demonstration. Values in the sequence of demonstrated actions are
+                replaced with variables; this is termed variablization. If there is no
+                support found for an argument, it is made to be an input parameter to the
+                learned procedure, obliging the user to provide it upon execution. This
+                process of support analysis and variablization is termed parameter
+                generalization.</para>
+            <para>It is possible to limit variablization by designating action model
+                parameters as ungeneralizable. Such parameters are never variablized --
+                they remain as constants in the learned procedure. For example, if the
+                Format parameter of the Convert action is made ungeneralizable, learned
+                procedures containing it will always convert to the demonstrated format
+                ("HTML" in this example). In addition, certain constants-the null value,
+                the empty string, empty list, and empty set - are never generalized. All
+                other values are variablized.</para>
+        </section>
+        <section>
+            <title>Support Relationships</title>
+            <para>During parameter generalization LAPDOG determines which values support
+                other values. For a learned procedure to be valid, all inputs to all its
+                actions must be supported. An input value in an action is supported if
+                that value is available in the learned procedure when that action is
+                executed, either by being an input to the procedure, by being output by a
+                previous action, or if it is a known function, discussed in detail below,
+                of supported values.</para>
+            <para>
+                Support determination depends upon the types of the values involved. A
+                scalar value u supports another value v if u equals v, and u's type is
+                either the same as v's type or a supertype of it. A list u supports
+                another list v if each element of u supports the corresponding element in
+                v. The same is true for sets: the element correspondence is determined by
+                the inherent order of the elements. A tuple, discussed in detail below, u
+                supports a tuple v if u and v are of exactly the same type, and each
+                element of u supports the corresponding element of v. Support
+                relationships for nonscalars are defined recursively, permitting an
+                element of an arbitrarily structured data value to support another if
+                their types are compatible. For example, given a demonstration of some
+                string-manipulation actions:
+                <programlisting>
+		  concatenate(+"the quick " +"brown fox" -"the quick brown fox")
+		  removeBlanks(+"the quick brown fox" -"thequickbrownfox")
+                  uppercase(+"the quick brown fox" -"THE QUICK BROWN FOX")
+		</programlisting>
+                the learned procedure is
+                <programlisting>
+		  P(+$string1 +$string2 -$out1 -$out2 -$out3) {
+		    concatenate($string1 $string2 $out1)
+		    removeBlanks($out1 $out2)
+		    uppercase($out1 $out3) }
+		</programlisting>
+                Since the first occurrence of "the quick brown fox" supports values in the
+                second and third actions, they are all co-designated with the same
+                variable. Furthermore, since the first occurrence is computed, it need
+                not, and should not, be an input parameter.
+            </para>
+        </section>
+        <section>
+            <title>Ambiguous Supports</title>
+            <para>
+                Ambiguity occurs when two or more supports are available for a given
+                value. In the demonstration
+                <programlisting>
+		  findZipCode(+"alice" -"12345")
+		  findZipCode(+"bob" -"12345")
+		  printZip(+"12345")
+		</programlisting>
+                the support for the "12345" in printZip is ambiguous. LAPDOG resolves such
+                ambiguities during generalization by using the most recent supporting
+                value:
+                <programlisting>
+		  findZipCode($name1 $zip1)
+		  findZipCode($name2 $zip2)
+                  printZip($zip2)
+		</programlisting>
+                Using distinct data types can help prevent unwanted generalizations
+                arising from ambiguous supports. For example, the demonstration (with
+                relevant argument types made explicit):
+                <programlisting>
+		  findZipCode(+"bob" -"12345":Zip)
+		  findEmployeeId(+"bob" -"12345":Id) printZip(+"12345":Zip)
+		</programlisting>
+                contains two potential supports for "12345" in the last action. However,
+                it generalizes uniquely to
+                <programlisting>
+		  findZipCode($name $zip)
+		  findEmployeeId($name $id)
+		  printZip($zip)
+		</programlisting>
+                due to the types of the action parameters.
+            </para>
+        </section>
+        <section>
+            <title>Tuples and Functions</title>
+            <para>
+                The action model may define arguments as
+                <emphasis>tuples</emphasis>
+                - arbitrarily-structured data similar to records or structures in
+                programming languages. For example, we can define a tuple to represent an
+                employee, containing their first name, last name, and employee ID:
+                <programlisting>
+		  findEmployee(+12345 -&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+		</programlisting>
+                The elements of a tuple are named. Each element may be of any type,
+                including lists, sets, and tuples. Supports and variablization are
+                computed both for the tuple itself, and for each element. Like any other
+                value, one tuple can support another in its entirety:
+                <programlisting>
+		  findEmployee(+12345 -&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+		  printEmployee(+&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+		</programlisting>
+                generalizes to:
+                <programlisting>
+		  findEmployee($id $employee)
+		  printEmployee($employee)
+		</programlisting>
+                Tuple elements can support other values. The following demonstration of
+                constructing a full name from first and last names:
+                <programlisting>
+		  findEmployee(+12345 -&lt;firstName="Alice" lastName="Ames" id=12345&gt;)
+		  concatenate(+"Ames" +"," -"Ames,")
+		  concatenate(+"Ames," +"Alice" -"Ames,Alice")
+		</programlisting>
+                generalizes to:
+                <programlisting>
+		  findEmployee($id $employee)
+		  concatenate((mapGet $employee "lastName") "," $string1)
+		  concatenate($string1 (mapGet $employee "firstName") "Ames,Alice")
+		</programlisting>
+                Note the generalization of the argument "Ames" to the function (mapGet
+                $employee "lastName"). This means that the element named "lastName" of
+                the tuple associated with $employee is used as the argument of the action.
+            </para>
+            <para>
+                Besides tuples, the accessor functions first($List) and last($List) are
+                available for lists. Thus, a demonstration
+                <programlisting>
+		  getAllEmployeeNames(-["alice" "bob" "carl"]: itl_core.list&lt;itl_core.string&gt;)
+		  findZipCode(+"alice" -"12345")
+                  printZip(+"12345")
+		  findZipCode(+"carl" -"67890") printZip(+"67890")
+		</programlisting>
+                generalizes to:
+                <programlisting>
+		  getAllEmployeeNames($people)
+		  findZipCode((first $people) $zip1)
+		  printZip($zip1) findZipCode((last $people) $zip2)
+                  printZip($zip2)
+		</programlisting>
+                In addition to accessor functions, there are also constructor functions,
+                which support a list, set, or tuple by constructing it from individually
+                supported parts. For example, the demonstration
+                <programlisting>
+		  inputEmployeeName(-"Bob" -"Baker")
+                  generateNewEmployeeId(-67890)
+		  createNewEmployee(+&lt;firstName="Bob" lastName="Baker" id=67890&gt;)
+		</programlisting>
+                generalizes to
+                <programlisting>
+		  inputEmployeeName($firstName $lastName)
+                  generateNewEmployeeId($id)
+		  createNewEmployee((mapGen "firstName" $firstName "lastName" $lastName "id" $id))
+		</programlisting>
+                with mapGen being the internal name for the tuple constructor
+                function. Tuples obey strict typing with regard to support determination.
+                One tuple value does not support another unless they are of identical
+                types, even if the names and the values of their components match exactly.
+            </para>
+        </section>
+        <section>
+            <title>Loop Learning</title>
+            <para>
+                If the action model contains lists or sets, LAPDOG may learn loop
+                generalizations. For example, consider the demonstration:
+                <programlisting>
+		  getAllEmployeeNames(-["alice" "bob" "carl"]: list&lt;string>)
+		  findZipCode(+"alice" -"12345")
+		  printZip(+"12345")
+                  findZipCode(+"bob" -"12345")
+		  printZip(+"12345")
+		  findZipCode(+"carl" -"67890")
+		  printZip(+"67890")
+		</programlisting>
+                Here, list values are delimited with [ ], and the list type is made
+                explicit. The demonstration contains a pattern of repetitions of the
+                findZipCode and printZip actions. The first argument to findZipCode refers
+                in turn to each element of the list supported by the first action in the
+                demonstration. Moreover, the support relationships within the repeated
+                actions are consistent-the output of findZipCode is used consistently as
+                the input to printZip. This action pattern forms a valid iteration over a
+                list, and generalizes to a procedure containing a loop:
+                <programlisting>
+		  getAllEmployeeNames($people)
+		  for $person in $people do
+                    findZipCode($person $zip)
+		    printZip($zip)
+		  od
+		</programlisting>
+                There are significant limitations to loop learning. LAPDOG can only
+                detect loops in which a supported list is explicit within the
+                demonstration. The elements of the list must occur in order within a
+                sequence of repeated actions (the loop body) that are identical except for
+                the references to those elements, or values that are supportable by
+                functions of those elements. LAPDOG can also detect parallel iteration
+                over multiple lists if multiple lists of the same length are present and
+                their elements are accessed consistently within the loop body.
+            </para>
+            <para>
+                Loops may also generate values that support subsequent lists. If the
+                outputs of a repeated action that form a loop body, when taken in order,
+                form a list that is used later in the demonstration, the learned loop will
+                construct that value. Here is a richer example of loop learning, using
+                abstract actions:
+                <programlisting>
+		  A(-[1 2 3])
+		  B(-[a b c])
+		  C(+a +1 -a1)
+		  C(+b +2 -b2)
+		  C(+c +3 -c3)
+		  D(+[a1 b2 c3])
+		</programlisting>
+                This generalizes to
+                <programlisting>
+		  A(-X) B(-Y)
+		  for U in X, V in Y building Z do
+		    C(+U +V -W)
+                    W accumulate Z
+		  od
+		  D(+Z)
+		</programlisting>
+            </para>
+        </section>
+        <section>
+            <title>References</title>
+            <orderedlist>
+                <listitem>
+                    <para>
+                        Eker, S.; Lee, T.; and Gervasio, M. 2009. Iteration Learning by
+                        Demonstration. In Proceedings of the AAAI Spring Symposium
+                        <emphasis>Agents that Learn from Human Teachers</emphasis>. AAAI Press.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Gervasio, M.; Lee, T.; and Eker, S. 2008. Learning Email
+                        Procedures from the Desktop. In Proceedings of the AAAI Workshop
+                        <emphasis>Enhanced Messaging</emphasis>. AAAI Press.
+                    </para>
+                </listitem>
+            </orderedlist>
+        </section>
+    </section>
+    <section>
+        <title>Lumen</title>
+        <section>
+            <title>Conceptual Overview</title>
+            <para>
+                Lumen is a framework for implementing software agents. A Lumen software
+                agent performs
+                <xref linkend="action" />s
+		and responds to new events by executing
+                <xref linkend="procedure" />s.
+		A procedure contains sequences and loops of other sub-actions to be
+                performed. These sub-actions may be
+                <xref linkend="primitiveAction" />s
+		executed directly by CPOF or
+                <xref linkend="compoundAction" />s
+                executed through lower-level procedures. Each agent has a knowledge
+                base, a local store of information including information about its own
+                state, and has the ability to monitor its own behavior and respond
+                accordingly.
+            </para>
+            <para> The role of Lumen in CPOF-PAL is to manage the execution of procedures for CPOF.
+	      Besides execution proper, Lumen is also responsible for combining permission
+	      <emphasis>constraints</emphasis>
+	      of the sub-actions of a procedure into a form that is testable prior to procedure execution;
+	      failure of this test indicates that execution of the procedure would violate CPOF permission
+	      policies and therefore fail. Thus Lumen helps assure the safety of procedure execution. </para>
+        </section>
+        <section>
+            <title>Example Procedure</title>
+            <para>
+                Actions and procedures are key components of Lumen. Let us consider
+                an example of a procedure written in the
+                <xref linkend="ctrs" />
+                syntax used in CPOF-PAL:
+            </para>
+            <programlisting>
+	       action 'CPOF.action42'(+$x, +$y, -$result0, -$result1)
+	         execute: {
+		   do 'CPOF.action2'($x, $y, $result0)';
+		   do 'CPOF.action3'($x, "NOTHING", $result0, $result1);
+	         }; </programlisting>
+            <para> This declares an action 'CPOF.action42' to have two input parameters
+                (marked with a + prefix), $x and $y, and two output parameters (marked
+                with a - prefix), $result0 and $result1. It also specifies that to execute
+                that compound action, Lumen must first pass those input arguments to
+                'CPOF.action2', which will return a value for $result0. It must then pass
+                the value of $x, the string literal "NOTHING, and the value of $result0
+                returned by 'CPOF.action3' as inputs to 'CPOF.action3' which will return a
+                value for $result1. This completes 'CPOF.action42' and the values of
+                $result0 and $result1 are returned. </para>
+        </section>
+        <section>
+            <title>Language</title>
+            <para> Lumen can deal with arbitrary Java objects as data values, however
+                there are certain built-in data types that are central to the Lumen
+                language. These are called core values and are also used to represent
+                Lumen source code. </para>
+            <para> The atomic core values are: 32-bit integers, double-precision floating
+                point numbers, strings, symbols (such as 'CPOF.action42' and $x, used as
+                identifiers), and null.
+                The compound core values are simple lists of values and structures. A
+                structure consists of a “functor” symbol together with a sequence of
+                values that are the elements of the structure.
+<!-- 		The elements of the -->
+<!--                 structure are identified by position, but identifiers can also be -->
+<!--                 associated with the elements. This is done by associating a sequence of -->
+<!--                 name symbols with the structure, for example, -->
+<!--                 <code>'CPOF.action2'($x, $y, $result0)</code> -->
+<!--                 is a structure with functor 'CPOF.action2' and three un-named elements, -->
+<!--                 and -->
+<!--                 <code>action myTask() execute: { do subtask(); };</code> -->
+<!--                 is a different-style representation of a structure with functor 'action' -->
+<!--                 and two elements, the second having name 'execute'. Even -->
+<!--                 <code>{ do subtask(); }</code> -->
+<!--                 is a structure, a special case whose functor is '{}' and whose single -->
+<!--                 element is -->
+<!--                 <code>do subtask();</code> -->
+<!--                 . -->
+            </para>
+            <para>
+                The Lumen source code language, called CTR-S (for
+                <xref linkend="ctrs" />
+                ), consists of a standard representation for these core values (i.e., how
+                to parse and format these values), together with a specific interpretation
+                of pre-defined functors (i.e., how to interpret the functor of a structure
+                as an operator of the language).
+<!-- 		For example, the pre-defined 'action' -->
+<!--                 functor is interpreted as introducing an action definition, the -->
+<!--                 pre-defined '{}' functor is interpreted as specifying a sequence of -->
+<!--                 actions (or a map object), whereas the 'CPOF.action2' functor is not -->
+<!--                 pre-defined, but interpreted by its context to be an action. -->
+            </para>
+            <para> Each core value corresponds to an expression
+                in Lumen. There are different categories of expressions in Lumen. These
+                include: </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        term expressions, e.g.,
+                        <code>sizeOf($z)</code>
+                        ,
+                        <code>$x + 7</code>
+                        ,
+                        <code>[1,2,3]</code>
+                        , evaluate to a value (or are used to match a value). These
+                        consist of atomic expressions, including variable symbols such as
+                        $z and $x, literals such as 1, and compound expressions that are
+                        lists of term expressions or structures formed by applying
+                        function operators, such as 'sizeOf' and '+', to term expressions.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        logical expressions, e.g.,
+                        <code>sizeOf($x) > 1</code>
+                        ,
+                        <code>HasCause($x, $y)</code>,
+                        are used to test some condition. These consist of term
+                        expressions, such as sizeOf($x), 1, $x, $y combined using
+                        predicate operators, such as '>' and 'HasCause' as well as logical
+                        expressions combined using logical operators such as '&amp;', '|',
+                        and '~'. 
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        action expressions, e.g.,
+                        <code>act2($x)</code>
+                        ,
+                        <code>act3("X")</code>
+                        , represent a specific action to perform. These consist of term
+                        expressions, such as $x and "X" combined using action operators,
+                        such as 'act2' and 'act3'.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        task expressions, e.g.,
+                        <code>do act2($x);</code>
+                        ,
+                        <code>test P($x);</code>
+                        ,
+                        <code>{ do a(); do b(); }</code>
+                        , describe something to do. These consist of special task
+                        operators applied to arguments. Here the task operators are 'do'
+                        applied to an action expression
+                        <code>act2($x)</code>
+			, 'test' applied to a logical expression
+			<code>P($x)</code>
+                        , and the sequence operator '{}' applied to the task expressions
+                        <code>do a();</code>
+                        and
+                        <code>do b();</code>
+                        .
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        declaration/definition expressions, e.g.,
+                        <code>action act2(+$x);</code>
+                        ,
+                        <code>procedure act2(+$x) precondition:Big($x) execute:{do
+                            act3($x);};</code>
+                        , introduce new operators and/or specify the behavior of those
+                        operators. The declaration/definition expressions are actually a
+                        special case of logical expressions, in that they are treated as
+                        facts to be added to the agent's knowledge base.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            <para> The pre-defined operators include the logical operators '&amp;' for
+                and, '|' for or, and '~' for not, and: </para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        action, e.g.,
+                        <code>action myTask() execute: { do subtask(); };</code>
+                        , defines a new action 'myTask' and how to execute it
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        function, e.g.,
+                        <code>function myFun($x, $y) eval: $x + $y; </code>
+                        , defines a new function and how to evaluate it.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        predicate, e.g.,
+                        <code>predicate HasCause($x, $y); </code>
+                        , defines a predicate and how to test/update it.
+                    </para>
+                </listitem>
+<!--                 tomlee: removed since only the execute flavor is used in CPOF-PAL -->
+<!--                 <listitem> -->
+<!--                     <para> -->
+<!--                         action, e.g., -->
+<!--                         <code>action act2(+$x);</code> -->
+<!--                         , defines an action and possibly how to execute it (this may -->
+<!--                         specify a specific task expression to execute or may leave Lumen -->
+<!--                         to look for separate applicable procedures and choose between -->
+<!--                         them). -->
+<!--                     </para> -->
+<!--                 </listitem> -->
+                <listitem>
+                    <para>
+                        procedure, e.g.,
+                        <code>procedure act2(+$x) precondition:Big($x) execute:{do
+                            act3($x);};</code>
+                        , defines one procedure (of potentially many) for an action.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        =, e.g.,
+                        <code>$x = 7</code>
+                        , the equality predicate
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        .in., e.g.,
+                        <code>$x .in. $myList</code>
+                        , a predicate to test/find elements of a list
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        forall, e.g.,
+                        <code>forall $x .in. $myList execute: {do act($x);};</code>
+                        , a task operator that performs a task expression repeatedly, once
+                        for each solution to a logical expression.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        set, e.g.,
+                        <code>set $x to: sizeOf($myList);</code>
+                        , a task operator that binds a variable to the value of a task
+                        expression.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        test, e.g.,
+                        <code>test $x .in. [1,2,3];</code>
+                        , a task operator that tests a logical expression
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        '{}', e.g.,
+                        <code>{ do a(); do b(); }</code>
+                        ,
+                        <code> {name:"Fred", age:23} </code>,
+			    appearing as a task expression, a task operator that
+                                preforms actions sequentially, or appearing as a term
+                                expression and with named elements, a function that
+                                constructs a :map" from names to values. 
+		    </para>
+                </listitem>
+            </itemizedlist>
+        </section>
+        <!-- <section> <title>Architecture</title> <itemizedlist> <listitem> <para>Major components 
+            of a Lumen agent</para> </listitem> <listitem> <para>Execution cycle</para> </listitem> </itemizedlist> 
+            </section> <section> <title>Guide to code</title> <itemizedlist> <listitem> <para>Important 
+            interfaces and classes</para> </listitem> <listitem> <para>Bridge/Lumen interactions</para> 
+            </listitem> <listitem> <para>Important log entries</para> </listitem> </itemizedlist> </section> -->
+    </section>
+    
+    <section>
+        <title>CPOF-PAL Procedure Viewer/Editor</title>
+<!--         <section> -->
+<!--             <title>Overview</title> -->
+	    <para>
+	      The CPOF-PAL Procedure Viewer/Editor is a CPOF user affordance that provides
+	      support for users to visualize PAL (that is, CTR-S) procedures in a human-readable form.
+	      While it currently only visualizes procedures,
+	      it is intended to be expanded into a procedure editor in future versions
+	      and is called an "editor" internally. </para>
+	    <para>The Viewer/Editor is implemented using the VizPak user interface package;
+	      it is represented as a chart with custom extensions. It accesses procedures
+	      using repository wrappers that allow 3G aynschronous access to the CPOF repository.
+	      CPOF's Structured Procedure Information Architecture (SPIA) is used to traverse
+	      the procedure structure.</para>
+
+<!--             <para>The CPOF-PAL editor is an SRI-written CPOF appliance that allows users -->
+<!--                 to edit PAL (that is, CTR-S) procedures. It currently exists as an IXM -->
+<!--                 component inside of CPOF that talks to the PAL Bridge by means of IXM -->
+<!--                 runtimes. A user can simply pull the editor out of the administrator -->
+<!--                 palette in CPOF, drop a PAL procedure box onto the editor, and begin -->
+<!--                 editing. A saved edited procedure is always a new copy of the old -->
+<!--                 procedure, so there is no danger of an edit implicitly breaking components -->
+<!--                 that rely on the old procedure.</para> -->
+<!--         </section> -->
+<!--         <section> -->
+<!--             <title>Major Features</title> -->
+<!--             <para> -->
+<!--                 The editor currently allows all PAL-enabled users to view a human-readable -->
+<!--                 representation of any PAL procedure. With appropriate editing privileges, -->
+<!--                 a user can also: -->
+<!--                 <itemizedlist> -->
+<!--                     <listitem> -->
+<!--                         <para>Delete or add steps</para> -->
+<!--                     </listitem> -->
+<!--                     <listitem> -->
+<!--                         <para>Move steps within and between procedures</para> -->
+<!--                     </listitem> -->
+<!--                     <listitem> -->
+<!--                         <para>Re-wire the data flow within a procedure</para> -->
+<!--                     </listitem> -->
+<!--                     <listitem> -->
+<!--                         <para>Rename variables within a procedure to make them more -->
+<!--                             readable</para> -->
+<!--                     </listitem> -->
+<!--                 </itemizedlist> -->
+<!--             </para> -->
+<!--             <para>Within the context of the above edits, the editor communicates with -->
+<!--                 Lumen to perform error checking. This error checking prevents users from -->
+<!--                 re-wiring variables in a procedure in invalid ways (e.g.- using out of -->
+<!--                 scope or mistyped variables). It also provides warnings when the user -->
+<!--                 moves steps to places that would result in an invalid procedure.</para> -->
+<!--         </section> -->
+<!--         <section> -->
+<!--             <title>Architecture</title> -->
+<!--             <para>The procedure editor is an IXM appliance module within CPOF, installed in workspace installer XML file. When a user instantiates the appliance, it attempts to connect with the PAL Bridge, which should already be running. If it can connect to the PAL Bridge, it uses that connection to get a remote reference to Lumen and PAL-CPOF's representation of the action model, which it uses to parse and validate procedures on an as-needed basis.</para> -->
+<!--             <figure id="Editor_architecture"> -->
+<!--                 <title>[Architecture Diagram goes here]</title> -->
+<!--                 <mediaobject> -->
+<!--                     <imageobject> -->
+<!--                         <imagedata fileref="graphics/Editor_architecture.png" /> -->
+<!--                     </imageobject> -->
+<!--                 </mediaobject> -->
+<!--             </figure> -->
+<!--             <para>Note that the editor uses within-JVM static calls to Lumen whenever -->
+<!--                 possible when parsing procedures and only makes remote calls to the -->
+<!--                 bridge's Lumen instance when information about the current CPOF action -->
+<!--                 model is absolutely necessary.</para> -->
+<!--         </section> -->
+<!--         <section> -->
+<!--             <title>Code Guide</title> -->
+<!--             <para>The vast majority of the classes in the CPOF-PAL editor are IXM-based -->
+<!--                 declarative models that specify the user interface. Please see General -->
+<!--                 Dynamic's documentation for IXM for more information about this toolkit.</para> -->
+<!--             <para>The com.gdc4s.viz.pal.ui.procedure.editor.backend package and -->
+<!--                 subpackages contain the pure Java runtime code that communicates with the -->
+<!--                 rest of SRI's PAL components via the ITL Bridge.</para> -->
+<!--         </section> -->
+    </section>
+
+    <section>
+      <title>Spine</title>
+        <para>
+            The Spine is a communication API that enables communication
+            among the PAL components (PAL Bridge, Lumen, LAPDOG). It defines an interface which
+	    hides the implementation details of message-passing from these components.
+            This ensures that changing from one Spine Interface Implementation to another
+            will have no impact on the PAL component usage of the Spine interface.
+	    The implementation used in CPOF-PAL is based on Java Messaging Service (JMS),
+            and uses the Apache Active MQ implementation of it.
+	</para>
+    </section>
+    <section>
+      <title>PAL Bridge</title>
+      <para>The PAL Bridge is an API layer which presents a coherent API
+    to the application (CPOF) enabling it to access PAL functionality
+    for learning, execution, visualization, and editing of
+    procedures. The Bridge provides none of this functionality itself;
+    it simply wraps existing functionality in a consistent API and
+    performs various bookkeeping tasks.</para>
+    </section>
+    <section>
+      <title>LAPDOG Mediator</title>
+      <para>The LAPDOG Mediator provides an interface between LAPDOG and
+      the CPOF-PAL system, in particular the Bridge.
+      Incoming messages received via the Spine are mapped
+      to LAPDOG API method calls, and results of these
+      calls are sent in outgoing messages. </para>
+    </section>
+    <section>
+      <title>Lumen Mediator</title>
+      <para>The Lumen Mediator provides an interface between Lumen and
+      the CPOF-PAL system, mapping incoming messages received via the Spine
+      to Lumen API method calls, and mapping results of these
+      calls to outgoing messages.
+      It supports bi-directional execution: Spine clients such as
+      CPOF can request Lumen to execute procedures, and Lumen can
+      request Spine clients to execute actions.</para>
+    </section>
+    <section>
+      <title>Shell</title>
+      <para>The Shell is the entry point for the PAL JVM.
+      It starts the other PAL components (Spine, LAPDOG, Lumen,
+      mediators). It exchanges status information with the PAL Bridge
+      inside the CPOF JVM, and also with Remote Admin. It monitors resource usage
+      and provides feedback to Remote Admin. It also provides a mechanism
+      for Remote Admin to shut down all PAL components. </para>
+    </section>
+    <section>
+      <title>Common Task Representation / Abstract Task Representation</title>
+      <para>The Common Task Representation (CTR) module is used to represent learned procedures,
+      and in particular to exchange them among components. It does not perform any system
+      operations itself; rather, it provides the data representation and exchange format
+      for system operations involving procedures. </para>
+      <para>The Abstract Task Representation (ATR) module is an abstraction of CTR that is used at points of
+      interface instead of CTR. This facilitates future alternate implementations of procedures
+      without refactoring these interfaces. </para>
+      <para>CTR and ATR are static libraries within Lumen. Using them does not
+      require Lumen to be running.</para>
+    </section>
+
+  </chapter>
+

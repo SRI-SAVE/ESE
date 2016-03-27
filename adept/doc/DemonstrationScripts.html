@@ -1,0 +1,114 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+  <title> Adept Demonstration Scripts </title>
+</head>
+
+
+<body>
+<h1> Adept Demonstration Scripts </h1>
+
+ <P>
+This documents contains scripts for operating Adept in order to highlight
+(and test) its various capabilities.
+
+<br>
+<h2>Table of Contents</h2>
+
+<a href="#UploadDocuments"> Saving Documents to a Website </a><br>
+<a href="#ExtendedDemo"> Extended Demo </a><br>
+
+<br><HR>
+<h2><a name="UploadDocuments"></a> Saving Documents to a Website </h2>
+
+Demo centers around the following procedure:
+<PRE>
+  action 'Demo Procedure'(+'$Email message' = "")
+   execute:{
+    do 'mozilla.Open email'('$Email message');
+    do 'mozilla.Save attachments email'('$Email message', "C:\\Documents and Settings\\Default User\\Desktop\\images\\", '$saved attachments 1');
+    forall '$file 1' .in. '$saved attachments 1'
+     execute:{
+      do 'image.OpenFile'('$file 1', '$image 1');
+      do 'image.Resize'('$image 1', "medium (800x600 px)", '$resized image 1');
+      do 'image.Save'('$resized image 1', "/my/webpage/");
+     };
+    do 'mozilla.Go to URL'("http://www.mydomain.org/my/webpage/");}
+   argtypes:["Desktop.email"]
+   properties:{description:"Save the attachments of an email, resize them to 800x600, and then upload them to flickr.com", terse_task_description:"Demo Procedure"}
+
+</PRE>
+
+
+Demonstration sequence:
+<OL>
+
+<LI> Enable Watch Me
+
+<LI> Dmeonstrate the above on two-attachment email
+  [See if one attachment will learn a loop]
+  but introduce one or two mistakes
+
+<LI> Turn off Watch Me
+
+<LI> Learn procedure
+
+<LI> [Do we execute this and show failure?]
+
+<LI> Edit procedure
+
+<LI> Fix error(s)
+
+<LI> Execute and show successful completion
+</OL>
+
+ <P>
+Alternative is to replace the image save with an image upload to a site like Flickr.
+Thisis a more compelling demo as it is more realistic, but would involve either
+further Firefox instrumentation to handle Javascript, or us building a simple Flickr
+uploader app (easy to do as Flickr provides a straightforward API,
+but dubious from a demo standpoint).
+
+<br><HR>
+<h2><a name="ExtendedDemo"></a> Extended Demo </h2>
+
+Extended demo:
+
+<UL>
+<LI> Show creation and demonstration of a nested procedure
+
+<LI>  Procedure validation
+
+<LI>  More extensive editing operations
+
+<LI>  [Flickr] Not logged into website error
+<UL>
+<LI> had logged in prior to Watch Me
+<LI> repair is to log in
+</UL>
+
+<LI>  [Future] App or website server down error?
+
+<LI>  [Future] Pecari IP-action insertion [using image properties?]
+
+<LI>  [Future] Procedure library search
+</UL>
+
+
+</body> 
+</html>

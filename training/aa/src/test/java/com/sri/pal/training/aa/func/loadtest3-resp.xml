@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<response>
+    <id>resp-21</id>
+    <exercise_id>ex-1</exercise_id>
+    <task_response>
+        <demo>$demonstration {
+  'LoadTest^1.0^removeFromContainer' "-4589582268572406429", "-2558196825104504007";
+  'LoadTest^1.0^removeFromContainer' "-8969822338827030465", "56419350177103120";
+  'LoadTest^1.0^addToContainer' "-6703886523153641919", "-3589867727973315219";
+  'LoadTest^1.0^selectAll' "-1038237100682079057", ["-69778990802268328", "-3602923474374676009", "3434009091151879781"];
+  'LoadTest^1.0^makeItem' "8067456995864035647", "-8969822338827030465";
+  'LoadTest^1.0^removeFromContainer' "-3589867727973315219", "-6314905885062016077";
+  'LoadTest^1.0^selectAll' "-5148575679832396168", ["-1038237100682079057", "-1394585522833673458", "5760122731876057670"];
+  'LoadTest^1.0^addToContainer' "56419350177103120", "-2908839403286175001";
+  'LoadTest^1.0^removeFromContainer' "56419350177103120", "-9092745123309057033";
+  'LoadTest^1.0^selectAll' "8764952749169445013", ["-9092745123309057033", "-8190750920008134216", "-5127845116153853431"];}
+ properties:{}</demo>
+        <seconds_elapsed>0</seconds_elapsed>
+    </task_response>
+</response>

@@ -1,0 +1,758 @@
+/*
+    Document   : PalCore
+    Created on : Jul 9, 2010, 11:09:22 AM
+    Author     : Adam
+-*/
+
+.root {
+    /* PAL colors replicated from "Colors.java" */
+    -pal-disabled-text: rgba(87,87,87, 1.0);
+    -pal-selection: rgba(25, 49, 82,1.0);
+
+    -pal-SystemLightGray: rgba(239,239,239,1.0);
+    -pal-SystemGray: rgba(204,204,204,1.0);
+    -pal-SystemGrayTrans: rgba(204,204,204,0.4);
+    -pal-SystemDarkGray: rgba(103,103,103,1.0);
+    -pal-SystemDarkGrayTrans: rgba(103,103,103, 0.8);
+    -pal-StepBackground: rgba(185, 203, 217,1.0);
+    -pal-StepBackgroundOptional: rgba(185, 203, 217, 0.3);
+    -pal-hover-overlay: rgba(0,0,0,0.08);
+    -pal-WindowBackground: rgba(255,255,255,1.0);
+    -pal-SelectedStepBackground: rgba(255,200,145,1.0);
+    -pal-SelectedStepLightBackground: rgba(255, 245,236,1.0);
+    -pal-SubtaskBackgroundOrdered: rgba(100,100,200,0.6);
+    -pal-SubtaskBackgroundUnordered: rgba(150,150,150,0.6);
+    
+    /* gradients for buttons  */
+    -pal-SystemGrayDient:           linear-gradient(from 0% 0% to 0% 90%, white, -pal-SystemGray);
+    -pal-SystemDarkGrayPushedDient: linear-gradient(from 0% -30% to 0% 120%, -pal-SystemDarkGray, -pal-SystemGray);
+    -pal-StepBackgroundDient:      linear-gradient(from 0% 0% to 0% 90%, white, pal-StepBackground);
+    -pal-StepBackgroundPushedDient: linear-gradient(from 0% 0% to 0% 120, derive(-pal-StepBackground,-25%), -pal-StepBackground);
+    -pal-LoopBackgroundDient:       linear-gradient(from 0% 0% to 90% 0%, -pal-SystemLightGray, -pal-WindowBackground);
+    -pal-SelectedStepBackgroundDient: linear-gradient(from 0% 0% to 100% 0%, -pal-SelectedStepBackground, -pal-SelectedStepLightBackground);
+    -pal-TrainingPageRight: linear-gradient(from 0% 0% to 100% 0%, -pal-SystemGray 0%, -pal-SystemLightGray 10%, -pal-WindowBackground 15%, -pal-WindowBackground 99%, -pal-SystemLightGray 99%, -pal-SystemGray 100%);
+    -pal-TrainingPageLeft: linear-gradient(from 50% 0% to 100% 0%, -pal-WindowBackground, -pal-SystemLightGray, -pal-SystemGray);
+    
+    /* Variable colors */
+    -pal-ConstantFlat: rgba(225,224,224,1.0);
+    -pal-ConstantBorder: rgba(134,134,134,1.0);
+    -pal-ConstantFill: linear-gradient(from 0% 0% to 0% 200%, -pal-ConstantFlat, -pal-ConstantBorder);
+    -pal-ConstantFillHover: linear-gradient(from 0% 0% to 0% 200%, derive(-pal-ConstantFlat,-16%), derive(-pal-ConstantBorder,-16%));
+    -pal-ConstantFillPushed: linear-gradient(from 0% 0% to 0% 200%, -pal-ConstantBorder, -pal-ConstantFlat);
+    -pal-ExistingVarFlat: rgba(225,230,250,1.0);
+    -pal-ExistingVarBorder: rgba(114,157,196,1.0);
+    -pal-ExistingVarFill: linear-gradient(from 0% 0% to 0% 200%, -pal-ExistingVarFlat, -pal-ExistingVarBorder);
+    -pal-ExistingVarFillHover: linear-gradient(from 0% 0% to 0% 200%, derive(-pal-ExistingVarFlat,-16%), derive(-pal-ExistingVarBorder,-16%));
+    -pal-ExistingVarFillPushed: linear-gradient(from 0% 0% to 0% 200%, -pal-ExistingVarBorder, -pal-ExistingVarFlat);
+    -pal-InputFlat: rgba(196,215,237,1.0);
+    -pal-InputBorder: rgba(69,115,159,1.0);
+    -pal-InputFill: linear-gradient(from 0% 0% to 0% 200%, -pal-InputFlat, -pal-InputBorder);
+    -pal-InputFillPushed: linear-gradient(from 0% 0% to 0% 200%, -pal-InputBorder, -pal-InputFlat);
+    -pal-HiliteVarFlat: rgba(255, 128, 0,1.0);
+    -pal-HiliteVarBorder: rgba(68, 68, 68,1.0);
+    -pal-HiliteVarFill: linear-gradient(from 0% 0% to 0% 200%, -pal-HiliteVarFlat, rgba(157, 86, 14,1.0));
+    -pal-HiliteVarFillPushed: linear-gradient(from 0% 0% to 0% 200%, rgba(157, 86, 14, 1.0), -pal-HiliteVarFlat);
+    
+    /* Added by MW */ 
+    -pal-ChangedVarFlat: rgba(200, 200, 200, 1.0);
+    -pal-ChangedVarBorder: rgba(68, 68, 68,1.0);
+    -pal-ChangedVarFill: linear-gradient(from 0% 0% to 0% 300%, -pal-ChangedVarFlat, rgba(157, 86, 14,1.0)); 
+       
+    /* Main color palette that the user should play with to change colors of controls */
+    
+    -fx-color: -pal-SystemGray;
+    -fx-base: -pal-SystemGray;
+    -fx-background: -pal-SystemGray;
+    -fx-control-inner-background: -pal-SystemLightGray;
+    -fx-focus-color: -pal-StepBackground; 
+
+    -fx-focus-size: 0;
+    -fx-dark-text-color: black;
+    -fx-mid-text-color: black;
+    -fx-light-text-color: white;
+    -fx-mark-color: -pal-SystemDarkGray;
+    -fx-box-border: -pal-SystemDarkGray; 
+    
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * CSS Styles for various panels and regions in the application
+ *                                                                             *
+ ******************************************************************************/
+
+.tab-label {
+    -fx-content-display: top;
+}
+
+.tab-pane {
+    -fx-tab-min-height: 50;
+    -fx-tab-max-height: 50;
+}
+
+procedure-view {
+    -fx-background-color: blue;
+}
+
+.procedure-header {
+    -fx-background-color: -pal-SystemLightGray; 
+    -fx-border-width: 0 0 1 0; 
+    -fx-border-color: -pal-SystemGray;
+}
+
+.procedure-footer {
+    -fx-background-color: -pal-SystemLightGray; 
+    -fx-border-width: 1 0 0 0; 
+    -fx-border-color: -pal-SystemGray;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.panel-header {
+    -fx-background-color: -pal-SystemLightGray, -pal-SystemGrayTrans; 
+    -fx-border-color: -pal-SystemDarkGray, transparent; 
+    -fx-border-width: 0 0 1 0, 0; 
+    -fx-background-insets: 0, 14 0 0 0; 
+    -fx-padding: 0 10 0 10;
+}
+
+.variable-panel {
+    -fx-border-color: -pal-SystemDarkGray; 
+    -fx-border-width: 0 0 0 0;
+}
+
+.library-panel {
+    -fx-background-color: -pal-WindowBackground;
+}
+
+.library-action-list {
+    -fx-border-color: null; 
+    -fx-border-width: 0;
+}
+
+.library-action-list-scroll {
+    -fx-background-color: -pal-WindowBackground; 
+    -fx-border-color: -pal-SystemDarkGray; 
+}
+
+.library-info-panel {
+    -fx-border-color: -pal-SystemDarkGray; 
+    -fx-border-width: 1 0 0 0;
+}
+
+.procedure-browser {
+    -fx-border-color: -pal-SystemDarkGray; 
+    -fx-border-width: 1;
+}
+
+.moveable-procedure-input {
+    -fx-background-color: -pal-SystemLightGray;
+    -fx-background-radius: 5; 
+    -fx-border-color: -pal-SystemDarkGray; 
+    -fx-border-radius: 5; 
+    -fx-border-width: 0.5;
+}
+
+.step-header-rounded {
+    -fx-background-insets: 0 0 2 0; 
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-StepBackground); 
+    -fx-background-radius: 5;
+}
+
+.step-header-optional-rounded {
+    -fx-background-insets: 0 0 2 0; 
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-StepBackgroundOptional); 
+    -fx-background-radius: 5;
+}
+
+.step-header-half-rounded {
+    -fx-background-insets: 0 0 2 0; 
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-StepBackground); 
+    -fx-background-radius: 5 5 0 0;
+}
+
+.subtask-background-ordered {
+    -fx-background-insets: 0 0 2 0; 
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-SubtaskBackgroundOrdered); 
+    -fx-background-radius: 5;
+}
+
+.subtask-background-unordered {
+    -fx-background-insets: 0 0 2 0; 
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-SubtaskBackgroundUnordered); 
+    -fx-background-radius: 5;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * CSS Styles for Buttons and Choiceboxes
+ *                                                                             *
+ ******************************************************************************/
+ 
+.button, .menu-button, .split-menu-button {
+    -fx-font: 11pt "Tahoma";
+}
+
+.button, .button:focused, .choice-box, .choice-box:focused, .check-box box, .check-box:selected box {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemLightGray, -pal-SystemGrayDient;
+    -fx-text-fill: black;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
+
+.button:hover, .choice-box:hover {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemLightGray, -pal-SystemGrayDient, -pal-hover-overlay;
+}
+.button:pressed, .choice-box:pressed {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemGray, -pal-SystemDarkGrayPushedDient;
+}
+.button:disabled, .button:strong:disabled, .choice-box:disabled {
+    -fx-background-color: rgba(255,255,255,0.20), derive(-pal-SystemDarkGray, 25%),
+        -pal-SystemLightGray, -pal-SystemLightGray;
+    -fx-opacity: .50;
+}
+
+.adept-button:disabled {
+    -fx-text-fill: -pal-SystemDarkGray;
+}
+
+.choice-box, .choice-box:focused {
+    -fx-background-radius: 2,2,2,2;
+    -fx-border-radius: 2;
+}
+.menu-button, .menu-button:pressed, .menu-button:focused, .split-menu-button {
+    -fx-text-overrun: center-ellipsis;
+    -fx-text-wrap: false;
+}
+
+/* "Default" (aka "strong") buttons turn blue */
+.button:strong, .button:strong:focused {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray, -pal-SystemLightGray, -pal-StepBackgroundDient;
+}
+.button:strong:hover {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemLightGray, -pal-StepBackgroundDient, rgba(105, 123, 137,0.15);
+}
+.button:strong:pressed {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-StepBackground, -pal-StepBackgroundPushedDient;
+}
+
+/* #small-button buttons have squared corners */
+.button#small-button {
+    -fx-background-radius: 0,0,0,0;
+    -fx-border-radius: 0;
+    -fx-font: 12.2pt "Tahoma";
+}
+
+.button#left-arrow {
+    -fx-shape: "M 50,5 L 37,40 5,40 30,60 20,95 50,75 80,95 70,60 95,40 63,40 Z";
+}
+
+.button#right-arrow {
+    -fx-shape: "M 50,5 L 37,40 5,40 30,60 20,95 50,75 80,95 70,60 95,40 63,40 Z";
+}
+/*******************************************************************************
+ *
+ * CSS Styles for Textboxes
+ *
+ ******************************************************************************/
+ 
+.text-field, .text-field:focused {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-focus-radius: 0;
+    -fx-background-color: white; 
+    -fx-border-width:1;
+    -fx-border-color: -pal-SystemDarkGray;
+    -fx-text-fill: black;
+}
+
+.search-text-field {
+    -fx-skin: "com.sun.javafx.scene.control.skin.TextFieldSkin";
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-background-color: white;
+    -fx-padding: 0 0 0 10;
+    -fx-border-width: 0;
+}
+
+.subtask-name-text-field {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-focus-radius: 0;
+    -fx-background-color: white; 
+    -fx-border-width:10;
+    -fx-border-color: -pal-SystemDarkGray;
+    -fx-text-fill: black;
+    -fx-font: 14pt "Tahoma";
+}
+
+#header-textbox {
+    -fx-background-color: -pal-SystemLightGray;
+    -fx-border-width:1;
+    -fx-border-color: transparent;
+    -fx-font: 11pt "Tahoma";
+}
+
+#header-textbox .scroll-pane {
+    -fx-border-color: transparent;
+}
+
+#header-textbox:focused, #header-textbox:hover {
+    -fx-border-color: -pal-SystemDarkGray;
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for Tooltips
+ *
+ ******************************************************************************/
+  
+.tooltip {
+    -fx-background-color: rgba(255,255,190,1.0);
+    -fx-border-color: black;
+    -fx-background-radius: 0;
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.75), 7, 0.0, 2, 2);
+}
+
+.page-corner {
+    -fx-padding: 0;
+    -fx-background-color: inherit;
+    -fx-shape: null;
+    -fx-effect: null;
+}
+
+
+/*******************************************************************************
+ *
+ * CSS Styles for Hyperlinks
+ *
+ ******************************************************************************/
+ 
+.hyperlink, .hyperlink:visited {
+    -fx-text-fill: -pal-selection;
+    -fx-underline: true;
+}
+.hyperlink:focused {
+    -fx-border-color: null;
+}
+
+
+/*******************************************************************************
+ *
+ * CSS Styles for ALL Exercise Parmaeters 
+ * variables are ExerciseParamaterSplitMenuButtons, they contain a label an arrow
+ * 
+ * Added by MW for Exercise Editor
+ *
+ ******************************************************************************/
+ 
+.exercise-var {
+	-fx-skin: "com.sun.javafx.scene.control.skin.SplitMenuButtonSkin";
+    -fx-font: 12pt "Tahoma";
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFill;
+}
+
+.exercise-var:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFill, -pal-hover-overlay;
+}
+.exercise-var:armed, .exercise-var:focused {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFillPushed;
+}
+.exercise-var:disabled {
+    -fx-background-color: transparent, -pal-InputBorder, -pal-InputFlat;
+    -fx-opacity: .9;
+}
+.exercise-var *.label {
+    -fx-padding: 3 3 2 8;
+}
+
+.exercise-var *.arrow-button {
+    -fx-padding: 8 5 6 4;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+.exercise-var *.arrow {
+    -fx-background-color: -fx-mark-highlight-color, derive(-pal-InputBorder, -15%);
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 3, 3;
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+.exercise-var-border-rect {
+ 	-fx-background-radius: 3.0; 
+    -fx-padding: 4;
+    -fx-border-radius: 5; 
+  	-fx-background-radius: 5; 
+  	-fx-background-color: transparent;
+  	-fx-foreground-color: transparent; 
+}
+
+.exercise-var-border-rect-highlighted {
+ 	-fx-background-radius: 3.0; 
+    -fx-padding: 4;
+    -fx-border-radius: 5; 
+  	-fx-background-radius: 5; 
+  	-fx-background-color: -pal-HiliteVarFlat;
+  	-fx-foreground-color: -pal-HiliteVarFlat; 
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for Existing Value variables
+ *
+ ******************************************************************************/
+.existing-var {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ExistingVarBorder, -pal-ExistingVarFill;
+}
+.existing-var:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ExistingVarBorder, -pal-ExistingVarFill, -pal-hover-overlay;
+}
+.existing-var:armed, .existing-var:focused {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ExistingVarBorder, -pal-ExistingVarFillPushed;
+}
+.existing-var:disabled {
+    -fx-background-color: transparent, -pal-ExistingVarBorder, -pal-ExistingVarFlat;
+    -fx-opacity: .9;
+}
+.existing-var *.label {
+    -fx-padding: 3 3 2 8;
+}
+.existing-var *.arrow-button {
+    -fx-padding: 8 5 6 4;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+.existing-var *.arrow {
+    -fx-background-color: -fx-mark-highlight-color, derive(-pal-ExistingVarBorder, -20%);
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 3, 3;
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for Constant value variables
+ *
+ ******************************************************************************/
+.constant-var {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ConstantBorder, -pal-ConstantFill;
+}
+.constant-var:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ConstantBorder, -pal-ConstantFill, -pal-hover-overlay;
+}
+.constant-var:armed, .constant-var:focused {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ConstantBorder, -pal-ConstantFillPushed;
+}
+.constant-var:disabled {
+    -fx-background-color: transparent, -pal-ConstantBorder, -pal-ConstantFlat;
+    -fx-opacity: .9;
+}
+.constant-var *.label {
+    -fx-padding: 3 3 2 8;
+}
+.constant-var *.arrow-button {
+    -fx-padding: 8 5 6 4;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+.constant-var *.arrow {
+    -fx-background-color: -fx-mark-highlight-color, rgba(0,0,0,0.66);
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 3, 3;
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for Procedure Input variables
+ * includes "stealth-var" variant used in procedure header
+ *
+ ******************************************************************************/
+.input-var, #stealth-var:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFill;
+}
+.input-var:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFill, -pal-hover-overlay;
+}
+.input-var:armed, .input-var:focused, #stealth-var:focused, #stealth-var:armed {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFillPushed;
+}
+.input-var:disabled {
+    -fx-background-color: transparent, -pal-InputBorder, -pal-InputFlat;
+    -fx-opacity: .9;
+}
+.input-var *.label {
+    -fx-padding: 3 3 2 8;
+}
+
+.input-var *.arrow-button {
+    -fx-padding: 8 5 6 4;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+.input-var *.arrow, #stealth-var:focused *.arrow, #stealth-var:hover *.arrow {
+    -fx-background-color: -fx-mark-highlight-color, derive(-pal-InputBorder, -15%);
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 3, 3;
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+#stealth-var {
+    -fx-background-color: null;
+}
+#stealth-var *.arrow {
+    -fx-background-color: null;
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for HIGHLIGHTED variables
+ *
+ ******************************************************************************/
+.highlighted {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-HiliteVarBorder, -pal-HiliteVarFill;
+}
+.highlighted:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-HiliteVarBorder, -pal-HiliteVarFill, -pal-hover-overlay;
+}
+.highlighted:disabled {
+    -fx-background-color: transparent, -pal-HiliteVarBorder, -pal-HiliteVarFlat;
+    -fx-opacity: .9;
+}
+.highlighted:armed, .highlighted:focused {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-HiliteVarBorder, -pal-HiliteVarFillPushed;
+}
+.highlighted *.arrow {
+    -fx-background-color: rgba(255,255,255,0.4), derive(-pal-HiliteVarBorder, -15%);
+}
+/* special case: highlighted variables INSIDE menus should have a bright border */
+.menu-item *#highlighted:disabled {
+    -fx-background-color: transparent, derive(-pal-HiliteVarFlat, 18%), -pal-HiliteVarFlat;
+    -fx-opacity: 1;
+}
+
+
+/*******************************************************************************
+ *
+ * CSS Styles for CHANGED Exercise Parameter
+ * Added by MW
+ * 
+ ******************************************************************************/
+
+.changed {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ChangedVarBorder, -pal-ChangedVarFill;
+}
+
+.changed:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ChangedVarBorder, -pal-ChangedVarFill, -pal-hover-overlay;
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for Menus
+ *
+ ******************************************************************************/
+/* style the popup (context) menus */
+.popup-menu {
+    -fx-padding: 2 0 2 0;
+    -fx-background-radius: 0 4 4 4, 0 3 3 3, 0 2 2 2;
+    -fx-background-color:
+        derive(-fx-color,-40%),
+        derive(-fx-color,65%),
+        linear-gradient(from 0% 0% to 0% 100%, derive(-fx-color,70%), derive(-fx-color,40%), derive(-fx-color,20%), derive(-fx-color,-3%));
+}
+
+/* basic menu items (anything derived from MenuItemBase) */
+*.menu-item, *.check-menu-item {
+    -fx-font: 9pt "Tahoma";
+}
+*.menu-item *.label, *.check-menu-item *.label {
+    -fx-text-overrun: word-ellipsis;
+}
+.menu-item:disabled, .check-menu-item:disabled {
+    -fx-text-fill: -pal-disabled-text;
+}
+.menu-item *.label:disabled, .check-menu-item *.label:disabled {
+    -fx-opacity: 0.82;
+}
+.menu-item:disabled *.box, .check-menu-item:disabled *.box {
+    -fx-opacity: 1;
+}
+
+/* menu is a menu-item with children */
+
+.menu-bar {
+    -fx-background-color: derive(-pal-SystemGray, 0%);
+}
+
+.menu-bar *.menu {
+    -fx-padding: 4 10 4 10;
+    -fx-text-fill: -fx-text-background-color;
+}
+
+.menu-bar *.menu:focused:showing, .menu-bar *.menu:showing, .menu:focused:showing, .menu-bar *.menu:hover, .menu-bar *.menu:focused:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+/* separator menu item */
+*.separator:horizontal *.line {
+    -fx-border-style: solid;
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for special case when a MenuButton is contained within a
+ * SplitMenuButton for purposes of providing a submenu that behaves like
+ * other GUIs. In this case, we need to strip off the border and background
+ * and insure that the mouse-over appears like it does for other menu items. 
+ *
+ ******************************************************************************/
+
+#nested-menu-button {
+    -fx-border-insets:0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 3 0 3 0;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+#nested-menu-button:hover {
+    -fx-background-color: rgba(22,44,72,1.0);
+    -fx-text-fill: white;
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for Toolbar and toolbar buttons
+ *
+ ******************************************************************************/
+ 
+ 
+ 
+.tool-bar {
+    -fx-background-color: linear-gradient(from 0% -100% to 0% 250%, -pal-SystemLightGray, -pal-SystemGray,  -pal-SystemDarkGray);
+    -fx-padding: 2 2 2 2;
+}
+*.separator:vertical *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-insets: 0 0 0 1, 0;
+    -fx-border-color: rgba(255,255,255,0.33), -pal-SystemDarkGrayTrans;
+}
+
+/* toolbar buttons */
+.tool-bar *.button {
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+    -fx-background-insets: 1;
+    -fx-background-radius: 3;
+}
+.tool-bar *.button:hover {
+    -fx-background-color: transparent;
+    -fx-border-insets: 1 0 0 1, 0;
+    -fx-border-color: rgba(255,255,255,0.28), -pal-SystemDarkGrayTrans;
+}
+.tool-bar *.button:armed {
+    -fx-border-insets: 0 0 1 0, 0;
+    -fx-border-color: rgba(255,255,255,0.2), -pal-SystemDarkGrayTrans;
+    -fx-background-color: linear-gradient(from 0% 300% to 0% -50%, -pal-SystemLightGray, -pal-SystemGray, -pal-SystemDarkGray) !important;
+}
+
+/* styling for toolbar split menu button; contains a label and arrow-button*/
+.tool-bar *.split-menu-button {
+    -fx-background-color: transparent;
+}
+.tool-bar *.split-menu-button *.label {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 1;
+    -fx-border-radius: 4 0 0 4, 3 0 0 3;
+    -fx-background-radius: 3 0 0 3;
+    -fx-border-width: 1;
+    -fx-padding: 3 6 2 8;
+}
+.tool-bar *.split-menu-button *.label:pressed {
+    -fx-border-insets: 0 0 1 0, 0 !important;
+    -fx-border-radius: 4 0 0 4, 4 0 0 3;
+    -fx-border-color: rgba(255,255,255,0.2), -pal-SystemDarkGrayTrans !important;
+    -fx-background-color: linear-gradient(from 0% 300% to 0% -50%, -pal-SystemLightGray, -pal-SystemGray, -pal-SystemDarkGray) !important;
+}
+
+.tool-bar *.split-menu-button *.arrow-button {
+    -fx-border-width: 1;
+    -fx-padding: 20 5 20 5;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-border-radius: 0 4 4 0, 0 3 3 0;
+    -fx-border-insets: 1 0 0 1, 0 0 0 0;
+}
+
+.tool-bar *.split-menu-button:hover *.label {
+    -fx-background-color: transparent;
+    -fx-border-insets: 1 0 0 1, 0;
+    -fx-border-color: rgba(255,255,255,0.28), -pal-SystemDarkGrayTrans;
+}
+.tool-bar *.split-menu-button:hover *.arrow-button {
+    -fx-background-color: transparent;
+    -fx-border-insets: 1 0 0 0, 0 0 0 -1;
+    -fx-border-color: rgba(255,255,255,0.28), -pal-SystemDarkGrayTrans !important;
+}
+.split-menu-button *.arrow-button:pressed {
+    -fx-border-insets: 0 0 1 -1, 0 0 0 -1 !important;
+    -fx-border-color: rgba(255,255,255,0.2), -pal-SystemDarkGrayTrans !important;
+    -fx-background-color: linear-gradient(from 0% 300% to 0% -50%, -pal-SystemLightGray, -pal-SystemGray, -pal-SystemDarkGray) !important;
+}
+
+/* error-warning counter button */
+#error-button {
+    -fx-padding: 6 12 5 10;
+}
+
+
+/*******************************************************************************
+ *
+ * CSS Styles for List View and Cell
+ *
+ ******************************************************************************/
+
+.list-view {
+    -fx-padding: 1;
+    -fx-border-color: -pal-SystemDarkGray;
+    -fx-border-width: 1;
+    -fx-background-color: transparent;  
+}
+
+.list-cell {
+    /*-fx-cell-size: 24;*/
+    -fx-padding: 3;
+    -fx-background-color: transparent;
+}
+
+.list-cell:selected {
+    -fx-background-insets: 0, 1.4;
+    -fx-background-color: -fx-focus-color, -pal-SelectedStepBackground;
+}
+
+.list-cell *.label {
+    -fx-text-fill: black;
+}
+

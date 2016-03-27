@@ -1,0 +1,47 @@
+SETUP
+
+Adept 1.1 does not run under MacOS.
+
+The first time Adept 1.1 is run, it's best to remove the old AdeptTaskLearning directory
+under Documents and Settings/%USER%/Application Data/ . Adept will create the appropriate
+directory structure.
+
+
+BUILDING
+
+In file pal-ui/core/src/com/sri/tasklearning/ui/core/EditController.java,
+the following flags should be set:
+
+    // #defines...
+    public static final boolean WEBTAS = false;
+    public static final boolean ADEPT = !WEBTAS; 
+
+To clean and build all Adept components in a SVN working area
+of the tasklearning repository rooted at directory $TLROOT:
+
+> cd $TLROOT
+> ant clean build
+
+
+EXECUTION
+
+> cd $TLROOT/pal-ui/adept-ui
+> ant run
+
+This will build Adept if need be. If missing class errors occur, it could be that
+te WEBTAS/ADEPT flags noted in the previous section are wrong.
+
+A UI window should appear after a few lines on the console.
+
+NOTE: do not use the build file in $TLROOT/adept as it is obsolete.
+
+
+LOGGING/DEBUGGING
+
+Log file is written to $TLROOT/pal-ui/adept-ui/adept-ui.log.
+Default logging is INFO level to console and to this file.
+To override defaults, copy the file
+  $TLROOT/pal-ui/adept-ui/src/com/sri/tasklearning/ui/adept/adept_ui_log.xml
+into $TLROOT/pal-ui/adept-ui, and modify appropriately. This file
+will need to be regenerated after a clean.
+

@@ -1,0 +1,43 @@
+Hard requirements:
+
+- synchronous calls exist to wrap every asynchronous call
+
+- anything that can have a side effect of loading data has to be an
+  asynchronous call
+
+- procedure source is stored in CPOF
+
+- loading can be initiated by CPOF or ITL (the latter in response to
+  nested procedures)
+
+- nested procedures: SPARK needs to reference nested procedures before
+  defining parent
+
+- method to get a list of procedures stored by CPOF
+
+- method to get CPOF's metadata for a given stored procedure
+
+- method to get SPARK's metadata for a loaded procedure
+
+- method to get signature for a loaded procedure
+
+- support for non-SPARK procedures (non-SPARK executors)
+
+- method to load a procedure object given its SPARK name (as opposed
+  to loading by UUID)
+
+- ability to introspect a procedure (metadata and signature) when the
+  Bridge isn't running -- either before it's started, or if it's
+  crashed
+
+Soft requirements:
+
+- loading can be initiated by other applications, such as external TA
+  or WebTAS
+
+- local readable names for nested procedures
+
+- multiple sources of persistence -- multiple applications
+  implementing ProcedureLoader
+
+- unification of Task and ActionDefinition

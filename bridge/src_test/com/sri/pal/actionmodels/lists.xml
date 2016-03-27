@@ -1,0 +1,97 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: lists.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="String">
+        <description>simple string type</description>
+        <metadata key="string key 1" value="string value 1"/>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="list1">
+        <description>simple list type</description>
+        <metadata key="list 1 key 1" value="list 1 value 1"/>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+
+    <type id="list2">
+        <description>simple list type</description>
+        <metadata key="list 2 key 1" value="list 2 value 1"/>
+        <list>
+            <ref typeRef="list1"/>
+        </list>
+    </type>
+
+    <type id="list3">
+        <description/>
+        <list>
+            <ref typeRef="string"/>
+        </list>
+    </type>
+
+    <type id="list4">
+        <description/>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+
+    <type id="list5">
+        <description/>
+        <equivalentTo>list&lt;string&gt;</equivalentTo>
+    </type>
+
+    <type id="list6">
+        <description/>
+        <equivalentTo>list&lt;string&gt;</equivalentTo>
+    </type>
+
+    <type id="struct1">
+        <description/>
+        <struct>
+            <ref typeRef="string"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+
+    <type id="list7">
+        <description/>
+        <list>
+            <ref typeRef="struct1"/>
+        </list>
+    </type>
+
+    <action id="action1">
+        <description>action #1</description>
+        <inputParam id="arg1">
+            <description>Arg #1</description>
+            <typeRef typeId="list1"/>
+        </inputParam>
+    </action>
+
+    <action id="action2">
+        <description>action #2</description>
+        <inputParam id="arg1">
+            <description>Arg #1 (action #2)</description>
+            <typeRef typeId = "list2"/>
+        </inputParam>
+    </action>
+</actionModel>

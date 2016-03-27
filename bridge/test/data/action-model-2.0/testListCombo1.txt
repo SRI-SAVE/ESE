@@ -1,0 +1,5 @@
+Test list combination 1
+Ensure that list handling is working.  The first action produces a list and the second action consumes it.
+#########################################################
+action143[param108=SigActTable; param157=item16s; param198=type; param143=IED; param170=[IED1, IED2, IED3]; ]
+action170[param114=Myitem2; param157=item16s; param119=[IED1, IED2, IED3]; ]

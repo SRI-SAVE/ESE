@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^4.5Accumulator'
+ execute:{
+  do 'arda^1.0^CreateList'('$output list 1');
+  forall $X1 .in. '$output list 1'
+   execute:{
+    do 'arda^1.0^UseString'($X1);
+    do 'arda^1.0^CreateString'($X2);}
+   collect:$X2
+   into:$Generated_1;
+  forall $X3 .in. $Generated_1
+   execute:{
+    do 'arda^1.0^UseString'($X3);};}
+ properties:{expected_output:"CREATE LIST\nUSE STRING: list value 1\nCREATE STRING\nUSE STRING: list value 2\nCREATE STRING\nUSE STRING: string\nUSE STRING: string\n", isTransient:"true", metadata:{description:"", expected_output:"CREATE LIST\nCREATE LIST\nCREATE LIST\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 2\nCREATE LIST\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 2\nCREATE LIST\nCREATE LIST\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 2\nCREATE LIST\nUSE STRING: list value 2\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 2\nUSE STRING: list value 2\n"}}</bodySource>
+</TaskModel>

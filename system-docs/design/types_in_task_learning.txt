@@ -1,0 +1,647 @@
+// Note: AsciiDoc format <http://www.methods.co.nz/asciidoc/>
+
+Types In Task Learning
+======================
+
+Introduction
+------------
+
+Within Task Learning we use ``semantic types'' to describe the
+domain-specific types that are used in specifying parameter types, and
+``representation types'' to describe the data values that are passed
+around in the system to represent instances of the semantic types.
+
+This document currently discusses the semantic types with only passing
+reference to representation types.
+
+In this document, the inheritance we have is (i) the inheritance of
+the representation type of an application subtype from the application base
+type it is based on and (ii) the inheritance of structure
+types fields from the parent type.
+
+Semantic Type Categories
+------------------------
+
+These are the ``atomic'' semantic types:
+
+* The ``root'' or ``universal'' type with name 'object' that is a
+  supertype of all other types. This type is generally for system
+  internal use, rather than in parameter type declarations.
+
+* The ``empty'' or ``impossible'' type with the empty string for its
+  name that is a subtype of all other types and has no possible
+  values. This type is generally for system internal use, rather than
+  in parameter type declarations.
+
+* A fixed set of ``predefined primitive-predefined'' types with names:
+  'integer', 'real', 'string', 'boolean', 'timestamp', and 'duration'.
+
+* An extensible set of ``enumerated'' types, where each type has a
+  fixed number of possible values. For example, the enumerated type
+  'TrafficLightColor' might have values 'red', 'amber', and 'green'.
+
+* An extensible set of ``application base'' types, whose representation
+  type (in Java at least) is some Java class and for which there is a
+  string representation that can be used to communicate values between
+  systems.
+
+* An extensible set of ``application subtypes'', each of which nominates another application base type or application subtype as its 'parent', and
+  represents a subset of values of the parent type. Note:
+** two different subtypes of a parent type may or may not be disjoint, i.e., they may share values, and
+** the representation type of the application subtype is the same as that of the parent type.
+
+These are the ``compound'' semantic types:
+
+* An extensible set of structure base types that are ordered
+  aggregates of zero or more named fields of other types. For example,
+  a 'Date' structure type could be defined to have three fields of
+  type 'integer' named 'day', 'month', and 'year'. A field value may
+  be accessed either by its name or by its zero-based index.
+
+** There is a predefined structure type with zero fields named
+   ``structure''. This is the root of all structure types.
+
+** Every structure type with the exception of ``structure'' is derived
+   from another structure type, it's 'parent' type. The new structure
+   type inherits the fields of the parent type and adds zero or more
+   new fields after the parent's fields. The new type is a subtype of
+   the parent type, extending the parent type by refinement.  It is an
+   error for a structure type to specify a new field that has the same
+   name as one of the parent type's fields.
+
+* An infinite set of ``collection'' types that can be enumerated by
+  applying one or more generic type constructors, either 'list',
+  'set', 'bag', or 'nullable' to another type.  These collection types
+  are not explicitly declared, but instead are implicitly declared by
+  the existence of the base type. Thus as soon as the type named 'foo'
+  is explicitly declared, the collection types with names 'list<foo>',
+  'set<foo>', 'list<nullable<foo>>', and so on are taken to be
+  implicitly declared.  The type, 'list<foo>' would be a collection
+  type that includes all lists with elements of type 'foo'.  Note that
+  the collection values really need to be immutable, since:
+
+** mutable collections do not work well in distributed environments,
+** identity and equality of mutable collections are not equivalent, and
+** the subtype relationship becomes very complicated and you need
+   to introduce Java-generic style types such as 'list<? super X'
+   and 'list<? extends X>'.
+
+[red]#Note that circular type references are prohibited in compound
+types. Thus you may not declare a type name 'foo' for a collection type
+'list<foo>'.#
+   
+
+
+Semantic Type Semantics
+-----------------------
+
+Semantic types are identified with sets of allowed semantic
+values. These semantic values are idealized values, distinct from the
+data values that are used to represent the semantic values in
+practice. For example, we may have an enumerated semantic type
+'TrafficLightColor' with three possible semantic values, 'red',
+'amber', and 'green'. These semantic values are considered different
+from the strings "red", "amber", and "green" of the 'string' predefined primitive
+semantic type, even if in the underlying representation type, the data
+values used to represent them are the same.
+
+From here on, the unqualified word ``type'' will mean ``semantic
+type'' and ``value'' will mean ``semantic value''.
+
+A type, X, is ``a subtype of'' another type, Y, if the
+set of allowed values for X is a subset of the set of allowed values
+for Y. This means that wherever a value of type Y is required, a value
+of type X can be supplied.
+
+A type, X, is ``equivalent to'' another type, Y, if
+they have exactly the same allowed values. Note that X is equivalent
+to Y if and only if X is a subtype of Y and Y is a subtype of X.
+
+A type, X, is ``disjoint from'' another type, Y, if X and Y have no
+allowed values in common.
+
+A type, X, is ``almost disjoint from'' another type, Y, if X and Y have only
+``degenerate'' values in common, such as the null value, the empty list, a set containing only the empty list, and so on.
+
+We define the ``ancestor list'' of a structure type to be a list of
+the type itself, its parent, its parent's parent, and so on up to the
+root structure type, ``structure''.
+
+For the different categories of types:
+
+* The root type, ``object'', allows every value.
+
+* The empty type allows no values.
+
+* The predefined primitive types are disjoint from one another (although see note
+  later in this document).
+
+* Each enumerated type is disjoint from every other enumerated type
+  and from every predefined primitive type.
+
+* Each application base type is disjoint from every other application
+  base type and from every predefined primitive or enumerated type.
+
+* Each application subtype is a subtype of its base type and may or
+  may not be disjoint from each of its sibling subtypes.
+
+* Each structure type is a subtype of each of its ancestor types.
+  Note that this form of subtyping (by addition of fields, a form of
+  refinement) is different from application subtyping (by explicit
+  subsetting of values by the application).
+
+* Each structure type is disjoint from every other structure type with
+  the same parent. Thus given any two structure types, either one is
+  an ancestor of the other or else the two types are disjoint.
+
+* Each collection type (except the nullable collection types) is
+  disjoint from every predefined primitive, enumerated, application
+  and structure type and from every collection type that is the
+  application of a different generic type constructor (that is,
+  'set<X>' is disjoint from 'list<X>' for all X). The type 'list<X>'
+  is a subtype of type 'list<Y>' if and only if type 'X' is a subtype
+  of type 'Y', and so on for each of the generic type constructors.
+
+* For any type X, there is only one value of type 'list<X>' that is
+  empty. From this and the subtype relationship described above, we
+  can deduce that this empty list value is shared by all list
+  types. Similarly, there is one empty set value shared by all set
+  types and one empty bag value shared by all bag types. This means
+  that even if two types, 'X' and 'Y', are disjoint then the types
+  'list<X>' and 'list<Y>' are ``almost disjoint'' since they share the
+  same empty value.
+
+* A type 'nullable<T>' includes all values of T, as well as a
+  distinguished value 'null'. So type 'T' is a subtype of
+  'nullable<T>'. If 'X' is a subtype of 'Y' then 'nullable<X>' is a
+  subtype of 'nullable<Y>' (but not a subtype of 'Y'). As a
+  consequence, there can only be one null value shared by all nullable
+  types. This means that even if two types, 'X' and 'Y', are disjoint
+  then the types 'nullable<X>' and 'nullable<Y>' are ``almost
+  disjoint'' since they share the same null value.
+
+* Note that 'nullable<nullable<T>>' would be no different from
+  'nullable<T>', so we do not allow 'nullable<nullable<T>>'
+
+Note that we can have multiple names that refer to the same type. For
+example, if 'intList' is defined to be an alias for a list of integers
+then this type is equivalent to a type 'list<num>' where num is an
+alias for integer.
+
+The semantic equals relationship between values is easy to define, but
+hard to implement. The system will be using instances of
+representation types to represent the data values. In the absence of
+run-time type information associated with the values, it may be
+impossible to distinguish semantically different values, for example
+the value 'red' of enumerated type 'TrafficLightColor' and the string
+'red' of predefined primitive type 'String'.
+
+We could require that if non-universal semantic types X and Y are
+neither disjoint nor almost disjoint (i.e., they have some
+non-degenerate semantic values in common), then the data values used
+to represent instances of these types will only be equal for
+semantically equal values. That would mean that we could get ``false
+positives'' when testing equality at the representation level, only
+when
+
+
+* the objects are of types that could not possibly be equal (or equal only for degenerate cases) and so equality 
+should never be tested, or
+
+* we are testing equality of a value for which we have no type information.
+
+Structure values are considered equal if they are of the same type and
+have the same values for each of the fields. Note that two subtypes of
+a parent structure type, neither of which adds any fields, are
+necessarily disjoint. Thus two structure values with the same field
+names and values may not be equal. Therefore structure values should be
+tagged with the structure type.
+[NOTE]
+.Implementation note
+=====================================
+In the current implementation, structure values are not tagged with the
+structure type. This means that in the presence of structure type inheritance,
+the equals method may return false positives.
+=====================================
+
+There are other relationships between types and values that can be
+expressed. I will express these in Java-like syntax for static
+methods, so every parameter is explicit. Where types are parameters or
+return values, I will use the java Class<T> notation to represent the
+type of a type.
+
+Representation Types
+~~~~~~~~~~~~~~~~~~~~
+
+Each predefined primitive type has an analogous representation type.
+The task learning system is implemented in the Java programming language.
+It uses Java data types internally to represent values of predefined primitive types.
+ICal is used to represent 'timestamp' and 'duration' types; Java native
+types are used to represent the others.
+
+[horizontal]
+*integer*:: java.lang.Long
+*real*:: java.lang.Double
+*boolean*:: java.lang.Boolean
+*string*:: java.lang.String
+*timestamp*:: com.sri.pal.common.ICalDateTime
+*duration*:: com.sri.pal.common.ICalDuration
+
+Each application subtype inherits its representation type from
+  its base type. It may not be overridden.
+
+Values entering the system that may be implemented in non-Java are converted
+to Java representation types on a best-effort basis.
+
+[red]#TODO describe how web interface provides values to the task learning system.#
+
+
+
+[NOTE]
+.Implementation note
+=====================================
+ All predefined primitive types except timestamp and duration implement
+ 'java.lang.Comparable'.
+ Implementations can exploit this,
+ using for example 'java.lang.TreeSet' to implement sets
+ of predefined primitive values.
+=====================================
+
+
+Learning Semantics
+------------------
+
+TODO: move this section to another document
+
+* A permutable list may 'support' another if they contain the same bag of elements.
+* Element order is irrelevant when finding loops over permutable lists.
+
+A timestamp may support another timestamp only if both have time zones specified,
+or both do not (ie. they are local times). This frees the learning system from
+location-specific semantics.
+
+A timestamp may 'support' another timestamp if it refers to the exact same point in time.
+
+A duration may 'support' another duration iff it refers to the exact same number of
+milliseconds. For example, one hour may support 60 minutes.
+
+Metadata
+--------
+
+Various key/value pairs may be associated with types to modify the behavior of
+those types and/or their values in specific components of the task learning system.
+These are detailed in
+link:../Metadata.html[Metadata in Task Learning].
+
+
+Extensions and Modifications
+----------------------------
+
+We may want to eliminate the predefined primitive types and instead force the
+user to declare their own numeric application types.
+
+We could allow enumerated types to extend another enumerated type by
+restricting the allowed values. The new enumerated type would then be
+a subtype of the enumerated type being extended.
+
+We could allow an enumerated type to extend another enumerated type by
+splitting one or more values of the parent enumerated type into more
+precise values. For example, given an enumerated type with values
+'succeeded' and 'failed', we could have a subtype that splits 'failed'
+into 'cancelled', 'timedOut', and 'lackedResourced'.
+
+We could allow the 'integer' type to be a subtype of the 'long' type,
+so the number `1' would be both an 'integer' and a 'long'. This has a
+mathematical elegance, but this has a serious problem: we could not
+use the Java Object.equals method for comparison of representation
+values. To use the Object.equals method for value equality, we need to
+cast (automatically?) whenever an 'integer' is passed where a 'long'
+is required, for example.
+
+In this presentation, the only way you can have an explicitly declared
+name for a collection type is if that name is an alias for that
+collection type. Thus if two different applications give two different
+names for the same collection type then those new names will be treated
+as equivalent. There may be a reason to introduce ``derived new
+collection'' types, each of which is based on a collection type and
+represents a disjoint set of possible values. For example, a derived
+new collection type 'integers' may be based on type 'set<integer>',
+but would be distinct from that type. That is, an 'integers' value
+cannot be used as a 'set<integer>' value and vice versa. Personally, I
+would prefer this to be expressed in a `has-a' relationship, such as
+by creating a structure type containing a field of type
+'set<integer>'.
+
+We could allow collection types to be opaque. This would
+mean that first/last/only may not be applied to their values,
+nor may iteration over their values be learned.
+
+We could allow an application subtype to be based on multiple
+application types, so long as all those types were eventually derived
+from the same application base type.
+
+We could allow a structure subtype to be based on multiple
+structure types, inheriting the union of all their fields in a canonical order.
+
+We could introduce polymorphism by introducing type variables. These
+should be distinct from any possible type names, for example by
+requiring them all to start with a pre-defined variable prefix
+character. For example, we might have a polymorphic type 'list<$x>'
+meaning a list of whatever type '$x' refers to. A variable's scope is
+the action/function/predicate definition it appears in.
+
+Partial Information and Distributed Declarations
+------------------------------------------------
+
+The information about the type system may not be complete. We may only
+have information about loaded components. However, that may not be a
+problem. It is still possible to reason about input and output
+parameters of a named type with no declaration if the values are just
+passed through without any processing. It is also possible to reason
+about iterating over or constructing lists of a named type with no
+declaration.
+
+One problem arises if we want to extract field values from or
+construct an instance of a structure type with no declaration. There
+is no immediately obvious solution to this problem. I believe that we
+will only be able to treat instance of an undeclared type as opaque
+objects. We might even want to enforce a requirement that a structure
+declaration requires declarations to be known for all types used by
+that declaration.
+
+Another problem arises when we need to know whether we can pass a
+value of one type as a value of another type. One particular example
+is the use of different names for a type in different components. An
+approach that is currently in use in the bridge is to have each
+component declare the type using their own name, say 'thunderbird.URL'
+and declare types that should be treated as equivalent, e.g.,
+'firefox.URL'. If this declaration is loaded before that of
+'firefox.URL', the 'thunderbird.URL' type is defined as normal with
+'firefox.URL' as an alias for it.  Alternatively, if 'firefox.URL' is
+already defined, its declaration is confirmed to be the same as that
+of 'thunderbird.URL' and 'thunderbird.URL' is declared to be an alias
+of 'firefox.URL'
+
+Implementation
+--------------
+
+The implementation of the type system is based on:
+
+* com.sri.ai.lumen.atr.decl.ATRTypeDeclaration objects that correspond
+  to declarations of type names,
+
+* com.sri.ai.lumen.atr.type.Type objects that encapsulate all known
+  information about a type, and
+
+* a com.sri.ai.lumen.atr.type.Type.Registry object that accumulates
+  type declarations and maps type names to type objects.
+
+The user defined type names will be separated into namespaces, which
+each namespace corresponding to a client such as firefox, and will use
+the client name as a prefix. The user defined types will also include
+a version number.
+
+For the CTRS syntax of a type declaration we could have something like:
+
+----
+type "foo^7.0^trafficLightColor" values: ["red", "amber", "green"];
+type "foo^7.0^app1" representationType: "java.lang.String";
+type "foo^7.0^app2" parentType: "foo^7.0^app1";
+type "foo^7.0^date" fieldNames: ["month", "day", "year"] fieldTypes: ["integer", "integer", "integer"];
+----
+
+Each enumerated type must supply a "values" keyword argument, but not
+one of the other keywords listed above, each application base type must supply
+a "representationType" keyword argument, but not one of the others
+listed above, and so on. A structure type may also declare a parentType argument -
+if it doesn't, the 'structure' type is assumed to be the parent.
+
+In addition to these arguments, a type declaration may include an
+"equivalentTypes" keyword, whose value is a list of type name strings,
+and a "properties" keyword, whose value is a map containing meta-data
+for the type.
+
+To alias an existing type you can just use the equivalentTypes keyword
+argument (and optionally the "properties" keyword).
+
+----
+type "foo^7.0^intList" equivalentTypes: ["list<integer>"];
+type "foo^7.0^int" equivalentTypes: ["integer"];
+----
+
+If a type declaration is loaded when the type name or one of its
+"equivalentTypes" is already defined, then the type declaration is
+checked to be equivalent to the already-defined type and the type name
+(if not already defined) and any "equivalentTypes" not already defined
+are declared to be new names for the already-defined type.
+
+If a type declaration with an "equivalentTypes" keyword is loaded and
+neither it nor any of the "equivalentTypes" is already defined, then
+each of the "equivalentTypes" is declared to be an alternative name for the
+type.
+
+
+A type declaration contains the information needed to create a Type
+object via the type registry.
+
+A type declaration is the repository for all metadata associated with
+a type 'name'.  A type can in general have multiple declarations using
+the equivalent types attribute of a declaration, and each declaration
+has distinct metadata. All metadata for a declaration is provided by the
+'getProperties' method of ATRTypeDeclaration. This returns an ATRMap from which the relevant
+metadata can be extracted using the getInteger, getString, getDouble,
+and getBoolean methods.
+
+A type registry accumulates type declarations and provides Type objects.
+The effect of 'addDeclaration(ATRTypeDeclaration)' is to create a new Type
+if no type corresponding to the equivalent types exist
+or add a new declaration to an existing Type listed as one of the equivalent type names.
+The declared type name and all equivelent type names will now map to the Type object.
+Since a type may have numerous names, it may have multiple declarations.
+
+Note that a Type object refers to other Type objects and uses
+java.lang.String for names, whereas ATRTypeDeclaration objects,
+corresponding to CTRS source code like the other ATR interafces, refer
+to other types by name and use ATRLiterals. Note also that only
+ATRTypeDeclarations have properties associated with them, not Type
+objects.
+
+
+The registry constructors add all predefined primitive types automatically.
+
+Collection types are implicitly defined. The 'getCollectionType(C, T)'
+method of a type registry returns the
+same Type for any given C/T pair. A collection type has no declarations associated with it, unless some named type(s) is (are) declared to be equivalent to a collection type.
+The 'getNames()' of a
+collection type returns the standard name, along with any names declared to be equivalent
+(e.g., "list<set<string>>, syntax dependent upon conventions to be determined)".
+
+If an "alias" declaration is added to a type registry when none of the
+equivalent types exists (i.e., it is a forward or external reference),
+the 'addDeclaration' method returns a Type with category
+"INCOMPLETE". This Type provides no semantics except associations with
+its declaration(s).  Generally 'addDeclaration()' will fail if the
+declaration names a type that has already been declared of a different
+category or with different fields, etc., but if it names an
+"INCOMPLETE" Type, that type is updated to reflect the declaration.
+
+Current Implementation Limitations
+----------------------------------
+
+Currently, structure inheritance from anything other than the root
+structure type is not supported. One problem with inheritance is that
+for the Bridge to be able to communicate values, it needs to know the
+type of the value. Static type checking may provide one structure type
+for a parameter, but the argument value passed may be a
+sub-type. Since structure values are not tagged with type information,
+the types of any additional fields in the sub-type value will not be
+known.
+
+Currently, no null-checking of values is performed as values are being
+transmitted. Thus it is possible for a null to be passed as the value
+for a non-nullable type.
+
+XML Declarations
+----------------
+Due to the complexity of representing '<' and '>' in XML, we may want
+to use '[' and ']' for delimiters for the collection types, e.g.,
+'set[integer]' rather than 'set<integer>'.
+
+OLDER NOTES, POSSIBLY NO LONGER ACCURATE OR RELEVANT
+----------------------------------------------------
+
+Type Operations
+~~~~~~~~~~~~~~~
+
+These operations may be applied to any type.
+
+----
+String getDisplayName(Class<T> type);
+----
+
+Returns a human-readable name for this type (e.g. email instead of
+namespace.version.emailID). Type metadata (see below) may be exploited
+to compute this name.
+
+Predefined Primitive Type Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The predefined primitive types are also ordered
+
+----
+boolean lessThan(Long o1, Long o2);
+boolean lessThan(Double o1, Double o2);
+boolean lessThan(Boolean o1, Boolean o2);
+boolean lessThan(String o1, String o2);
+boolean lessThan(ICalDate o1, ICalDate o2);
+boolean lessThan(ICalDuration o1, ICalDuration o2);
+----
+
+Application Base Type Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Information about application base type T:
+
+----
+Class<?> getBaseType(Class<T> type);
+----
+
+Operations on values:
+
+----
+String getStringValue(T applicationValue);
+Nullable<T> fromStringValue(Class<T> type, String str);
+----
+
+Application Subtype Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Information about application subtype T derived from B:
+
+----
+Class<?> getBaseType(Class<T> type);
+----
+
+Operations on values:
+
+----
+Nullable<T> downCast(Class<T> type, B baseValue);
+Nullable<T> fromStringValue(Class<T> type, String str);
+----
+
+Structure Type Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Information about structure type T extends StructureType:
+
+----
+Nullable<Class<? super T>> superClass(Class<T> type);
+List<String> directFieldNames(Class<T> type);
+List<Class<?>> directFieldTypes(Class<T> type);
+----
+
+Operations involving values:
+
+----
+T constructStructure(Class<T> type, List<Object> fieldValues);
+T constructStructure(Class<T> type, List<String> fieldNames, List<Object> fieldValues);
+T constructStructure(Class<T> type, Map<String,Object> fieldValues);
+F getFieldValue(T structure, String fieldName, Class<F> fieldType);
+Object getFieldValue(T structure, String fieldName);
+F getFieldValue(T structure, int fieldIndex, Class<F> fieldType);
+Object getFieldValue(T structure, int fieldIndex);
+----
+
+If we have sufficient tagging of data values:
+
+----
+Class<?> getStructureType(T structure);
+----
+
+
+Collection Type Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Information about collection type T extends CollectionType<E>:
+
+----
+Class<E> getElementType(Class<T> type);
+----
+
+Operations involving values:
+
+----
+Integer size(T collection);
+boolean isEmpty(T collection);
+E only(T collection); - throw exceptions if size != 1
+E first(list<E> list); - throws exception if size < 1
+E last(list<E> list); - throws exception if size < 1
+E get(list<E> list, Integer index); - throws exception if index < 0 or index >= size
+boolean contains(T collection, E element);
+Integer count(T collection, E element); - most useful for bag<E>
+Collection<E> asJavaCollection(T collection);
+E[] asJavaArray(T collection);
+list<E> listFrom(E... elements);
+set<E> setFrom(E... elements);
+bag<E> bagFrom(E... elements);
+Nullable<E> nullableFrom();
+Nullable<E> nullableFrom(E element);
+----
+
+
+Enumerated Values Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Information about values of enumerated type T:
+
+----
+boolean isValueOf(Class<T> type, T value);
+boolean lessThan(T o1, T o2);
+----
+
+
+unknown
+~~~~~~~
+
+Since predefined primitive types can be aliased, these methods would behave similar to types that are not predefined primitive types, 
+i.e., returning a Collection of size one or more, including all aliases and one unaliased result.

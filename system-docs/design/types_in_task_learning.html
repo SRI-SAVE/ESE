@@ -1,0 +1,1333 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.2" />
+<title>Types In Task Learning</title>
+<style type="text/css">
+/* Sans-serif font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+div#toctitle,
+span#author, span#revnumber, span#revdate, span#revremark,
+div#footer {
+  font-family: sans-serif;
+}
+
+/* Serif font. */
+div.sectionbody {
+  font-family: serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+tt {
+  color: navy;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+span#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+span#email {
+}
+span#revnumber, span#revdate, span#revremark {
+}
+
+div#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+div#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+div#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+div#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.tableblock, div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid silver;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid silver;
+  background: #f4f4f4;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #dddddd;
+  color: #777777;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  div#footer-badges { display: none; }
+}
+
+div#toc {
+  margin-bottom: 2.5em;
+}
+
+div#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+window.onload = function(){asciidoc.footnotes();}
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  var cont = document.getElementById("content");
+  var noteholder = document.getElementById("footnotes");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      // Use [\s\S] in place of . so multi-line matches work.
+      // Because JavaScript has no s (dotall) regex flag.
+      note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      spans[i].innerHTML =
+        "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+        "' title='View footnote' class='footnote'>" + n + "</a>]";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+}
+
+}
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Types In Task Learning</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Within Task Learning we use &#8220;semantic types&#8221; to describe the
+domain-specific types that are used in specifying parameter types, and
+&#8220;representation types&#8221; to describe the data values that are passed
+around in the system to represent instances of the semantic types.</p></div>
+<div class="paragraph"><p>This document currently discusses the semantic types with only passing
+reference to representation types.</p></div>
+<div class="paragraph"><p>In this document, the inheritance we have is (i) the inheritance of
+the representation type of an application subtype from the application base
+type it is based on and (ii) the inheritance of structure
+types fields from the parent type.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_semantic_type_categories">Semantic Type Categories</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>These are the &#8220;atomic&#8221; semantic types:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The &#8220;root&#8221; or &#8220;universal&#8221; type with name <em>object</em> that is a
+  supertype of all other types. This type is generally for system
+  internal use, rather than in parameter type declarations.
+</p>
+</li>
+<li>
+<p>
+The &#8220;empty&#8221; or &#8220;impossible&#8221; type with the empty string for its
+  name that is a subtype of all other types and has no possible
+  values. This type is generally for system internal use, rather than
+  in parameter type declarations.
+</p>
+</li>
+<li>
+<p>
+A fixed set of &#8220;predefined primitive-predefined&#8221; types with names:
+  <em>integer</em>, <em>real</em>, <em>string</em>, <em>boolean</em>, <em>timestamp</em>, and <em>duration</em>.
+</p>
+</li>
+<li>
+<p>
+An extensible set of &#8220;enumerated&#8221; types, where each type has a
+  fixed number of possible values. For example, the enumerated type
+  <em>TrafficLightColor</em> might have values <em>red</em>, <em>amber</em>, and <em>green</em>.
+</p>
+</li>
+<li>
+<p>
+An extensible set of &#8220;application base&#8221; types, whose representation
+  type (in Java at least) is some Java class and for which there is a
+  string representation that can be used to communicate values between
+  systems.
+</p>
+</li>
+<li>
+<p>
+An extensible set of &#8220;application subtypes&#8221;, each of which nominates another application base type or application subtype as its <em>parent</em>, and
+  represents a subset of values of the parent type. Note:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+two different subtypes of a parent type may or may not be disjoint, i.e., they may share values, and
+</p>
+</li>
+<li>
+<p>
+the representation type of the application subtype is the same as that of the parent type.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="paragraph"><p>These are the &#8220;compound&#8221; semantic types:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+An extensible set of structure base types that are ordered
+  aggregates of zero or more named fields of other types. For example,
+  a <em>Date</em> structure type could be defined to have three fields of
+  type <em>integer</em> named <em>day</em>, <em>month</em>, and <em>year</em>. A field value may
+  be accessed either by its name or by its zero-based index.
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+There is a predefined structure type with zero fields named
+   &#8220;structure&#8221;. This is the root of all structure types.
+</p>
+</li>
+<li>
+<p>
+Every structure type with the exception of &#8220;structure&#8221; is derived
+   from another structure type, it&#8217;s <em>parent</em> type. The new structure
+   type inherits the fields of the parent type and adds zero or more
+   new fields after the parent&#8217;s fields. The new type is a subtype of
+   the parent type, extending the parent type by refinement.  It is an
+   error for a structure type to specify a new field that has the same
+   name as one of the parent type&#8217;s fields.
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+An infinite set of &#8220;collection&#8221; types that can be enumerated by
+  applying one or more generic type constructors, either <em>list</em>,
+  <em>set</em>, <em>bag</em>, or <em>nullable</em> to another type.  These collection types
+  are not explicitly declared, but instead are implicitly declared by
+  the existence of the base type. Thus as soon as the type named <em>foo</em>
+  is explicitly declared, the collection types with names <em>list&lt;foo&gt;</em>,
+  <em>set&lt;foo&gt;</em>, <em>list&lt;nullable&lt;foo&gt;&gt;</em>, and so on are taken to be
+  implicitly declared.  The type, <em>list&lt;foo&gt;</em> would be a collection
+  type that includes all lists with elements of type <em>foo</em>.  Note that
+  the collection values really need to be immutable, since:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+mutable collections do not work well in distributed environments,
+</p>
+</li>
+<li>
+<p>
+identity and equality of mutable collections are not equivalent, and
+</p>
+</li>
+<li>
+<p>
+the subtype relationship becomes very complicated and you need
+   to introduce Java-generic style types such as <em>list&lt;? super X</em>
+   and <em>list&lt;? extends X&gt;</em>.
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="paragraph"><p><span class="red">Note that circular type references are prohibited in compound
+types. Thus you may not declare a type name <em>foo</em> for a collection type
+<em>list&lt;foo&gt;</em>.</span></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_semantic_type_semantics">Semantic Type Semantics</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Semantic types are identified with sets of allowed semantic
+values. These semantic values are idealized values, distinct from the
+data values that are used to represent the semantic values in
+practice. For example, we may have an enumerated semantic type
+<em>TrafficLightColor</em> with three possible semantic values, <em>red</em>,
+<em>amber</em>, and <em>green</em>. These semantic values are considered different
+from the strings "red", "amber", and "green" of the <em>string</em> predefined primitive
+semantic type, even if in the underlying representation type, the data
+values used to represent them are the same.</p></div>
+<div class="paragraph"><p>From here on, the unqualified word &#8220;type&#8221; will mean &#8220;semantic
+type&#8221; and &#8220;value&#8221; will mean &#8220;semantic value&#8221;.</p></div>
+<div class="paragraph"><p>A type, X, is &#8220;a subtype of&#8221; another type, Y, if the
+set of allowed values for X is a subset of the set of allowed values
+for Y. This means that wherever a value of type Y is required, a value
+of type X can be supplied.</p></div>
+<div class="paragraph"><p>A type, X, is &#8220;equivalent to&#8221; another type, Y, if
+they have exactly the same allowed values. Note that X is equivalent
+to Y if and only if X is a subtype of Y and Y is a subtype of X.</p></div>
+<div class="paragraph"><p>A type, X, is &#8220;disjoint from&#8221; another type, Y, if X and Y have no
+allowed values in common.</p></div>
+<div class="paragraph"><p>A type, X, is &#8220;almost disjoint from&#8221; another type, Y, if X and Y have only
+&#8220;degenerate&#8221; values in common, such as the null value, the empty list, a set containing only the empty list, and so on.</p></div>
+<div class="paragraph"><p>We define the &#8220;ancestor list&#8221; of a structure type to be a list of
+the type itself, its parent, its parent&#8217;s parent, and so on up to the
+root structure type, &#8220;structure&#8221;.</p></div>
+<div class="paragraph"><p>For the different categories of types:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The root type, &#8220;object&#8221;, allows every value.
+</p>
+</li>
+<li>
+<p>
+The empty type allows no values.
+</p>
+</li>
+<li>
+<p>
+The predefined primitive types are disjoint from one another (although see note
+  later in this document).
+</p>
+</li>
+<li>
+<p>
+Each enumerated type is disjoint from every other enumerated type
+  and from every predefined primitive type.
+</p>
+</li>
+<li>
+<p>
+Each application base type is disjoint from every other application
+  base type and from every predefined primitive or enumerated type.
+</p>
+</li>
+<li>
+<p>
+Each application subtype is a subtype of its base type and may or
+  may not be disjoint from each of its sibling subtypes.
+</p>
+</li>
+<li>
+<p>
+Each structure type is a subtype of each of its ancestor types.
+  Note that this form of subtyping (by addition of fields, a form of
+  refinement) is different from application subtyping (by explicit
+  subsetting of values by the application).
+</p>
+</li>
+<li>
+<p>
+Each structure type is disjoint from every other structure type with
+  the same parent. Thus given any two structure types, either one is
+  an ancestor of the other or else the two types are disjoint.
+</p>
+</li>
+<li>
+<p>
+Each collection type (except the nullable collection types) is
+  disjoint from every predefined primitive, enumerated, application
+  and structure type and from every collection type that is the
+  application of a different generic type constructor (that is,
+  <em>set&lt;X&gt;</em> is disjoint from <em>list&lt;X&gt;</em> for all X). The type <em>list&lt;X&gt;</em>
+  is a subtype of type <em>list&lt;Y&gt;</em> if and only if type <em>X</em> is a subtype
+  of type <em>Y</em>, and so on for each of the generic type constructors.
+</p>
+</li>
+<li>
+<p>
+For any type X, there is only one value of type <em>list&lt;X&gt;</em> that is
+  empty. From this and the subtype relationship described above, we
+  can deduce that this empty list value is shared by all list
+  types. Similarly, there is one empty set value shared by all set
+  types and one empty bag value shared by all bag types. This means
+  that even if two types, <em>X</em> and <em>Y</em>, are disjoint then the types
+  <em>list&lt;X&gt;</em> and <em>list&lt;Y&gt;</em> are &#8220;almost disjoint&#8221; since they share the
+  same empty value.
+</p>
+</li>
+<li>
+<p>
+A type <em>nullable&lt;T&gt;</em> includes all values of T, as well as a
+  distinguished value <em>null</em>. So type <em>T</em> is a subtype of
+  <em>nullable&lt;T&gt;</em>. If <em>X</em> is a subtype of <em>Y</em> then <em>nullable&lt;X&gt;</em> is a
+  subtype of <em>nullable&lt;Y&gt;</em> (but not a subtype of <em>Y</em>). As a
+  consequence, there can only be one null value shared by all nullable
+  types. This means that even if two types, <em>X</em> and <em>Y</em>, are disjoint
+  then the types <em>nullable&lt;X&gt;</em> and <em>nullable&lt;Y&gt;</em> are &#8220;almost
+  disjoint&#8221; since they share the same null value.
+</p>
+</li>
+<li>
+<p>
+Note that <em>nullable&lt;nullable&lt;T&gt;&gt;</em> would be no different from
+  <em>nullable&lt;T&gt;</em>, so we do not allow <em>nullable&lt;nullable&lt;T&gt;&gt;</em>
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Note that we can have multiple names that refer to the same type. For
+example, if <em>intList</em> is defined to be an alias for a list of integers
+then this type is equivalent to a type <em>list&lt;num&gt;</em> where num is an
+alias for integer.</p></div>
+<div class="paragraph"><p>The semantic equals relationship between values is easy to define, but
+hard to implement. The system will be using instances of
+representation types to represent the data values. In the absence of
+run-time type information associated with the values, it may be
+impossible to distinguish semantically different values, for example
+the value <em>red</em> of enumerated type <em>TrafficLightColor</em> and the string
+<em>red</em> of predefined primitive type <em>String</em>.</p></div>
+<div class="paragraph"><p>We could require that if non-universal semantic types X and Y are
+neither disjoint nor almost disjoint (i.e., they have some
+non-degenerate semantic values in common), then the data values used
+to represent instances of these types will only be equal for
+semantically equal values. That would mean that we could get &#8220;false
+positives&#8221; when testing equality at the representation level, only
+when</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+the objects are of types that could not possibly be equal (or equal only for degenerate cases) and so equality
+should never be tested, or
+</p>
+</li>
+<li>
+<p>
+we are testing equality of a value for which we have no type information.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>Structure values are considered equal if they are of the same type and
+have the same values for each of the fields. Note that two subtypes of
+a parent structure type, neither of which adds any fields, are
+necessarily disjoint. Thus two structure values with the same field
+names and values may not be equal. Therefore structure values should be
+tagged with the structure type.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">Implementation note</div>
+<div class="paragraph"><p>In the current implementation, structure values are not tagged with the
+structure type. This means that in the presence of structure type inheritance,
+the equals method may return false positives.</p></div>
+</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>There are other relationships between types and values that can be
+expressed. I will express these in Java-like syntax for static
+methods, so every parameter is explicit. Where types are parameters or
+return values, I will use the java Class&lt;T&gt; notation to represent the
+type of a type.</p></div>
+<div class="sect2">
+<h3 id="_representation_types">Representation Types</h3>
+<div class="paragraph"><p>Each predefined primitive type has an analogous representation type.
+The task learning system is implemented in the Java programming language.
+It uses Java data types internally to represent values of predefined primitive types.
+ICal is used to represent <em>timestamp</em> and <em>duration</em> types; Java native
+types are used to represent the others.</p></div>
+<div class="hdlist"><table>
+<tr>
+<td class="hdlist1">
+<strong>integer</strong>
+<br />
+</td>
+<td class="hdlist2">
+<p style="margin-top: 0;">
+java.lang.Long
+</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>real</strong>
+<br />
+</td>
+<td class="hdlist2">
+<p style="margin-top: 0;">
+java.lang.Double
+</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>boolean</strong>
+<br />
+</td>
+<td class="hdlist2">
+<p style="margin-top: 0;">
+java.lang.Boolean
+</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>string</strong>
+<br />
+</td>
+<td class="hdlist2">
+<p style="margin-top: 0;">
+java.lang.String
+</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>timestamp</strong>
+<br />
+</td>
+<td class="hdlist2">
+<p style="margin-top: 0;">
+com.sri.pal.common.ICalDateTime
+</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+<strong>duration</strong>
+<br />
+</td>
+<td class="hdlist2">
+<p style="margin-top: 0;">
+com.sri.pal.common.ICalDuration
+</p>
+</td>
+</tr>
+</table></div>
+<div class="paragraph"><p>Each application subtype inherits its representation type from
+  its base type. It may not be overridden.</p></div>
+<div class="paragraph"><p>Values entering the system that may be implemented in non-Java are converted
+to Java representation types on a best-effort basis.</p></div>
+<div class="paragraph"><p><span class="red">TODO describe how web interface provides values to the task learning system.</span></p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">Implementation note</div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>All predefined primitive types except timestamp and duration implement
+'java.lang.Comparable'.
+Implementations can exploit this,
+using for example 'java.lang.TreeSet' to implement sets
+of predefined primitive values.</tt></pre>
+</div></div>
+</td>
+</tr></table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_learning_semantics">Learning Semantics</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>TODO: move this section to another document</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+A permutable list may <em>support</em> another if they contain the same bag of elements.
+</p>
+</li>
+<li>
+<p>
+Element order is irrelevant when finding loops over permutable lists.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>A timestamp may support another timestamp only if both have time zones specified,
+or both do not (ie. they are local times). This frees the learning system from
+location-specific semantics.</p></div>
+<div class="paragraph"><p>A timestamp may <em>support</em> another timestamp if it refers to the exact same point in time.</p></div>
+<div class="paragraph"><p>A duration may <em>support</em> another duration iff it refers to the exact same number of
+milliseconds. For example, one hour may support 60 minutes.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_metadata">Metadata</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Various key/value pairs may be associated with types to modify the behavior of
+those types and/or their values in specific components of the task learning system.
+These are detailed in
+<a href="../Metadata.html">Metadata in Task Learning</a>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_extensions_and_modifications">Extensions and Modifications</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>We may want to eliminate the predefined primitive types and instead force the
+user to declare their own numeric application types.</p></div>
+<div class="paragraph"><p>We could allow enumerated types to extend another enumerated type by
+restricting the allowed values. The new enumerated type would then be
+a subtype of the enumerated type being extended.</p></div>
+<div class="paragraph"><p>We could allow an enumerated type to extend another enumerated type by
+splitting one or more values of the parent enumerated type into more
+precise values. For example, given an enumerated type with values
+<em>succeeded</em> and <em>failed</em>, we could have a subtype that splits <em>failed</em>
+into <em>cancelled</em>, <em>timedOut</em>, and <em>lackedResourced</em>.</p></div>
+<div class="paragraph"><p>We could allow the <em>integer</em> type to be a subtype of the <em>long</em> type,
+so the number &#8216;1&#8217; would be both an <em>integer</em> and a <em>long</em>. This has a
+mathematical elegance, but this has a serious problem: we could not
+use the Java Object.equals method for comparison of representation
+values. To use the Object.equals method for value equality, we need to
+cast (automatically?) whenever an <em>integer</em> is passed where a <em>long</em>
+is required, for example.</p></div>
+<div class="paragraph"><p>In this presentation, the only way you can have an explicitly declared
+name for a collection type is if that name is an alias for that
+collection type. Thus if two different applications give two different
+names for the same collection type then those new names will be treated
+as equivalent. There may be a reason to introduce &#8220;derived new
+collection&#8221; types, each of which is based on a collection type and
+represents a disjoint set of possible values. For example, a derived
+new collection type <em>integers</em> may be based on type <em>set&lt;integer&gt;</em>,
+but would be distinct from that type. That is, an <em>integers</em> value
+cannot be used as a <em>set&lt;integer&gt;</em> value and vice versa. Personally, I
+would prefer this to be expressed in a &#8216;has-a&#8217; relationship, such as
+by creating a structure type containing a field of type
+<em>set&lt;integer&gt;</em>.</p></div>
+<div class="paragraph"><p>We could allow collection types to be opaque. This would
+mean that first/last/only may not be applied to their values,
+nor may iteration over their values be learned.</p></div>
+<div class="paragraph"><p>We could allow an application subtype to be based on multiple
+application types, so long as all those types were eventually derived
+from the same application base type.</p></div>
+<div class="paragraph"><p>We could allow a structure subtype to be based on multiple
+structure types, inheriting the union of all their fields in a canonical order.</p></div>
+<div class="paragraph"><p>We could introduce polymorphism by introducing type variables. These
+should be distinct from any possible type names, for example by
+requiring them all to start with a pre-defined variable prefix
+character. For example, we might have a polymorphic type <em>list&lt;$x&gt;</em>
+meaning a list of whatever type <em>$x</em> refers to. A variable&#8217;s scope is
+the action/function/predicate definition it appears in.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_partial_information_and_distributed_declarations">Partial Information and Distributed Declarations</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The information about the type system may not be complete. We may only
+have information about loaded components. However, that may not be a
+problem. It is still possible to reason about input and output
+parameters of a named type with no declaration if the values are just
+passed through without any processing. It is also possible to reason
+about iterating over or constructing lists of a named type with no
+declaration.</p></div>
+<div class="paragraph"><p>One problem arises if we want to extract field values from or
+construct an instance of a structure type with no declaration. There
+is no immediately obvious solution to this problem. I believe that we
+will only be able to treat instance of an undeclared type as opaque
+objects. We might even want to enforce a requirement that a structure
+declaration requires declarations to be known for all types used by
+that declaration.</p></div>
+<div class="paragraph"><p>Another problem arises when we need to know whether we can pass a
+value of one type as a value of another type. One particular example
+is the use of different names for a type in different components. An
+approach that is currently in use in the bridge is to have each
+component declare the type using their own name, say <em>thunderbird.URL</em>
+and declare types that should be treated as equivalent, e.g.,
+<em>firefox.URL</em>. If this declaration is loaded before that of
+<em>firefox.URL</em>, the <em>thunderbird.URL</em> type is defined as normal with
+<em>firefox.URL</em> as an alias for it.  Alternatively, if <em>firefox.URL</em> is
+already defined, its declaration is confirmed to be the same as that
+of <em>thunderbird.URL</em> and <em>thunderbird.URL</em> is declared to be an alias
+of <em>firefox.URL</em></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementation">Implementation</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The implementation of the type system is based on:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+com.sri.ai.lumen.atr.decl.ATRTypeDeclaration objects that correspond
+  to declarations of type names,
+</p>
+</li>
+<li>
+<p>
+com.sri.ai.lumen.atr.type.Type objects that encapsulate all known
+  information about a type, and
+</p>
+</li>
+<li>
+<p>
+a com.sri.ai.lumen.atr.type.Type.Registry object that accumulates
+  type declarations and maps type names to type objects.
+</p>
+</li>
+</ul></div>
+<div class="paragraph"><p>The user defined type names will be separated into namespaces, which
+each namespace corresponding to a client such as firefox, and will use
+the client name as a prefix. The user defined types will also include
+a version number.</p></div>
+<div class="paragraph"><p>For the CTRS syntax of a type declaration we could have something like:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>type "foo^7.0^trafficLightColor" values: ["red", "amber", "green"];
+type "foo^7.0^app1" representationType: "java.lang.String";
+type "foo^7.0^app2" parentType: "foo^7.0^app1";
+type "foo^7.0^date" fieldNames: ["month", "day", "year"] fieldTypes: ["integer", "integer", "integer"];</tt></pre>
+</div></div>
+<div class="paragraph"><p>Each enumerated type must supply a "values" keyword argument, but not
+one of the other keywords listed above, each application base type must supply
+a "representationType" keyword argument, but not one of the others
+listed above, and so on. A structure type may also declare a parentType argument -
+if it doesn&#8217;t, the <em>structure</em> type is assumed to be the parent.</p></div>
+<div class="paragraph"><p>In addition to these arguments, a type declaration may include an
+"equivalentTypes" keyword, whose value is a list of type name strings,
+and a "properties" keyword, whose value is a map containing meta-data
+for the type.</p></div>
+<div class="paragraph"><p>To alias an existing type you can just use the equivalentTypes keyword
+argument (and optionally the "properties" keyword).</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>type "foo^7.0^intList" equivalentTypes: ["list&lt;integer&gt;"];
+type "foo^7.0^int" equivalentTypes: ["integer"];</tt></pre>
+</div></div>
+<div class="paragraph"><p>If a type declaration is loaded when the type name or one of its
+"equivalentTypes" is already defined, then the type declaration is
+checked to be equivalent to the already-defined type and the type name
+(if not already defined) and any "equivalentTypes" not already defined
+are declared to be new names for the already-defined type.</p></div>
+<div class="paragraph"><p>If a type declaration with an "equivalentTypes" keyword is loaded and
+neither it nor any of the "equivalentTypes" is already defined, then
+each of the "equivalentTypes" is declared to be an alternative name for the
+type.</p></div>
+<div class="paragraph"><p>A type declaration contains the information needed to create a Type
+object via the type registry.</p></div>
+<div class="paragraph"><p>A type declaration is the repository for all metadata associated with
+a type <em>name</em>.  A type can in general have multiple declarations using
+the equivalent types attribute of a declaration, and each declaration
+has distinct metadata. All metadata for a declaration is provided by the
+<em>getProperties</em> method of ATRTypeDeclaration. This returns an ATRMap from which the relevant
+metadata can be extracted using the getInteger, getString, getDouble,
+and getBoolean methods.</p></div>
+<div class="paragraph"><p>A type registry accumulates type declarations and provides Type objects.
+The effect of <em>addDeclaration(ATRTypeDeclaration)</em> is to create a new Type
+if no type corresponding to the equivalent types exist
+or add a new declaration to an existing Type listed as one of the equivalent type names.
+The declared type name and all equivelent type names will now map to the Type object.
+Since a type may have numerous names, it may have multiple declarations.</p></div>
+<div class="paragraph"><p>Note that a Type object refers to other Type objects and uses
+java.lang.String for names, whereas ATRTypeDeclaration objects,
+corresponding to CTRS source code like the other ATR interafces, refer
+to other types by name and use ATRLiterals. Note also that only
+ATRTypeDeclarations have properties associated with them, not Type
+objects.</p></div>
+<div class="paragraph"><p>The registry constructors add all predefined primitive types automatically.</p></div>
+<div class="paragraph"><p>Collection types are implicitly defined. The <em>getCollectionType(C, T)</em>
+method of a type registry returns the
+same Type for any given C/T pair. A collection type has no declarations associated with it, unless some named type(s) is (are) declared to be equivalent to a collection type.
+The <em>getNames()</em> of a
+collection type returns the standard name, along with any names declared to be equivalent
+(e.g., "list&lt;set&lt;string&gt;&gt;, syntax dependent upon conventions to be determined)".</p></div>
+<div class="paragraph"><p>If an "alias" declaration is added to a type registry when none of the
+equivalent types exists (i.e., it is a forward or external reference),
+the <em>addDeclaration</em> method returns a Type with category
+"INCOMPLETE". This Type provides no semantics except associations with
+its declaration(s).  Generally <em>addDeclaration()</em> will fail if the
+declaration names a type that has already been declared of a different
+category or with different fields, etc., but if it names an
+"INCOMPLETE" Type, that type is updated to reflect the declaration.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_current_implementation_limitations">Current Implementation Limitations</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Currently, structure inheritance from anything other than the root
+structure type is not supported. One problem with inheritance is that
+for the Bridge to be able to communicate values, it needs to know the
+type of the value. Static type checking may provide one structure type
+for a parameter, but the argument value passed may be a
+sub-type. Since structure values are not tagged with type information,
+the types of any additional fields in the sub-type value will not be
+known.</p></div>
+<div class="paragraph"><p>Currently, no null-checking of values is performed as values are being
+transmitted. Thus it is possible for a null to be passed as the value
+for a non-nullable type.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_xml_declarations">XML Declarations</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Due to the complexity of representing <em>&lt;</em> and <em>&gt;</em> in XML, we may want
+to use <em>[</em> and <em>]</em> for delimiters for the collection types, e.g.,
+<em>set[integer]</em> rather than <em>set&lt;integer&gt;</em>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_older_notes_possibly_no_longer_accurate_or_relevant">OLDER NOTES, POSSIBLY NO LONGER ACCURATE OR RELEVANT</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_type_operations">Type Operations</h3>
+<div class="paragraph"><p>These operations may be applied to any type.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>String getDisplayName(Class&lt;T&gt; type);</tt></pre>
+</div></div>
+<div class="paragraph"><p>Returns a human-readable name for this type (e.g. email instead of
+namespace.version.emailID). Type metadata (see below) may be exploited
+to compute this name.</p></div>
+<div class="paragraph"><p>Predefined Primitive Type Operations</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>The predefined primitive types are also ordered
+
+----
+boolean lessThan(Long o1, Long o2);
+boolean lessThan(Double o1, Double o2);
+boolean lessThan(Boolean o1, Boolean o2);
+boolean lessThan(String o1, String o2);
+boolean lessThan(ICalDate o1, ICalDate o2);
+boolean lessThan(ICalDuration o1, ICalDuration o2);
+----
+
+Application Base Type Operations</tt></pre>
+</div></div>
+<div class="paragraph"><p>Information about application base type T:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Class&lt;?&gt; getBaseType(Class&lt;T&gt; type);</tt></pre>
+</div></div>
+<div class="paragraph"><p>Operations on values:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>String getStringValue(T applicationValue);
+Nullable&lt;T&gt; fromStringValue(Class&lt;T&gt; type, String str);</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_application_subtype_operations">Application Subtype Operations</h3>
+<div class="paragraph"><p>Information about application subtype T derived from B:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Class&lt;?&gt; getBaseType(Class&lt;T&gt; type);</tt></pre>
+</div></div>
+<div class="paragraph"><p>Operations on values:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Nullable&lt;T&gt; downCast(Class&lt;T&gt; type, B baseValue);
+Nullable&lt;T&gt; fromStringValue(Class&lt;T&gt; type, String str);</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_structure_type_operations">Structure Type Operations</h3>
+<div class="paragraph"><p>Information about structure type T extends StructureType:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Nullable&lt;Class&lt;? super T&gt;&gt; superClass(Class&lt;T&gt; type);
+List&lt;String&gt; directFieldNames(Class&lt;T&gt; type);
+List&lt;Class&lt;?&gt;&gt; directFieldTypes(Class&lt;T&gt; type);</tt></pre>
+</div></div>
+<div class="paragraph"><p>Operations involving values:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>T constructStructure(Class&lt;T&gt; type, List&lt;Object&gt; fieldValues);
+T constructStructure(Class&lt;T&gt; type, List&lt;String&gt; fieldNames, List&lt;Object&gt; fieldValues);
+T constructStructure(Class&lt;T&gt; type, Map&lt;String,Object&gt; fieldValues);
+F getFieldValue(T structure, String fieldName, Class&lt;F&gt; fieldType);
+Object getFieldValue(T structure, String fieldName);
+F getFieldValue(T structure, int fieldIndex, Class&lt;F&gt; fieldType);
+Object getFieldValue(T structure, int fieldIndex);</tt></pre>
+</div></div>
+<div class="paragraph"><p>If we have sufficient tagging of data values:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Class&lt;?&gt; getStructureType(T structure);</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_collection_type_operations">Collection Type Operations</h3>
+<div class="paragraph"><p>Information about collection type T extends CollectionType&lt;E&gt;:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Class&lt;E&gt; getElementType(Class&lt;T&gt; type);</tt></pre>
+</div></div>
+<div class="paragraph"><p>Operations involving values:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>Integer size(T collection);
+boolean isEmpty(T collection);
+E only(T collection); - throw exceptions if size != 1
+E first(list&lt;E&gt; list); - throws exception if size &lt; 1
+E last(list&lt;E&gt; list); - throws exception if size &lt; 1
+E get(list&lt;E&gt; list, Integer index); - throws exception if index &lt; 0 or index &gt;= size
+boolean contains(T collection, E element);
+Integer count(T collection, E element); - most useful for bag&lt;E&gt;
+Collection&lt;E&gt; asJavaCollection(T collection);
+E[] asJavaArray(T collection);
+list&lt;E&gt; listFrom(E... elements);
+set&lt;E&gt; setFrom(E... elements);
+bag&lt;E&gt; bagFrom(E... elements);
+Nullable&lt;E&gt; nullableFrom();
+Nullable&lt;E&gt; nullableFrom(E element);</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_enumerated_values_operations">Enumerated Values Operations</h3>
+<div class="paragraph"><p>Information about values of enumerated type T:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>boolean isValueOf(Class&lt;T&gt; type, T value);
+boolean lessThan(T o1, T o2);</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_unknown">unknown</h3>
+<div class="paragraph"><p>Since predefined primitive types can be aliased, these methods would behave similar to types that are not predefined primitive types,
+i.e., returning a Collection of size one or more, including all aliases and one unaliased result.</p></div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2011-10-13 08:59:20 EST
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project name="installer" default="izpack">
+
+
+    <property name="dir.tl" location="${basedir}/../.."/>
+    <property name="dir.adept" location="${basedir}/.."/>
+    <property name="dir.dist" location="${basedir}/dist"/>
+    <property name="dir.build" location="${basedir}/build"/>
+    <property name="dir.stage" location="${dir.build}/stage"/>
+    <property name="dir.stage.lib" location="${dir.stage}/lib"/>
+    <property name="dir.stage.doc" location="${dir.stage}/doc"/>
+
+
+    <target name="setup" description="stage files for installers">
+
+        <!-- Build all tasklearning modules -->
+        <ant dir="${dir.tl}" inheritall="false" inheritrefs="false"/>
+
+
+        <!-- required jar files -->
+        <copy todir="${dir.stage.lib}">
+            <fileset dir="${dir.adept}/applications/novo/build/" includes="novo.jar"/>
+            <fileset dir="${dir.adept}/applications/novo/lib/runtime/">
+				<include name="*.jar"/>
+				<exclude name="jfxrt.jar"/>
+			</fileset>
+            <fileset dir="${dir.adept}/applications/imageloader/build/" includes="imageloader.jar"/>
+            <fileset dir="${dir.adept}/build/" includes="adept.jar"/>
+            <fileset dir="${dir.adept}/lib/compile/" includes="*.jar"/>
+            <fileset dir="${dir.tl}/pal-ui/adept-ui/build/" includes="*.jar"/>
+            <fileset dir="${dir.tl}/pal-ui/adept-ui/lib/runtime/">
+				<include name="*.jar"/>
+				<exclude name="jfxrt.jar"/>
+			</fileset>
+            <fileset dir="${dir.tl}/pal-ui/core/lib/runtime/" includes="*.jar"/>
+            <fileset dir="${dir.tl}/pal-ui/demonstrator/lib/runtime/">
+			    <include name="*.jar"/>
+				<exclude name="jfxrt.jar"/>
+			</fileset>
+            <fileset dir="${dir.tl}/pal-ui/editor/lib/runtime/">
+            <include name="*.jar"/>
+				<exclude name="jfxrt.jar"/>
+			</fileset>
+			<fileset dir="${dir.tl}/remotexml-mediator/lib/runtime/" includes="*.jar"/>
+        </copy>
+
+        <!-- documentation -->
+        <copy todir="${dir.stage.doc}">
+            <fileset dir="${dir.adept}/doc/external/">
+                <include name="*"/>
+                <include name="images/*"/>
+            </fileset>
+        </copy>
+
+        <!-- example applicaiton -->
+        <copy todir="${dir.stage}/example_applications/ImageLoader">
+            <fileset dir="${dir.adept}/applications/imageloader/src"/>
+        </copy>
+
+        <!-- plugins -->
+        <copy file="${dir.tl}/remotexml-mediator/plugin/firefox/adept_firefox.xpi" tofile="${dir.stage}/plugins/firefox.xpi"/>
+        <copy file="${dir.tl}/remotexml-mediator/plugin/thunderbird/adept_thunderbird.xpi" tofile="${dir.stage}/plugins/thunderbird.xpi"/>
+
+
+        <!-- Set up tokens to define application classpaths in scripts -->
+        <fileset id="staged.jars" dir="${dir.stage.lib}" includes="*.jar"/>
+        <filter token="ADEPT_LAUNCHER_CLASSPATH" value="${toString:staged.jars}"/>
+        <filter token="IMAGELOADER_LAUNCHER_CLASSPATH" value="${toString:staged.jars}"/>
+
+        <!-- scripts to lib dir -->
+        <copy todir="${dir.stage.lib}" filtering="true" overwrite="true">
+            <fileset dir="${basedir}/scripts">
+                <include name="AdeptLauncher.bat"/>
+                <include name="ImageLoaderLauncher.bat"/>
+                <include name="NovoLauncher.bat"/>
+                <include name="invis.vbs"/>
+            </fileset>
+        </copy>
+
+        <!-- scripts to install dir -->
+        <copy todir="${dir.stage}">
+            <fileset dir="${basedir}/scripts">
+                <include name="Adept.bat"/>
+                <include name="ImageLoader.bat"/>
+                <include name="Novo.bat"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="izpack" depends="setup" description="Creates an izPack installer">
+
+        <taskdef name="izpack"
+                 classpath="${dir.tl}/ivy/third-party/izpack-4.3.2-standalone-compiler.jar"
+                 classname="com.izforge.izpack.ant.IzPackTask"/>
+
+
+        <mkdir dir="${dir.dist}"/>
+        <!-- Run installer build -->
+        <echo message="## Running IzPack to build the installer${dir.adept}."/>
+        <izpack
+                input="installer.xml"
+                output="${dir.dist}/adept-installer.jar"
+                installerType="standard"
+                inheritAll="true"
+                basedir="${basedir}"
+                compression="deflate"
+                compressionlevel="9"/>
+
+        <echo level="info" message="## Done."/>
+        <echo level="info" message="## Run installer with: java -jar dist/adept-installer.jar"/>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${dir.build}"/>
+    </target>
+
+
+</project>

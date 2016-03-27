@@ -1,0 +1,2 @@
+This software is intended for use by employees of SRI International only. Please contact Tom Lee (tomlee@ai.sri.com)
+ for usage permission.

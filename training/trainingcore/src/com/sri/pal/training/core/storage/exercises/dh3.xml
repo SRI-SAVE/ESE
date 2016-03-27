@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise>
+  <name>PE TMB6F04PE</name>
+  <description>Analyze Data Using CPOF</description>
+  <html>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;p class=&quot;MsoNormal&quot; align=&quot;center&quot; style=&quot;margin-bottom:12.0pt;text-align:center;
+mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;PRACTICAL EXERCISE SHEET TMB6F04PE&lt;o:p&gt;&lt;/o:p&gt;&lt;/b&gt;&lt;/p&gt;
+
+&lt;table class=&quot;MsoNormalTable&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;text-align: left;border-collapse: collapse; &quot;&gt;
+ &lt;tbody&gt;&lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Title&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border-top:solid windowtext 1.0pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:none;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;Perform Data Analysis
+  Using Command Post of the Future (CPOF) Practical Exercise &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Lesson Number / Title&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;TMB6F04L version SW11 / Perform
+  Data Analysis Using Command Post of the Future (CPOF)&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Introduction&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;You will now participate
+  in a PE to demonstrate your ability to use CPOF tools to analyze data.&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Motivator&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;Battlefield information is of limited value until it has been analyzed.&amp;nbsp; All the data on CPOF systems and all the
+  other shared data is of no value to the commander until it has been analyzed
+  and implemented.&amp;nbsp; Applying analysis to
+  data enables the commander to use combat power effectively.&amp;nbsp; Analysis is an important part of the
+  command process.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;During this Practical
+  Exercise, we will learn how to use CPOF tools to analyze battlefield
+  information. &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Terminal Learning Objective&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;NOTE:&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt; The
+  instructor should inform the students of the following Terminal Learning
+  Objective covered by this practical exercise.&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;mso-pagination:widow-orphan&quot;&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;At the completion of this lesson, you [the student]
+  will:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;81&quot; valign=&quot;top&quot; style=&quot;width:61.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .75pt;mso-border-alt:
+  solid windowtext .75pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; align=&quot;right&quot; style=&quot;text-align:right;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;Action:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;423&quot; valign=&quot;top&quot; style=&quot;width:317.0pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:
+  solid windowtext .75pt;mso-border-right-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;Perform Data Analysis
+  Using the Command Post of the Future (CPOF).&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;81&quot; valign=&quot;top&quot; style=&quot;width:61.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .75pt;mso-border-alt:
+  solid windowtext .75pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; align=&quot;right&quot; style=&quot;text-align:right;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;Conditions:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;423&quot; valign=&quot;top&quot; style=&quot;width:317.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-bottom-alt:solid windowtext .75pt;mso-border-right-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;In a classroom
+  environment, given a Tactical Mission Command (TMC) System with CPOF software
+  installed and the CPOF Software User's Manual (SUM).&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;81&quot; valign=&quot;top&quot; style=&quot;width:61.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .75pt;mso-border-alt:
+  solid windowtext .75pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; align=&quot;right&quot; style=&quot;text-align:right;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;Standards:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;423&quot; valign=&quot;top&quot; style=&quot;width:317.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-bottom-alt:solid windowtext .75pt;mso-border-right-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;You Must:&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;1)&amp;nbsp; Analyze Data Using CPOF Tables. &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;2)&amp;nbsp; Analyze Data Using CPOF Maps.&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;3)&amp;nbsp; Analyze Data Using CPOF Event Charts.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;4)&amp;nbsp; Analyze Data Using CPOF 3D Charts and
+  Tools.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;5)&amp;nbsp; Locate Data Using Search Tools.&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</html>
+  <problem>
+     <task id="task-1">
+       <name>Task 1</name>
+       <description>Analyze Data Using CPOF Tables</description>
+       <html>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p&gt;&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;margin-left: 0.25in; text-indent: -0.25in; &quot;&gt;Analyze Data Using CPOF Tables.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(a)&amp;nbsp; From
+the [Frame Dispenser &amp;gt; Specialized Frames], drag out the &lt;b&gt;Events &lt;/b&gt;Table.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(b)&amp;nbsp; Sort
+the &lt;b&gt;Events &lt;/b&gt;Table by timeobservedlong.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(c)&amp;nbsp; Select
+&lt;b&gt;Events&lt;/b&gt; that were observed on 16 Nov 06.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(d)&amp;nbsp; From
+the [Frame Dispenser &amp;gt; General Frames], drag a new &lt;b&gt;Table&lt;/b&gt; and name it &lt;b&gt;PE04
+Events&lt;/b&gt;.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(e)&amp;nbsp; Mirror
+the &lt;b&gt;Events&lt;/b&gt; selected in step 2.c. to the new Table.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(f)&amp;nbsp; From
+the [Frame Dispenser &amp;gt; Specialized Frames], drag the &lt;b&gt;SIGACTS&lt;/b&gt; Table.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(g)&amp;nbsp; Sort
+the &lt;b&gt;SIGACTS&lt;/b&gt; Table by timeobservedlong.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(h)&amp;nbsp; Select
+S&lt;b&gt;IGACTS&lt;/b&gt; that were observed on 16 Oct 09.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(i)&amp;nbsp; Mirror
+the &lt;b&gt;Events&lt;/b&gt; selected in step 2 (h). to the new Table.&lt;/p&gt;
+
+&lt;p class=&quot;MsoNormal&quot; style=&quot;text-align: left;text-indent: 17.25pt; &quot;&gt;(j)&amp;nbsp; Sort
+the new &lt;b&gt;Table&lt;/b&gt; by timeobservedlong.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</html>
+       <webview_height>380</webview_height>
+       <sub_task id="sub1">
+          <prompt>From the [Frame Dispenser > Specialized Frames], drag out the Events Table</prompt>
+        </sub_task>
+        <sub_task id="sub2">
+          <prompt>Sort the Events Table by timeobservedlong.</prompt>
+        </sub_task>
+        <sub_task id="sub3">
+          <prompt>Select Events that were observed on 16 Nov 06</prompt>
+        </sub_task>
+        <sub_task id="sub4">
+          <prompt>From the [Frame Dispenser > General Frames], drag a new Table and name it PE04 Events.</prompt>
+        </sub_task>
+        <sub_task id="sub5">
+          <prompt>Mirror the Events selected in step 3 to the new Table</prompt>
+        </sub_task>
+        <sub_task id="sub6">
+          <prompt>From the [Frame Dispenser > Specialized Frames], drag the SIGACTS Table</prompt>
+        </sub_task>
+        <sub_task id="sub7">
+          <prompt>Sort the SIGACTS Table by timeobservedlong</prompt>
+        </sub_task>
+        <sub_task id="sub8">
+          <prompt>Select SIGACTS that were observed on 16 Oct 09</prompt>
+        </sub_task>
+        <sub_task id="sub9">
+          <prompt>Mirror the Events selected in step 8 to the new Table</prompt>
+        </sub_task>
+        <sub_task id="sub10">
+          <prompt>Sort the new Table by timeobservedlong</prompt>
+        </sub_task>                       
+     </task>
+   </problem>
+   <solution>
+     <task_solution task="task-1">
+        <option>
+           <step id="step-1">
+             <atom functor="cpof7^2.0^trainingCopyInto">
+               <parameter id="param-1.1" accessor="template"/>
+               <parameter id="param-1.2" accessor="destination"/>
+               <parameter id="param-1.3" accessor="new item"/>               
+             </atom>
+           </step>
+           <step id="step-2">
+             <atom functor="cpof7^2.0^trainingSort">
+               <parameter id="param-2.1" accessor="source"/>
+               <parameter id="param-2.2" accessor="sort attribute"/>
+             </atom>
+           </step>
+           <step id="step-3">
+             <atom functor="cpof7^2.0^selectByValue">
+               <parameter id="param-3.1" accessor="source">
+                 <sub_param id="param-3.1.1" accessor="only" />
+               </parameter>
+               <parameter id="param-3.2" accessor="selection attribute"/>
+               <parameter id="param-3.3" accessor="selection value"/>
+               <parameter id="param-3.4" accessor="selected items"/>                              
+             </atom>
+           </step>
+           <step id="step-4">
+             <atom functor="cpof7^2.0^trainingCopyInto">
+               <parameter id="param-4.1" accessor="template"/>
+               <parameter id="param-4.2" accessor="destination"/>
+               <parameter id="param-4.3" accessor="new item"/>
+             </atom>
+           </step>
+           <step id="step-5">
+             <atom functor="cpof7^2.0^setTitle">
+               <parameter id="param-5.1" accessor="frame"/>
+               <parameter id="param-5.2" accessor="title"/>
+             </atom>
+           </step>                         
+           <step id="step-6">
+             <atom functor="cpof7^2.0^addToContent">
+               <parameter id="param-6.1" accessor="frame"/>
+               <parameter id="param-6.2" accessor="items"/>
+             </atom>
+           </step>
+           <step id="step-7">
+             <atom functor="cpof7^2.0^trainingCopyInto">
+               <parameter id="param-7.1" accessor="template"/>
+               <parameter id="param-7.2" accessor="destination"/>
+               <parameter id="param-7.3" accessor="new item"/>               
+             </atom>
+           </step> 
+           <step id="step-8">
+             <atom functor="cpof7^2.0^trainingSort">
+               <parameter id="param-8.1" accessor="source"/>
+               <parameter id="param-8.2" accessor="sort attribute"/>
+             </atom>
+           </step>
+           <step id="step-9">
+             <atom functor="cpof7^2.0^selectByValue">
+               <parameter id="param-9.1" accessor="source">
+                 <sub_param id="param-9.1.1" accessor="only" />
+               </parameter>
+               <parameter id="param-9.2" accessor="selection attribute"/>
+               <parameter id="param-9.3" accessor="selection value"/>
+               <parameter id="param-9.4" accessor="selected items"/>                              
+             </atom>
+           </step>
+           <step id="step-10">
+             <atom functor="cpof7^2.0^addToContent">
+               <parameter id="param-10.1" accessor="frame"/>
+               <parameter id="param-10.2" accessor="items"/>
+             </atom>
+           </step>
+           <step id="step-11">
+             <atom functor="cpof7^2.0^trainingSort">
+               <parameter id="param-11.1" accessor="source"/>
+               <parameter id="param-11.2" accessor="sort attribute"/>
+             </atom>
+           </step>                                                      
+           <equality_constraint support="true">
+              <parameter>param-1.3</parameter>                            
+              <parameter>param-2.1</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-1.3</parameter>                            
+              <parameter>param-3.1.1</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-4.3</parameter>                            
+              <parameter>param-5.1</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-4.3</parameter>                            
+              <parameter>param-6.1</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-3.4</parameter>                            
+              <parameter>param-6.2</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-7.3</parameter>                            
+              <parameter>param-8.1</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-7.3</parameter>                            
+              <parameter>param-9.1.1</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-4.3</parameter>                            
+              <parameter>param-10.1</parameter>
+           </equality_constraint>           
+           <equality_constraint support="true">
+              <parameter>param-9.4</parameter>                            
+              <parameter>param-10.2</parameter>
+           </equality_constraint>
+           <equality_constraint support="true">
+              <parameter>param-4.3</parameter>                            
+              <parameter>param-11.1</parameter>
+           </equality_constraint>
+           <ordering_constraint>
+              <predecessor step="step-6"/>
+              <successor step="step-11"/>
+           </ordering_constraint>             
+           <ordering_constraint>
+              <predecessor step="step-10"/>
+              <successor step="step-11"/>
+           </ordering_constraint>           
+           <value_constraint>
+               <parameter>param-1.1</parameter>
+               <value>"Events Table"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-1.2</parameter>
+               <value>"Local Workspace"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-2.2</parameter>
+               <value>"timeobservedlong"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-3.2</parameter>
+               <value>"timeobservedlong"</value>
+           </value_constraint> 
+           <value_constraint>
+               <parameter>param-3.3</parameter>
+               <value>"16 Nov 06"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-5.2</parameter>
+               <value>"PE04 Events"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-7.1</parameter>
+               <value>"SIGACTs Table"</value>
+           </value_constraint>           
+           <value_constraint>
+               <parameter>param-7.2</parameter>
+               <value>"Local Workspace"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-8.2</parameter>
+               <value>"timeobservedlong"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-9.2</parameter>
+               <value>"timeobservedlong"</value>
+           </value_constraint> 
+           <value_constraint>
+               <parameter>param-9.3</parameter>
+               <value>"16 Oct 09"</value>
+           </value_constraint>
+           <value_constraint>
+               <parameter>param-11.2</parameter>
+               <value>"timeobservedlong"</value>
+           </value_constraint>                                                                                                                                                                                                                                                                     
+         </option>
+      </task_solution>
+    </solution> 
+</exercise>

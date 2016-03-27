@@ -1,0 +1,139 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: idioms.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="stringlist">
+        <description/>
+        <list>
+            <ref typeRef="string"/>
+        </list>
+    </type>
+
+    <family id="add">
+        <inputParam role="what"/>
+        <inputParam role="where"/>
+    </family>
+    <family id="remove">
+        <inputParam role="what"/>
+        <inputParam role="where"/>
+    </family>
+
+    <action id="addThingToContainer" category="effector">
+        <description/>
+        <idiomFamily family="add"/>
+
+        <inputParam id="thing">
+            <description/>
+            <typeRef typeId="string"/>
+            <idiomParam family="add" role="what"/>
+        </inputParam>
+        <inputParam id="container">
+            <description/>
+            <typeRef typeId="string"/>
+            <idiomParam family="add" role="where"/>
+        </inputParam>
+    </action>
+    <action id="removeThingFromContainer">
+        <description/>
+        <idiomFamily family="remove"/>
+
+        <inputParam id="thing">
+            <description/>
+            <typeRef typeId="string"/>
+            <idiomParam family="remove" role="what"/>
+        </inputParam>
+        <inputParam id="container">
+            <description/>
+            <typeRef typeId="string"/>
+            <idiomParam family="remove" role="where"/>
+        </inputParam>
+    </action>
+    <action id="addSomeThingsAndRemoveOthers">
+        <description>The name implies plurality, but that's not implemented here.</description>
+        <idiomFamily family="add"/>
+        <idiomFamily family="remove"/>
+
+        <inputParam id="addedThings">
+            <description/>
+            <typeRef typeId="stringlist"/>
+            <idiomParam family="add" role="what"/>
+        </inputParam>
+        <inputParam id="removedThings">
+            <description/>
+            <typeRef typeId="stringlist"/>
+            <idiomParam family="remove" role="what"/>
+        </inputParam>
+        <inputParam id="container">
+            <description/>
+            <typeRef typeId="string"/>
+            <idiomParam family="add" role="where"/>
+            <idiomParam family="remove" role="where"/>
+        </inputParam>
+    </action>
+
+    <idiom id="move">
+        <description/>
+        <metadata key="fancyName" value="Move ,#payload, from ,#source, to ,#dest"/>
+
+        <inputParam id="payload" matchIf="equals"/>
+        <inputParam id="source"/>
+        <inputParam id="dest"/>
+
+        <template id="A" precedence="1">
+            <action family="add">
+                <idiomParam id="payload" role="what"/>
+                <idiomParam id="dest" role="where"/>
+            </action>
+            <action family="remove">
+                <idiomParam id="payload" role="what"/>
+                <idiomParam id="source" role="where"/>
+            </action>
+        </template>
+    </idiom>
+
+    <idiom id="add A to B and B to A">
+        <description/>
+
+        <inputParam id="A" matchIf="singleton"/>
+        <inputParam id="B" matchIf="singleton"/>
+
+        <template id="A">
+            <action family="add">
+                <idiomParam id="A" role="what"/>
+                <idiomParam id="B" role="where"/>
+            </action>
+            <action family="add">
+                <idiomParam id="B" role="what"/>
+                <idiomParam id="A" role="where"/>
+            </action>
+        </template>
+    </idiom>
+
+    <idiom id="specific action add">
+        <description/>
+
+        <inputParam id="payload"/>
+        <inputParam id="dest"/>
+
+        <template id="A">
+            <namedAction id="addThingToContainer">
+                <idiomParam id="payload" actionParam="thing"/>
+                <idiomParam id="dest" actionParam="container"/>
+            </namedAction>
+        </template>
+    </idiom>
+</actionModel>

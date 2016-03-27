@@ -1,0 +1,379 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- $Id: middleware_reqs.html 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="Content-Type">
+  <title>PAL Mediator Requirements</title>
+</head>
+<body>
+<h3>These are requirements for the PAL Mediator, which is the
+mid-layer that connects the Bridge with Lumen and LAPDOG.</h3>
+<ol style="list-style-type: upper-roman;">
+  <li>Messaging semantics</li>
+  <ol style="list-style-type: upper-alpha;">
+    <li>Call-type semantics, where the caller expects a return value or
+possibly an Exception</li>
+    <ol>
+      <li>Execution request Bridge -&gt; Lumen</li>
+      <li>Execution request Lumen -&gt; Bridge</li>
+      <li>Learning request Bridge -&gt; LAPDOG</li>
+      <li>Action model changes (sent to some authoritative Action
+Model from a client)<br>
+      </li>
+    </ol>
+    <li>Notification semantics, which don't expect any response</li>
+    <ol>
+      <li>Execution status updates for procedures and actions</li>
+      <ol style="list-style-type: lower-alpha;">
+        <li>These could be single-threaded or multi-threaded with
+respect to each client.</li>
+        <li>These must be delivered in chronological order to each
+client, based on dependencies between the notifications. If event B
+depends on event A, the client cannot be notified of B until its event
+handler method which receives A has returned.</li>
+        <ol style="list-style-type: lower-roman;">
+          <li>"Sub-task start" depends on "parent task start."</li>
+          <li>"Task end" depends on "task start."</li>
+          <li>"Parent task end" depends on "sub-task end."<br>
+          </li>
+        </ol>
+      </ol>
+      <li>Action model changes (sent to all the clients from the
+Mediator)</li>
+      <ol style="list-style-type: lower-alpha;">
+        <li>These must be single-threaded with respect to each client.
+A client should never be handling more than one of these at a time.</li>
+        <li>These must be delivered in chronological order to each
+client.<br>
+        </li>
+      </ol>
+    </ol>
+  </ol>
+  <li>Action model.</li>
+  <ol style="list-style-type: upper-alpha;">
+    <li>Contains types. Types include:</li>
+    <ol>
+      <li>Atomic types. Can be represented by java.lang.String.</li>
+      <li>List/Set/Bag/PermutableList. These are types that take a
+single parameter, e.g., "List of addresses"</li>
+      <li>Map. Takes two parameters. Maps one type to another type.</li>
+      <li>Tuple. Fixed-length, ordered list of items, where each item
+has a distinct type.<br>
+      </li>
+    </ol>
+    <li>Contains actions and procedures. A procedure is a special type
+of action, which the action model doesn't necessarily have to
+distinguish between.</li>
+    <li>Each type or action has a unique name.<br>
+    </li>
+    <li>Can retrieve a type/action by name.<br>
+    </li>
+    <li>Can list all types/actions.</li>
+    <li>Can add a type/action.</li>
+    <li>Can remove a type/action.</li>
+    <li>Can attach arbitrary string key/value metadata to a type/action.</li>
+    <li>Locking. Any client should be able to try to get either type of
+lock:<br>
+    </li>
+    <ol>
+      <li>Exclusive, distributed locks. Exclusive in that no other
+party
+can get a lock while an exclusive lock is already held. Distributed
+meaning multiple resources (Action Model, Lumen, LAPDOG) are all locked
+at the same time.</li>
+      <ol style="list-style-type: lower-alpha;">
+        <li>Action model additions</li>
+        <li>Action model removals</li>
+      </ol>
+      <li>Non-exclusive, distributed locks. Non-exclusive meaning that
+multiple lockers can lock the same resources at the same time without
+intefering with each other. "Don't change the action model while I'm
+running this procedure."</li>
+      <ol style="list-style-type: lower-alpha;">
+        <li>Procedure execution</li>
+        <li>Procedure learning</li>
+        <li>Procedure editing?</li>
+      </ol>
+      <li>The easiest way to meet this requirement is not through
+distributed locks, but instead by having only one copy of the action
+model. Any party wishing to do something with an action first acquires
+a read lock on the action in the action model. Any party wishing to
+delete an action checks that there are no read locks on it, then
+acquires a write lock to exclude race conditions involving readers.
+Adding new actions should use a write lock also. Changing an existing
+action is not supported.</li>
+    </ol>
+    <li>Action model garbage collection. When an action is no longer in
+use, we need to detect that condition and remove the action from all
+action models.</li>
+    <ol style="list-style-type: decimal;">
+      <li>Softening requirement: We don't have to detect it immediately.</li>
+      <li>Softening requirement: We can tolerate a few false postiives,
+as long as we have locking implemented correctly. The removal will only
+happen when there are no procedures running, so no procedures will
+break. And the next time somebody executes the procedures, we'll load
+it on demand.</li>
+    </ol>
+    <li>How do we handle inherited actions? If A inherits from B, does
+A
+include all of B's fields, or does the client have to retrieve B to
+fill in those fields?</li>
+    <li>All clients receive notification when a type is added or
+removed from the action model.</li>
+    <ol>
+      <li>The client which initiated the add or remove only needs to
+hold its lock until the action has been added or removed from the
+action model. That means the remove command from the client to the
+Mediator must be synchronous.</li>
+      <li>The add/remove notifications from the Mediator to the clients
+should not be synchronous; otherwise one bad client could deadlock the
+whole system.</li>
+      <li>Add and remove notifications should be single-threaded as far
+as any client is concerned. In other words, there should never be both
+an add notification and a remove notification being handled by one
+client at the same time.</li>
+    </ol>
+  </ol>
+  <li>Action execution. This also applies to procedures, which are a
+special type of action.<br>
+  </li>
+  <ol style="list-style-type: upper-alpha;">
+    <li>Any client can request that an action be executed. The
+requesting client doesn't need to know what other client is responsible
+for executing the action.</li>
+    <li>The execution request contains the name or some reference to
+the action in the action model.<br>
+    </li>
+    <li>The execution request may contain values for the input
+parameters. It's up to the implementing client whether to execute an
+action with no input values specified. Input values need to be of the
+appropriate type, but the Mediator doesn't have to do any type checking.</li>
+    <li>If no client is responsible for handling the execution request,
+the Mediator should throw an Exception.</li>
+    <li>The execution request should be handled asynchronously. The
+requesting client thread should not block until the execution is
+complete.</li>
+    <li>Each execution request needs to be uniquely identified.</li>
+    <li>All clients should receive status updates as the execution
+request proceeds.</li>
+    <ol>
+      <li>Start. This notification should include input parameters.<br>
+      </li>
+      <li>Successful completion. This notification should include
+output parameters.<br>
+      </li>
+      <li>Error. This should include the Exception which caused the
+error.</li>
+      <li>Cancel. Needs no additional information.</li>
+    </ol>
+    <li>(optional) Only the client which is executing the request
+should be allowed to update the status of the execution.<br>
+    </li>
+    <li>(optional) It would be nice if the requester could get the
+request ID before any status messages are delivered.</li>
+    <li>(optional) It would be nice if the requester could listen for
+status updates of only one particular request.</li>
+    <li>A client needs a way to advertise that it has started a new
+execution which it is handling. (As opposed to handling a request from
+another client.) This is what happens when Lumen executes a sub-task.</li>
+    <li>Each execution request has an optional parent execution
+request. Top-level executions have a null parent.<br>
+    </li>
+  </ol>
+  <li>Ready signal.</li>
+  <ol style="list-style-type: upper-alpha;">
+    <li>Each client needs a way to signal when it's fully initialized
+and ready to handle requests.</li>
+    <li>Clients are not considered ready just because they connect to
+the Mediator. The must signal readiness.</li>
+    <li>The client will not receive any execution requests or execution
+status notifications until it signals readiness.</li>
+    <li>Should a client receive action model changes before it signals
+readiness? If not, should those notifications be queued up until the
+client is ready?</li>
+  </ol>
+  <li>Arbitrary client-to-client calls.<br>
+  </li>
+  <ol style="list-style-type: upper-alpha;">
+    <li>Any client needs to be able to publish an RMI interface that
+can be used by other clients. The consumer needs a way to get the
+appropriate RMI stub object based on the name of the producer.</li>
+    <li>RMIException should be hidden in this interface, to allow for
+future transports which would not be based on RMI.<br>
+    </li>
+  </ol>
+  <li>Keep off the net. Our communications need to exclusively use the
+loopback interface, not the external network interface. For RMI, this
+means we need to set the system property java.rmi.server.hostname to
+"127.0.0.1".</li>
+  <li>No cross-JVM class loading. RMI wants to do this, and it has to
+be disabled.</li>
+  <li>Type information. We need to represent many kinds of types and
+actions.</li>
+  <ol style="list-style-type: upper-alpha;">
+    <li>Simple types, which have a Java class backing them and a
+distinct name.</li>
+    <li>Aggregate types, which all fit the pattern of
+java.util.Collection&lt;T&gt;, where T is essentially another type.</li>
+    <ol>
+      <li>List</li>
+      <li>Permutable list</li>
+      <li>Set</li>
+      <li>Bag</li>
+    </ol>
+    <li>Maps, which are analogous to java.util.Map&lt;K,V&gt;.</li>
+    <li>Tuples, which are fixed-length lists of items, each of which
+has a distinct type.</li>
+    <li>Actions, which look a lot like tuples, but don't necessarily
+have to be represented the same way.</li>
+    <li>Procedures, which look a lot like actions.<br>
+    </li>
+    <li>Has to be sendable from one JVM to another. This probably means
+Serializable.</li>
+  </ol>
+</ol>
+<hr>
+<h3>Interfaces between Bridge and ITL
+code</h3>
+<br>
+This is a list of the spots where the Bridge depends on ITL
+functionality. In other words, these are the things we're going to have
+to support int he new middleware layer.<br>
+<dl>
+  <dt>ActionExecAdapter</dt>
+  <dd>Receives exec requests from Lumen, asking for
+CPOF actions to be executed. Needs to decode the calling
+ActionInvocation,
+the called ActionDef, and the input params. Then create a new
+ActionInvocation
+for the called action, and invoke it. When invocation finishes,
+re-encode output params and invocation status and send them back.</dd>
+  <dt>ActionInvocation</dt>
+  <dd>When its status changes, it broadcasts the new status along with
+output params. Is this duplicating what ActionExecAdapter already does?</dd>
+  <dt>ActionModel</dt>
+  <dd>Gets types out of the ITL type system, and puts new types into
+ITL. Needs to work with TypeTranslator, described below.</dd>
+  <dt>Bridge</dt>
+  <dd>Connects to ITL. Signals ITL that the Bridge is ready. Connects
+to the Shell.</dd>
+  <dt>ITLExecutionStatusListener</dt>
+  <dd>Receives notification of ActionInvocations that have started,
+ended, and failed. Decodes input/output parameters and either finds a
+cached ActionInvocation or creates a new one.</dd>
+  <dt>ITLSystemManager</dt>
+  <dd>Starts and stops LAPDOG, Lumen, and ITL Server.</dd>
+  <dt>Learner</dt>
+  <dd>Connects to the LAPDOG Mediator.</dd>
+  <dt>SparkProcedureExecutor</dt>
+  <dd>Connects to Lumen. Requests procedure execution. Encodes
+procedure name and input parameters. Adds procedures to Lumen
+(add_tm_tasks). Receives procedure completion message from Lumen.
+Decodes output parameters.</dd>
+  <dt>TaskExecutor.</dt>
+  <dd>Chooses between SPARK and Lumen. Can probably be deleted.</dd>
+  <dt>TypeTranslator</dt>
+  <dd>Two-way translator between ITL type representations and Bridge
+type representations.</dd>
+</dl>
+<hr>
+<h3>How does the Lumen Mediator interact with ITL?</h3>
+<dl>
+  <dt>ITLTypeChangeListener</dt>
+  <dd>Receives notification of added types and sends the info to
+LumenClient.</dd>
+  <dt>ITLTypeRemovalListener</dt>
+  <dd>Receives notification of removed types and sends the info to
+LumenClient.</dd>
+  <dt>LumenClient</dt>
+  <dd>Adds and removes actions and procedures from Lumen.</dd>
+  <dt>LumenTaskExecutorListener</dt>
+  <dd>Receives procedure execution requests for Lumen. Publishes status
+updates.</dd>
+  <dt>LumenTaskResultListener</dt>
+  <dd>Sends procedure execution results. Encodes status and output
+parameters.</dd>
+  <dt>SubTaskExecutionListener</dt>
+  <dd>Sends subtask execution results by calling into
+ServerConnectionImpl.</dd>
+  <dt>LumenCallServiceImpl</dt>
+  <dd>RMI class which accepts calls from other ITL clients and makes
+calls into Lumen.</dd>
+  <dt>LumenProcess</dt>
+  <dd>Responsible for starting the Lumen service.</dd>
+  <dt>ServerConnectionImpl</dt>
+  <dd>Evil god class. Does that make it a devil class?</dd>
+  <dt>ConvertTask</dt>
+  <dd>Converts task representations between Lumen and ITL forms.<br>
+  </dd>
+</dl>
+<dl>
+</dl>
+<hr>
+<h3>How does the LAPDOG Mediator interact with ITL?
+</h3>
+<dl>
+  <dt>ITL_ServerFacadeImpl </dt>
+  <dd>Allows the LAPDOG Mediator to make calls to ITL. Subscribes to
+type addition and removal. Checks a type to see if it's an action.
+Retrieves types by name. Makes LAPDOG available by registering
+LapdogClientCallServiceImpl with ITL.</dd>
+  <dt>LapdogClient</dt>
+  <dd>Connects to ITL. Accepts type addition and removal events and
+delegates them to TypePublicationFacade.</dd>
+  <dt>LapdogClientCallServiceImpl</dt>
+  <dd>Accepts LAPDOG calls from other ITL clients. Learn and cancel.</dd>
+  <dt>LapdogClientProcessManager</dt>
+  <dd>Responsible for starting and stopping LAPDOG.</dd>
+  <dt>TypePublicationFacade</dt>
+  <dd>Converts ITL types to LAPDOG types, and pushes them to LAPDOG via
+LapdogFacade.<br>
+  </dd>
+</dl>
+<hr>
+<h3>Stuff to save from ITL</h3>
+<ol>
+  <li>Stuff used to start and stop modules of the system.<br>
+  </li>
+  <ul>
+    <li>ITLModule</li>
+    <li>ITLServerProcessManager - with changes</li>
+    <li>ModuleManager</li>
+  </ul>
+  <li>Mechanism to differentiate between a failed action and a canceled
+one.</li>
+  <ul>
+    <li>CanceledTaskException</li>
+  </ul>
+  <li>Anything that uses System.getProperty and friends.</li>
+  <ul>
+    <li>RMI_MX_PORT - used in RmiMXConnectionFactory to choose a port
+number for the RMI registry.</li>
+    <li>PAL.disableFinalizer - used in Bridge to determine whether to
+run the action finalizer.<br>
+    </li>
+    <li>itl.module.*.startup - used in ITLModule to control how a
+module is started. Probably don't need to preserve this.</li>
+    <li>run-with-rmi - used in XPSServerMain to disable use of RMI.
+It's hard to imagine using this.</li>
+  </ul>
+</ol>
+</body>
+</html>

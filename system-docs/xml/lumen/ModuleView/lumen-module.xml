@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+<section id="lumen_module">
+<title>Lumen</title>
+<section>
+<title>Introduction</title>
+<para>       Lumen is used to execute compoundActions implemented
+by procedures       and to provide procedure analysis services to
+the Procedure Editor.       These services can be used to validate
+user modifications to       procedures, to identify semantic errors
+in modified procedures, and       to suggest ways of repairing errors.
+    </para>
+<para>       The key elements of Lumen are shown in <xref
+linkend="lumen-elements"/>.     </para>
+<figure id="lumen-elements">
+<title>Principal Lumen Elements</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/LumenPrimaryPresentation.png" scale="80"/>
+</imageobject></mediaobject>
+</figure>
+<section>
+<title>Context Diagram</title>
+<figure id="cpof-pal-architecture">
+<title>CPOF-PAL Architecture</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PAL_Architecture.png" scale="80"/></imageobject>
+</mediaobject>
+</figure>
+</section>
+</section>
+ <section>
+  <title>Structural View</title>
+ <section>
+<title>Element Catalog</title>
+<para></para>
+<section>
+<title>Elements and their properties</title>
+<para> &#9;In this subsection we describe the classes listed in <xref
+linkend="lumen-elements"/> as well as some of the &#9;aggregations
+that can also be considered as significant &#9;elements in their own
+right.       </para>
+<section>
+<title> &#9;  Agent &#9;</title>
+<para> &#9;  An Agent encapsulates the state and behavior of a Lumen
+&#9;  executor. Its responsibility is to be a central repository &#9;
+ of all information that Lumen requires to execute &#9;  procedures.
+&#9;</para>
+</section>
+<section>
+<title> &#9;  Expr &#9;</title>
+<para> &#9;  An Expr is an object that corresponds to a Lumen expression
+&#9;  such as within a Lumen procedure, for example "do &#9;  myAction($x);".
+Each compound Expr corresponding to a &#9;  compound Lumen expression
+contains Exprs corresponding to &#9;  each of the subexpressions of
+the compound expression. Its &#9;  responsibility is to manage the
+execution of that Lumen &#9;  expression when needed. &#9;</para>
+</section>
+<section>
+<title> &#9;  SpecialOperator &#9;</title>
+<para> &#9;  A SpecialOperator defines a special operator of the Lumen
+&#9;  language, such as the 'do' operator or the 'action' &#9;  operator.
+A special operator is a Lumen language construct &#9;  whose arguments
+are not simply expressions that are to be &#9;  evaluated, but may
+be logical expressions, actions to &#9;  perform, and so on. The SpecialOperator's
+responsibility is &#9;  to aid in the construction and execution of
+Exprs &#9;  corresponding to occurrences of special operators in a
+Lumen &#9;  procedure. &#9;</para>
+</section>
+<section>
+<title> &#9;  Op &#9;</title>
+<para> &#9;  An Op defines a (non-special) operator. These include
+&#9;  primitive actions, compound actions, and ordinary functions
+&#9;  and predicates such as '&lt;'. The responsibility of an Op &#9;
+ is to handle the execution of expressions containing that &#9;  operator.
+&#9;</para>
+</section>
+<section>
+<title> &#9;  Declaration &#9;</title>
+<para> &#9;  A Declaration contains information about a declaration
+of an &#9;  operator: how the operator may be used (as a function,
+&#9;  predicate, or action), the number of parameters allowed, and
+&#9;  whether parameters are input or output. The Declaration is &#9;
+ used in validating each use of an operator. &#9;</para>
+</section>
+<section>
+<title> &#9;  Validator &#9;</title>
+<para> &#9;  A Validator object exists to construct an Expr corresponding
+&#9;  to a Lumen expression, such as a compound action and &#9;  procedure
+declaration, and to check the usage of operators &#9;  against the
+operator declarations. &#9;</para>
+</section>
+<section>
+<title> &#9;  StandardClosureInstance &#9;</title>
+<para> &#9;  A StandardClosureInstance is one class of Op that can
+be &#9;  added to an agent's set of operators by a declaration such
+&#9;  as an 'action' declaration. Its responsibility is to handle
+&#9;  the application of the operator being defined by the &#9;  declaration
+to a collection of argument values. A &#9;  StandardClosureInstace
+often delegates that responsibility &#9;  to an ExprOp. &#9;</para>
+</section>
+<section>
+<title> &#9;  ExprOp &#9;</title>
+<para> &#9;  An ExprOp is an operator that handles the application
+of an &#9;  operator to a collection of argument values by binding
+some &#9;  formal parameters to those values and execution some Lumen
+&#9;  expression. For example, an ExprOp that comes from an &#9; 
+'action' declaration will execute the defined action by &#9;  executing
+the specified procedure. &#9;</para>
+</section>
+<section>
+<title> &#9;  Event &#9;</title>
+<para> &#9;  An event is something that Lumen needs to respond to,
+either &#9;  a request to add or remove actions and procedures to/from
+&#9;  Lumen's knowledge base or a request to perform or cancel a &#9;
+ compound action. Its responsibility is to generate potential &#9;
+ Intentions when processed by the agent. &#9;</para>
+</section>
+<section>
+<title> &#9;  SubIntent &#9;</title>
+<para> &#9;  A SubIntent captures the state of execution of an action
+or &#9;  procedure (but not that of any sub-actions invoked). Its
+&#9;  responsibility is to be able to progress that execution. &#9;</para>
+</section>
+<section>
+<title> &#9;  DoSubIntent &#9;</title>
+<para> &#9;  A DoSubIntent is a SubIntent corresponding to the need
+to &#9;  perform an action. It specifies the name of the action to
+&#9;  execute and the input argument values for the action. &#9;</para>
+</section>
+<section>
+<title> &#9;  MethodSubOpIntent &#9;</title>
+<para> &#9;  A MethodSubOpIntent is a SubIntent for executing an action
+&#9;  by calling a Java method. &#9;</para>
+</section>
+<section>
+<title> &#9;  TaskExprSubIntentObj &#9;</title>
+<para> &#9;  A TaskExprSubIntentObj is a SubIntent for executing an
+&#9;  action by executing the sub-actions specified by a &#9;  procedure.
+Its responsibility is to execute the associated &#9;  Expr, using
+and updating the variable bindings in the &#9;  associated Bindings
+object. &#9;</para>
+</section>
+<section>
+<title> &#9;  Bindings &#9;</title>
+<para> &#9;  A Bindings object holds the bindings of variables for
+a &#9;  particular invocation of an ExprOp. It maps each variable
+&#9;  name that appears in the Expr of the ExprOp to value if that
+&#9;  variable has been bound. &#9;</para>
+</section>
+<section>
+<title> &#9;  Intention&#9;   &#9;</title>
+<para> &#9;  An Intention is a stack of SubIntents holding the current
+&#9;  state of execution of a single top-level compound action and
+&#9;  the sub-actions that are currently being executed in the &#9;
+ performance of that action. &#9;</para>
+</section>
+<section>
+<title> &#9;  LumenConnection &#9;</title>
+<para> &#9;  The LumenConnection object provides a Lumen Mediator-friendly
+&#9;  interface to a Lumen Agent and procedure validation &#9;  services.
+Its responsibility is to translate incoming &#9;  information and
+execution requests into Events that are put &#9;  onto the Agent's
+Event Queue and to manage calls to the &#9;  validator. &#9;</para>
+</section>
+<section>
+<title> &#9;  TaskExecutionListener &#9;</title>
+<para> &#9;  A TaskExecutionListener is a callback object for reporting
+&#9;  the success or failure of a specific action execution &#9; 
+instance (both Lumen execution of compound actions and CPOF &#9; 
+execution of primitive actions). &#9;</para>
+</section>
+<section>
+<title> &#9;  Issue.Located &#9;</title>
+<para> &#9;  These objects are generated by the Validator to represent
+an &#9;  error at a particular location in a given procedure. Its
+&#9;  responsibility is to generate RepairSuggestions. &#9;</para>
+</section>
+<section>
+<title> &#9;  RepairSuggestion &#9;</title>
+<para> &#9;  These objects represent ways of fixing an error in a
+&#9;  procedure and are used by the Editor. &#9;</para>
+</section>
+<section>
+<title> &#9;  Parser/Formatter &#9;</title>
+<para> &#9;  This collection of classes deals with the parsing and
+&#9;  formatting of Lumen-syntax strings. &#9;</para>
+</section>
+<section>
+<title> &#9;  Common Task Representation (CTR)&#9;   &#9;</title>
+<para> &#9;  An API used principally to construct a representation
+of a &#9;  learned procedure that is shareable among PAL modules,
+and &#9;  to decompose it into its component objects. &#9;</para>
+</section>
+<section>
+<title> &#9;  Knowledge Base (Aggregation)&#9;   &#9;</title>
+<para> &#9;  There is a set of named operators (Ops) associated with
+each &#9;  Agent. These operators include the actions and procedures
+&#9;  that the Agent has been told to adopt. Collectively, the set
+&#9;  of operators, and any information about the state of the &#9;
+ agent and the outside world contained in those operators,       
+   is called the Knowledge &#9;  Base of the Agent. &#9;</para>
+</section>
+<section>
+<title> &#9;  Intention Structure (Aggregation)&#9;  &#9;   &#9;</title>
+<para> &#9;  The set of Intentions being executed by an Agent is called
+&#9;  the Agent's Intention Structure, and is divided into those &#9;
+ Intentions that are currently executable and those that are &#9;
+ blocked waiting for some response (for example, waiting for &#9;
+ the result of executing a primitive action). &#9;</para>
+</section>
+<section>
+<title> &#9;  Event Queue (Aggregation)&#9;  &#9;   &#9;</title>
+<para> &#9;  There is a queue of Events associate with each Agent.
+This &#9;  is the Event Queue and contains Events that the Lumen Agent
+&#9;  needs to process.  The Event Queue buffers requests to &#9;
+ execute compound actions and information about actions and &#9; 
+procedures. &#9;</para>
+</section>
+</section>
+<section>
+<title>Relations and their properties</title>
+<para> &#9;The primary relation displayed in the Primary &#9;Presentation
+is the uses relation, which is a &#9;specialization of the depends-on
+relation. This &#9;relation asserts that the correctness of one element
+&#9;depends on that of another element. Generalization is &#9;also
+shown where appropriate, asserting one element is a &#9;subclass of
+another. Realizations are shown where &#9;appropriate for contextual
+establishment of program &#9;flow; it should be noted that not all
+realizations are &#9;displayed where they do not help with the understanding
+&#9;of flow control for the interactions.       </para>
+</section>
+<section>
+<title>Element interface</title>
+<para> &#9;Lumen interacts through the Lumen Mediator with two other
+&#9;components, the Bridge and the Procedure Editor through the &#9;SPINE
+(previously ITL) (shown in <xref linkend="cpof-pal-architecture"/>).
+ The Lumen Mediator keeps &#9;a reference to a LumenConnection object,
+which itself keeps a &#9;reference to a ServerConnection object. 
+     </para>
+<para> &#9;The Bridge interacts with Lumen, through the Lumen Mediator,
+&#9;to add primitive action definitions and add and remove &#9;procedures
+to/from the agent's knowledge base and to execute &#9;procedures.
+      </para>
+<para> &#9;To inform Lumen of the existence of a new action (such
+as &#9;actions from the initial action model at startup), the Lumen
+&#9;Mediator calls the LumenConnection.addIfPrimitiveAction &#9;passing
+in a representation of the type information for that &#9;action. If
+this is a primitive action, then the type &#9;information is translated
+into a Lumen action definition and &#9;added to the Lumen knowledge
+base.       </para>
+<para> &#9;To add a procedure for a new compound action, the Lumen
+&#9;Mediator calls the addTaskDefinition method of the &#9;LumenConnection
+object, passing in a String containing the &#9;CTR-S representation
+of the procedure. If there is an error in &#9;the specification of
+the procedure, a LumenException is &#9;thrown. If not, Lumen calls
+the ServerConnection.addTask &#9;method to add the compound action
+definition to the &#9;registry and the LumenConnection.registerAsTaskExecutor
+method &#9;to register LumenConnection._lumenExecutor as the executor
+for &#9;that compound action.       </para>
+<para> &#9;To remove a procedure, the Lumen Mediator calls the &#9;LumenConnection.removeTaskDefinition
+method, passing in the &#9;action name for the procedure. Lumen deletes
+the procedure  &#9;and calls the &#9;ServerConnection.unregisterAsTaskExecutor
+method to unregister &#9;LumenConnection._lumenExecutor &#9;as an
+executor for the compound action.       </para>
+<para> &#9;To execute a procedure for a compound action, the Lumen
+&#9;Mediator calls the startTask method of &#9;LumenConnection._lumenExecutor,
+which is the registered &#9;executor for the compound action. The
+xpsTaskArgs argument is &#9;a list of objects, one per action parameter
+(both input and &#9;output) with argument values for input parameters
+and nulls &#9;for output parameters. The requester argument is a &#9;TaskExecutionListener
+for reporting back progress of the task.       </para>
+<para> &#9;When Lumen executes a procedure containing a compound action
+&#9;as a subtask, it must execute the corresponding sub-procedure,
+&#9;Lumen calls the &#9;ServerConnection.createSubTaskExecutionListener
+method to &#9;inform the Bridge of the execution of that compound
+action and &#9;receives back a new TaskExecutionListener for reporting
+the &#9;success or failure of the subtask.       </para>
+<para> &#9;When Lumen needs to execute a primitive action instance,
+it &#9;calls the startTask method of the ServerConnection object,
+&#9;passing in a TaskExecutionListener one of whose methods will &#9;be
+called when the primitive action finishes.       </para>
+<para> &#9;Whenever Lumen finishes executing a compound action instance
+&#9;(i.e., when the corresponding procedure instance has succeeded
+&#9;or failed), Lumen reports the result via the taskSuceeded or &#9;taskFailed
+method of the TaskExecutionListener associated with &#9;that compound
+action instance. If the action completed &#9;successfully, the taskSucceeded
+method is called with a list &#9;of objects, one per action parameter,
+with argument values for &#9;the output parameters in the appropriate
+positions. If the &#9;action did not complete successfully (either
+through failure &#9;of some subtask or by being canceled), the taskFailed
+method &#9;is called passing a Throwable to provide information about
+the &#9;reason for the failure.       </para>
+<para> &#9;To cancel the execution of a procedure for a compound action
+instance, &#9;the Lumen Mediator calls the cancelProcedure method
+of the &#9;LumenConnection object, supplying the task id. This causes
+&#9;Lumen to immediately fail whatever is being executed in that &#9;procedure,
+with the cancellation of the nested and top-level &#9;compound action
+instances being reported via the taskFailed &#9;method of the relevant
+TaskExecutionListeners.       </para>
+<para> &#9;The Procedure Editor interacts with Lumen through a synchronous
+&#9;interface that provides information about potential problems in
+a &#9;procedure as well as suggested repairs for those problems. 
+     </para>
+<para> &#9;To validate a procedure, the Editor calls the &#9;LumenConnection.validateProcedure
+method, passing in the &#9;procedure. The procedure is passed as the
+Lumen core value &#9;representation, rather than a CTR-S String, to
+avoid the need &#9;to parse CTR-S. The method returns a structure
+containing an &#9;Expr representing the validated procedure and a
+collection of &#9;objects implementing the Issue.Located interface
+that describe &#9;problems with the procedure.       </para>
+</section>
+<!-- END Element interface subsection -->
+<!-- END Element Catalog section -->
+</section>
+ </section>
+ 
+<section>
+<title>Behavioral View</title>
+<figure id="lumen-structure">
+<title>Lumen Structure</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/LumenStructure.png" scale="40"/></imageobject>
+</mediaobject>
+</figure>
+<para> &#9;In Lumen, a single thread, the executor thread, has write
+&#9;access to the Knowledge Base and Intention Structure of the &#9;Agent.
+The executor thread runs the execution loop. This &#9;central control
+loop interleaves the execution of the &#9;intention structure and
+updates to the knowledge base. It (i) &#9;takes events from the event
+queue and processes them and (ii) &#9;progresses the execution of
+the intentions in the intention &#9;structure. In both cases this
+is achieved by updating the &#9;knowledge base and intention structure
+appropriately. This is &#9;represented informally in <xref
+linkend="lumen-structure"/>.       </para>
+<para> &#9;At start-up, the Bridge sends Lumen the primitive action
+definitions &#9;corresponding to the initial Action Model through
+the Lumen Mediator. &#9;Events wrapping these action definitions are
+added to the event queue.         This  &#9;results in the execution
+loop adding the definitions to the knowledge &#9;base.       </para>
+<para> &#9;To execute a compound action, Lumen requires the procedures
+for that &#9;action and all sub-actions called by the procedures to
+be present in &#9;its knowledge base. Currently, the bridge actively
+maintains Lumen's &#9;knowledge base by sending requests  &#9;(through
+the Lumen Mediator) &#9;to add procedures to Lumen when &#9;needed
+and requests to delete procedures when execution has &#9;finished.
+When the Bridge wishes Lumen to execute a compound action &#9;the
+following happens:       </para>
+<orderedlist>
+<listitem><para> &#9;    The Bridge first sends the procedure for
+that compound &#9;    action and the relevant sub-procedures to the
+Lumen &#9;    Mediator, which posts events wrapping those procedures
+to &#9;    the event queue, which result in the execution loop adding
+&#9;    the procedures to the knowledge base. &#9;  </para></listitem>
+<listitem><para> &#9;    The Bridge then sends a task request to Lumen
+(through the &#9;    Mediator and event queue), providing a &#9; 
+  TaskExecutionListener for reporting the result of &#9;    executing
+that task. &#9;  </para></listitem>
+<listitem><para> &#9;    The executor thread creates a top-level SubIntent
+&#9;    corresponding to the task request and adds an Intention &#9;
+   containing that SubIntent to the active Intentions of the &#9;
+   agent. &#9;  </para></listitem>
+<listitem><para> &#9;    The executor thread adds a TaskExprSubIntentObj
+based on &#9;    the relevant procedure in its knowledge base to that
+&#9;    intention. &#9;  </para></listitem>
+<listitem><para> &#9;    Progressing the intention requires the execution
+of &#9;    sub-actions of the procedure. As each sub-action is &#9;
+   reached, a DoSubIntent is added to the intention. &#9;  </para>
+</listitem>
+<listitem><para> &#9;    If the action is a primitive action, the
+executor thread &#9;    expands the action using a special procedure
+that sends an &#9;    asynchronous request to the Bridge, passing
+a &#9;    newly-created TaskExecutionListener and the intention is
+&#9;    suspended. &#9;  </para></listitem>
+<listitem><para> &#9;    When the primitive action completes, the
+Bridge calls one &#9;    of the TaskExecutionListener methods to indicate
+success &#9;    or failure of the action. This puts an event on the
+event &#9;    queue to instruct the executor thread to un-suspend
+the &#9;    relevant intention and continue execution. &#9;  </para>
+</listitem>
+<listitem><para> &#9;    If instead the action is a compound action,
+the executor &#9;    thread expands the action by adding a TaskExprSubIntentObj
+&#9;    based on the relevant procedure in the knowledge base for
+that &#9;    action. The executor thread reports the creation of the
+&#9;    new compound action subintention to the Bridge and receives
+&#9;    back an TaskExecutionListener for Lumen to report the &#9;
+   result of executing that sub-procedure. &#9;  </para></listitem>
+<listitem><para> &#9;    As the intermediate-level and then the top-level
+procedure &#9;    instances finish, Lumen reports the results back
+to the &#9;    Bridge through the methods of the supplied &#9;   
+ExecutionListeners. &#9;  </para></listitem>
+<listitem><para> &#9;    To clean up, the Bridge sends requests to
+Lumen (via the &#9;    Lumen mediator and &#9;    event queue) to
+delete the compound action definitions &#9;    from the knowledge
+base when they are no longer needed. &#9;  </para></listitem>
+</orderedlist>
+<para> &#9;The following sequence diagrams, depicting methods and
+messages &#9;that cross component boundaries, further illustrate these
+&#9;interactions where they involve other system components.     
+ </para>
+<figure id="sequence-diagram-key">
+<title>Sequence diagram key</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALSequenceDiagramKey.png" scale="60"/></imageobject>
+</mediaobject>
+</figure>
+<section>
+<title>Action Definition</title>
+<para>The primitive actions are sent to LAPDOG and Lumen when the
+action model is loaded.</para>
+<figure id="lumen-action-def-sequence-diagram">
+<title>Action Definition sequence diagram</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALActionDefinitionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Successful Execution</title>
+<para> &#9;  This diagram shows the interactions between CPOF and
+&#9;  Lumen during the successful execution of a simple (non-nested)
+&#9;  procedure. &#9;</para>
+<figure id="lumen-success-exec-seq">
+<title>Successful Execution Diagram</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALSuccessfulExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Nested Execution</title>
+<para> &#9;  This diagram shows the interactions between CPOF and
+&#9;  Lumen during the successful execution of nested &#9;  procedures.
+&#9;</para>
+<figure id="lumen-nested-exec-seq">
+<title>Nested Execution Diagram</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALNestedExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+<figure>
+<title>Nested Execution Diagram Continued</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALNestedExecutionSequenceDiagramContinued.png"
+scale="50"/></imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Failed Execution</title>
+<para> &#9;  This diagram shows the interactions between CPOF and
+Lumen during the &#9;  failed execution of a procedure. &#9;</para>
+<figure id="lumen-failed-execution-sequence-diagram">
+<title>Failed Execution Sequence Diagram</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALFailedExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<section>
+<title>Canceled Execution</title>
+<para> &#9;  This diagram shows the interactions between CPOF and
+Lumen during the &#9;  cancelled execution of a procedure. &#9;</para>
+<figure id="lumen-canceled-execution-sequence-diagram">
+<title>Canceled Execution Sequence Diagram</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/PALCanceledExecutionSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+<!-- END Element behavior subsection -->
+</section>
+<section>
+<title>Quality Attributes</title>
+<section>
+<title>Extended capabilities</title>
+<para>Currently, CPOF uses only a simple form of Lumen procedures
+that       consist of sequences and loops of subtasks and primitive
+actions. In       the future, CPOF may make use of additional capabilities
+such       as:</para>
+<itemizedlist>
+<listitem><para>More complex control structures (branching, parallel
+execution, explicit failure handling).</para></listitem>
+<listitem><para>A more sophisticated knowledge base containing predicates
+that refer &#9;  to properties and conditions for use in branching
+(rather than just &#9;  the collection of available procedures)</para>
+</listitem>
+<listitem><para>Implicit iteration, a.k.a. "piling", in which a procedure
+is automatically executed multiple times when passed an argument that
+is a list rather than a single value.</para></listitem>
+<listitem><para>"Meta-level procedures" that monitor the execution
+of the agent and respond to potential execution problems</para>
+</listitem>
+</itemizedlist>
+<para>Some of these capabilities are already present in Lumen (the
+complex control structures other than parallel execution) and are
+available if the procedures use the relevant operators.</para>
+<para>Some predicates are already built into Lumen and can be accessed
+&#9;immediately. Extending the knowledge base to enable it to query
+&#9;properties of CPOF is most simply performed by writing Java methods
+to &#9;access the information through the Lumen Mediator and &#9;Bridge
+and then configuring the &#9;initial setup of Lumen by passing in
+declarations of the new &#9;predicates (essentially mapping predicate
+names to Java methods) along &#9;with the initial action model declarations.</para>
+<para>Piling and meta-level procedures require new Lumen code to be
+written.</para>
+<para>In the future, Lumen may provide additional procedure analysis
+services targeted at collecting information to support checking type
+&#9;and permissions requirements and to estimate typical resource
+usage &#9;patterns.</para>
+</section>
+</section>
+<section>
+<title>Architecture Background</title>
+<para>The PAL technologies were derived from CALO, an intelligent
+    system for providing personalized assistance in an office    
+environment. A key capability of CALO was the ability to learn,  
+  execute, and reason over procedures and adapt to new situations.
+The     execution component of CALO was based on SPARK, an open-source
+agent     system developed at SRI International. SPARK follows the
+Belief,     Desire, Intention (BDI) model of agency, which has an
+explicit     representation of the mental state of the agent. Significant
+benefits     of the BDI agent model for developing intelligent agents
+are:</para>
+<itemizedlist>
+<listitem><para>The BDI representation, being based loosely on human
+      cognition, is a natural and easy-to-understand representation
+for       people to work with.</para></listitem>
+<listitem><para>The BDI model has the capability for reactive and
+      proactive behavior in addition to top-down goal-directed   
+   behavior.</para></listitem>
+</itemizedlist>
+<para>       The initial CPOF-PAL prototype used SPARK as its procedure
+execution       engine. SPARK, which included a broad range of capabilities
+linked to       ongoing agent design research, was not well suited
+for deployment in a       production system. Lumen, a Java-based version
+of SPARK, was created       in response to this need. From the perspective
+of incorporating PAL       into CPOF, Lumen has the following advantages
+over SPARK:     </para>
+<itemizedlist>
+<listitem><para> &#9;Lumen is based on the same core architectural
+design &#9;as SPARK, but is more narrowly focused on the essential
+capabilities &#9;necessary for executing and reasoning about procedures
+acquired &#9;through learning by demonstration.  As a result, Lumen
+has a smaller, &#9;simpler code base that will be much easier to maintain.
+At the same &#9;time, by sharing the SPARK architecture, Lumen retains
+the potential &#9;to readily incorporate additional features from
+SPARK that may be       needed in the future to support CPOF.  </para>
+</listitem>
+<listitem><para> Being implemented in pure Java, Lumen does not  
+    involve the additional libraries and overhead involved in the
+Jython       implementation of Python in Java. This gives Lumen an
+advantage in       speed and memory usage as well as potentially greater
+stability. It       also allows Lumen to be distributed as a single
+jar file and to be       embedded in other applications.  </para>
+</listitem>
+<listitem><para> The SPARK procedure representation was based on a
+      somewhat idiosyncratic syntax not well known outside of the
+Artificial       Intelligence community. To improve accessibility,
+a new syntax was       created that makes procedures more readily
+understandable by       programmers familiar with C and Java.  </para>
+</listitem>
+</itemizedlist>
+<para>       Both Lumen and SPARK distinguish between a compound action
+(a complex       task to perform) and a procedure (how to perform
+the task). This       allows greater flexibility in the execution
+of compound actions. For       example, Lumen can select between alternative
+procedures for       performing the same compound action based on
+various criteria (state       of the world, personal preferences etc.).
+Lumen could also be set up       to respond to the absence of any
+known procedures to execute a task by       sending out a request
+to find a procedure that would work. Currently       in CPOF, this
+capability is unused as every compound action is       associated
+with exactly one procedure.     </para>
+<para>       The types of data values that Lumen can deal with consist
+of a set of       core values, both atomic (integers, floats, strings,
+and symbols) and       compound (lists that are simple sequences of
+values and structures       that are slightly more complex), and non-core
+values that can be       arbitrary Java values. As in many languages
+used for artificial       intelligence, Lumen code is itself represented
+using core data       values. As well as simplifying the analysis
+and manipulation of code       by Lumen itself, this also made it
+very easy for Lumen to switch       between the SPARK syntax and new
+Lumen syntax by simply switching the       textual representation
+of the core values.     </para>
+<para>       For extenal modules that deal with procedures (such as
+LAPDOG       and the Editor), neither the Lumen syntax string representation
+      nor the uninterpreted Lumen core data value representations
+      provide enough semantic information about the structure of the
+      Lumen code. That is, those representations do not provide  
+    information about which expressions are logical expressions to
+      be tested rather than actions to perform, and so on. The CTR
+      representation was introduced to provide an alternative    
+  representation, independent of Lumen's internal Expr objects,  
+    that included this additional information.     </para>
+<para>       Lumen uses an execution loop running in a single thread
+to interleave       the execution of different top-level tasks that
+it has been requested       to do. The advantage of this approach
+is that it eliminates the       overhead of synchronization code and
+the potential complexity of       multi-threaded access to the agent's
+knowledge base and intention       structure. Any external information
+coming into the agent (such as       task requests, newly-learned
+procedures, results from primitive       actions, and so on) is placed
+on a queue that is processed by the       execution loop as needed.
+When Lumen needs to execute primitive       actions, it sends out
+asynchronous requests via the Lumen Mediator and        Bridge and
+marks       the relevant intention stack as "suspended", allowing
+the execution       loop to continue processing other intentions.
+    </para>
+<para>       The editor interaction with Lumen to validate procedures
+only requires       read-only access to the Lumen knowledge base to
+get the current set of       action declarations. Once those are obtained,
+the validation can       proceed using static methods of Lumen that
+do not refer to Lumen's       state. Since this can be done without
+affecting Lumen's knowledge base       or intention structure, we
+perform this through simple (synchronous)       method calls rather
+than going through the event queue.     </para>
+</section>
+<section id="miscellaneous" xreflabel="miscellaneous">
+<title>Other Information</title>
+<para>None.<?Pub Caret?></para>
+</section>
+<section>
+<title>Related Views</title>
+<itemizedlist>
+<listitem><para><xref linkend="lumen_mediator_module"
+xrefstyle="&lt;listitem>&lt;para>The Lumen Mediator and Bridge mediates interactions"
+/></para></listitem>
+<listitem><para><xref linkend="bridge_module"
+xrefstyle="&lt;listitem>&lt;para>The Lumen Mediator and Bridge mediates interactions"
+/></para></listitem>
+<listitem><para><xref linkend="lapdog_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="editor_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+</itemizedlist>
+</section>
+</section>
+<?Pub *0000032596?>

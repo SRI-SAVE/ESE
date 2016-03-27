@@ -1,0 +1,19 @@
+Icons by VisualPharm (CC-atrib)
+(http://www.iconspedia.com/icon/delete--832.html)
+ add-48
+ delete-48
+ play-48
+ save-48
+ print-48
+ undo-48
+ redo-48
+ copy-48
+ paste-48
+
+Unlicensed icons (must replace!)
+ flickr
+ img-viewer (though probably ok, built into Windows)
+
+
+
+All other icons were created by us.

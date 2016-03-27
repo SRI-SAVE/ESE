@@ -1,0 +1,9 @@
+Changes since build 1.14 of the ITL-based PAL Bridge:
+
+- Reduced the logging verbosity.
+
+- Removed redundant code.
+
+- Added new logging
+
+- Added call throughs to Lumen to support Editor 

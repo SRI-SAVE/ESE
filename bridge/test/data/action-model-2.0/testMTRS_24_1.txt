@@ -1,0 +1,5 @@
+testMTRS_24_1
+Description needed
+#########################################################
+action189[param108=entity; param157=children; param170=[child1, child2]; ]
+action170[param114=entity2; param157=children; param119=[child1, child2]; ]

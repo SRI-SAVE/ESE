@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.3Bags'(+'$inputbag 1' = bagGen("val 1", "val 2"), -'$output bag 1')
+ argtypes:["bag&lt;string&gt;", "bag&lt;string&gt;"]
+ execute:{
+  do 'arda^1.0^UseBag'('$inputbag 1');
+  do 'arda^1.0^CreateBag'('$output bag 1');
+  do 'arda^1.0^UseBag'('$output bag 1');
+  do 'arda^1.0^UseBag'(bagGen("val 1", "val 1", "val 2"));
+  do 'arda^1.0^UseBag'(bagGen);}
+ properties:{expected_output:"USE BAG: [val 1,val 2]\nCREATE BAG\nUSE BAG: [bag value 1,bag value 1,bag value 2]\nUSE BAG: [val 1,val 1,val 2]\nUSE BAG: []\n", isTransient:"true"}</bodySource>
+</TaskModel>

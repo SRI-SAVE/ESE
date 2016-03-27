@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise>
+  <name>PE TMB6F06PE</name>
+  <description>Conduct a Collaborative Brief Using CPOF</description>
+  <problem>
+      <task id="task-1">
+        <name>Task 1</name>
+        <description>Prepare a Collaborative Brief</description>
+        <sub_task id="sub1">
+          <prompt>From the Item Palette, drag and name a Pasteboard.</prompt>
+        </sub_task>
+        <sub_task id="sub2">
+          <prompt>Assign Privileges to other members of your group who will need access to your Pasteboard and/or Map.</prompt>
+        </sub_task>
+        <sub_task id="sub3">
+          <prompt>As appropriate, use Marking to color-code elements on the Map.</prompt>
+        </sub_task>
+        <sub_task id="sub4">
+          <prompt>Capture an image using Snagit and include it on the briefing Pasteboard.</prompt>
+        </sub_task>
+        <sub_task id="sub5">
+          <prompt>Place your Briefing Pasteboard in Delay Sleep.</prompt>
+        </sub_task>                      
+      </task>
+  </problem>
+</exercise>

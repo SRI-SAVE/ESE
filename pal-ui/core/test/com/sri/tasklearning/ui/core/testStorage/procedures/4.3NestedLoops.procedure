@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^4.3NestedLoops'
+ execute:{
+  do 'arda^1.0^CreateList'('$output list 1');
+  forall '$list element 1' .in. '$output list 1'
+   execute:{
+    do 'arda^1.0^CreateList'('$output list 2');
+    forall '$list element 2' .in. '$output list 2'
+     execute:{
+      do 'arda^1.0^CreateList'('$output list 3');
+      forall '$list element 3' .in. '$output list 3'
+       execute:{
+        do 'arda^1.0^UseString'('$list element 1');
+        do 'arda^1.0^UseString'('$list element 2');
+        do 'arda^1.0^UseString'('$list element 3');};};};}
+ properties:{expected_output:"CREATE LIST\nCREATE LIST\nCREATE LIST\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 2\nCREATE LIST\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 2\nCREATE LIST\nCREATE LIST\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 2\nCREATE LIST\nUSE STRING: list value 2\nUSE STRING: list value 2\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: list value 2\nUSE STRING: list value 2\n", isTransient:"true"}</bodySource>
+</TaskModel>

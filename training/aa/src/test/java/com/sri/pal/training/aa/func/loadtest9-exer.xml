@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise id="ex-1">
+    <name>Load test</name>
+    <description>Load test</description>
+    <problem>
+        <task id="task-2">
+        </task>
+    </problem>
+    <solution>
+        <task_solution>
+            <option>
+                <step id="step-4">
+                    <atom functor="LoadTest^1.0^selectAll">
+                        <parameter accessor="container" id="param-24"/>
+                        <parameter accessor="contents" id="param-42">
+                            <sub_param accessor="first" id="param-43"/>
+                            <sub_param accessor="last" id="param-49"/>
+                        </parameter>
+                    </atom>
+                </step>
+                <step id="step-5">
+                    <atom functor="LoadTest^1.0^makeItem">
+                        <parameter accessor="type" id="param-44"/>
+                    </atom>
+                </step>
+                <step id="step-6">
+                    <atom functor="LoadTest^1.0^makeItem">
+                        <parameter accessor="type" id="param-32"/>
+                        <parameter accessor="created" id="param-45"/>
+                    </atom>
+                </step>
+                <step id="step-7">
+                    <atom functor="LoadTest^1.0^removeFromContainer">
+                        <parameter accessor="toBeRemoved" id="param-46"/>
+                        <parameter accessor="container" id="param-52"/>
+                    </atom>
+                </step>
+                <step id="step-8">
+                    <atom functor="LoadTest^1.0^selectAll">
+                        <parameter accessor="container" id="param-25"/>
+                        <parameter accessor="contents" id="param-40">
+                            <sub_param accessor="first" id="param-41"/>
+                            <sub_param accessor="last" id="param-51"/>
+                        </parameter>
+                    </atom>
+                </step>
+                <step id="step-9">
+                    <atom functor="LoadTest^1.0^addToContainer">
+                        <parameter accessor="container" id="param-27"/>
+                    </atom>
+                </step>
+                <step id="step-10">
+                    <atom functor="LoadTest^1.0^makeItem"/>
+                </step>
+                <step id="step-11">
+                    <atom functor="LoadTest^1.0^removeFromContainer">
+                        <parameter accessor="container" id="param-53"/>
+                    </atom>
+                </step>
+                <step id="step-12">
+                    <atom functor="LoadTest^1.0^selectAll">
+                        <parameter accessor="contents" id="param-36">
+                            <sub_param accessor="first" id="param-37"/>
+                            <sub_param accessor="last" id="param-50"/>
+                        </parameter>
+                    </atom>
+                </step>
+                <step id="step-13">
+                    <atom functor="LoadTest^1.0^removeFromContainer">
+                        <parameter accessor="container" id="param-31"/>
+                    </atom>
+                </step>
+                <step id="step-14">
+                    <atom functor="LoadTest^1.0^selectAll">
+                        <parameter accessor="contents" id="param-34">
+                            <sub_param accessor="first" id="param-35"/>
+                            <sub_param accessor="last" id="param-47"/>
+                        </parameter>
+                    </atom>
+                </step>
+                <step id="step-15">
+                    <atom functor="LoadTest^1.0^selectAll">
+                        <parameter accessor="contents" id="param-38">
+                            <sub_param accessor="first" id="param-39"/>
+                            <sub_param accessor="last" id="param-48"/>
+                        </parameter>
+                        <parameter accessor="container" id="param-54"/>
+                    </atom>
+                </step>
+                <step id="step-16">
+                    <atom functor="LoadTest^1.0^makeItem"/>
+                </step>
+                <step id="step-17">
+                    <atom functor="LoadTest^1.0^makeItem">
+                        <parameter accessor="type" id="param-28"/>
+                    </atom>
+                </step>
+                <step id="step-18">
+                    <atom functor="LoadTest^1.0^makeItem">
+                        <parameter accessor="created" id="param-55"/>
+                    </atom>
+                </step>
+                <step id="step-19">
+                    <atom functor="LoadTest^1.0^makeItem">
+                        <parameter accessor="type" id="param-30"/>
+                        <parameter accessor="created" id="param-33"/>
+                    </atom>
+                </step>
+                <step id="step-20">
+                    <atom functor="LoadTest^1.0^addToContainer">
+                        <parameter accessor="container" id="param-26"/>
+                    </atom>
+                </step>
+                <step id="step-21">
+                    <atom functor="LoadTest^1.0^addToContainer"/>
+                </step>
+                <step id="step-22">
+                    <atom functor="LoadTest^1.0^makeItem">
+                        <parameter accessor="type" id="param-29"/>
+                    </atom>
+                </step>
+                <step id="step-23">
+                    <atom functor="LoadTest^1.0^addToContainer"/>
+                </step>
+                <equality_constraint>
+                    <parameter>param-32</parameter>
+                    <parameter>param-33</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-39</parameter>
+                    <parameter>param-35</parameter>
+                    <parameter>param-41</parameter>
+                    <parameter>param-43</parameter>
+                    <parameter>param-37</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-44</parameter>
+                    <parameter>param-45</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-45</parameter>
+                    <parameter>param-46</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-47</parameter>
+                    <parameter>param-51</parameter>
+                    <parameter>param-50</parameter>
+                    <parameter>param-49</parameter>
+                    <parameter>param-48</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-24</parameter>
+                    <parameter>param-52</parameter>
+                    <parameter>param-53</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-31</parameter>
+                    <parameter>param-54</parameter>
+                    <parameter>param-55</parameter>
+                </equality_constraint>
+                <equality_constraint>
+                    <parameter>param-36</parameter>
+                    <parameter>param-40</parameter>
+                    <parameter>param-38</parameter>
+                    <parameter>param-34</parameter>
+                    <parameter>param-42</parameter>
+                </equality_constraint>
+                <query_constraint negated="true" functor="LoadTest^1.0^lessThan3">
+                    <arg><ref>param-24</ref></arg>
+                    <arg><ref>param-24</ref></arg>
+                    <arg><ref>param-25</ref></arg>
+                </query_constraint>
+                <query_constraint negated="false" functor="LoadTest^1.0^lessThan3">
+                    <arg><ref>param-26</ref></arg>
+                    <arg><ref>param-27</ref></arg>
+                    <arg><ref>param-28</ref></arg>
+                </query_constraint>
+                <query_constraint negated="false" functor="LoadTest^1.0^div2">
+                    <arg><ref>param-26</ref></arg>
+                </query_constraint>
+                <query_constraint negated="false" functor="LoadTest^1.0^div2">
+                    <arg><ref>param-29</ref></arg>
+                </query_constraint>
+                <query_constraint negated="true" functor="LoadTest^1.0^lessThan3">
+                    <arg><ref>param-30</ref></arg>
+                    <arg><ref>param-31</ref></arg>
+                    <arg><ref>param-29</ref></arg>
+                </query_constraint>
+
+            </option>
+        </task_solution>
+    </solution>
+</exercise>

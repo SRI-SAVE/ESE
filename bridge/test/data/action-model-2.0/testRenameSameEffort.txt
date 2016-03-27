@@ -1,0 +1,6 @@
+Test rename same item1
+Procedure to repeatedly rename the same item1
+#########################################################
+action202[param185=1234; param198=Name; param143=one; ]
+action202[param185=1234; param198=Name; param143=two; ]
+action202[param185=1234; param198=Name; param143=three; ]

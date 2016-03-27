@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TaskModel version="0.4">
+    <cueSource></cueSource>
+    <bodySource>action 'lumen^0.4^test-simpleCoalesce-1304613343391'(+$arg1_1 = "act1arg1", +$arg1_2 = "act3arg1", +$arg2_1 = "act3arg2", -$arg1_3)
+ execute:{
+  do 'cns^1.0^action1'($arg1_1);
+  do 'cns^1.0^action2'($arg1_3);
+  do 'cns^1.0^action3'($arg1_2, $arg2_1);}
+ argtypes:["cns^1.0^String", "cns^1.0^String", "cns^1.0^String", "cns^1.0^String"]
+ properties:{creator:"user unknown", demonstrated_variable_bindings:{arg1_1:"act1arg1", arg1_2:"act3arg1", arg1_3:"act2arg1", arg2_1:"act3arg2"}, learner:"LAPDOG", learner_version:"Beta 5.0", registration_date:"20110505T163543Z"}</bodySource>
+</TaskModel>

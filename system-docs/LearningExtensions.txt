@@ -1,0 +1,212 @@
+EFFECTS OF TYPE AND ACTION MODEL EXTENSIONS ON LEARNING
+===========================================
+
+Terminology
+-----------
+
+What were once known as tuple types are now called structure types.
+Lists (incl. permutable), sets, and bags are collectively called collection types.
+Collection and structure types are collectively called compound types.
+
+
+Enumerated types
+---------------
+Enumerated types are treated as ordinary strings during generalization
+and enumerated arguments appear in learned procedures exactly like
+string values.  The effect of enumerated types comes during editing
+and execution, when the default values of an enumerated-type parameter
+can only be replaced by enumerated values of the same type.
+
+
+Dynamic structure fields
+---------------------
+Each structure declaration may specify a set of fields of that
+structure that are "dynamic".  Such fields are ignored during learning
+when comparing values of this type for support relationships.
+
+
+Partially supported compound values
+------------------------------
+Compound types may specify a generalization preference for situations
+in which the demonstrated value is not supported by previous outputs
+but zero or more of elements of the value are supported:
+
+- parameterize [default]: the entire compound value is made a
+   procedure input; any and all supports for supported elements are
+   ignored.
+
+- construct <max-inputs>: generalize the value to a construction
+   expression, with any unsupported elements made into made procedure
+   inputs
+   - max-inputs=N attribute [default infinity]; if the #of procedure
+      inputs to be added will be >N, treat as "parameterize"--i.e.,
+      create a procedure input for the entire compound value.
+
+Note that in the construct case:
+- a compound value will only be generalized by construction if no
+   previous output supports the entire compound value 
+- the construct preference is applied recursively only to the first
+   element type that specifies "parameterize"
+- the compound arguments will be of fixed length in the learned
+   procedure 
+- there are numerous ways to construct the value and to parameterize
+   inputs; simplest (the current approach) would be a constructor over
+   the individual elements; alternatives include some form of union or
+   merge of supported and unsupported elements, and grouping
+   unsupported elements into a single procedure input
+
+
+Element access of (singleton) lists
+---------------------------
+
+List types may specify a generalization preference for singleton lists
+(i.e., lists with exactly one element) when the sole element of that
+list is used to support an input in some subsequent action:
+
+- only: references to the singleton element will be through only($L)
+  - Execution will fail if  |$L| != 1.
+- first|last: references to the singleton element generalize to
+  - first($L) and last($L) respectively
+  - Execution will fail if|$L| = 0.
+
+If unspecified, the default preference order for lists is
+[only, first, last].  (Note: Previously, the LAPDOG learning bias was
+[first, last])
+
+Implementation Notes
+
+The intention is to also add:
+ - loop: always learn a loop over the singleton collection; references
+    to its element will be through a loop variable
+and to support a default preference of
+- [loop, only, first, last] for lists
+- [loop, only] for unordered collections (sets and bags)
+
+Without the loop option, "only" is the sole possible generalization for access
+of singleton sets/bags, which means that to execute successfully, the
+learned procedure must have a set/bag with one element for the
+corresponding parameter.   If this is not the desired behavior, the
+demonstration provided must be over a set/bag with more than one element.
+
+Althought originally intended just to address the singleton list
+issue, in the case of lists the generalizeSingleton preference
+actually applies even to non-singleton lists.    That is, if both
+first($L) and last($L) are valid generalizations, the generalization
+selected will be according to the specified generalizeSingleton
+preference.
+
+
+Ungeneralizable constants (TO BE IMPLEMENTED)
+----------------------
+[Replaces LAPDOG hard-coded default semantics of certain
+constants like empty lists being ungeneralizable.]
+
+Each type may specify a list of strings which should each
+parse to a valid value of that type. Each such value is
+not generalized by task learning, regardless of the
+class of the corresponding parameter.
+
+NOTE: It is unclear how null values should be treated.
+Should we allow null to be specified here, or does it have
+special inviolable meaning in the system? Currently LAPDOG
+will never generalize null values. Some use cases of null
+should be considered.
+
+NOTE: It is unclear how empty collection values should be treated.
+Currently LAPDOG hard-codes these as ungeneralizable. Should this
+be overrideable?
+
+NOTE: There is no way to specify on a type that all its values
+are ungeneralizable. If this is desired, the action model must
+designate this on each parameter of that type.
+
+
+Actions
+======
+
+Action classes
+--------------
+effector [default, replaces has_side_effects]
+- execution may change state of application
+
+completer [replaces is_knowledge_producing]
+- execution does not change state of application
+- may be inserted by task learning to complete dataflow
+- removable if its outputs provide no supports (i.e. due to action
+   deletions) 
+
+context [new]
+- execution does not change state of application
+- for now, may be inserted by the application prior to demonstration
+and prior to execution but not during demonstration or during
+execution (i.e., in between the steps of the demonstration/procedure)
+   - ISSUE: should context actions be allowable in a demonstration?
+- removable if its outputs provide no supports (e.g., if added
+speculatively by application) 
+
+supporter
+- like completer, but may also be inserted by application during
+demonstration
+
+
+NOTES
+- Maybe drop classes and make completer and context action properties,
+   as they could both apply to an action
+- LAPDOG currently has a 'gui_only' class of action for actions that
+   change only the app's GUI state, but this hasn't been used, so it
+   will be dropped.  A LAPDOG follow-on that tracks state
+   changes could reconsider this...
+
+
+Action Parameters
+---------------
+
+Each parameter of an action now has a "class" in addition to type and
+mode.
+
+Input classes
+
+- generalizable [default, identical to 6.0]
+   - always generalized to variable or expression by task learning
+   - an unsupported value is made a parameter with default = demonstrated
+value  
+
+- constant [identical to ungeneralizable in 6.0]
+   - never generalized by task learning
+
+- distinct
+   - always generalized to a new input parameter, even if supportable
+      another way (i.e., by a previous output or an existing input parameter)
+   - alternate name: ununifiable
+
+- local <defaultValue>
+   - supported values are treated like generalizable
+   - unsupported values are replaced with a default value
+      regardless of the value demonstrated
+   - default is specified on action parameter, not on type
+  - e.g., extrinsic hints in CPOF will be local
+
+
+Output classes
+
+- external [default, identical to 6.0 outputs]
+  - made a procedure output parameter
+
+- internal
+  - not made a procedure output parameter (e.g., completer and context
+     action outputs should probably always be internal)
+
+- intermediate
+  - if value supports any other value, treat as internal; otherwise,
+     treat as external 
+
+Parameters of learned procedures may be specified to have any of these
+classes. By default, inputs are 'generalizable' and outputs are 'external'.
+
+NOTE: It is difficult for an action model designer to predict which
+action outputs may be useful as procedure outputs.  These output
+classes do provide some flexibility in this regard, albeit
+imperfect. For example, an app can make all outputs internal if
+subprocedures are used exclusively for their side effects.
+  
+

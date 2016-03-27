@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<!-- 
+/**
+ * ITL_UI_log4j_config.xml
+ *
+ * @author Will Haines
+ * @version May 15, 2008
+ *
+ * Specifies the default logging configuration for the ITL GUI.
+ *
+ *  Log4j is a standard logging API.
+ *  See http://jakarta.apache.org/log4j/docs/index.html for more information.
+ */
+ -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- The output appender for the console, right now set to only echo errors and above -->
+    <appender name="Stdout" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="ERROR"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%-5p: %m%n"/>
+        </layout>
+    </appender>
+
+	<!-- The output appender for lapdog-client.log -->    
+    <appender name="UILogFile" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="ALL"/>
+        <param name="file" value="lapdog-client.log"/>
+        <param name="append" value="false"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%-6r %d %-16C{1}: %-5p: %m%n"/>
+        </layout>
+    </appender>
+
+	<!-- The output appender for lapdog-learner.log -->      
+   <appender name="LapdogLogFile" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="DEBUG"/>
+        <param name="file" value="lapdog_logs/lapdog-learner.log"/>
+        <param name="append" value="false"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%-6r %d %-16C{1}: %-5p - %m%n"/>
+        </layout>
+    </appender>
+    
+    <!-- The output appender for PALBridge-Client.log -->   
+    <appender name="BridgeClientLogFile" class="org.apache.log4j.FileAppender">
+        <param name="Threshold" value="INFO"/>
+        <param name="file" value="PALBridge-Client.log"/>
+        <param name="append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value="%-6r %d %-16C{1}.%M: %-5p - %m%n"/>
+        </layout>
+    </appender>
+    
+    <!-- The logger that handles UI logging -->
+    <logger name="com.sri.tasklearning" additivity="true">
+        <level value="ALL"/>
+    	<appender-ref ref="UILogFile"/>
+    	<appender-ref ref="Stdout"/>
+    </logger>
+    
+    <!--  The logger that handles LAPDOG logging -->
+    <logger name="com.sri.ai.tasklearning.lapdog" additivity="true">
+        <level value="ALL"/>
+    	<appender-ref ref="LapdogLogFile"/>
+    	<appender-ref ref="Stdout"/>
+    </logger>
+    
+    <!--  The logger that handles Bridge logging -->
+    <logger name="com.sri.pal" additivity="true">
+        <level value="ALL"/>
+    	<appender-ref ref="BridgeClientLogFile"/>
+    	<appender-ref ref="Stdout"/>
+    </logger>
+
+    <!-- Don't connect the root logger; logs errors by default -->
+    <root>
+        <priority value="ERROR"/>
+    </root>
+
+</log4j:configuration>

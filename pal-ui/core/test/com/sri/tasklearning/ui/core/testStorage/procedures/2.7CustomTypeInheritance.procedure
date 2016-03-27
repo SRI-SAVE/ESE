@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^2.7CustomTypeInheritance'
+ execute:{
+  do 'arda^1.0^CreateString'('$output 1');
+  do 'arda^1.0^CreateArdaString'('$output 3');
+  do 'arda^1.0^CreateArdaChildString'('$output 2');
+  do 'arda^1.0^CreateArdaGrandChildString'('$output 4');
+  do 'arda^1.0^UseString'('$output 1');
+  do 'arda^1.0^UseArdaString'('$output 3');
+  do 'arda^1.0^UseArdaChildString'('$output 2');
+  do 'arda^1.0^UseArdaGrandChildString'('$output 4');}
+ properties:{expected_output:"CREATE STRING\nCREATE STRING\nCREATE STRING\nCREATE STRING\nUSE STRING: string\nUSE STRING: string\nUSE STRING: string\nUSE STRING: string\n", isTransient:"true"}</bodySource>
+</TaskModel>

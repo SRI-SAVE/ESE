@@ -1,0 +1,13 @@
+testTenOfSameEventSameValues
+Test using repeated events using same values
+#########################################################
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]
+action144[param133=item5item2; param185=item1-test-1234; ]

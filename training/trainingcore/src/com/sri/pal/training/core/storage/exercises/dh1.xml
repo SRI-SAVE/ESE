@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise id="c8860930-79e3-11e1-b0c4-0800200c9a67">
+  <name>PE TMB6F02PE</name>
+  <description>Prepare the CPOF Workspace for Operations</description>
+  <html>
+&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;p class=&quot;MsoNormal&quot; align=&quot;center&quot; style=&quot;margin-bottom:12.0pt;text-align:center;
+mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;PRACTICAL EXERCISE SHEET TMB6F02PE&lt;o:p&gt;&lt;/o:p&gt;&lt;/b&gt;&lt;/p&gt;
+
+&lt;table class=&quot;MsoNormalTable&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;text-align: left;border-collapse: collapse; &quot;&gt;
+ &lt;tbody&gt;&lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Title&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border-top:solid windowtext 1.0pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:none;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;Prepare the CPOF Workspace
+  for Operations.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Lesson Number / Title&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;TMB6F02L version SW11 /
+  Prepare the Command Post of the Future (CPOF) Workspace for Operations &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Introduction&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Motivator&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;CPOF presents the COP via voice, data, imagery, and graphics.&amp;nbsp; It provides functional applications
+  necessary to access and manipulate common data received from other ABCS
+  System of Systems (SoS).&amp;nbsp; Commanders
+  and key staff use these tools to visualize, describe, and direct subordinates
+  and supporting organizations toward mission accomplishment during all phases
+  and spectrums of operations.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;CPOF provides the Battle
+  Staff a comprehensive suite of functional tools designed to support planning,
+  preparation, execution, and assessment of operations in support of the
+  commander&#x2019;s intent.&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:
+  9.0pt&quot;&gt;Terminal Learning Objective&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;504&quot; colspan=&quot;2&quot; valign=&quot;top&quot; style=&quot;width:5.25in;border:none;
+  border-bottom:solid windowtext 1.0pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;NOTE:&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt; The
+  instructor should inform the students of the following Terminal Learning
+  Objective covered by this practical exercise.&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot; style=&quot;margin-top:6.0pt;mso-pagination:widow-orphan&quot;&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;At the completion of this lesson, you [the student]
+  will:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;81&quot; valign=&quot;top&quot; style=&quot;width:61.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .75pt;mso-border-alt:
+  solid windowtext .75pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; align=&quot;right&quot; style=&quot;text-align:right;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;Action:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;423&quot; valign=&quot;top&quot; style=&quot;width:317.0pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-top-alt:solid windowtext .75pt;mso-border-bottom-alt:
+  solid windowtext .75pt;mso-border-right-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;Prepare the CPOF
+  Workspace for Operations.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;81&quot; valign=&quot;top&quot; style=&quot;width:61.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .75pt;mso-border-alt:
+  solid windowtext .75pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; align=&quot;right&quot; style=&quot;text-align:right;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;Conditions:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;423&quot; valign=&quot;top&quot; style=&quot;width:317.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-bottom-alt:solid windowtext .75pt;mso-border-right-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;In a classroom
+  environment, given a Tactical Mission Command (TMC) System with CPOF software
+  installed and the CPOF Software User's Manual (SUM).&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+  &lt;td width=&quot;109&quot; valign=&quot;top&quot; style=&quot;width:81.9pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;81&quot; valign=&quot;top&quot; style=&quot;width:61.0pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .75pt;mso-border-alt:
+  solid windowtext .75pt;padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot; align=&quot;right&quot; style=&quot;text-align:right;mso-pagination:widow-orphan&quot;&gt;&lt;b&gt;&lt;span style=&quot;font-size:9.0pt&quot;&gt;Standards:&lt;o:p&gt;&lt;/o:p&gt;&lt;/span&gt;&lt;/b&gt;&lt;/p&gt;
+  &lt;/td&gt;
+  &lt;td width=&quot;423&quot; valign=&quot;top&quot; style=&quot;width:317.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .75pt;mso-border-top-alt:solid windowtext .75pt;
+  mso-border-bottom-alt:solid windowtext .75pt;mso-border-right-alt:solid windowtext .75pt;
+  padding:0in 5.4pt 0in 5.4pt&quot;&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;You must:&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;&lt;o:p&gt;&amp;nbsp;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;1)&amp;nbsp; Start the CPOF Application.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;2)&amp;nbsp; Organize 2D CPOF Workspace.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;3)&amp;nbsp; Organize 3D CPOF Workspace.&lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;p class=&quot;MsoNormal&quot;&gt;4)&amp;nbsp; Stop the CPOF Application.&amp;nbsp; &lt;o:p&gt;&lt;/o:p&gt;&lt;/p&gt;
+  &lt;/td&gt;
+ &lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+  </html>
+  <problem>
+      <task id="task-1">
+        <name>Task 1</name>
+        <html>
+    &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size:10.0pt;font-family:&amp;quot;Arial&amp;quot;,&amp;quot;sans-serif&amp;quot;;
+    mso-fareast-font-family:&amp;quot;Times New Roman&amp;quot;;mso-ansi-language:EN-US;mso-fareast-language:
+    EN-US;mso-bidi-language:AR-SA&quot;&gt;Drag a &lt;b&gt;Pasteboard&lt;/b&gt; from the Frame
+    Dispenser to the personal workspace and rename it with the Student # X (where X
+    is the Last Name).&amp;nbsp; Demonstrate &lt;b&gt;Frame
+    Stacking&lt;/b&gt; using the Tool Bar, Graphics Palette, and Item Palette.&amp;nbsp; Send and retrieve the &lt;b&gt;Pasteboard&lt;/b&gt; from
+    Trash.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+        </html>
+        <webview_height>80</webview_height>
+        <sub_task id="sub1"><prompt>Dummy Prompt</prompt></sub_task>
+      </task>       
+      <task id="task-2">
+        <name>Task 2</name>
+        <html>
+    &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size:10.0pt;font-family:&amp;quot;Arial&amp;quot;,&amp;quot;sans-serif&amp;quot;;
+    mso-fareast-font-family:&amp;quot;Times New Roman&amp;quot;;mso-ansi-language:EN-US;mso-fareast-language:
+    EN-US;mso-bidi-language:AR-SA&quot;&gt;Drag a &lt;b&gt;Map&lt;/b&gt; from the Frame Dispenser and
+    nest it on the Student # X Pasteboard.&amp;nbsp;
+    Change the &lt;b&gt;Pasteboard Layout&lt;/b&gt; to Automatic.&amp;nbsp; On the 2D Map, place a &lt;b&gt;GeoStickie&lt;/b&gt; at
+    grid coordinate 38SMB 30318 84693.&amp;nbsp; Name
+    the &lt;b&gt;GeoStickie&lt;/b&gt; with the Student Last Name.&amp;nbsp; Zoom in on the GeoStickie.&amp;nbsp; Create a &lt;b&gt;Map Preset&lt;/b&gt; and name it &lt;b&gt;PE1&lt;/b&gt;.&amp;nbsp; Draw a boundary around the GeoStickie using a
+    combination of Freeform Ink and Point-to-Point Ink on the 2D Map.&amp;nbsp; Use Black line color and a fill color of
+    yellow with an opacity of 20%.&amp;nbsp; Create a
+    text label with the Student # for inside the Freeform drawn boundary area.&amp;nbsp; Create a label named PE1 for the
+    Point-to-Point boundary.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+        </html>
+        <sub_task id="sub1">
+          <prompt>Drag a Map from the Frame Dispenser and nest it on the 'Student #X' Pasteboard.  Change the Pasteboard Layout to Automatic.</prompt>
+        </sub_task>
+        <sub_task id="sub2">
+          <prompt>On the 2D Map, place a GeoStickie at grid coordinate 38SMB 30318 84693.  Name the GeoStickie with the Student Last Name.  Zoom in on the GeoStickie.</prompt>
+        </sub_task>
+        <sub_task id="sub3">
+          <prompt>Create a Map Preset and name it PE1.</prompt>
+        </sub_task>
+        <sub_task id="sub4">
+          <prompt>Draw a boundary around the GeoStickie using a combination of Freeform Ink and Point-to-Point Ink on the 2D Map.  Use Black line color and a fill color of yellow with an opacity of 20%.</prompt>
+        </sub_task>
+        <sub_task id="sub5">
+          <prompt>Create a text label with the Student # for the inside of the Freeform drawn boundary area.  Create a label named PE1 for the Point-to-Point boundary.</prompt>
+        </sub_task>
+      </task>       
+      <task id="task-3">
+        <name>Task 3</name>
+        <html>
+    &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size:10.0pt;font-family:&amp;quot;Arial&amp;quot;,&amp;quot;sans-serif&amp;quot;;
+    mso-fareast-font-family:&amp;quot;Times New Roman&amp;quot;;mso-ansi-language:EN-US;mso-fareast-language:
+    EN-US;mso-bidi-language:AR-SA&quot;&gt;An IED Explosion was reported by 1BCT on patrol
+    in the market place; a Suicide Bomber was reported in the parking lot near a
+    Mosque.&amp;nbsp; The bomb went off killing only
+    the bomber.&amp;nbsp; No other injuries reported;
+    Small Arms Fire was heard from a location south of the boundary area; a Team,
+    working from an informant's tip, located a Weapons Cache of 2 RPG launchers, 12
+    rockets, and 300 rounds of ammo in a dumpster at the North East boundary
+    line.&amp;nbsp; Create, name, and place &lt;b&gt;Events&lt;/b&gt;
+    on the 2D Map within the Point-to-Point drawn boundary.&amp;nbsp; Use the workspace zoom to magnify the
+    Point-to-Point boundary area for the instructor.&amp;nbsp; Reset the zoom on the workspace.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+        </html>
+        <sub_task id="sub1"><prompt>Dummy sub_task</prompt></sub_task>
+      </task>       
+      <task id="task-4">
+        <name>Task 4</name>
+        <html>
+    &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size:10.0pt;font-family:&amp;quot;Arial&amp;quot;,&amp;quot;sans-serif&amp;quot;;
+    mso-fareast-font-family:&amp;quot;Times New Roman&amp;quot;;mso-ansi-language:EN-US;mso-fareast-language:
+    EN-US;mso-bidi-language:AR-SA&quot;&gt;Create an &lt;b&gt;Effort &lt;/b&gt;and name it &lt;b&gt;PE1
+    Student # X&lt;/b&gt; (where X is the Last Name).&amp;nbsp;
+    Place the &lt;b&gt;Events&lt;/b&gt;, &lt;b&gt;GeoStickie&lt;/b&gt;, and &lt;b&gt;Ink&lt;/b&gt; into the
+    Effort and place the Effort in the 2D Map Effort List.&amp;nbsp; Toggle the &lt;b&gt;Effort&lt;/b&gt; on and off.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+        </html>
+      </task>       
+      <task id="task-5">
+        <name>Task 5</name>
+        <html>
+    &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;p style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size:10.0pt;font-family:&amp;quot;Arial&amp;quot;,&amp;quot;sans-serif&amp;quot;;
+    mso-fareast-font-family:&amp;quot;Times New Roman&amp;quot;;mso-ansi-language:EN-US;mso-fareast-language:
+    EN-US;mso-bidi-language:AR-SA&quot;&gt;Drag a &lt;b&gt;Stickie&lt;/b&gt; and nest it on the &lt;b&gt;Pasteboard&lt;/b&gt;.&amp;nbsp; Name the Stickie &lt;b&gt;Today's Activities&lt;/b&gt;.&amp;nbsp; Copy and Paste comments from the Events to
+    the Stickie.&amp;nbsp; Change the color of the
+    Stickie to Yellow and use Verdana font size 14.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+        </html>
+        <sub_task id="sub1"><prompt>Dummy sub_task</prompt></sub_task>
+      </task>
+  </problem>
+</exercise>

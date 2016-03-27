@@ -1,0 +1,48 @@
+# ------------------------------------------------
+# PAL-TESTNS Regression Test Suite                 #
+# ------------------------------------------------
+
+# Test Action Model 2.0 Domain
+action-model-2.0/testNewActionModel.txt
+action-model-2.0/testAction144.txt
+action-model-2.0/testAction179.txt
+action-model-2.0/testAction152.txt
+action-model-2.0/testAction202.txt
+
+# Test poossible syntax errors
+action-model-2.0/testEmptyInputParameter.txt
+action-model-2.0/testEmptyOutputParemeter.txt
+action-model-2.0/testEmptyProcedure.txt
+action-model-2.0/testExtraParameter.txt
+action-model-2.0/testListCombo1.txt
+action-model-2.0/testListCombo2.txt
+action-model-2.0/testMisspelledParameter.txt
+action-model-2.0/testMultipleOutputParams.txt
+action-model-2.0/testNullInputParameter.txt
+action-model-2.0/testEmptyListInput.txt
+action-model-2.0/testRenameSameEffort.txt
+action-model-2.0/testReturnValueIsList.txt
+action-model-2.0/testSingletonToListProcedure.txt
+action-model-2.0/testTenOfSameEventDifferentValues.txt
+action-model-2.0/testTenOfSameEventSameValues.txt
+
+# Regression tests for bug reports
+action-model-2.0/testMTRS_24_1.txt
+action-model-2.0/testMTRS_24_2.txt
+action-model-2.0/testMTRS_25.txt
+action-model-2.0/testFailureToRegister1.txt
+action-model-2.0/testFailureToRegister2.txt
+action-model-2.0/testFailureToRegister3.txt
+action-model-2.0/testFailureToRegister4.txt
+action-model-2.0/testMissingRegisteredProc.txt
+action-model-2.0/testNPE1.txt
+action-model-2.0/testNPE2.txt
+action-model-2.0/testLapdogNPE2.txt
+action-model-2.0/testMissingCallbacks.txt
+
+# Performance-related tests
+action-model-2.0/testSpeed1.txt
+action-model-2.0/testSpeed2.txt
+
+
+

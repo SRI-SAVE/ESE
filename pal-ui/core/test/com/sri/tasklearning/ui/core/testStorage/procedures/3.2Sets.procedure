@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.2Sets'(+'$input set 1' = setGen("val 1", "val 2"))
+ argtypes:["set&lt;string&gt;"]
+ execute:{
+  do 'arda^1.0^UseSet'('$input set 1');
+  do 'arda^1.0^CreateSet'('$output set 1');
+  do 'arda^1.0^UseSet'('$output set 1');
+  do 'arda^1.0^UseSet'(setGen("val 1", "val 2", "val 3"));
+  do 'arda^1.0^UseSet'(setGen);}
+ properties:{expected_output:"USE SET: [val 2,val 1]\nCREATE SET\nUSE SET: [set value 2,set value 1]\nUSE SET: [val 3,val 2,val 1]\nUSE SET: []\n", isTransient:"true"}</bodySource>
+</TaskModel>

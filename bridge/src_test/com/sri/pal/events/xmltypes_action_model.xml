@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+    <type id="String">
+        <description>Description needed</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="Integer">
+        <description>Description needed</description>
+        <custom>
+            <javaType>java.lang.Integer</javaType>
+        </custom>
+    </type>
+    <type id="type104">
+        <description>Description needed.</description>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+    <type id="tuple1">
+        <description>Description needed.</description>
+        <struct>
+            <ref typeRef="Integer"/>
+            <ref typeRef="Integer"/>
+        </struct>
+    </type>
+    <type id="tuple2">
+        <description>Description needed.</description>
+        <struct>
+            <ref typeRef="tuple1"/>
+            <ref typeRef="type104"/>
+        </struct>
+    </type>
+    <type id="list1">
+        <description>Description needed.</description>
+        <list>
+            <ref typeRef="type104"/>
+        </list>
+    </type>
+    <type id="list2">
+        <description>Description needed.</description>
+        <list>
+            <ref typeRef="tuple1"/>
+        </list>
+    </type>
+    <type id="type128">
+        <description>Description needed.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="blahtuple">
+        <description>Description needed.</description>
+        <struct>
+            <ref typeRef="String"/>
+            <ref typeRef="String"/>
+        </struct>
+    </type>
+    <type id="layerList">
+        <description>Description needed.</description>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+
+    <action id="action163">
+        <description>empty1</description>
+        <inputParam id="containerID">
+            <description>empty2</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="item42IDs">
+            <description>empty3</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+        <inputParam id="positions">
+            <description>empty4</description>
+            <typeRef typeId="blahtuple"/>
+        </inputParam>
+    </action>
+    <action id="deep_types">
+        <description>empty1</description>
+        <inputParam id="tuple">
+            <description>Description needed.</description>
+            <typeRef typeId="tuple2"/>
+        </inputParam>
+        <inputParam id="listoflist">
+            <description>Description needed.</description>
+            <typeRef typeId="list1"/>
+        </inputParam>
+        <inputParam id="listoftuple">
+            <description>Description needed.</description>
+            <typeRef typeId="list2"/>
+        </inputParam>
+    </action>
+
+    <action id="action159">
+        <description>Adds one or more item43 layers to a multi-layer
+            visualization
+        </description>
+        <inputParam id="visualizationID">
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="layerIDs">
+            <typeRef typeId="layerList"/>
+        </inputParam>
+    </action>
+    <action id="action209">
+        <description>Description needed.</description>
+        <inputParam id="containerID">
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="item42item11">
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+
+    <action id="ungeneralizableTuple">
+        <description>Description needed.</description>
+        <inputParam id="ungeneralizableTuple">
+            <class class="constant"/>
+            <typeRef typeId="tuple1"/>
+        </inputParam>
+    </action>
+</actionModel>

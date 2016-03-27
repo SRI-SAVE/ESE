@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^1.1EmptyProcedure'
+ execute:{}
+ properties:{expected_output:"", isTransient:"true"}</bodySource>
+</TaskModel>

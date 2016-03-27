@@ -1,0 +1,5 @@
+Test list combination 2
+Action 1 produces an item, the item is converted to a list. Action 2 consumes the list containing only that item.
+#########################################################
+action144[param133=item2item5; param185=Myitem2; ]
+action170[param114=Theitem8; param157=item16s; param119=[Myitem2]; ]

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+    <action id="action178">
+        <description>No descr.</description>
+        <inputParam id="collectionID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="entityIDs">
+            <description/>
+            <!-- This could be an ordered set. -->
+            <typeRef typeId="type112"/>
+        </inputParam>
+    </action>
+
+    <action id="action187">
+        <description>No descr.</description>
+        <inputParam id="collectionID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="entityIDs">
+            <description>No descr.</description>
+            <!-- This could be a set. -->
+            <typeRef typeId="type112"/>
+        </inputParam>
+    </action>
+
+    <action id="action186">
+        <description>No descr.</description>
+        <inputParam id="collectionID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="entityIDs">
+            <description>No descr.</description>
+            <typeRef typeId="type112"/>
+        </inputParam>
+    </action>
+
+    <action id="action223">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="text">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action157">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action225">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="time">
+            <description>No descr.</description>
+            <typeRef typeId="type135"/>
+        </inputParam>
+    </action>
+
+    <action id="action220">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="starttype115">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="startTime">
+            <description>No descr.</description>
+            <typeRef typeId="type135"/>
+        </inputParam>
+        <inputParam id="endtype115">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <inputParam id="endTime">
+            <description>No descr.</description>
+            <typeRef typeId="type135"/>
+        </inputParam>
+    </action>
+
+    <action id="action184">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="gridCoords">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action136">
+        <description>No descr.</description>
+        <inputParam id="unitID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="affiliation">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action226">
+        <description>No descr.</description>
+        <inputParam id="unitID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="echelon">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action125">
+        <description>No descr.</description>
+        <inputParam id="unitID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="unitType">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action101">
+        <description>No descr.</description>
+        <inputParam id="stickieID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="title">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action154">
+        <description>No descr.</description>
+        <inputParam id="stickieID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="color">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action180">
+        <description>No descr.</description>
+        <inputParam id="stickieID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="text">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action135">
+        <description>No descr.</description>
+        <inputParam id="stickieID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="text">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+    <action id="action123">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="text">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+
+</actionModel>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<jaxb:bindings version="2.0"
+    xmlns="http://java.sun.com/xml/ns/jaxb"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <bindings schemaLocation="training.xsd" node="/xs:schema">
+        <schemaBindings>
+            <nameXmlTransform>
+                <typeName suffix="Base" />
+            </nameXmlTransform>
+        </schemaBindings>
+        
+       <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+                              EXERCISE CUSTOMIZATIONS
+          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <!-- Exercise Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Exercise']/xs:sequence/xs:element[@name='problem']">
+          <class ref="com.sri.pal.training.core.exercise.Problem" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Exercise']/xs:sequence/xs:element[@name='solution']">
+          <class ref="com.sri.pal.training.core.exercise.Solution" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Exercise']/xs:sequence/xs:element[@name='datafile']">
+          <class ref="com.sri.pal.training.core.exercise.Datafile" />
+        </bindings>
+
+        <!-- Problem Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Problem']/xs:sequence/xs:element[@name='task']">
+          <class ref="com.sri.pal.training.core.exercise.Task" />
+          <property name="tasks" />
+        </bindings>                          
+                
+        <!-- Task Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Task']/xs:sequence/xs:element[@name='sub_task']">
+          <class ref="com.sri.pal.training.core.exercise.SubTask" />
+          <property name="subTasks" />          
+        </bindings>
+        
+        <!-- SubTask Customizations -->
+        
+        <bindings node="//xs:complexType[@name='SubTask']/xs:sequence/xs:element[@name='help_link']">
+          <class ref="com.sri.pal.training.core.exercise.Link" />
+          <property name="helpLinks" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='SubTask']/xs:sequence/xs:element[@name='hint_sequence']">
+          <class ref="com.sri.pal.training.core.exercise.HintSequence" />
+          <property name="hintSequences" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='HintSequence']/xs:sequence/xs:element[@name='hint']">
+          <property name="hints" />
+        </bindings>
+        
+        <!-- Solution Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Solution']/xs:sequence/xs:element[@name='constant']">          
+          <class ref="com.sri.pal.training.core.exercise.Value" />
+          <property name="constants" />
+        </bindings>
+                     
+        <bindings node="//xs:complexType[@name='Solution']/xs:sequence/xs:element[@name='task_solution']">
+          <class ref="com.sri.pal.training.core.exercise.TaskSolution" />
+          <property name="taskSolutions" />
+        </bindings>                
+                
+        <!-- TaskSolution Customizations -->
+
+        <bindings node="//xs:complexType[@name='TaskSolution']/xs:sequence/xs:element[@name='option']">          
+          <class ref="com.sri.pal.training.core.exercise.Option" />
+        </bindings>
+                          
+        <!-- No effect due to XJC bug -->
+        <bindings node="//xs:complexType[@name='TaskSolution']/xs:attribute[@name='task']">          
+          <class ref="com.sri.pal.training.core.exercise.Task" />
+        </bindings>
+        
+        <!-- Step Customizations -->
+
+        <bindings node="//xs:complexType[@name='Step']/xs:sequence/xs:choice/xs:element[@name='atom']">
+          <class ref="com.sri.pal.training.core.exercise.Atom" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Step']/xs:sequence/xs:choice/xs:element[@name='option_set']">
+          <class ref="com.sri.pal.training.core.exercise.OptionSet" />
+        </bindings>        
+                
+        <!-- Atom Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Atom']/xs:sequence/xs:element[@name='parameter']">
+          <class ref="com.sri.pal.training.core.exercise.Parameter" />
+          <property name="parameters" />
+        </bindings>
+        
+        <!-- Parameter Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Parameter']/xs:sequence/xs:element[@name='sub_param']">
+          <class ref="com.sri.pal.training.core.exercise.Parameter" />
+          <property name="subParameters" />
+        </bindings>
+        
+        <!-- OptionSet Customizations -->
+        
+        <bindings node="//xs:complexType[@name='OptionSet']/xs:sequence/xs:element[@name='option']">
+          <class ref="com.sri.pal.training.core.exercise.Option" />
+          <property name="options" />
+        </bindings>        
+        
+        <!-- Option Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='step']">
+          <class ref="com.sri.pal.training.core.exercise.Step" />
+          <property name="steps" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='ordering_constraint']">
+          <class ref="com.sri.pal.training.core.exercise.OrderingConstraint" />
+          <property name="orderingConstraints" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='query_constraint']">
+          <class ref="com.sri.pal.training.core.exercise.QueryConstraint" />
+          <property name="queryConstraints" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='state_constraint']">
+          <class ref="com.sri.pal.training.core.exercise.StateConstraint" />
+          <property name="stateConstraints" />
+        </bindings>        
+        
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='equality_constraint']">
+          <class ref="com.sri.pal.training.core.exercise.EqualityConstraint" />
+          <property name="equalityConstraints" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='value_constraint']">
+          <class ref="com.sri.pal.training.core.exercise.ValueConstraint" />
+          <property name="valueConstraints" />
+        </bindings>                                
+                                         
+        <!-- QueryConstraint Customizations -->
+        
+        <bindings node="//xs:complexType[@name='QueryConstraint']/xs:sequence/xs:element[@name='arg']">
+          <class ref="com.sri.pal.training.core.exercise.ConstraintArgument" />
+          <property name="arguments" />
+        </bindings>
+        
+        <!-- StateConstraint Customizations -->
+        
+        <bindings node="//xs:complexType[@name='StateConstraint']/xs:sequence/xs:element[@name='arg']">
+          <class ref="com.sri.pal.training.core.exercise.ConstraintArgument" />
+          <property name="arguments" />
+        </bindings>               
+        
+        <!-- ConstraintArgument Customizations -->
+        
+        <bindings node="//xs:complexType[@name='ConstraintArgument']/xs:choice/xs:element[@name='value']">
+          <class ref="com.sri.pal.training.core.exercise.Value" />
+        </bindings>                       
+        
+        <!-- ValueConstraint Customizations -->
+        
+        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:element[@name='value']">
+          <class ref="com.sri.pal.training.core.exercise.Value" />        
+          <property name="values" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:element[@name='ref']">
+          <property name="refs" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='EqualityConstraint']/xs:sequence/xs:element[@name='parameter']">
+          <property name="parameters" />
+        </bindings>                  
+                
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+                              RESPONSE CUSTOMIZATIONS
+           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <!-- Response Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Response']/xs:sequence/xs:element[@name='task_response']">
+          <class ref="com.sri.pal.training.core.response.TaskResponse" />
+          <property name="taskResponses" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='TaskResponse']/xs:sequence/xs:element[@name='delineation']">
+          <class ref="com.sri.pal.training.core.response.SubTaskDelineation" />
+          <property name="delineations" />
+        </bindings>        
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   
+                             ASSESSMENT CUSTOMIZATIONS
+           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+           
+        <!-- Assessment Customizations -->
+        
+        <bindings node="//xs:complexType[@name='Assessment']/xs:sequence/xs:element[@name='task_assessment']">
+          <class ref="com.sri.pal.training.core.assessment.TaskAssessment" />
+        </bindings>           
+           
+        <!-- TaskAssessment Customizations -->
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='response_indexes']">
+          <class ref="com.sri.pal.training.core.assessment.AssessedResponseIndexes" />       
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='extra_atoms_issue']">
+          <class ref="com.sri.pal.training.core.assessment.ExtraAtomsIssue" />
+          <property name="extraAtomsIssues" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='equality_issue']">
+          <class ref="com.sri.pal.training.core.assessment.EqualityIssue" />
+          <property name="equalityIssues" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='missing_atom_issue']">
+          <class ref="com.sri.pal.training.core.assessment.MissingAtomIssue" />
+          <property name="missingAtomIssues" />
+        </bindings>                               
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='ordering_issue']">
+          <class ref="com.sri.pal.training.core.assessment.OrderingIssue" />
+          <property name="orderingIssues" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='query_issue']">
+          <class ref="com.sri.pal.training.core.assessment.QueryIssue" />
+          <property name="queryIssues" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='state_issue']">
+          <class ref="com.sri.pal.training.core.assessment.StateIssue" />
+          <property name="stateIssues" />
+        </bindings>        
+        
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='value_issue']">
+          <class ref="com.sri.pal.training.core.assessment.ValueIssue" />
+          <property name="valueIssues" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='ArgumentLocation']/xs:sequence/xs:element[@name='accessor']">
+          <property name="accessors" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='AssessedResponseIndexes']/xs:sequence/xs:element[@name='index']">
+          <property name="indexes" />     
+        </bindings>                
+        
+        <!-- Issue Customizations -->
+        
+        <bindings node="//xs:complexType[@name='ValueIssue']/xs:sequence/xs:element[@name='location']">
+          <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='EqualityIssue']/xs:sequence/xs:element[@name='location1']">
+          <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='EqualityIssue']/xs:sequence/xs:element[@name='location2']">
+          <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
+        </bindings>                  
+        
+        <bindings node="//xs:complexType[@name='QueryIssue']/xs:sequence/xs:element[@name='location']">
+          <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
+          <property name="locations" />          
+        </bindings>
+        
+        <bindings node="//xs:complexType[@name='StateIssue']/xs:sequence/xs:element[@name='location']">
+          <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
+          <property name="locations" />          
+        </bindings> 
+    </bindings>
+</jaxb:bindings>
+

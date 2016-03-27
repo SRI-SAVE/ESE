@@ -1,0 +1,137 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: equivalence.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="typeA">
+        <description>simple string type</description>
+        <equivalentTo>eqv^1.0^typeB</equivalentTo>
+        <equivalentTo>typeC</equivalentTo>
+        <equivalentTo>typeE</equivalentTo>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="typeB">
+        <description>simple string type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="typeC">
+        <description>simple double type</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+
+    <type id="typeD">
+        <description>simple string type</description>
+        <equivalentTo>typeA</equivalentTo>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="typeE">
+        <description>simple string type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="typeF">
+        <description>mutually equivalent types test for infinite recursion</description>
+        <equivalentTo>typeG</equivalentTo>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="typeG">
+        <description>mutually equivalent types test for infinite recursion</description>
+        <equivalentTo>typeF</equivalentTo>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <action id="makeA">
+        <description>make an object of type A</description>
+        <outputParam id="output">
+            <description>output</description>
+            <typeRef typeId="typeA"/>
+        </outputParam>
+    </action>
+
+    <action id="makeB">
+        <description>make an object of type B</description>
+        <outputParam id="output">
+            <description>output</description>
+            <typeRef typeId="typeB"/>
+        </outputParam>
+    </action>
+
+    <action id="takeB">
+        <description>consume an object of type B</description>
+        <inputParam id="input">
+            <description>input</description>
+            <typeRef typeId="typeB"/>
+        </inputParam>
+    </action>
+
+    <action id="takeC">
+        <description>consume an object of type C</description>
+        <inputParam id="input">
+            <description>input</description>
+            <typeRef typeId="typeC"/>
+        </inputParam>
+    </action>
+
+    <action id="takeD">
+        <description>consume an object of type D</description>
+        <inputParam id="input">
+            <description>input</description>
+            <typeRef typeId="typeD"/>
+        </inputParam>
+    </action>
+
+    <action id="takeE">
+        <description>consume an object of type E</description>
+        <inputParam id="input">
+            <description>input</description>
+            <typeRef typeId="typeE"/>
+        </inputParam>
+    </action>
+
+    <action id="makeF">
+        <description>make an object of type F</description>
+        <outputParam id="output">
+            <description>output</description>
+            <typeRef typeId="typeF"/>
+        </outputParam>
+    </action>
+
+    <action id="takeG">
+        <description>consume an object of type G</description>
+        <inputParam id="input">
+            <description>input</description>
+            <typeRef typeId="typeG"/>
+        </inputParam>
+    </action>
+</actionModel>

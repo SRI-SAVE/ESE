@@ -1,0 +1,35 @@
+Jan 29 - Changes to Lumen since the Jan 15 release:
+
+Removed diagnostic println statements
+Added javadoc comments and renamed method argument names for clarity
+Moved/removed unused and deprecated methods
+Fixed bugs in support methods for editor and added checks for variables used outside their scope
+Made handling of java nulls more robust
+Enabled syntax for missing circumflex operator
+Fixed bounds check error
+Fixed error in calculation of hidden variables
+Fixed support for variables and operators in properties of definitions
+
+Jan 15 - Changes to Lumen since the Jan 8 release:
+
+Now using a Lumen-syntax only agent rather than hybrid Lumen/SPARK-L-syntax.
+Added HashFactsPredicateOp for indexing of predicates.
+Eliminated translation of '.' characters in action names ("name mangling") that was a hold-over from SPARK
+Added default arguments and "don't care about output value" operator
+Added deepCopyWithRename to CTR
+Added preliminary SPARK-L <-> Lumen translation support (for editor)
+Added retractall special operator
+Added Lumen object to CTR translation
+Multiple bug-fixes
+
+Jan 8 - Changes to Lumen since the Dec 1:
+
+Added Common Task Representation to replace shared-spark representation of procedures.
+Revised new syntax.
+Implemented operators for new syntax.
+Renamed classes and reorganized the packaging of classes
+Changed the Op interface to improve handling of output parameters
+Moved default representation of objects to new syntax and allowed both old and new syntax for learned procedures
+Added special literal syntax for infinite and Nan double values and other classes.
+Implemented numeric comparisons.
+Improved support for the editor.

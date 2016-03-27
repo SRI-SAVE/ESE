@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.8NestedLists'
+ execute:{
+  do 'arda^1.0^CreateList'('$output list 1');
+  do 'arda^1.0^CreateList'('$output list 2');
+  do 'arda^1.0^UseListOfList'([["val 1.1", "val 1.2", "val 1.3"], ["val2.1", "val2.2", "val2.3"], '$output list 1']);}
+ properties:{expected_output:"CREATE LIST\nCREATE LIST\nUSE LIST OF LIST: [[val 1.1,val 1.2,val 1.3][val2.1,val2.2,val2.3][list value 1,list value 2]]\n", isTransient:"true"}</bodySource>
+</TaskModel>

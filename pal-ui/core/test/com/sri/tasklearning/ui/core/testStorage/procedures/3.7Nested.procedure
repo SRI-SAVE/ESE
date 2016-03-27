@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.7Nested'
+ execute:{
+  do 'arda^1.0^CreateListOfStruct'($tuples);
+  do 'arda^1.0^UseString'(structureGet(first($tuples), "text", 1));
+  do 'arda^1.0^UseString'(structureGet(last($tuples), "text", 1));
+  do 'arda^1.0^UseSet'(setGen(first($tuples), last($tuples)));}
+ properties:{expected_output:"CREATE LIST OF STRUCT\nUSE STRING: text 1\nUSE STRING: text 2\nUSE SET: [[1, text 1],[2, text 2]]\n", isTransient:"true"}</bodySource>
+</TaskModel>

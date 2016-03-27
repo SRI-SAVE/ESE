@@ -1,0 +1,169 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: constraints.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <type id="String">
+        <description>simple string type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="string2">
+        <description>another simple string type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="stringlist">
+        <description>a list of strings</description>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+
+    <constraintDecl id="isFoo">
+        <param id="foo1"/>
+    </constraintDecl>
+
+    <constraintDecl id="isBar">
+        <param id="bar1"/>
+        <param id="bar2"/>
+    </constraintDecl>
+
+    <action id="action1">
+        <description>action #1</description>
+        <inputParam id="arg1">
+            <description>Arg #1</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <constraints version="1">
+            <constraint name="isFoo">
+                <param id="foo1">
+                    <inputRef ref="arg1"/>
+                </param>
+            </constraint>
+        </constraints>
+    </action>
+
+    <action id="action2">
+        <description>action #2</description>
+        <outputParam id="arg1">
+            <description>Arg #1 (action #2)</description>
+            <typeRef typeId = "String"/>
+        </outputParam>
+        <constraints version="1"/>
+    </action>
+
+    <action id="action3">
+        <description>action #3</description>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="arg2">
+            <description>arg 2</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <constraints version="1">
+            <and>
+                <constraint name="isFoo">
+                    <param id="foo1">
+                        <inputRef ref="arg1"/>
+                    </param>
+                </constraint>
+                <constraint name="isBar">
+                    <param id="bar1">
+                        <inputRef ref="arg1"/>
+                    </param>
+                    <param id="bar2">
+                        <inputRef ref="arg2"/>
+                    </param>
+                </constraint>
+            </and>
+        </constraints>
+    </action>
+
+    <action id="action4">
+        <description>action #4</description>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <typeRef typeId="stringlist"/>
+        </inputParam>
+        <constraints version="1">
+            <constraint name="isFoo">
+                <param id="foo1">
+                    <inputRef ref="arg1"/>
+                </param>
+            </constraint>
+        </constraints>
+    </action>
+
+    <action id="action5">
+        <description>constraint on ungeneralizable parameter</description>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="arg2">
+            <description>Arg 2</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <constraints version="1">
+            <constraint name="isBar">
+                <param id="bar1">
+                    <inputRef ref="arg1"/>
+                </param>
+                <param id="bar2">
+                    <inputRef ref="arg2"/>
+                </param>
+            </constraint>
+        </constraints>
+    </action>
+
+    <action id="action6">
+        <description>produces a list</description>
+        <outputParam id="output">
+            <description>Output list</description>
+            <typeRef typeId="stringlist"/>
+        </outputParam>
+    </action>
+
+    <action id="action7">
+        <description>action #7</description>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="arg2">
+            <description>Arg 2</description>
+            <typeRef typeId="stringlist"/>
+        </inputParam>
+        <constraints version="1">
+            <constraint name="isBar">
+                <param id="bar1">
+                    <inputRef ref="arg1"/>
+                </param>
+                <param id="bar2">
+                    <inputRef ref="arg2"/>
+                </param>
+            </constraint>
+        </constraints>
+    </action>
+</actionModel>

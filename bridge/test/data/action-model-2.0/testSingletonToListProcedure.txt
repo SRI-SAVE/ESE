@@ -1,0 +1,5 @@
+testSingletonToListProcedure
+Description needed
+#########################################################
+action144[param133=item2; param185=entity5; ]
+action170[param114=my-item7; param157=item16s; param119=[entity5]; ]

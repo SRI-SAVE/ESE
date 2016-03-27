@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+    <type id="type128">
+        <description>Description needed</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+     <type id="type129">
+        <description>Description needed.</description>
+        <list>
+            <ref typeRef="type128"/>
+        </list>
+    </type>
+    <type id="type119">
+        <description>Description needed</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+    <type id="String">
+        <description>Description needed</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+    <type id="type138">
+        <description>Description needed</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+    <type id="type104">
+        <description>Description needed.</description>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+    <action id="action144">
+        <description>Creates an entity that plays the supplied item4, and returns the new entity's type128.</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item4ID">
+            <description>The item4 that this entity plays</description>
+            <ungeneralizable/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="entityID">
+            <description>The type128 of the created entity</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action202">
+        <description>Sets the value of the attribute described by attrName on the entity to value.</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="entityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>The value to set on that attribute</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action182">
+        <description>Gets the value of the attribute described by attrName on the entity.</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="entityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="value">
+            <description>The current value of the attribute on the entity.</description>
+            <typeRef typeId="String"/>
+        </outputParam>
+    </action>
+    <action id="action142">
+        <description>Sets the value of the attribute described by attrName on the entity to a sequence value.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="entityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>The sequence value to set on that attribute</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+    </action>
+    <action id="action106">
+        <description>Adds items to the value of the attribute described by attrName on the entity to a sequence value.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="entityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>The sequence value to add to that attribute</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+    </action>
+    <action id="action222">
+        <description>Adds items to the value of the attribute described by attrName on the entity to a sequence value.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="entityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>The sequence value to add to that attribute</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+        <inputParam id="position">
+            <description>The position in the sequence where the values are to be inserted</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action197">
+        <description>Reaction163s items from the value of the attribute described by attrName on the entity to a sequence
+            value.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="entityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>The sequence value to reaction163 from that attribute</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+    </action>
+    <action id="action170">
+        <description>Adds addEntity(ies) as a member of the item44 described by item44Name on targetEntity.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="targetEntityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="addEntityIDList">
+            <description>The list of entities to add to the item44</description>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+    <action id="action191">
+        <description>Gets members of the item44 described by item44Name on targetEntity.</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="targetEntityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 attribute to read</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>The list of entities that are members of the item44</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action152">
+        <description>Reaction163s reaction163Entity from item44Name on targetEntity.</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="targetEntityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="reaction163EntityIDList">
+            <description>The list of entities to reaction163 from the item44</description>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+    <action id="action215">
+        <description>Sets the members of a item44 to the specified list</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="targetEntityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 attribute to change</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="setEntityIDList">
+            <description>The list of entities to reaction163 from the item44</description>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+    <action id="action189">
+        <description>Selects all the entities that are members of the given item44 on the source entity and returns
+            them.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="sourceEntityID">
+            <description>The type128 of the entity to select from</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 containing the selected values</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>The list of entities selected</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action143">
+        <description>Returns a set of entity IDs that exist as members of the item44 on the source, provided they have
+            value for attr that matches value.
+        </description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="sourceEntityID">
+            <description>The type128 of the entity to select from</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 containing the selected values</description>
+            <ungeneralizable/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>The name of the attribute being selected on</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>The value of that attribute that was matched for selection</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>The entities selected</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action210">
+        <description>Outputs user-specific context values</description>
+        <effectsType type="has_side_effects"/>
+        <outputParam id="userID">
+            <description>The type128 of the user u-form itself</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+        <outputParam id="item30ID">
+            <description>The type128 of the item30 item45 for the user's item39</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+        <outputParam id="item39ChildrenID">
+            <description>The type128 of the children aggregate for the user's item39</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+        <outputParam id="item39item37ID">
+            <description>The type128 of the user's item39's item36</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action217">
+        <description>Find the type128 corresponding to an item in the user's context</description>
+        <effectsType type="has_side_effects"/>
+       
+        <inputParam id="logicalNamespace">
+            <description>The logical namespace for the name of the context item</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="logicalName">
+            <description>The logical name of the context item</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="itemitem34">
+            <description>The type128 corresponding to the logical name</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action175">
+        <description>Sets the root item42 displayed in a hierarchical visulization</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item43ID">
+            <description>The type128 of the item43 aggregate containing the item42</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>The type128 of the item42 to be displayed</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action150">
+        <description>Adds a new hierarchy item42</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item43ID">
+            <description>The type128 of the item43 aggregate containing the item42</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>The type128 of the item42 to add</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action212">
+        <description>Reaction163s a hierarchy item42</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item43ID">
+            <description>The type128 of the item43 aggregate containing the item42</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>The type128 of the item42 to be reaction163d</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action216">
+        <description>Expands a given hierarchy node shown in some tree item43</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item43ID">
+            <description>The type128 of the item43 aggregate containing the item42</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>The type128 of the item42 to be drilled-down upon</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action224">
+        <description>Collapses a hierarchy node</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item43ID">
+            <description>The type128 of the item43 aggregate containing the item42</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>The type128 of the item42 to be drilled-down upon</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action206">
+        <description>Expands a given hierarchy node shown in a table</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item43ID">
+            <description>The type128 of the item43 aggregate containing the item42</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>The type128 of the item42 to be drilled-down upon</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44">
+            <description>The name of the item44 traversed for drilling</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action185">
+        <description>Marks one or more item42s with a visible action121ing</description>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="item42Ids">
+            <description/>
+            <typeRef typeId="type129"/>
+        </inputParam>
+        <inputParam id="action121ingAggID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="action121ID">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action207">
+        <description/>
+        <effectsType type="has_side_effects"/>        
+        <inputParam id="dupAction">
+            <description/>
+            <typeRef typeId="type138"/>
+        </inputParam>
+        <inputParam id="originalID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="duplicateID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action208">
+        <description/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="duplicationID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="targetEntityID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>The name of the item44 attribute to read</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>The list of entities that are members of the item44</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action200">
+        <description>Causes an entity needing privileges to be bootstrapped</description>
+<effectsType type="has_side_effects"/><inputParam id="item45ID">
+            <description>The type128 of the target entity</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item4ID">
+            <description>The type128 of the item4</description>
+            <ungeneralizable/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="bootstrapName">
+            <description>The Bootstrap Name</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="isCreation">
+            <description>Boolean representing if this is a creation or not.</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="targetPath">
+            <description>The Target Path item44 type115</description>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action221">
+        <description>Signals the beginning of a new step in the procedure</description>
+<effectsType type="has_side_effects"/><inputParam id="stepID">
+            <description/>
+            <typeRef typeId="type119"/>
+        </inputParam>
+    </action>
+    <action id="action103">
+        <description>Moves a container child to the front or back of its parent container.</description>
+<effectsType type="has_side_effects"/><inputParam id="containerID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="childID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="operation">
+            <description/>
+            <ungeneralizable/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action218">
+        <description>Exports data from a item14Table to MS Excel</description>
+<effectsType type="has_side_effects"/><inputParam id="tabletype128">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="showIdentity">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="devMode">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="item33List">
+            <description/>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+</actionModel>

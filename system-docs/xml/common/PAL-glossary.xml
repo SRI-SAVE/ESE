@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE glossary PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+
+<!-- Maintain in alphabetical order -->
+
+<glossary><title>PAL Glossary</title>
+
+<glossentry id="action"><glossterm>action</glossterm>
+<glossdef>
+  <para>The fundamental unit of execution in CPOF-PAL,
+  consisting of a name, input and output parameters, and properties,
+  which comprise demonstrations and learned procedures.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="actionInstance"><glossterm>action instance</glossterm>
+<glossdef>
+  <para>A specific occurrence of an <xref linkend="action"/>, with values for the input arguments of the action.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="actionModel"><glossterm>action model</glossterm>
+<glossdef>
+<orderedlist>
+<listitem>
+  <para>The set of actions representing fundamental executable units in CPOF-PAL,
+  which are the elements comprising demonstrations and learned procedures.</para>
+</listitem>
+<listitem>
+  <para>[LAPDOG] Ambiguously refers to a single action with this set of actions,
+  esp. an object of the ActionModel class.</para>
+</listitem>
+</orderedlist>
+</glossdef>
+</glossentry>
+
+<glossentry id="bridge">
+  <glossterm>Bridge</glossterm>
+  <glossdef>
+    <para>CPOF-PAL component which resides in CoMotion and provides a
+    gateway to other PAL functionality. Encapsulates the PAL
+    API.</para>
+  </glossdef>
+</glossentry>
+
+<glossentry id="ctr"><glossterm>Common Task Representation</glossterm>
+  <acronym>CTR</acronym>
+<glossdef>
+  <para>An API used principally to construct a representation of a learned procedure
+  that is shareable among PAL modules, and to decompose it into its component objects.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="ctrs"><glossterm>Common Task Representation Source</glossterm>
+  <acronym>CTR-S</acronym>
+<glossdef>
+  <para>
+  A textual representation of procedures (and the basic representation of
+ Lumen source code) that can be easily converted to and from CTR objects.
+  </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="compoundAction"><glossterm>compound action</glossterm>
+<glossdef>
+  <para>An <xref linkend="action"/>, corresponding to the execution of
+  a collection of other actions, as described by a <xref
+  linkend="procedure"/>.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="dataflow"><glossterm>dataflow</glossterm>
+<glossdef>
+  <para> [LAPDOG] The use of output parameter values of actions or input parameter values of procedures
+  as input parameters in subsequently executed actions, or more generally
+  the enumeration of such occurrences. </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="demonstration"><glossterm>demonstration</glossterm>
+<glossdef>
+  <para>A sequence of user-originated <xref linkend="action"/>s
+  with all parameters instantiated, represented in a form
+  and at a level of detail suitable for generalization and subsequent execution.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="ixm"><glossterm>IXM</glossterm>
+<glossdef>
+  <para>The declarative user-interface modeling toolkit in which the 5.0 <xref linkend="procedureEditor" />
+  is implemented.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="lapdog"><glossterm>LAPDOG</glossterm>
+<glossdef>
+  <para> (Learning Assistant Procedures from Demonstration, Observation
+and Generalization) CPOF-PAL component that performs task learning by converting a
+demonstration trace into an executable, parameterized procedure that
+reproduces the demonstrated activity as well as generalizing it so
+that the demonstrated task may be executed in the future to perform
+tasks similar to the one that is demonstrated. </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="lapdog-mediator"><glossterm>LAPDOG Mediator</glossterm>
+<glossdef>
+  <para> CPOF-PAL component that invokes LAPDOG API methods
+    in response to messages originating from other components, and
+    sends messages to other compnents in response to return from LAPDOG API methods.
+    Doing so isolates LAPDOG from the message-passing aspects of CPOF-PAL. </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="lumen"><glossterm>Lumen</glossterm>
+<glossdef>
+  <para> CPOF-PAL component that is used to execute
+ <xref linkend="compoundAction"/>s
+ implemented by <xref linkend="procedure"/>s
+      and to provide procedure analysis services to the Procedure Editor.
+</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="lumen-mediator"><glossterm>Lumen Mediator</glossterm>
+<glossdef>
+  <para> CPOF-PAL component that invokes Lumen API methods
+    in response to messages originating from other components, and
+    sends messages to other compnents in response to return from Lumen API methods.
+    Doing so isolates Lumen from the message-passing aspects of CPOF-PAL. </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="parameter"><glossterm>parameter</glossterm>
+<glossdef>
+  <para>An the inputs and outputs of a given <xref linkend="action"/> or <xref linkend="procedure"/>.
+  Parameters link the <xref linkend="action"/>s together.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="primitiveAction"><glossterm>primitive action</glossterm>
+<glossdef>
+  <para>An <xref linkend="action"/>, corresponding to a CPOF command or portion thereof,
+  that is directly executable by CPOF.</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="procedure"><glossterm>procedure</glossterm>
+<glossdef>
+  <para>
+    A parameterized collection of actions to be performed in the execution of a
+    <xref linkend="compoundAction" />. This "recipe" contains sequences and loops of other sub-
+    <xref linkend="action" />s to be performed. Flow of information between the sub-<xref linkend="action" />s 
+    is achieved through procedure input parameters and subaction output parameters
+    binding variables and procedure output parameters and subaction input parameters using
+    those variable bindings.
+</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="procedureInstance"><glossterm>procedure instance</glossterm>
+<glossdef>
+    <para>
+        A specific execution of a <xref linkend="procedure" />, with a current execution step and 
+        bindings for variables that have been bound up to the current execution step.
+    </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="procedureEditor"><glossterm>procedure viewer/editor</glossterm>
+<glossdef>
+    <para>
+        The CPOF-PAL procedure viewer/editor is a CPOF user affordance that provides
+        support users to visualize and to create new <xref linkend="procedure" />s by editing an extant
+        <xref linkend="procedure" />.
+    </para>
+</glossdef>
+</glossentry>
+
+<glossentry id="spine"><glossterm>Spine</glossterm>
+<glossdef>
+  <para> CPOF-PAL component that provides message-passing services to the CPOF-PAL system.
+</para>
+</glossdef>
+</glossentry>
+
+<glossentry id="step"><glossterm>step</glossterm>
+<glossdef>
+    <para>
+        A user-facing display of one <xref linkend="action" /> or conceptual grouping of <xref linkend="action" />s
+        in a <xref linkend="procedure" />.
+    </para>
+</glossdef>
+</glossentry>
+
+</glossary>

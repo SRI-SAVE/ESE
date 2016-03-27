@@ -1,0 +1,123 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: actions_test.xml 1034 2009-06-17 18:43:47Z cjones $ -->
+<actionModel version="1.0">
+    <require url="types_test.xml"/>
+    <action id="createObject">
+        <description>Creates an object.</description>
+        <inputParam id="type">
+            <description>The type of object to create.</description>
+            <typeRef typeId="createType"/>
+        </inputParam>
+        <outputParam id="object">
+            <description>The OID of the object which was created.</description>
+            <typeRef typeId="createArg"/>
+        </outputParam>
+    </action>
+
+    <action id="destroyObject">
+        <description>Destroys an object.</description>
+        <inputParam id="object">
+            <description>The OID of the object to be destroyed.</description>
+            <typeRef typeId="destroyArg"/>
+        </inputParam>
+    </action>
+
+    <action id="copyObject">
+        <description>Copies an object.</description>
+        <inputParam id="objectIn">
+            <description>The OID of the original object.</description>
+            <typeRef typeId="oid"/>
+        </inputParam>
+        <outputParam id="objectOut">
+            <description>The OID of the newly produced object.</description>
+            <typeRef typeId="oid"/>
+        </outputParam>
+    </action>
+
+    <action id="recreateObject">
+        <inherit parent="copyObject"/>
+        <description>Creates a action145 of an object and destroys the original.
+        </description>
+    </action>
+
+    <action id="createPath">
+        <description>Create a path with the given name, made of the given
+            points.
+        </description>
+        <inputParam id="name">
+            <description>The name of the new path.</description>
+            <typeRef typeId="name"/>
+        </inputParam>
+        <inputParam id="points">
+            <description>The points the path consists of.</description>
+            <typeRef typeId="pointsList"/>
+        </inputParam>
+    </action>
+
+    <action id="getPath">
+        <description>Retrieves a path with the given name.</description>
+        <inputParam id="name">
+            <description>The name of the new path.</description>
+            <typeRef typeId="name"/>
+        </inputParam>
+        <outputParam id="points">
+            <description>The points the path consists of.</description>
+            <typeRef typeId="pointsList"/>
+        </outputParam>
+    </action>
+
+    <action id="drawPoint">
+        <description>Draw a point at the given location.</description>
+        <inputParam id="location">
+            <description>The location to put the new point.</description>
+            <typeRef typeId="point"/>
+        </inputParam>
+    </action>
+
+    <action id="getClass">
+        <description>Gives the class object by ID.</description>
+        <inputParam id="classID">
+            <description>The OID of the class.</description>
+            <typeRef typeId="oid"/>
+        </inputParam>
+        <outputParam id="method">
+            <description>The class object.</description>
+            <typeRef typeId="friendlyObject"/>
+        </outputParam>
+    </action>
+
+    <action id="mapPoint">
+        <description>Map a point</description>
+        <inputParam id="x">
+            <description>The X Coordinate</description>
+            <typeRef typeId="floatCoord"/>
+        </inputParam>
+    </action>
+
+    <action id="move" benign="true">
+        <description>move an object on screen</description>
+        <inputParam id="object">
+            <description>The thing to be moved</description>
+            <typeRef typeId="oid"/>
+        </inputParam>
+        <inputParam id="location">
+            <description>The new location</description>
+            <typeRef typeId="point"/>
+        </inputParam>
+    </action>
+</actionModel>

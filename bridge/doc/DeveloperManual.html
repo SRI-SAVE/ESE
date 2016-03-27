@@ -1,0 +1,220 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Developer Manual</title></head>
+<body>
+<h1>PAL Bridge Developer Manual</h1>
+<h3>Overview</h3>
+The PAL Bridge system consists of the following components:<br>
+<ul>
+    <li>The target application (e.g. CPOF, WebTAS)</li>
+    <li>LAPDOG for Task Learning</li>
+    <li>Lumen for procedure execution</li>
+    <li>Bridge API for adapting PAL components for target
+    application</li>
+    <li>Spine to route messages between the PAL components</li>
+</ul>
+<h3>Architecture</h3>The PAL Bridge system is a client-server
+architecture. The server component, the Spine, can exist either in its
+own JVM, or in the client's JVM.
+
+<h3>Integration Overview</h3>
+<p>The following list gives a high-level overview of what needs to be
+done to enable PAL-Bridge-based Task Learning in an
+application.
+<ul>
+    <li><i>Action Model Instrumentation</i>
+        <ul><li>Develop an action model, which is the set of atomic
+                operations that a user may perform. A simple learned
+                task consists of a sequence of these actions. Each
+                action has input parameters (objects upon which the
+                action operates) and output parameters (artifacts the
+                action produces or side effects). The action model
+                also includes the definition of types that are
+                specific to the target domain. It is important that
+                the action model be specified at the correct semantic
+                level: The level at which the user thinks about and
+                interacts with the system.
+            <li>Formalize the action model into an XML descriptor
+                file. While it's possible to dynamically define the
+                action model using the PAL API, this is not
+                recommended except for special cases.
+            <li>For each action in the action model, the target
+                application must provide both instrumentation code to
+                report the occurrence of the action (a sensor) during
+                the task learning phase and instrumentation code to
+                reproduce the action (an effector) during task
+                execution. <b>Producing the instrumentation code is
+                typically the largest part of the work to integrate
+                task learning.</b>
+        </ul>
+    <li><i>User Interface</i>
+        <ul><li>The PAL-Bridge system does not provide a user
+                interface. (SRI does have a standalone task learning
+                system which provides a UI, but that system is beyond
+                the scope of this document.) The target application
+                must provide a user interface to do the following (at
+                a minimum):
+                <ul><li>Initiate and control task learning
+                    <li>Provide access to previously-learned tasks
+                    <li>Initiate task execution
+                </ul>
+        </ul>
+    <li><i>API Integration</i>
+        <ul><li>Write code to use the PAL-Bridge APIs for task
+                learning and execution. This involves implementing a
+                variety of interfaces, depending on what functionality
+                is desired.
+            <li>Write code to provide persistence of learned tasks.
+        </ul>
+</ul>
+
+<h3>The Bridge API</h3>
+<p>See the <a href="api/com/sri/pal/package-summary.html">com.sri.pal
+package javadoc</a> for a good introduction to the Bridge API, or read
+on:
+<p>The main entry point for the target application in the Bridge API
+is the <code>Bridge</code> class. This class instantiates and/or
+connects to the other PAL components, and it provides the API for
+registering various application listeners and services. The
+application should consider implementing some or all of the following:
+<ul>
+    <li><code><a href="api/com/sri/pal/ActionExecutor.html">ActionExecutor</a></code>
+        - provides the application's callback facility for procedure
+        execution. When a procedure needs to perform an action in the
+        application, it will call this interface. Multiple
+        implementations of this interface can be registered to handle
+        distinct subsets of the action model, if necessary.
+    <li><code><a href="api/com/sri/pal/ActionInvocationStatusListener.html">ActionInvocationStatusListener</a></code>
+        - allows the implementor to track the status of a
+        single <code>ActionInvocation</code>
+        or <code>ProcedureInvocation</code>, usually the latter.
+    <li><code><a href="api/com/sri/pal/TypeStorage.html">TypeLoader</a></code>
+        - provides persistence of stored procedures and potentially
+        offline applications' action models.
+    <li><code><a href="api/com/sri/pal/GlobalActionListener.html">GlobalActionListener</a></code>
+        - allows the application to be notified of any procedures or
+        actions which are executed.
+    <li><code><a href="api/com/sri/pal/InstrumentationControl.html">InstrumentationControl</a></code>
+        - allows for selective enabling/disabling of instrumentation
+        when multiple applications are sharing the same PAL backend
+        for cross-application learning.
+    <li><code><a href="api/com/sri/pal/ProcedureExecutor.html">ProcedureExecutor</a></code>
+        - In some cases, the application may implement this in
+        addition to <code>ActionExecutor</code>. If the application
+        provides access to an embedded scripting language, where a
+        string containing source code is used to define a new action,
+        then this interface is appropriate.
+</ul>
+<p>Additionally, the application integration developer may wish to
+look at some of the PAL classes available for representing application
+data types:
+<ul>
+    <li><code><a href="api/com/sri/pal/PrimitiveTypeDef">PrimitiveTypeDef</a></code>
+        - holds primitive values such as string or int.
+    <li><code><a href="api/com/sri/pal/EnumeratedTypeDef">EnumeratedTypeDef</a></code>
+        - for enumerated types.
+    <li><code><a href="api/com/sri/pal/CustomTypeDef.html">CustomTypeDef</a></code>
+        - for application types which can't easily be represented
+        using combinations of the other types. A custom type needs a
+        way to map between its string representation and its Java
+        object representation. See the javadoc for that class for more
+        implementation notes.
+    <li><code><a href="api/com/sri/pal/ListDef.html">ListDef</a></code>
+        - ordered collection of other objects.
+    <li><code><a href="api/com/sri/pal/SetDef.html">SetDef</a></code>
+        - unordered collection of other objects with no duplicates.
+    <li><code><a href="api/com/sri/pal/BagDef.html">BagDef</a></code>
+        - unordered collection of other objects with duplicates
+        allowed.
+    <li><code><a href="api/com/sri/pal/StructDef.html">StructDef</a></code>
+        - for structured objects with named, typed fields.
+</ul>
+The container types can be nested within each other arbitrarily
+deeply.
+<p>The target domain is defined by an action model in an XML file. The
+action model is loaded the first time a given application runs by
+calling one of the <code>ActionModel.load()</code> methods, at which
+time the action model data will be written to persistent storage. The
+action model <a href="examples/ActionModel.xsd">XSD</a> and
+<a href="examples/actions_test.xml">an example</a> are available.
+
+<h3>Adapting the System to a New Application Domain</h3>
+<ol>
+    <li>Create a new XML action model. Schema for the XML is
+        at <a href="examples/ActionModel.xsd"><code>examples/ActionModel.xsd</code></a>.
+    <li>Start the PAL components, if not running in a separate JVM
+        (<code>Bridge.startPAL()</code>).
+    <li>Create an instance of the PAL Bridge
+        (<code>Bridge.newInstance()</code>).
+    <li>To instrument the effectors, implement
+        the <code>ActionExecutor</code> interface.</li>
+    <li>Register your <code>ActionExecutor</code>
+        using <code>ActionModel.registerExecutor()</code>.
+    <li>Register your action model with the PALBridge. (one time only)
+        <code><pre>
+                ActionModel am = Bridge.getActionModel();
+                am.load(url, executor, NAMESPACE);
+        </pre></code>
+    <li>To learn a procedure from a demonstrated sequence of user
+        actions, call <code>Learner.learn()</code>.
+</ol>
+
+<h3>Details, Hints, and System Properties</h3>
+<ul><li>The PAL components use
+        <a href="http://www.slf4j.org/">SLF4J</a> for logging. SLF4J
+        can send messages to log4j, java.util.logging, or other
+        logging frameworks. Ensure that exactly one of the logging
+        framework binding jar files
+        (e.g., <code>slf4j-log4j12-1.5.11.jar</code>) is on the
+        classpath.
+    <li>LAPDOG can write output files which are very helpful
+        in diagnosing learning failures. This may be enabled by
+        setting the system property <CODE>lapdog.output.directory</CODE>
+        to the desired directory. Relative paths are relative to the
+        system's working directory.
+    <li>LAPDOG may be configured to name variables using an arbitrary separator
+        string between the stem and trailing integer of variable names. By default
+        this string is the underscore (_). This may be configured by
+        setting the system property <CODE>lapdog.naming.variable.separator</CODE>
+        to the desired string (the empty string is allowable).
+    <li>LAPDOG's ability to learn loops can be disabled by setting the
+        system property <code>lapdog.disable-loop-learning</code>.
+    <li>By default, PAL uses JMS on port 61616. This can be changed by
+        setting the system property <code>PAL.JmsMessageBrokerPort</code>.
+    <li>By default, the secondary JMS Spine used by the Bridge to
+        connect to the PAL backend will retry existing subscription
+        requests to the primary Jms Spine 10 times. This can be
+        changed by setting the system
+        property <code>PAL.SubscriptionAttempts</code>.
+    <li>By default, the secondary JMS Spines will wait 5000ms before
+        retrying existing subscription requests to the primary Jms
+        Spine. This can be changed by setting the system
+        property <code>PAL.SubscriptionInterval</code> in
+        milliseconds.
+    <li>By default, the PALBridge will wait 60,000ms before assuming that
+        the Shell has died. Thi can be changed by setting the system property
+        <code>PAL.ShellPingDelayTimeout</code> in milliseconds.
+    <li>For debugging, action model logging can be enabled by setting
+        the system property PAL.actionModelLogDir to the name of a
+        directory to log action model fragments into.
+</ul>
+<br>
+<pre>$Id: DeveloperManual.html 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $</pre>
+</body></html>

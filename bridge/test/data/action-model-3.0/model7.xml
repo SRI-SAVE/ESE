@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+
+    <require url="./model4.xml"/>
+
+    <type id="type130">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <action id="action149">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="interestID">
+            <description/>
+            <typeRef typeId="type130"/>
+        </outputParam>
+    </action>
+
+    <action id="action194">
+        <description>No descr.</description>
+        <inputParam id="interestID">
+            <description/>
+            <typeRef typeId="type130"/>
+        </inputParam>
+        <inputParam id="attribute">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type115"/>
+        </inputParam>
+        <outputParam id="value">
+            <description/>
+            <typeRef typeId="type108"/>
+        </outputParam>
+    </action>
+</actionModel>

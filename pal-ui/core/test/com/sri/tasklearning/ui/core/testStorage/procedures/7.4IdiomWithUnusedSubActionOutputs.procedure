@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^7.4IdiomWithUnusedSubActionOutputs'
+ execute:{
+  do 'arda^1.0^create_create_use/template1'($output)
+   by:{
+    do 'arda^1.0^CreateString'($output);
+    do 'arda^1.0^CreateString'($output2);
+    do 'arda^1.0^UseString'($output);};}
+ properties:{expected_output:"CREATE STRING\nCREATE STRING\nUSE STRING: string\n", isTransient:"true"}</bodySource>
+</TaskModel>

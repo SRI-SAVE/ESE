@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="./am-to-html.xslt"?>
+
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+
+    <!-- Types -->
+    
+    <type id="ShapeEnum">
+        <description>Enumeration of shape types</description>
+        <metadata key="name" value="shape"/>
+        <metadata key="thisName" value="this shape"/>
+        <metadata key="aName" value="a shape"/>
+        <metadata key="pluralName" value="shapes"/>
+        <enum>
+            <value>Circle</value>
+            <value>Square</value>
+            <value>Triangle</value>
+        </enum>
+    </type>
+    
+    <type id="ColorEnum">
+        <description>Enumeration of color types</description>
+        <metadata key="name" value="color"/>
+        <metadata key="thisName" value="this color"/>
+        <metadata key="aName" value="a color"/>
+        <metadata key="pluralName" value="colors"/>        
+        <enum>
+            <value>Black</value>
+            <value>Blue</value>
+            <value>Green</value>
+            <value>Red</value>
+            <value>White</value>
+            <value>Yellow</value>
+        </enum>
+    </type>
+    
+    <type id="SizeEnum">
+        <description>Enumeration of size types</description>
+        <metadata key="name" value="size"/>
+        <metadata key="thisName" value="this size"/>
+        <metadata key="aName" value="a size"/>
+        <metadata key="pluralName" value="sizes"/>  
+        <enum>
+            <value>Small</value>
+            <value>Medium</value>
+            <value>Large</value>
+        </enum>
+    </type>        
+    
+    <type id="ConfigEnum">
+        <description>Enumeration of configuration types</description>    
+        <metadata key="name" value="assembly configuration"/>
+        <metadata key="thisName" value="this assembly configuration"/>
+        <metadata key="aName" value="an assembly configuration"/>
+        <metadata key="pluralName" value="assembly configurations"/>  
+        <enum>
+            <value>Horizontal</value>
+            <value>Vertical</value>
+            <value>Diagonal-Up</value>
+            <value>Diagonal-Down</value>
+        </enum>
+    </type>
+    
+    <type id="Piece">
+        <description>A basic playing piece in Novo</description>
+        <metadata key="name" value="piece"/>
+        <metadata key="thisName" value="this piece"/>
+        <metadata key="aName" value="a piece"/>
+        <metadata key="pluralName" value="pieces"/>          
+        <struct>
+            <ref name="shape" typeRef="ShapeEnum"/>
+            <ref name="color" typeRef="ColorEnum"/>
+            <ref name="size" typeRef="SizeEnum"/>
+        </struct>
+    </type>
+    
+    <type id="PieceSet">
+        <description>A set of pieces</description>
+        <set>
+            <ref typeRef="Piece"/>
+        </set>
+    </type>
+    
+    <type id="PieceList">
+        <description>A list of Shapes</description>
+        <list>
+            <generalizeSingleton method="first"/>
+            <ref typeRef="Piece"/>
+        </list>
+    </type>       
+
+    <type id="Assembly">
+        <description>A composite assembly of pieces configured in a particular manner</description>
+        <metadata key="name" value="assembly"/>
+        <metadata key="thisName" value="this assembly"/>
+        <metadata key="aName" value="an assembly"/>
+        <metadata key="pluralName" value="assemblies"/>  
+        <struct>
+            <ref name="things" typeRef="PieceList"/>
+            <ref name="configuration" typeRef="ConfigEnum"/>
+        </struct>
+    </type>
+    
+    <!-- ACTIONS -->
+        
+    <action id="filterByShape">
+        <description>Filter pieces by their shape property</description>
+        <metadata key="name" value="Filter by shape"/>
+        <metadata key="fancyName" value="Filter out ,#shape, pieces"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="shape">
+            <class class="constant"/>
+            <typeRef typeId="ShapeEnum"/>
+        </inputParam>
+        <outputParam id="filtered_pieces">
+            <typeRef typeId="PieceList"/>
+        </outputParam>
+    </action>
+    
+    <action id="filterByColor">
+        <description>Filter pieces by their color property</description>
+        <metadata key="name" value="Filter pieces by color"/>
+        <metadata key="fancyName" value="Filter out ,#color, pieces"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="color">
+            <class class="constant"/>
+            <typeRef typeId="ColorEnum"/>
+        </inputParam>
+        <outputParam id="filtered_pieces">
+            <typeRef typeId="PieceList"/>
+        </outputParam>
+    </action>
+    
+    <action id="colorCopy">
+        <description>Create a copy of a piece and give it a different color</description>
+        <metadata key="name" value="Create a copy of a piece and give it a different color"/>
+        <metadata key="fancyName" value="Create a copy of ,#piece, and make it ,#color"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="piece">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="color">
+            <class class="constant"/>
+            <typeRef typeId="ColorEnum"/>
+        </inputParam>
+        <outputParam id="colored_copy">
+            <typeRef typeId="Piece"/>
+        </outputParam>
+    </action>
+        
+    <action id="sizeCopy">
+        <description>Create a copy of a piece and give it a different size</description>
+        <metadata key="name" value="Create a copy of a piece and give it a different size"/>
+        <metadata key="fancyName" value="Create a copy of ,#piece, and make it ,#size"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="piece">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="size">
+            <class class="constant"/>
+            <typeRef typeId="SizeEnum"/>
+        </inputParam>
+        <outputParam id="resized_copy">
+            <typeRef typeId="Piece"/>
+        </outputParam>
+    </action>
+    
+    <action id="dispenseShape">
+        <description>Create a new piece with a given shape</description>
+        <metadata key="name" value="Create a new piece with a given shape"/>
+        <metadata key="fancyName" value="Create a new piece that is a ,#shape"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="shape">
+            <class class="constant"/>
+            <typeRef typeId="ShapeEnum"/>
+        </inputParam>
+        <outputParam id="piece">
+            <typeRef typeId="Piece"/>
+        </outputParam>
+    </action>
+    
+    <action id="dispenseShapes">
+        <description>Create multiple new pieces with a given shape</description>
+        <metadata key="name" value="Create multiple new pieces with a given shape"/>
+        <metadata key="fancyName" value="Create ,#numShapes, new pieces that are ,#shape"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="numShapes">
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="shape">
+            <class class="constant"/>
+            <typeRef typeId="ShapeEnum"/>
+        </inputParam>
+        <outputParam id="pieces">
+            <typeRef typeId="PieceList"/>
+        </outputParam>
+    </action>
+           
+    <action id="assembleTwo">
+        <description>Assemble two pieces</description>
+        <metadata key="name" value="Assemble two pieces"/>
+        <metadata key="fancyName" value="Assemble ,#piece1, and ,#piece2, on a ,#configuration, line"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="piece1">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="piece2">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="configuration">
+            <class class="constant"/>
+            <typeRef typeId="ConfigEnum"/>
+        </inputParam>
+        <outputParam id="assembly">
+            <typeRef typeId="Assembly"/>
+        </outputParam>
+    </action>
+    
+    <action id="assembleThree">
+        <description>Assemble three pieces</description>
+        <metadata key="name" value="Assemble three pieces"/>
+        <metadata key="fancyName" value="Assemble ,#piece1, ,#piece2, and ,#piece3, on a ,#configuration, line"/>
+        <metadata key="icon" value="./fapps/novo.png"/>
+        <inputParam id="piece1">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="piece2">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="piece3">
+            <typeRef typeId="Piece"/>
+        </inputParam>
+        <inputParam id="configuration">
+            <class class="constant"/>
+            <typeRef typeId="ConfigEnum"/>
+        </inputParam>
+        <outputParam id="assembly">
+            <typeRef typeId="Assembly"/>
+        </outputParam>
+    </action>        
+</actionModel>

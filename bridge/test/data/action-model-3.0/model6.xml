@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+
+    <require url="./model4.xml"/>
+
+    <type id="type124">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type105">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Integer</javaType>
+        </custom>
+    </type>
+
+    <type id="type127">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Boolean</javaType>
+        </custom>
+    </type>
+
+    <type id="type121">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <action id="action193">
+        <description>No descr.</description>
+        <inputParam id="grantName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type124"/>
+        </inputParam>
+        <inputParam id="depth">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type105"/>
+        </inputParam>
+        <inputParam id="profiles">
+            <description>No descr.</description>
+            <!-- This could be a set. -->
+            <typeRef typeId="type112"/>
+        </inputParam>
+    </action>
+
+    <action id="action130">
+        <description/>
+        <inputParam id="frame">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="framePart">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type121"/>
+        </inputParam>
+    </action>
+
+    <action id="action227">
+        <description/>
+        <inputParam id="entity">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+
+    <action id="action111">
+        <description>No descr.</description>
+        <inputParam id="depth">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="type105"/>
+        </inputParam>
+        <inputParam id="readOnly">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type127"/>
+        </inputParam>
+    </action>
+</actionModel>

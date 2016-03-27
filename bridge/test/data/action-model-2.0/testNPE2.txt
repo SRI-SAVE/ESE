@@ -1,0 +1,18 @@
+testNPE2
+NPE regression test
+#########################################################
+action144[param133=0xfc59cc0d5265736f757263652b526f6c65; param185=0x080e000001116acbc2430af104a48010; ]
+action202[param185=0x080e000001116acbc2430af104a48010; param198=icon; param143=com/path/images/resource.png; ]
+action202[param185=0x080e000001116acbc2430af104a48010; param198=Name; param143=Untitled; ]
+action170[param114=0x080e000001116acbc2430af104a48010; param157=item5s; param119=[0xfc59cc0d5265736f757263652b526f6c65]; ]
+action170[param114=0x080e000001116acbc2430af104a48010; param157=shared log; param119=[0x080e000001116acbc2430af104a48011]; ]
+action202[param185=0x080e000001116acbc2430af104a48010; param198=wrapper; param143=com.generic.value3; ]
+action144[param133=0xfc59cc0e5368617265644c6f672b526f6c65; param185=0x080e000001116acbc2430af104a48011; ]
+action170[param114=0x080e000001116acbc2430af104a48011; param157=item16s; param119=[]; ]
+action142[param185=0x080e000001116acbc2430af104a48011; param198=no_clone; param143=[item16s]; ]
+action142[param185=0x080e000001116acbc2430af104a48011; param198=no_action145; param143=[item16s]; ]
+action170[param114=0x080e000001116acbc2430af104a48011; param157=item5s; param119=[0xfc59cc0e5368617265644c6f672b526f6c65]; ]
+action144[param133=0xfc59cc0e50726f6365647572652b526f6c65; param185=0x080e000001116acbc2430af104a4802c; ]
+action202[param185=0x080e000001116acbc2430af104a4802c; param198=lastExecuted; param143=0; ]
+action202[param185=0x080e000001116acbc2430af104a4802c; param198=Name; param143=New PAL Procedure; ]
+action170[param114=0x080e000001116acbc2430af104a4802c; param157=item5s; param119=[0xfc59cc0e50726f6365647572652b526f6c65]; ]

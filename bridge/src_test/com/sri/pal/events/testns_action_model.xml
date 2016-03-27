@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+    <type id="type128">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="type119">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="String">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="type138">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    <type id="type129">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="type128"/>
+        </list>
+    </type>
+    <type id="type104">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+    <action id="action144">
+        <description>No descr.</description>
+        <inputParam id="item4ID">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action202">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action182">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </outputParam>
+    </action>
+    <action id="action142">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+    </action>
+    <action id="action106">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+    </action>
+    <action id="action222">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+        <inputParam id="position">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action197">
+        <description>No descr.</description>
+        <inputParam id="entityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="type104"/>
+        </inputParam>
+    </action>
+    <action id="action170">
+        <description>No descr.</description>
+        <inputParam id="targetEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="addEntityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+    <action id="action191">
+        <description>No descr.</description>
+        <inputParam id="targetEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action152">
+        <description>No descr.</description>
+        <inputParam id="targetEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="reaction163EntityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+    <action id="action215">
+        <description>No descr.</description>
+        <inputParam id="targetEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="setEntityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+    <action id="action189">
+        <description>No descr.</description>
+        <inputParam id="sourceEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action143">
+        <description>Returns a set of entity IDs that exist as members of the
+            item44 on the source, provided they have value for attr that
+            matches value.
+        </description>
+        <inputParam id="sourceEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="attrName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="value">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action210">
+        <description>No descr.</description>
+        <outputParam id="userID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+        <outputParam id="item30ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+        <outputParam id="item39ChildrenID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+        <outputParam id="item39item37ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action217">
+        <description>No descr.</description>
+        <inputParam id="logicalNamespace">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="logicalName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="itemitem34">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action175">
+        <description>No descr.</description>
+        <inputParam id="item43ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action150">
+        <description>No descr.</description>
+        <inputParam id="item43ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action212">
+        <description>No descr.</description>
+        <inputParam id="item43ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action216">
+        <description>No descr.</description>
+        <inputParam id="item43ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action224">
+        <description>No descr.</description>
+        <inputParam id="item43ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+    </action>
+    <action id="action206">
+        <description>No descr.</description>
+        <inputParam id="item43ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item42ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44">
+            <description>No descr.</description>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action185">
+        <description>No descr.</description>
+        <inputParam id="item42Ids">
+            <description/>
+            <typeRef typeId="type129"/>
+        </inputParam>
+        <inputParam id="action121ingAggID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="action121ID">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action207">
+        <description/>
+        <inputParam id="dupAction">
+            <description/>
+            <typeRef typeId="type138"/>
+        </inputParam>
+        <inputParam id="originalID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <outputParam id="duplicateID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </outputParam>
+    </action>
+    <action id="action208">
+        <description/>
+        <inputParam id="duplicationID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="targetEntityID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item44Name">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <outputParam id="entityIDList">
+            <description>No descr.</description>
+            <typeRef typeId="type129"/>
+        </outputParam>
+    </action>
+    <action id="action200">
+        <description>No descr.</description>
+        <inputParam id="item45ID">
+            <description>No descr.</description>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="item4ID">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="bootstrapName">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="isCreation">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="targetPath">
+            <description>No descr.</description>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action221">
+        <description>No descr.</description>
+        <inputParam id="stepID">
+            <description/>
+            <typeRef typeId="type119"/>
+        </inputParam>
+    </action>
+    <action id="action103">
+        <description>No descr.</description>
+        <inputParam id="containerID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="childID">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="operation">
+            <description/>
+            <class class="constant"/>
+            <typeRef typeId="String"/>
+        </inputParam>
+    </action>
+    <action id="action218">
+        <description>No descr.</description>
+        <inputParam id="tabletype128">
+            <description/>
+            <typeRef typeId="type128"/>
+        </inputParam>
+        <inputParam id="showIdentity">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="devMode">
+            <description/>
+            <typeRef typeId="String"/>
+        </inputParam>
+        <inputParam id="item33List">
+            <description/>
+            <typeRef typeId="type129"/>
+        </inputParam>
+    </action>
+</actionModel>

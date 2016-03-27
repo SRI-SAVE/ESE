@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<response>
+    <id>resp-32</id>
+    <exercise_id>ex-1</exercise_id>
+    <task_response>
+        <demo>$demonstration {
+  'LoadTest^1.0^addToContainer' "895086605528588832", "-8080408294149858453";
+  'LoadTest^1.0^makeItem' "-8080408294149858453", "-8080408294149858453";
+  'LoadTest^1.0^selectAll' "8083319453648179568", ["-8941497113005562385", "7655617069165950029", "-6900771968266353606"];
+  'LoadTest^1.0^addToContainer' "-696489442968586474", "1094299818950669913";
+  'LoadTest^1.0^selectAll' "-6192762825471725722", ["1094299818950669913", "-2278082215692954090", "895086605528588832"];
+  'LoadTest^1.0^selectAll' "1094299818950669913", ["-6192762825471725722", "895086605528588832", "895086605528588832"];
+  'LoadTest^1.0^makeItem' "1244956278752761695", "-6192762825471725722";
+  'LoadTest^1.0^addToContainer' "8540016743005368682", "-3442512202317653808";
+  'LoadTest^1.0^makeItem' "1813806531944162070", "-549129815122108832";
+  'LoadTest^1.0^removeFromContainer' "-6998277056487148064", "-5303179644895158208";}
+ properties:{}</demo>
+        <seconds_elapsed>0</seconds_elapsed>
+    </task_response>
+</response>
+<!-- Change step 2 from SimpleTypeName[LoadTest^1.0^removeFromContainer] to SimpleTypeName[LoadTest^1.0^selectAll] -->

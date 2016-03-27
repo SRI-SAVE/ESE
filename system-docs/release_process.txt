@@ -1,0 +1,41 @@
+$Id: release_process.txt 2110 2010-02-12 20:29:06Z cjones $
+
+To make a release, do the following:
+
+0. Update release notes and change lists for all the modules, and
+   check them in to their respective locations.
+
+1. Make sure you're using the build machine, or at the very least, a
+   controlled build environment. This means you're sure you have the
+   correct version of the JDK with which to compile .class files and
+   build .jar files.
+
+2. Build LAPDOG from source, if necessary. LAPDOG comes from
+   https://svn.ai.sri.com/svn/lapdog/trunk or one of its
+   branches. Check in lapdog-ai.jar to
+   https://cmxt.sri.com/svn/tasklearning/trunk/lapdog-client/lib or an
+   appropriate branch.
+
+3. Build Lumen from source, if necessary. Lumen's home is
+   https://svn.ai.sri.com/projects/lumen/trunk . Check in to
+   https://cmxt.sri.com/svn/tasklearning/trunk/itl-server-lumen-support/lib .
+
+4. Check out the Shell's source, which grabs the tasklearning source
+   as necessary. The Shell lives at
+   https://cmit.sri.com/svn/PAL-CPOF-SHELL/trunk .
+
+5. Run "ant clean" and then "svn status" to make sure you have no
+   modified files.
+
+6. Run "svn update" even if you know your source is up to
+   date. Otherwise you may end up with an inconsistent version number
+   from svnversion.
+
+7. Run "ant dist" to build the release with a name similar to
+   pal-1.152.zip.
+
+8. Upload that zip file to the "File Exchange" area of the CPOF/PAL
+   Dev wiki at https://projects.esd.sri.com/CPOF-PAL/.
+
+9. Notify Vanessa or other appropriate people at GD that the new
+   release is available.

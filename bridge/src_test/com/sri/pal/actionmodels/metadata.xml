@@ -1,0 +1,79 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- $Id: metadata.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<actionModel version="1.0">
+    <metadata key="key1" value="value1"/>
+    <metadata key="key2" value="value2"/>
+
+    <type id="string0">
+        <description>simple string type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="string1">
+        <description>string type with 1 metadata item (metadatum?)</description>
+        <metadata key="foo" value="bar"/>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="string2">
+        <description>another simple string type</description>
+        <metadata key="foo" value="bar"/>
+        <metadata key="foo2" value="bar2"/>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <action id="action0">
+        <description>action #1</description>
+        <inputParam id="arg1">
+            <description>Arg #1</description>
+            <metadata key="key1" value="value1"/>
+            <metadata key="key2" value="value2"/>
+            <typeRef typeId="string0"/>
+        </inputParam>
+    </action>
+
+    <action id="action1">
+        <description>action #2</description>
+        <metadata key="alice" value="bob"/>
+        <outputParam id="arg1">
+            <description>Arg #1 (action #2)</description>
+            <typeRef typeId = "string0"/>
+        </outputParam>
+    </action>
+
+    <action id="action2">
+        <description>action #3</description>
+        <metadata key="key1" value="value1"/>
+        <metadata key="key2" value="value2"/>
+        <inputParam id="arg1">
+            <description>Arg 1</description>
+            <typeRef typeId="string0"/>
+        </inputParam>
+        <outputParam id="arg2">
+            <description>arg 2</description>
+            <class class="internal"/>
+            <typeRef typeId="string1"/>
+        </outputParam>
+    </action>
+</actionModel>

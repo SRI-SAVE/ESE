@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^6.2StepsWithMultipleOutputs'
+ execute:{
+  do 'arda^1.0^CreateBoolean'($myBool);
+  do 'arda^1.0^CreateStringAndOtherStuff'($myString, $myOtherBool, $myList);}
+ properties:{expected_output:"CREATE BOOLEAN\nCREATE STRING AND OTHER STUFF\n", isTransient:"true"}</bodySource>
+</TaskModel>

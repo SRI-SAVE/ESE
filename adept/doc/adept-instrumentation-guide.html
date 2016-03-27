@@ -1,0 +1,198 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Adept Instrumentation Guide</title>
+<!--  dsc {margin-left:50px;margin-right:50px}  -->
+<style type="text/css">
+pre {
+ background: #faf8f0;
+ border: 1px solid #bebab0;
+}
+</style>
+</head>
+<body>
+<h2>Instructions for adding an instrumentation source to the Adept system</h2>
+
+<h3>1. Introduction</h3>
+<p>
+This guide will explain how to create a module for that allows a third party application to exchange instrumented events and automated actions with the Adept task learning system.  Conceptually, we will be creating a bridge between the third party app and the JMS messaging spine used by Adept.  This bridge is typically called a "mediator" in Adept terminology.  The goal is to use our application and let it train the Adept system to build a procedure and then for Adept to play back the procedure and control the application.
+</p>
+<p>
+First we will need to create a class that extends the TLModule class.  Next we will create a main class that will handle all of the bridging logic and implement the various event handlers.  Then we will need to define the actions that we will submit to the JMS messaging spine.  These actions are defined in an xml file called an "action model".  Finally, we will write some event handlers that translate the application's native events into Adept actions and perform automation when the actions are invoked.
+</p>
+
+<h3>2. Extending the TLModule class</h3>
+<p>
+The first step to integrate with the Adept task learning system is to extend the TLModule class.  The purpose of this class is to manage the lifecycle of module and define startup parameters.  A typical implementation would look like this:
+<pre width="75">
+public class RemoteXmlProcessManager extends TLModule {
+}
+</pre>
+The next step is to override some methods so that Adept will run the module in the same Java VM:
+<pre width="75">
+    @Override
+    protected StartupMode getDefaultStartupMode() {
+        return StartupMode.IN_JVM;
+    }
+
+    @Override
+    public void startInJvm() throws SpineStartupException {
+        // Create main class and start it
+    }
+
+    @Override
+    public void stop() {
+        // Stop main class
+    }
+
+    @Override
+    public boolean isRunning() {
+        // return running status of main class
+    }
+</pre>
+Note that we could have chosen to run our module in a separate Java VM by returning StartupMode.NEW_CONSOLE and by overriding the startNewJvm() method.
+</p>
+<p>
+Once we have created our module class, we need to connect it to the main Adept system by adding it to the createModules() method of the ProcessManager class.
+<pre width="75">
+        if (isEnabled.get(ShellService.Modules.REMOTEXML)) {
+            TLModule remotexml = new RemoteXmlProcessManager();
+            modules.add(remotexml);
+            nameToModuleMap.put(ShellService.Modules.REMOTEXML, remotexml);
+        }
+</pre>
+First we need to check if the module is enabled (You will need to create a new entry in the SellService.Modules enum).  Next we create the module and add it to the modules list.  Finally, we need to register our service name in the nameToModuleMap collection.
+</p>
+<h3>3. Creating a main class</h3>
+<p>
+Now that we have created our module and connected it to the Adept system, we need to create a main class that does most of the heavy lifting.  This class is responsible for loading the action model and implementing handlers for instrumentation and automation events.  A typical class definition might look something like this:
+<pre width="85">
+public class RemoteXmlMain implements IMozillaEventListener, ActionExecutor {
+}
+</pre>
+Note that this class implements two interfaces.  The IMozillaEventListener interface is used to handle instrumentation events from your third party app (in this case, we are hadling events from Firefox and Thunderbird).  The ActionExecutor interface is used to handle automation events from the Adept system.  More detail on these interfaces is provided in sections below.
+</p>
+<p>
+The constructor for our main class might look something like this:
+<pre width="75">
+    public RemoteXmlMain() {
+        // Load services
+        loadServices();
+        // Load action model
+        loadActionModel();
+        // Build gui
+        buildGui();
+    }
+</pre>
+The loadServices() method is used to connect to the third party application and register the main class as an event listener for instrumentation.  The loadActionModel() method is used to load the action model from an xml file and register the main class as an event listener for automation.  A typical implemenation might look like this:
+<pre width="85">
+    private void loadActionModel() {
+        try {
+            Bridge bridge = Bridge.newInstance(APP_NAME);
+            actionModel = bridge.getActionModel();
+            URL url = ActionModels.class.getResource("/remotexml_model.xml");
+            actionModel.load(url, this, NAMESPACE);
+        } catch (PALException e) {
+            log.error("Failed to load action model", e);
+        }
+    }
+</pre>
+Note that the APP_NAME parameter is just a string for your application's module name:
+<pre width="75">
+    private static final String APP_NAME = "remotexml-mediator";
+</pre>
+And the NAMESPACE parameter is just a string groups all of your events into a common namespace:
+<pre width="75">
+    public static final String NAMESPACE = "mozilla";
+</pre>
+In the above example, we are getting a reference to our xml action model file from the class loader getResource() method.  This means that the action model should be in the application's classpath or contained with your module's jar file.  Another option is to load the model from a common directory location.  Next we call the actionModel.load() method passing in our xml file url, the ActionExecutor class (this) and the namespace for the events.
+</p>
+<h3>4. Creating an action model</h3>
+<p>
+The action model xml file defines all the actions (events) used by our third party application.  For each action, we define some meta data as well as all of the input and output parameters and their types.  For example, Firefox implements an OpenUrlEvent action:
+<pre width="75">
+&lt;actionModel version="1.0"&gt;
+    &lt;action id="OpenUrlEvent"&gt;
+        &lt;description&gt;Firfox open url event&lt;/description&gt;
+        &lt;metadata key="name" value="Open URL"/&gt;
+        &lt;metadata key="fancyName" value="Open: ,#url"/&gt;
+        &lt;metadata key="icon" value="./fapps/icon_firefox.png"/&gt;
+        &lt;effectsType type="has_side_effects"/&gt;
+        &lt;inputParam id="url"&gt;
+            &lt;description>URL&lt;/description&gt;
+            &lt;typeRef typeId="url"/&gt;
+        &lt;/inputParam&gt;
+    &lt;/action&gt;
+&lt;/actionModel&gt;
+</pre>
+The &lt;action&gt; tag defines a new action and the id parameter names the action.  It is a good idea to have some kind of mapping convention between the Adept action ids and the third party events.  In this case, we are simply using the event class name as the id.  the &lt;description&gt; tag is a description of the action and tells the user what the event does.  The various &lt;metadata&gt; tags provide additional information about the action to the Adept system.  For example, what kind of icon to associate with the action.  Finally, the &lt;inputParam&gt; tag is used to define the inputs to the action.  In the example above, we have one input, the url that was just opened.  As above, the id parameter names the input and the &lt;typeRef&gt; tag specifies the input type.  In this case, we are creating a new type called "url".  The url type is defined as:
+<pre width="75">
+    &lt;type id="url"&gt;
+        &lt;description&gt;A url such as http://www.yahoo.com&lt;/description&gt;
+        &lt;atom&gt;
+            &lt;javaType&gt;java.lang.String&lt;/javaType&gt;
+        &lt;/atom&gt;
+    &lt;/type&gt;
+</pre>
+This basically defines a new type called "url" that is mapped to a java String type.  By defining our own types, we are helping the Adept system to manage the various inputs/outputs of the actions within a given procedure.
+</p>
+
+<h3>5. Handling an instrumentation event</h3>
+<p>
+Now that we have defined the action model, we need to create the event handler for our instrumentation interface.  In this example, we are going to implement the IMozillaEventListener interface:
+<pre width="75">
+    public void notifyEventReceived(IMozillaEvent event) {
+    }
+</pre>
+The notifyEventReceived() method will get called by our third party application each time an event is received.  The main job of this method is to check the type of event received, extract the relevant data from the event and invoke the correct action with the Adept system.  Here is an example of the open url event:
+<pre width="95">
+        if (event instanceof IOpenUrlEvent) {
+            IOpenUrlEvent openUrlEvent = (IOpenUrlEvent) event;
+            String url = openUrlEvent.getUrl();
+            TypeName openUrlName = new TypeName("OpenUrlEvent", NAMESPACE);
+            ActionDef openUrlActionDef = (ActionDef) actionModel.getType(openUrlName);
+            try {
+                ActionInvocation openUrlAction = openUrlActionDef.invoke(null, url);
+                openUrlAction.setStatus(ActionInvocation.Status.RUNNING);
+            } catch (PALException e) {
+                log.error("Failed to invoke open url action", e);
+            }
+        }
+</pre>
+First we check the type using the instanceof operator.  Next we cast our event to be the correct type.  Then we extract the url parameter from the event.  Finally we create an action definition and invoke it.  The action definition is obtained from the action model by calling the getType() method.  Note that the type name is a combination of the event name from our xml file and the namespace used above.  Once we have our action definition, we call the invoke method, passing in the url.  Note that this method takes a variable number of arguments if we had more than one input parameter (order is important).  Once we have invoked the action, we need to set the status to RUNNING.
+</p>
+<h3>6. Handling an automation event</h3>
+<p>
+Automation of the third party application is handled via the ActionExecutor interface:
+<pre width="75">
+    public void execute(ActionInvocation invocation) throws PALException {
+    }
+</pre>
+The execute method will get called by the Adept system a procedure is executed that contains an automation action.  The main job of this method is to check the event type, extract the relevant data and invoke the correct automation method.  Here is an example of the open url event:
+<pre width="75">
+        String name = invocation.getDefinition().getName().toString();
+        if (name.equals("TypeName[mozilla.OpenUrlEvent]")) {
+            String url = invocation.getValue("url").toString();
+            firefoxAuto.openUrl(url);
+        }
+</pre>
+First we test the name of the type of our action invocation.  The easiest way to do this is with a simple string comparison.  Note that the type name is based on the namespace and the id of the action from the model.  Next we get the url that the Adept system is trying to open by calling the getValue() method.  Finally, we call the automation method of the third party application to actually open the url.
+</p>
+</body>
+</html>

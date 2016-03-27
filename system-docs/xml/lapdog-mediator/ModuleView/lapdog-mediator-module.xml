@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd" >
+<section id="lapdog_mediator_module">
+<title>LAPDOG Mediator</title>
+<section>
+<title>Introduction</title>
+<para>The LAPDOG Mediator provides an interface between LAPDOG and
+    the CPOF-PAL system, mapping incoming messages received via the
+Spine     to LAPDOG API method calls, and mapping results of these
+    calls to outgoing messages. If LAPDOG throws an exception,   
+ that result is sent instead.</para>
+<figure id="LAPDOG-Mediator">
+<title>Structural View of the LAPDOG Mediator</title>
+<mediaobject><imageobject><imagedata
+fileref="graphics/LAPDOG_Mediator.png"/></imageobject></mediaobject>
+</figure>
+<section>
+<title>Context Diagram</title>
+<para>This diagram shows the LAPDOG Mediator's place in the CPOF-PAL
+    architecture.</para>
+<figure>
+<title>PAL Architecture</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PAL_Architecture.png"/></imageobject></mediaobject>
+</figure>
+<para>This diagram shows the sequence of operations involved in  
+  learning a procedure from a demonstration.</para>
+<figure>
+<title>Learning Sequence</title>
+<mediaobject><imageobject><imagedata contentwidth="6.5in"
+fileref="graphics/PALLearningSequenceDiagram.png" scale="50"/>
+</imageobject></mediaobject>
+</figure>
+</section>
+</section>
+ <section>
+  <title>Structural View</title>
+ <section>
+<title>Element Catalog</title>
+<para>The LAPDOG Mediator has relatively few architectural     components:</para>
+<table>
+<title>LAPDOG Mediator Elements</title>
+<tgroup cols="2">
+<thead>
+<row><entry>Element</entry><entry>Description</entry></row>
+</thead>
+<tbody>
+<row><entry>LapdogClient</entry><entry>Top-level class responsible
+for initializing the             mediator</entry></row>
+<row><entry>LapdogClientCallServiceImpl</entry><entry>Receives and
+services learn requests</entry></row>
+<row><entry>LockingActionModel</entry><entry>Manages LAPDOG's internal
+action model of known             types and actions</entry></row>
+<row><entry>TypePublicationFacade</entry><entry>Converts from the
+Spine's representation of types             and actions to LAPDOG's
+representation</entry></row>
+<row><entry>LapdogFacade</entry><entry>Encapsulates LAPDOG and CTR
+functionality</entry></row>
+<row><entry>SpineFacadeImpl</entry><entry>Encapsulates Spine functionality</entry>
+</row>
+<row><entry>TypeResultListener</entry><entry>Receives the results
+of type queries sent to             CPOF via the Spine and Bridge</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</section>
+ </section>
+<section>
+<title>Behavioral View</title>
+<section>
+<title>LockingActionModel</title>
+<para>LockingActionModel acts as an abstraction layer for        
+LAPDOG's action model. This class maintains a ReadWriteLock      
+  for each type or action, in order to prevent the type or       
+ action from being removed while it is in         use. LockingActionModel
+also provides methods to add,         retrieve, and attempt removal
+of, these types and         actions.</para>
+</section>
+<section>
+<title>LapdogClientCallServiceImpl</title>
+<para>This class is responsible for driving the learning of a    
+    new procedure based on a received learn request. When a request
+is received, the following steps are performed: </para>
+<orderedlist>
+<listitem><para>The set of demonstrated actions is traversed, and
+            the required actions and types are recursively       
+     fetched.</para></listitem>
+<listitem><para>For each required action or type, a read lock is 
+           acquired from LockingActionModel. The read lock prevents
+            the action or type from being removed.</para></listitem>
+<listitem><para>For each required action or type, its definition is
+            pushed to LAPDOG.</para></listitem>
+<listitem><para>LAPDOG is called to learn a new procedure.</para>
+</listitem>
+<listitem><para>All the required actions and types are           
+ unlocked.</para></listitem>
+<listitem><para>An attempt is made to remove all the required    
+        actions and types from the action model. Each item will  
+          only be removed if it is not in use.</para></listitem>
+</orderedlist>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+href="../../common/included-xml/PAL-architecture-modules.xml"></xi:include>
+</section>
+</section>
+ 
+<section>
+<title>Architecture Background</title>
+<para>The architectural purpose of the LAPDOG Mediator is to provide
+an interface     between LAPDOG and the CPOF-PAL system that preserves
+the independence of LAPDOG     from CPOF-PAL. That is, all behaviors
+specific to CPOF-PAL are encapsulated in the     LAPDOG Mediator rather
+than LAPDOG itself.</para>
+<section>
+<title>Assumptions</title>
+<para>For this release of the PAL system, LAPDOG is a singleton  
+    resource that runs no more than a single thread per instance of
+      CPOF. In other words, we do not currently support concurrent
+      learning operations. The LAPDOG Mediator does not currently
+      enforce this constraint, but CPOF 2D does.</para>
+</section>
+</section>
+<section>
+<title>Related Views</title>
+<itemizedlist>
+<listitem><para><xref linkend="bridge_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lumen_mediator_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="shell_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="spine_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lapdog_module"
+xrefstyle="select: label title pageabbrev"/></para></listitem>
+<listitem><para><xref linkend="lumen_module"
+xrefstyle="select: label title pageabbrev"/><?Pub Caret?></para>
+</listitem>
+</itemizedlist>
+</section>
+</section>
+<?Pub *0000006030?>

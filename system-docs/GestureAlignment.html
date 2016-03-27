@@ -1,0 +1,525 @@
+
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+<body text="#000000" bgcolor="#ffffff">
+
+<title> GESTURE ALIGNMENT  </title>
+
+<h1> GESTURE ALIGNMENT </h1>
+
+The LAPDOG learning component will perform two new operations in support of gesture alignment.
+These are <i>idiom recognition</i> and <i>action collapse</i>.
+
+
+<h2>Gestures</h2>
+
+A gesture is a sequence of actions that, from the point
+of view of the user, perform a single logical operation and/or a single GUI action.
+The task learning system recognizes certain gestures as <i>idioms</i>.
+The system supports visualization of idioms as a single logical action
+in demonstrations and learned procedures. It also supports reporting of the
+execution of idioms, as well as the actions comprising it.
+<p>
+Gestural integrity respected by the task learning system. Gestures,
+whether they form an idiom or not, are regarded as indivisible by the system.
+For example, procedure learning will not learn a loop whose body includes only
+part of a gesture.
+<p>
+The task learning system does not characterize gestures as illegal or invalid.
+It simply recognizes certain gestures as idioms; it is the application's responsibilty to analyze the
+action/gesture/idiom stream and determine if it is invalid. 
+
+
+<h3>Gestures in demonstrations</h3>
+
+Gestural boundaries are provided by the application in the demonstration and
+are conveyed through the system to LAPDOG.
+
+<h3>Gesture execution</h3>
+
+TODO: Should gesture execution be reported to CPOF, like idioms are?
+
+
+<h4>Implementation</h4>
+
+There are two new classes - AbstractActionDef and ActionStreamEvent. These classes are new parents of ActionDef and ActionInvocation, respectively; but they're also parents of IdiomDef and GestureStart and GestureEnd. The general idea is that a demonstration will contain a combination of GestureStart, ActionInvocation, and GestureEnd objects. LAPDOG will provide the information to associate a GestureEnd with an IdiomDef, and that modified GestureStart will be returned to CPOF. At execution time, CPOF will see its GlobalActionListener receive notification of ActionInvocation events as normal, but also GestureStart and GestureEnd. ActionInvocation.getCaller() may return a ProcedureDef, or it may return a GestureStart. GestureStart.getCaller() will presumably always return a ProcedureDef.
+
+
+<h2>Idiom Recognition</h2>
+
+Idiom recognition matches an action sequence against a set of idiom templates defined in the action model.
+If a match is detected, a special kind of action called an idiom action both replaces and subsumes
+the actions it matches in the action sequence, the idiom serving as a container for those actions.
+
+
+<h3>Specification</h3>
+
+TBD: Should we support &lt;error&gt; tags on idioms or templates to facilitate data-driven error
+processing on the action stream?
+
+
+<h4>Action families and roles</h4>
+
+An <i>action family</i> is an abstraction of actions.
+It is comprised of one or more actions that are grouped together for
+the purpose of expressing idioms. Typically actions within a family will have similar
+semantics and some similar parameters.
+
+<p> A <i>role</i> is an abstraction of a parameter of an action.
+Just as an action family is an abstraction
+the actions in it, a role is an abstraction of one parameter of all the actions within a family.
+Specifying a role on a family is requiring all actions within the family to designate a parameter that fulfills that role.
+
+<pre>
+  &lt;family id="add"&gt;
+    &lt;inputParam role="what"/&gt;
+    &lt;inputParam role="where"/&gt;
+  &lt;/family&gt;
+
+  &lt;family id="create"&gt;
+    &lt;outputParam role="created"/&gt;
+  &lt;/family&gt;
+</pre>
+
+<h4>Idiom models and templates</h4>
+
+An <i>idiom model</i>, or simply <i>idiom</i>, has some of the same characteristics as an action.
+It has a name. It has input and output parameters. It has metadata for visualization
+that may reference those parameters. However, its parameters are not typed.
+
+<p> An idiom model specifies one or more templates. A template is a sequence of actions and/or
+action families which, along with constraints on action parameters, define a pattern of actions
+that if present in a demonstrated gesture will form an idiom. 
+
+<pre>
+&lt;idiom id="SIMPLE_MOVE"&gt;
+  &lt;inputParam id="items"/&gt;
+  &lt;inputParam id="source"/&gt;
+  &lt;inputParam id="destination"/&gt;
+
+  &lt;simpleName&gt;Move items&lt;/simpleName&gt;
+  &lt;fancyName&gt;Move #,items from #,source to #,destination&lt;/fancyName&gt;
+
+  &lt;template&gt;
+    &lt;action actionClass="add"&gt;
+       &lt;idiomParam id="items" role="what"/&gt;
+       &lt;idiomParam id="destination" role="where"/&gt;
+    &lt;/action&gt;
+    &lt;action actionClass="remove"&gt;
+       &lt;idiomParam id="items" role="what"/&gt;
+       &lt;idiomParam id="source" role="where"/&gt;
+    &lt;/action&gt;
+  &lt;/template&gt;
+&lt;/idiom&gt;
+</pre>
+
+Each <code>idiomParam</code> specifies an association between a parameter of the idiom
+and a parameter of its  <code>action</code>. If its action is a familiy, this is done
+by designating a role. If the action is a single concrete action, this is done by
+designating the ID of that action parameter. The converse designations - using a role
+with a specific action or an actionParam with an action family - are not allowed.
+
+<pre>
+&lt;idiom id="foobar"&gt;
+    &lt;idiomParam id="A"/&gt;
+    &lt;template&gt;
+        &lt;action family="foo"&gt;
+            &lt;idiomParam id="A" role="B"/&gt;
+        &lt;/action&gt;
+        &lt;action id="bar"&gt;
+            &lt;idiomParam id="A" actionParam="B"/&gt;
+    &lt;/template&gt;
+&lt;/idiom&gt;
+</pre>
+
+<p>
+Each template must associate at least one value to each parameter of the idiom. That is,
+each must occur at least once in the template.
+In general, a template may associate several values with an idiomParam. If mutliple
+values are associated with a parameter, they must all match according to the matching
+criteria defined later.
+
+<p>
+A template may specify an integer precedence value.
+This value is used to determine the matching order for the set of all templates of all idioms.
+A template with higher precedence is matched before those of lower precedence.
+The default precedence is the number of
+<code>&lt;action&gt;</code>s in the template.
+
+<pre>
+&lt;idiom id="add A to B and B to A"&gt;
+    &lt;inputParam id="A"/&gt;
+    &lt;inputParam id="B"/&gt;
+
+    &lt;template precedence=10&gt;
+        &lt;action family="add"&gt;
+            &lt;idiomParam id="A" role="what"/&gt;
+            &lt;idiomParam id="B" role="where"/&gt;
+        &lt;/action&gt;
+        &lt;action family="add"&gt;
+            &lt;idiomParam id="B" role="what"/&gt;
+            &lt;idiomParam id="A" role="where"/&gt;
+        &lt;/action&gt;
+    &lt;/template&gt;
+&lt;/idiom&gt;
+</pre>
+
+
+<h3>Representation</h3>
+
+<h4>Action model APIs</h4>
+
+With respect to the action model APIs for accessing action characteristics,
+idioms behave much like actions:
+<ol>
+<li> An idiom is accessed by its name, which uniquely distinguishes it from other idioms
+  and from actions.
+<li> An idiom contains much the same information as actions; this includes visualization
+  metadata, and all signature information except parameter types.
+</ol>
+
+<h4>ATR</h4>
+
+In an <code>ATRDemonstration</code> found to contain an idiom, the actions comprising the idiom,
+each of which is represented by an <code>ATRDemonstratedAction</code>,
+are replaced with a single <code>ATRDemonstratedAction</code> representing the idiom.
+<code>ATRDemonstratedAction</code> provides the following methods:
+
+<ol>
+<li> <code>optIdiomActions()</code> which returns the actions comprising the idiom, and
+<li> <code>optParameterTypes()</code> which returns the types of the idiom parameters.
+</ol>
+
+In an ATR procedure, an idiom instance is represented just like a standard action instance, by an
+<code>ATRAction</code>. It has been supplemented with two methods to support idioms:
+
+<ol>
+<li> <code>getBody()</code> which returns null for a non-idiom, or the <code>ATRSequence</code>
+  containing the actions comprising the idiom.
+<li> <code>getParameterTypes()</code> which returns the types of the corresponding idiom
+  parameters for this instantiation.
+</ol>
+
+
+<h3>Semantics</h3>
+
+<h4>Idiom parameters</h4>
+
+An idiom model specifies the parameters that every instance of the idiom must have;  these are some subset of the params that participate in the template matching. So for a notional idiom+template like
+
+<pre>
+Move(+data, +from, +to):
+  ADD(data, to)
+  REMOVE(data, from)
+</pre>
+
+we say the model has params data, from, and to.
+The actions matching REMOVE and ADD could have additional params,
+irrelevant for matching but needed for execution. These params are
+internal to the idiom and not part of the idiom's signature
+
+<P>
+  The relationship between idiom parameters and action arguments is in general many to many, regardless of whether the action arguments are specified by
+their ids or by roles. For example,
+this is an idiom that expresses that two arguments of an action must match, and that the matching
+value is the idiom's parameter:
+
+<pre>
+SelfAdd($self) {
+  ADD($self=from $self=to)
+}
+</pre>
+
+This two-template idiom expresses that either $x=$y or $y=$z:
+
+<pre>
+Idiom ($x $y $z) {
+  ACTION1($x=role1 $y=role1 $z=role2)
+} {
+  ACTION1($x=role1 $y=role2 $z=role2)
+}
+</pre>
+
+<p>
+An idiom parameter and the action parameter(s) associated with it in the template
+should follow these consistency rules:
+<ol>
+<li> An idiom output should be associated with an action output, not an input.
+<li> An idiom input should be associated with an action input, not an output.
+<li> An idiom parameter that is associated with an action input should not
+  be associated with an action output in a subsequent action.
+<!--
+    <li> An action output and subsequent action inputs may be associated with an idiom output;
+  such relationships may be omitted from the idiom altogether, as they are "internal"
+  to the idiom.
+      -->
+</ol>
+
+<p>
+It is well-defined to make an idiom model param ungeneralizable. However, at this time
+only default parameter classes are supported: all idiom
+inputs are <code>generalizable</code> and all idiom outputs are <code>external</code>.
+This is consistent with parameter classes for learned procedures.
+
+<h4>Type inference</h4>
+
+Templates may refer to an action family, and corresponding params of
+the various family members needn't have identical types.
+So the action from a family that matches a template will determine param types.
+<p>
+When a template calls for 2+ arguments in various actions to match, the values must match and their types must be compatible. Two types are compatible if they are either identical, specified to be equivalent in the action model, or if one is a subtype of the other.
+<p>
+The type of the idiom parameter is the type of the matching arguments. 
+There are two cases in which 2+ matching arguments can have different types:
+
+<ol>
+<li> If the argument types are hierarchically related, the inferred type is the more general of the types.
+<li> If the argument types are T and a collection&lt;T&gt; (due to singleton matching),
+    then T is the inferred type.
+</ol>
+
+
+<h4>Learning</h4>
+
+Though idioms are detected by the system during demonstration time,
+it is expected that any idiom actions recognized will be dropped from the demonstration.
+During a preprocessing step to generalization,
+idiom recognition is applied to each gesture in the action sequence,
+effectively re-recognizing any idioms that were detected earlier.
+<p>
+During generalization, the learner treats the demonstration as if each idiom action has
+been replaced with its expansion. That is, support relationships are found normally within
+an idiom's expansion and between an idiom's expansion and other actions in the demonstration.
+This includes loopfinding across a sequence of mixed idiom and regular actions.
+<p>
+Loopfinding respects gesture boundaries in general and idiom boundaries in particular,
+in that no loops will be found that contain only part of a gesture or an idiom. Loops *may*
+be found completely within idiom bodies, though it is not expected that templates designed to express
+loops will be specified, and templates that yield loops would need to be somewhat contrived.
+<p>
+As a postprocessing step, the learner determines idiom parameters
+by associating the parameter with the constant, variable, or expression that it has been
+generalized to in the expansion. Note that each parameter must have at least one corresponding
+value in the expansion, or the idiom would not have been recognized.
+
+
+<h4>Execution and constraint checking</h4>
+
+An idiom action is identical to a regular ATR action, except that
+
+<ul>
+<li> An idiom action has a nonnull body defining its execution semantics.
+<li> Idiom actions with like names may have different signature.
+<li> An idiom action has a nonnull type signature, to make this available for runtime
+  and for Editor operations.
+</ul>
+
+<p>
+  On execution, Lumen notifies the Bridge when an Idiom container is entered or exited.
+  Lumen doesn't use an external executor for idioms, though, so there's no execution request for the idiom itself.
+<p>
+    Idioms and gestural groups themselves don't have constraints. Their actions do.
+
+
+<h3>Processing</h3>
+
+Idiom recognition is invoked via a Bridge API call to LAPDOG. It is invoked
+at the following times:
+
+<ol>
+    <li> At demonstration time, upon a gesture, whenever a completed gesture is delivered to the Bridge.
+    <li> At learning time, upon each individual gesture in the demonstration separately, as a preprocessing
+      step to learning.
+</ol>
+ The idiom recognizer
+takes as input an action sequence that begins with a GestureStart indicator,
+ends with a GestureEnd indicator, and includes 0+ actions.
+It returns either an indicator that no idiom was found, or returns an
+<code>ATRDemonstratedAction</code>
+that expresses the idiom that was recognized. 
+<p>
+If no idiom was found, the action sequence is passed on through the system to the demonstration viewer.
+If an idiom was found, the idiom replaces the original action stream.
+
+
+<h3>Recognition</h3>
+
+If any extraneous actions (those not specified in the template) are encountered, matching fails.
+<p>
+Templates for all idioms are matched according to precedence, highest first. Default precedence is the number of actions in the template.
+<p>
+  Nested idioms are not allowed.
+<p>
+Permutable lists are unordered for purposes of matching.
+<p>
+
+<h4>Parameter matching</h4>
+
+When a template calls for 2+ arguments in various actions to match, the values must match and their types must be compatible. Two types are compatible if they are either identical, specified to be equivalent in the action model, or if one is a subtype of the other.
+<!-- TODO input/output directionality? -->
+
+<p>
+There are two critera for value match. The "equals" criterion means that the values must be equal.
+The "singleton" (or "equalsOrSingleton") criterion means the values must be equal, or if one of the
+values is E the other must equal [E]. Furthermore,
+if two nonequal args match in a template using the "singleton" criterion, subsequent matches must equal one of these two args. Gven CPOF's use of singelton lists this is required by CPOF for idioms to be useful for gesture alignment.
+<p>
+  TBD: matching algorithm. This will be similar to support finding in LAPDOG.
+
+
+<h2>Action Collapse</h2>
+<p>
+Prior to both idiom recognition and learning, action collapse is performed. This means that those demonstrated actions that have been specified to be collapsible in the action model and that meet their collapse criteria are removed from the demonstration and replaced with a single copy of the action.
+
+<h3>Collapse Specification</h3>
+An action is specified to be collapsible by providing a collapse rule. A collapse rule specifies three pieces of information:<br>
+<ul>
+  <li><span style="font-style: italic;">context of collapsibility</span>: whether collapsibility is being defined for inside or outside an action block (gesture/idiom)</li>
+  <ul>
+    <li>If context is left unspecified, collapsibility is assumed both inside and outside gestures. </li>
+  </ul>
+  <li><span style="font-style: italic;">contiguity requirements:</span>whether action instances must be contiguous to be collapsible</li>
+  <ul>
+    <li>If context is unspecified, contiguity is assumed to be <span style="font-style: italic;">not</span> required.</li>
+    <li>If context is specified, contiguity requirements must also be specified.</li>
+  </ul>
+  <li><span style="font-style: italic;">parameter constraints</span>: whether parameter values must match or how different values must be resolved for collapse</li>
+  <ul>
+    <li>If a constraint is specified, it must indicate whether the parameter value in the first or the
+last action instance should become the value for that parameter in the collapsed action or, in the case of collection types, if their values should be merged (according to the standard <span
+ style="font-style: italic;">addAll</span> behavior of the underlying collection).</li>
+    <li>If no constraint is specified for a parameter, values must match and that value becomes the value of that parameter in the collapsed action.</li>
+  </ul>
+</ul>
+<p>
+At most one collapse rule may be specified per action, although different collapsibility criteria may
+be specified for within-gesture and outside-gesture collapse. Specifically, contiguity requirements may vary by context but parameter constraints must be the same regardless of context.
+
+<p>
+Although well-defined, collapse rules may not be specified on idioms.
+
+<h4>Example Specifications</h4>
+<p>
+This action is collapsible only outside a gesture provided that the action instances are contiguous and that their values for the sole parameter match.</p>
+<pre>
+ &lt;action id="action1" category="effector"&gt;
+     &lt;description/&gt;
+     &lt;inputParam id="input1"&gt;
+         &lt;description/&gt;
+           &lt;typeRef typeId="string"/&gt;
+     &lt;/inputParam&gt;
+     <span style="font-weight: bold;">&lt;collapsible outsideGesture="contiguous"&gt;</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;"></span><span
+ style="font-weight: bold;">     &lt;/collapsible&gt;</span>
+ &lt;/action&gt;
+</pre>
+<p>
+This action is collapsible both inside and outside gestures provided the values of the first input parameter match. Action instances must be contiguous if inside a gesture but not if outside. The collapsed action takes the value of the last instance for the second input parameter.
+
+<pre>
+ &lt;action id="action2" category="effector"&gt;
+     &lt;description/&gt;
+     &lt;inputParam id="input1"&gt;
+         &lt;description/&gt;
+           &lt;typeRef typeId="string"/&gt;
+     &lt;/inputParam&gt;
+     &lt;inputParam id="input2"&gt;
+         &lt;description/&gt;
+           &lt;typeRef typeId="string"/&gt;
+     &lt;/inputParam&gt;
+     <span style="font-weight: bold;">&lt;collapsible outsideGesture="all" insideGesture="contiguous"&gt;</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">       &lt;param id="input2" keep="last"/&gt;</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">     &lt;/collapsible&gt;</span><br> &lt;/action&gt;
+</pre>
+<p>
+This action is collapsible both inside and outside gestures, with action instances not needing to be contiguous. The collapsed action takes as its value the merged values of its output list
+parameter.
+
+<pre>
+ &lt;action id="action3"&gt;
+     &lt;description/&gt;
+     &lt;category type="effector"/&gt;
+     &lt;outputParam id="output1"&gt;
+         &lt;description/&gt;
+         &lt;typeRef typeId="list&lt;string&gt;"/&gt;
+     &lt;/outputParam&gt;
+     <span style="font-weight: bold;">&lt;collapsible&gt;</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">         &lt;param id="output1" keep="merge"/&gt;</span><br style="font-weight: bold;"><span style="font-weight: bold;">     &lt;/collapsible&gt;</span><br> &lt;/action&gt;
+</pre>
+<h3>Collapsing</h3>
+<p>
+Action collapse is performed both prior to idiom recognition and prior to learning. In both cases it will alter the input action sequence if any actions are collapsed.
+
+<p>
+Collapse is localized to its context--i.e., an action instance occurring inside a gesture will not be collapsed with an action instance occurring outside that gesture or in another gesture.
+
+<p>
+Collapse is greedy--as many actions will be collapsed together as possible within the given collapsibility constraints.
+
+<p>
+The collapsed action always replaces the last action in the collapsed sequence. A contiguity requirement means that any intervening actions interrupt the collapse; instances of the action
+found both before and after an intervening action are collapsed separately. Contiguity is always evaluated based on the original demonstration rather than on the results of applying collapse rules. Thus,
+<p>&nbsp;&nbsp;&nbsp; ABBABA
+<p>collapses to
+<p>&nbsp;&nbsp;&nbsp; B'A' if both A and B are collapsible (all)
+<p>&nbsp;&nbsp;&nbsp; AB'ABA if both A and B are collapsible (contiguous)
+<p>&nbsp;&nbsp;&nbsp;&nbsp;AAB'A if A is collapsible (contiguous) and B is collapsible (all)
+<p>&nbsp;&nbsp;&nbsp; B'BA if A is collapsible (all) and B is collapsible (contiguous)
+<p>An action that is collapsible (contiguous) cannot have instances of different collapsible sequences interleaved in the demonstration. But an action that is collapsible (all) may. For example:
+<p>&nbsp;&nbsp;&nbsp; A1 A1 A2 A3 A3 A1 A2
+<p>(with different instances Ai collapsible only with matching Ai) collapses to
+<p>&nbsp;&nbsp;&nbsp; A3' A1' A2' if A is collapsible (all)
+<p>&nbsp;&nbsp;&nbsp; A1' A2 A3' A1 A2 if A is collapsible (contiguous)
+
+<h2>Examples</h2>
+
+<h3>Interaction of idiom recogntion and action collapse</h3>
+
+<pre>
+[start gesture]
+addToCollection(effort1, "members", [unit1])
+removeFromCollection(effort2, "members", [unit1])
+addToCollection(effort1, "members", [unit2])
+removeFromCollection(effort2, "members", [unit2])
+[end gesture]
+addToPasteboard(pb1, [effort1], etc.)
+addToPasteboard(pb1, [effort2], etc.)
+editData(unit3, "Name", "Harry")
+addToPasteboard(pb1, [unit3], etc.)
+</pre>
+
+<p>Action collapse will result in
+
+<pre>
+[start gesture]
+addToCollection(effort1, "members", [unit1, unit2])
+removeFromCollection(effort2, "members", [unit1, unit2])
+[end gesture]
+addToPasteboard(pb1, [effort1, effort2], etc.)
+editData(unit3, "Name", "Harry")
+addToPasteboard(pb1, [unit3], etc.)
+</pre>
+
+TODO: continue example with MOVE idiom match.
+
+</body>
+</html>

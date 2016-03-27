@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^3.5StructureGet'
+ execute:{
+  do 'arda^1.0^CreateStruct'('$output tuple 1');
+  do 'arda^1.0^UseString'(structureGet('$output tuple 1', "text", 1));
+  do 'arda^1.0^UseString'(structureGet('$output tuple 1', "text", 1));}
+ properties:{expected_output:"CREATE STRUCT\nUSE STRING: text\nUSE STRING: text\n", isTransient:"true"}</bodySource>
+</TaskModel>

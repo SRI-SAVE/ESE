@@ -1,0 +1,746 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+
+    <!--  TYPE DEFINITIONS -->
+    
+    <type id="struct">
+        <description>A struct</description>
+        <struct>
+          <ref name="number" typeRef="integer"/>
+          <ref name="text" typeRef="string"/>
+        </struct>
+    </type>
+    
+    <type id="parentStruct">
+        <description>A struct that contains another struct</description>
+        <struct>
+          <ref name="text" typeRef="string"/>
+          <ref name="child" typeRef="struct"/>
+        </struct>
+    </type>
+            
+    <type id="ardaEnum">
+      <description>An enumeration type</description>
+      <enum>
+        <value>Option 1</value>
+        <value>Option 2</value>
+        <value>Option 3</value>
+        <value>Option 4</value>
+      </enum>    
+    </type>
+    
+    <type id="ardaBoolean">
+        <description>A custom boolean type</description>
+        <custom>
+            <javaType>java.lang.Boolean</javaType>
+        </custom>
+    </type>
+    
+    <type id="ardaShort">
+        <description>A custom short integer type</description>
+        <custom>
+            <javaType>java.lang.Short</javaType>
+        </custom>
+    </type>
+    
+    <type id="ardaInteger">
+        <description>A custom integer type</description>
+        <custom>
+            <javaType>java.lang.Integer</javaType>
+        </custom>
+    </type>
+    
+    <type id="ardaLong">
+        <description>A custom long integer type</description>
+        <custom>
+            <javaType>java.lang.Long</javaType>
+        </custom>
+    </type>
+            
+    <type id="ardaFloat">
+        <description>A custom float type</description>
+        <custom>
+            <javaType>java.lang.Float</javaType>
+        </custom>
+    </type>
+    
+    <type id="ardaDouble">
+        <description>A custom double type</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+    
+    <type id="ardaString">
+        <description>A custom string type</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+    
+    <type id="ardaChildString">
+        <description>An arda string child</description>
+        <custom>
+            <inherit parent="ardaString"/>
+        </custom>
+    </type>
+    
+    <type id="ardaGrandChildString">
+        <description>An arda string grandchild</description>
+        <custom>
+            <inherit parent="ardaChildString"/>
+        </custom>
+    </type>
+    
+    <type id="ardaStringEquiv">
+        <description>A custom string type</description>
+        <equivalentTo>ardaString</equivalentTo>
+    </type>
+    
+    <type id="ardaFoo">
+        <description>A custom type</description>
+        <custom>
+            <javaType>foo</javaType>
+        </custom>
+    </type>
+    
+    <!-- ACTION FAMILIES -->
+            
+    <family id="create">
+      <outputParam role="create" />
+    </family>
+    
+    <family id="use">
+      <inputParam role="use" />
+    </family>
+    
+    <!--  ACTION DEFINITIONS -->
+
+    <action id="CreateString">
+        <description>Generates a string value</description>
+        <metadata key="name" value="Generate a string"/>
+        <metadata key="fancyName" value="Generate a string"/>
+        <idiomFamily family="create" />        
+        <outputParam id="output">
+           <description>The output value</description>
+           <typeRef typeId="string"/>
+           <idiomParam family="create" role="create" />
+        </outputParam>
+    </action>
+    
+    <action id="CreateArdaString">
+        <description>Generates an arda string value</description>
+        <metadata key="name" value="Generate an arda string"/>
+        <metadata key="fancyName" value="Generate an arda string"/>
+        <outputParam id="output">
+           <description>The output value</description>
+           <typeRef typeId="ardaString"/>
+        </outputParam>
+    </action>
+    
+    <action id="CreateArdaChildString">
+        <description>Generates an arda child string value</description>
+        <metadata key="name" value="Generate an arda child string"/>
+        <metadata key="fancyName" value="Generate an arda child string"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="ardaChildString"/>
+        </outputParam>
+    </action>
+    
+    <action id="CreateArdaGrandChildString">
+        <description>Generates an arda grandchild string value</description>
+        <metadata key="name" value="Generate an arda grandchild string"/>
+        <metadata key="fancyName" value="Generate an arda grandchild string"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="ardaGrandChildString"/>
+        </outputParam>
+    </action> 
+    
+    <action id="CreateEquivalentString">
+        <description>Generates an (equivalent) string value</description>
+        <metadata key="name" value="Generate an equivalent string"/>
+        <metadata key="fancyName" value="Generate an equivalent string"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="ardaStringEquiv"/>
+        </outputParam>
+    </action>    
+
+    <action id="CreateStrings">
+        <description>Generates two string values</description>
+        <metadata key="name" value="Generate two strings"/>
+        <metadata key="fancyName" value="Generate two strings"/>
+        <outputParam id="first output">
+             <description>
+                First output value
+            </description>
+           <typeRef typeId="string"/>
+        </outputParam>
+        <outputParam id="second output">
+             <description>
+                Second output value
+            </description>
+           <typeRef typeId="string"/>
+        </outputParam>
+    </action>
+    
+    <action id="CreateReal">
+        <description>Generates a real number</description>
+        <metadata key="name" value="Generate a real number"/>
+        <metadata key="fancyName" value="Generate a real number"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="real"/>
+        </outputParam>
+    </action>
+    
+    <action id="CreateInteger">
+        <description>Generates an integer</description>
+        <metadata key="name" value="Generate an integer"/>
+        <metadata key="fancyName" value="Generate an integer"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="integer"/>
+        </outputParam>
+    </action>
+    
+    <action id="CreateEnum">
+        <description>Generates an enumeration value</description>
+        <metadata key="name" value="Generate an enumeration value"/>
+        <metadata key="fancyName" value="Generate an enumeration value"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="ardaEnum"/>
+        </outputParam>
+    </action>
+    
+    <action id="CreateBoolean">
+        <description>Generates a boolean value</description>
+        <metadata key="name" value="Generate a boolean value"/>
+        <metadata key="fancyName" value="Generate a boolean called,#output"/>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="boolean"/>
+        </outputParam>
+    </action>
+
+    <action id="CreateSet">
+        <description>Generates a set of two elements</description>
+        <metadata key="name" value="Generate a set of two elements"/>
+        <metadata key="fancyName" value="Generate a set of two elements"/>
+        <outputParam id="output set">
+             <description>
+                The output set
+            </description>
+           <typeRef typeId="set&lt;string&gt;"/>
+        </outputParam>
+    </action>
+
+    <action id="CreateList">
+        <description>Generates a list of two elements</description>
+        <metadata key="name" value="Generate a list of two elements"/>
+        <metadata key="fancyName" value="Generate a list of two elements"/>
+        <outputParam id="output list">
+             <description>
+                The output list
+            </description>
+           <typeRef typeId="list&lt;string&gt;"/>
+        </outputParam>
+    </action>
+
+    <action id="CreateBag">
+        <description>Generates a bag of two elements</description>
+        <metadata key="name" value="Generate a bag of two elements"/>
+        <metadata key="fancyName" value="Generate a bag of two elements"/>
+        <outputParam id="output bag">
+             <description>
+                The output bag
+            </description>
+           <typeRef typeId="bag&lt;string&gt;"/>
+        </outputParam>
+    </action>
+
+    <action id="CreateStruct">
+        <description>Generates a struct</description>
+        <metadata key="name" value="Generate a struct"/>
+        <metadata key="fancyName" value="Generate a struct"/>
+        <outputParam id="output struct">
+             <description>
+                The output struct
+            </description>
+           <typeRef typeId="struct"/>
+        </outputParam>
+    </action>
+
+    <action id="CreateListOfStruct">
+        <description>Generates a list of two structs</description>
+        <metadata key="name" value="Generate a list of two structs"/>
+        <metadata key="fancyName" value="Generate a list of two structs"/>
+        <outputParam id="output list of structs">
+             <description>
+                The output list of structs
+            </description>
+           <typeRef typeId="list&lt;struct&gt;"/>
+        </outputParam>
+    </action>
+            
+    <action id="CreateStringAndOtherStuff">
+        <description>Generates a string value and some other stuff</description>
+        <metadata key="name" value="Generate a boolean value"/>
+        <metadata key="fancyName" value="Generate a string called,#strOutput"/>
+        <outputParam id="strOutput">
+           <description>The string output value</description>
+           <typeRef typeId="string"/>
+        </outputParam>
+        <outputParam id="boolOutput">
+           <description>The boolean output value</description>
+           <typeRef typeId="boolean"/>
+        </outputParam>
+        <outputParam id="listOutput">
+           <description>The list output value</description>
+           <typeRef typeId="list&lt;string&gt;"/>
+        </outputParam>          
+    </action>
+
+    <action id="UseString">
+        <description>Uses a string value</description>
+        <metadata key="name" value="Use a string"/>
+        <metadata key="fancyName" value="Use the string ,#input"/>
+        <idiomFamily family="use" />
+        <inputParam id="input">
+           <description>The input value</description>
+           <typeRef typeId="string"/>
+           <idiomParam family="use" role="use" />
+        </inputParam>
+    </action>
+    
+    <action id="UseArdaString">
+        <description>Uses an arda string</description>
+        <metadata key="name" value="Use an arda string"/>
+        <metadata key="fancyName" value="Use the arda string ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="ardaString"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseArdaChildString">
+        <description>Uses an arda child string</description>
+        <metadata key="name" value="Use an arda child string"/>
+        <metadata key="fancyName" value="Use the arda child string ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="ardaChildString"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseArdaGrandChildString">
+        <description>Uses an arda grandchild string</description>
+        <metadata key="name" value="Use an arda grandchild string"/>
+        <metadata key="fancyName" value="Use the arda grandchild string ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="ardaGrandChildString"/>
+        </inputParam>
+    </action>    
+
+    <action id="UseStrings">
+        <description>Uses two scalar values</description>
+        <metadata key="name" value="Use two values"/>
+        <metadata key="fancyName" value="Use the values ,#first input, and ,#second input"/>
+        <inputParam id="first input">
+             <description>
+                First input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="second input">
+             <description>
+                Second input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseReal">
+        <description>Uses a real number</description>
+        <metadata key="name" value="Use a real number"/>
+        <metadata key="fancyName" value="Use the real number ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="real"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseInteger">
+        <description>Uses an integer</description>
+        <metadata key="name" value="Use an integer"/>
+        <metadata key="fancyName" value="Use the integer ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="integer"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseEnum">
+        <description>Uses an enumeration value</description>
+        <metadata key="name" value="Use an enumeration value"/>
+        <metadata key="fancyName" value="Use the enumeration value ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="ardaEnum"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseBoolean">
+        <description>Uses a boolean value</description>
+        <metadata key="name" value="Use a boolean value"/>
+        <metadata key="fancyName" value="Use the boolean value ,#input"/>
+        <inputParam id="input">
+             <description>The input value</description>
+           <typeRef typeId="boolean"/>
+        </inputParam>
+    </action>
+
+    <action id="UseSet">
+        <description>Uses a set</description>
+        <metadata key="name" value="Use a set"/>
+        <metadata key="fancyName" value="Use the set ,#input set"/>
+        <inputParam id="input set">
+             <description>
+                The input set
+            </description>
+           <typeRef typeId="set&lt;string&gt;"/>
+        </inputParam>
+    </action>
+
+    <action id="UseList">
+        <description>Uses a list of strings</description>
+        <metadata key="name" value="Use a list"/>
+        <metadata key="fancyName" value="Use the list ,#input list"/>
+        <inputParam id="input list">
+             <description>
+                The input list
+            </description>
+           <typeRef typeId="list&lt;string&gt;"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseListOfList">
+        <description>Uses a list of lists of string</description>
+        <metadata key="name" value="Uses a list of lists of string"/>
+        <metadata key="fancyName" value="Uses a list of lists of string"/>
+        <inputParam id="input list">
+             <description>
+                The input list
+            </description>
+           <typeRef typeId="list&lt;list&lt;string&gt;&gt;"/>
+        </inputParam>
+    </action>    
+    
+    <action id="UseListOfInteger">
+        <description>Uses a list of integers</description>
+        <metadata key="name" value="Use a list of integers"/>
+        <metadata key="fancyName" value="Use the integer list ,#input list"/>
+        <inputParam id="input list">
+             <description>
+                The input integer list
+            </description>
+           <typeRef typeId="list&lt;integer&gt;"/>
+        </inputParam>
+    </action>
+    
+
+    <action id="UseBag">
+        <description>Uses a bag</description>
+        <metadata key="name" value="Use a bag"/>
+        <metadata key="fancyName" value="Use the bag ,#inputbag"/>
+        <inputParam id="inputbag">
+             <description>
+                The input bag
+            </description>
+           <typeRef typeId="bag&lt;string&gt;"/>
+        </inputParam>
+    </action>
+
+    <action id="UseStruct">
+        <description>Uses a struct</description>
+        <metadata key="name" value="Use a struct"/>
+        <metadata key="fancyName" value="Use the struct ,#input struct"/>
+        <inputParam id="input struct">
+             <description>
+                The input struct
+            </description>
+           <typeRef typeId="struct"/>
+        </inputParam>
+    </action>
+    
+    <action id="UseParentStruct">
+        <description>Uses a parent struct</description>
+        <metadata key="name" value="Use a parent struct"/>
+        <metadata key="fancyName" value="Use the parent struct ,#input struct"/>
+        <inputParam id="input struct">
+             <description>
+                The input struct
+            </description>
+           <typeRef typeId="parentStruct"/>
+        </inputParam>
+    </action>   
+
+    <action id="UseStringCreateString">
+        <description>Uses a scalar value and generates another one</description>
+        <metadata key="name" value="Use one value and generate another"/>
+        <metadata key="fancyName" value="Use ,#input, to produce ,#output"/>
+        <inputParam id="input">
+             <description>
+                The input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="output">
+             <description>
+                The output value
+            </description>
+           <typeRef typeId="string"/>
+        </outputParam>
+    </action>
+
+    <action id="UseStringCreateSet">
+        <description>Uses a string value and generates a set</description>
+        <metadata key="name" value="Use one value and generate a set"/>
+        <metadata key="fancyName" value="Use ,#input, to produce ,#output set"/>
+        <inputParam id="input">
+             <description>
+                The input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="output set">
+             <description>
+                The output set
+            </description>
+           <typeRef typeId="set&lt;string&gt;"/>
+        </outputParam>
+    </action>
+
+    <action id="UseStringCreateList">
+        <description>Uses a string value and generates a list</description>
+        <metadata key="name" value="Use one value and generate a list"/>
+        <metadata key="fancyName" value="Use ,#input, to produce ,#output list"/>
+        <inputParam id="input">
+             <description>
+                The input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="output list">
+             <description>
+                The output list
+            </description>
+           <typeRef typeId="list&lt;string&gt;"/>
+        </outputParam>
+    </action>
+
+    <action id="UseStringCreateBag">
+        <description>Uses a string value and generates a list</description>
+        <metadata key="name" value="Use one value and generate a bag"/>
+        <metadata key="fancyName" value="Use ,#input, to produce ,#output bag"/>
+        <inputParam id="input">
+             <description>
+                The input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="output bag">
+             <description>
+                The output bag
+            </description>
+           <typeRef typeId="bag&lt;string&gt;"/>
+        </outputParam>
+    </action>
+
+    <action id="UseStringCreateStruct">
+        <description>Uses a string value and generates a struct</description>
+        <metadata key="name" value="Use one value and generate a struct"/>
+        <metadata key="fancyName" value="Use ,#input, to produce ,#output struct"/>
+        <inputParam id="input">
+             <description>
+                The input value
+            </description>
+           <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="output struct">
+             <description>
+                The output struct
+            </description>
+           <typeRef typeId="struct"/>
+        </outputParam>
+    </action>
+    
+    <action id="UseCustomTypes">
+        <description>Use a value for each custom type</description>
+        <metadata key="name" value="Use custom types"/>
+        <metadata key="fancyName" value="Use custom types"/>
+        <inputParam id="string">
+           <description>An input value</description>
+           <typeRef typeId="ardaString"/>           
+        </inputParam>   
+        <inputParam id="short">
+           <description>An input value</description>
+           <typeRef typeId="ardaShort"/>           
+        </inputParam>        
+        <inputParam id="integer">
+           <description>An input value</description>
+           <typeRef typeId="ardaInteger"/>           
+        </inputParam>
+        <inputParam id="long">
+           <description>An input value</description>
+           <typeRef typeId="ardaLong"/>           
+        </inputParam>
+        <inputParam id="float">
+           <description>An input value</description>
+           <typeRef typeId="ardaFloat"/>           
+        </inputParam>
+        <inputParam id="double">
+           <description>An input value</description>
+           <typeRef typeId="ardaDouble"/>           
+        </inputParam>
+    </action>
+    
+    <action id="UsePrimitiveTypes">
+        <description>Use a value for each primitive type</description>
+        <metadata key="name" value="Use primitive types"/>
+        <metadata key="fancyName" value="Use primitive types"/>
+        <inputParam id="string">
+           <description>An input value</description>
+           <typeRef typeId="string"/>           
+        </inputParam>         
+        <inputParam id="integer">
+           <description>An input value</description>
+           <typeRef typeId="integer"/>           
+        </inputParam>
+        <inputParam id="real">
+           <description>An input value</description>
+           <typeRef typeId="real"/>           
+        </inputParam>
+        <inputParam id="boolean">
+           <description>An input value</description>
+           <typeRef typeId="boolean"/>           
+        </inputParam>
+        <inputParam id="duration">
+           <description>An input value</description>
+           <typeRef typeId="duration"/>           
+        </inputParam>
+        <inputParam id="timestamp">
+           <description>An input value</description>
+           <typeRef typeId="timestamp"/>           
+        </inputParam>
+    </action>
+    
+    <action id="UseFoo">
+        <description>Use a foo</description>
+        <metadata key="name" value="Use a foo"/>
+        <metadata key="fancyName" value="Use a foo"/>
+        <idiomFamily family="use" />
+        <inputParam id="foo">
+           <description>An input value</description>
+           <typeRef typeId="ardaFoo"/>           
+        </inputParam>         
+    </action>
+    
+    <!-- Idioms -->
+    
+    <idiom id="create_and_use">
+      <description>Create and use something</description>
+      <metadata key="simpleName" value="Create and use something"/>
+      <metadata key="fancyName" value="Create and use something"/>
+      <outputParam id="thing" />
+      <template id="template1">
+        <action family="create">
+          <idiomParam id="thing" role="create" />
+        </action>
+        <action family="use">
+          <idiomParam id="thing" role="use" />
+        </action> 
+      </template>
+    </idiom>
+    
+    <idiom id="create_create_use">
+      <description>Create and use something</description>
+      <metadata key="simpleName" value="Create, create and use"/>
+      <metadata key="fancyName" value="Create, create and use"/>
+      <outputParam id="thing" />
+      <template id="template1">
+        <action family="create">
+          <idiomParam id="thing" role="create" />
+        </action>
+        <action family="create" />
+        <action family="use">
+          <idiomParam id="thing" role="use" />
+        </action> 
+      </template>
+    </idiom>
+    
+    <idiom id="use_twice">
+      <description>Use a string twice</description>
+      <metadata key="simpleName" value="Use twice"/>
+      <metadata key="fancyName" value="Use ,#thing, twice"/>
+      <inputParam id="thing" />
+      <template id="template1">
+        <action family="use">
+          <idiomParam id="thing" role="use" />
+        </action>
+        <action family="use">
+          <idiomParam id="thing" role="use" />
+        </action> 
+      </template>
+    </idiom>
+    
+    <idiom id="use_twice_int_between">
+      <description>Use string twice with random integer</description>
+      <metadata key="simpleName" value="Use twice"/>
+      <metadata key="fancyName" value="Use ,#thing, twice"/>
+      <inputParam id="thing" />
+      <template id="template1">
+        <action family="use">
+          <idiomParam id="thing" role="use" />
+        </action>
+        <namedAction id="UseInteger" />
+        <action family="use">
+          <idiomParam id="thing" role="use" />
+        </action> 
+      </template>
+    </idiom>
+</actionModel>

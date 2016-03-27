@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<response>
+    <id>resp-39</id>
+    <exercise_id>ex-1</exercise_id>
+    <task_response>
+        <demo>$demonstration {
+  'LoadTest^1.0^selectAll' "7691321634310281183", ["7682991050769843194", "4397844582417991155", "-1600095739429370729"];
+  'LoadTest^1.0^makeItem' "803477013453289700", "-836219941733105195";
+  'LoadTest^1.0^selectAll' "7410589153645142863", ["-547782995961606076", "803477013453289700", "803477013453289700"];
+  'LoadTest^1.0^makeItem' "803477013453289700", "3678910230489417898";
+  'LoadTest^1.0^removeFromContainer' "-8372044174007864943", "8188686531775414792";
+  'LoadTest^1.0^removeFromContainer' "-864842219884642109", "-836219941733105195";
+  'LoadTest^1.0^removeFromContainer' "1269624764644814757", "-1463718916120016738";
+  'LoadTest^1.0^addToContainer' "-3918975829537048606", "-59523326017428467";
+  'LoadTest^1.0^makeItem' "5792087550436077595", "44560335050630837";}
+ properties:{}</demo>
+        <seconds_elapsed>0</seconds_elapsed>
+    </task_response>
+</response>
+<!-- Swap steps 5 and 6 -->
+<!-- Delete step 7 -->
+<!-- Insert step 6: SimpleTypeName[LoadTest^1.0^removeFromContainer] -->
+<!-- Insert step 10: SimpleTypeName[LoadTest^1.0^makeItem] -->
+<!-- Change step 8 from SimpleTypeName[LoadTest^1.0^addToContainer] to SimpleTypeName[LoadTest^1.0^removeFromContainer] -->
+<!-- Delete step 0 -->
+<!-- Insert step 0: SimpleTypeName[LoadTest^1.0^selectAll] -->
+<!-- Delete step 2 -->
+<!-- Delete step 3 -->
+<!-- Change param 1 of step 7 from -4987136965075627558 to -59523326017428467 -->

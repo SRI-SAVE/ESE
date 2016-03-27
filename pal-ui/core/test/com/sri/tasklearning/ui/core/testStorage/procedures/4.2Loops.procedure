@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^4.2Loops'
+ execute:{
+  do 'arda^1.0^CreateList'('$output list 1');
+  forall '$list element' .in. '$output list 1'
+   execute:{
+    do 'arda^1.0^UseString'('$list element');};
+  forall '$list element 2' .in. ["val1", "val2"]
+   execute:{
+    do 'arda^1.0^UseString'('$list element 2');};
+  do 'arda^1.0^CreateBag'('$output bag 1');
+  forall '$bag element 1' .in. '$output bag 1'
+   execute:{
+    do 'arda^1.0^UseString'('$bag element 1');};
+  forall '$bag element 2' .in. bagGen("val1", "val1", "val2")
+   execute:{
+    do 'arda^1.0^UseString'('$bag element 2');};
+  do 'arda^1.0^CreateSet'('$output set 1');
+  forall '$set element 1' .in. '$output set 1'
+   execute:{
+    do 'arda^1.0^UseString'('$set element 1');};
+  forall '$set element 2' .in. setGen("val1", "val2")
+   execute:{
+    do 'arda^1.0^UseString'('$set element 2');};}
+ properties:{expected_output:"CREATE LIST\nUSE STRING: list value 1\nUSE STRING: list value 2\nUSE STRING: val1\nUSE STRING: val2\nCREATE BAG\nUSE STRING: bag value 1\nUSE STRING: bag value 1\nUSE STRING: bag value 2\nUSE STRING: val1\nUSE STRING: val1\nUSE STRING: val2\nCREATE SET\nUSE STRING: set value 2\nUSE STRING: set value 1\nUSE STRING: val1\nUSE STRING: val2\n", isTransient:"true"}</bodySource>
+</TaskModel>

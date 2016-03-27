@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^1.7ConstantValueModel'
+ execute:{
+  do 'arda^1.0^UseString'("test_value");}
+ properties:{expected_output:"USE STRING: test_value\n", isTransient:"true"}</bodySource>
+</TaskModel>

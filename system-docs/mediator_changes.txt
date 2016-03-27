@@ -1,0 +1,28 @@
+$Id: mediator_changes.txt 2949 2010-06-24 19:27:41Z cjones $
+
+These are changes that come as a result of the middleware change and
+accompanying action model change. Only changes that are visible to a
+consumer of the Bridge API are listed here.
+
+ProcedureExecutor.load() side effects have been removed. It used to be
+that loading a procedure using a ProcedureExecutor (especially
+SparkProcedureExecutor) would have a side effect of loading the
+procedure into the action model, Lumen, and LAPDOG. This is no longer
+true. If you want a newly loaded procedure to be executable, you must
+make it available via a TypeLoader implementation.
+
+ActionModel methods have different side effects. The addType() and
+removeType() methods are still symmetrical, in that they manipulate a
+local cache of "permanent" types maintained by the Bridge on behalf of
+the application. This cache is available to the learning components in
+order to fulfill their functions. However, getType() has an expanded
+scope; it now queries the local type cache, followed by any local
+registered ActionLoader implementations, followed by any other task
+learning components. So it's possible to call removeType() but have
+the removed type still be available. Also, getTypes() provides a
+listing of only those types which are available in the cache; so
+getType() can retrieve types which are not visible in the output of
+getTypes().
+
+The TypeName class has moved packages from com.sri.pal to
+com.sri.tasklearning.spine.messages.contents.

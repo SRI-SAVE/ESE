@@ -1,0 +1,54 @@
+$Id: testing_reqs.txt 2949 2010-06-24 19:27:41Z cjones $
+
+Requirements for the test suite.
+
+I. Not ITAR controlled. We have ITAR-controlled data in the
+   PAL-CPOF-SHELL repository, and everything from CPOF is by default
+   ITAR-controlled. Any failure cases from CPOF need to be reproduced
+   in a test action model.
+
+II. Multiple JVMs. In the CPOF environment, we have the CPOF JVM which
+    contains an instance of the Bridge. We also have the PAL JVM which
+    contains our server, along with Lumen, LAPDOG, the Shell, and
+    another instance of the Bridge. The tests need to reproduce this
+    system configuration.
+
+    A. Start another JVM. This needs to be done programmatically from
+       within a test class.
+
+       1. Capture stdout and stderr. If this isn't done, the spawned
+          JVM will hang when it fills up its output buffer. Also,
+          stdout and stderr should be logged so we can diagnose
+          failures more easily. It should be easy to tell the
+          difference between the spawned JVM's stdout and other sorts
+          of log messages from the parent JVM. See ProcessMonitor for
+          an existing implementation.
+
+       2. Out-of-band communications. The test class needs to be the
+          controller for any given test, obviously. It should be able
+          to send instructions to the spawned JVM to make it perform
+          actions at a particular time. It also needs to be able to
+          query the spawned JVM for data it has received, for use in
+          test assertions.
+
+       3. Lifecycle management. If the JVM containing the test class
+          exits, the spawned JVM needs to exit also. If not, it's
+          possible for a bug in the test code to leave a spawned JVM
+          running which will interfere with future tests. This is
+          particularly bad if it happens on the autobuild machine. The
+          spawned JVM should probably contain a watchdog that keeps in
+          contact with the controlling JVM.
+
+    B. Run some tests in a single-JVM configuration. For our
+       integration with WebTAS, we will probably be running in a
+       single-JVM mode. The system will use Java API calls to
+       communicate with itself rather than any kind of inter-JVM
+       network communication. Our tests should not preclude this
+       setup.
+
+    C. Many JVMs. We have at least one future use case that will use 3
+       JVMs, each of which will have their own instance of the Bridge.
+
+    D. Different JVM models with the same test. We have a lot of test
+       cases that should be run in the 1-JVM model, the 2-JVM model,
+       and maybe also a 3+ JVM model.

@@ -1,0 +1,4 @@
+Test empty output parameter
+See what happens when the value for an output parameter is missing
+#########################################################
+action144[param133=item4ID; param185=; ]

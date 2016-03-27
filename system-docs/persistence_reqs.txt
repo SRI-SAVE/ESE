@@ -1,0 +1,25 @@
+$Id: persistence_reqs.txt 3284 2010-08-27 18:20:20Z cjones $
+
+Requirements for persistence of action models, actions, and procedures.
+
+- Abstract persistence service with multiple implementations:
+  - WebTAS
+  - Standalone, file-based persistence (Adept storage)
+  - CPOF
+
+- Different implementations of persistence will implement different
+  subsets of its functionality.
+
+- Base functionality (what CPOF implements):
+  - Load this application's action model on startup, probably via an
+    XML file.
+  - Load procedures on demand, based on procedure name. This is
+    exposed via the Spine to other clients.
+
+- Extended functionality (needed by non-CPOF editor):
+  - Provides a listing of all known procedures by name.
+  - Also need to list actions and types by name. Are these three
+    separate API methods, or one?
+  - Loads action models for other applications.
+  - Allows add, replace, and delete of procedures, actions, and types.
+  - Do any of these methods need to be exposed via the Spine?

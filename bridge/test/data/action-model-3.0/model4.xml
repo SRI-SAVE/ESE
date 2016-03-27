@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+    <type id="String">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type108">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="String"/>
+        </list>
+    </type>
+
+    <type id="Integer">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Integer</javaType>
+        </custom>
+    </type>
+
+    <type id="type128">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type112">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="type128"/>
+        </list>
+    </type>
+
+    <type id="type115">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type132">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type131">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="type132"/>
+        </list>
+    </type>
+
+    <type id="type110">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type135">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type126">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+
+    <type id="type118">
+        <description>No descr.</description>
+        <struct>
+            <ref typeRef="type126"/>
+            <ref typeRef="type126"/>
+        </struct>
+    </type>
+
+    <type id="type107">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="type118"/>
+        </list>
+    </type>
+
+    <type id="type139">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+
+    <type id="type103">
+        <description>No descr.</description>
+        <struct>
+            <ref typeRef="type139"/>
+            <ref typeRef="type139"/>
+        </struct>
+    </type>
+
+    <type id="type140">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+
+    <type id="type100">
+        <description>No descr.</description>
+        <struct>
+            <ref typeRef="type140"/>
+            <ref typeRef="type140"/>
+        </struct>
+    </type>
+
+    <type id="type134">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+
+    <type id="type116a">
+        <description>No descr.</description>
+        <struct>
+            <ref typeRef="type134"/>
+            <ref typeRef="type134"/>
+        </struct>
+    </type>
+
+    <type id="type116">
+        <description>No descr.</description>
+        <list>
+            <ref typeRef="type116a"/>
+        </list>
+    </type>
+
+    <type id="type133">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.String</javaType>
+        </custom>
+    </type>
+
+    <type id="type109">
+        <description>No descr.</description>
+        <custom>
+            <javaType>java.lang.Double</javaType>
+        </custom>
+    </type>
+
+    <type id="type136">
+        <description>No descr.</description>
+        <struct>
+            <ref typeRef="type109"/>
+            <ref typeRef="type109"/>
+        </struct>
+    </type>
+
+</actionModel>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^4.1EmptyLoop'
+ execute:{
+  do 'arda^1.0^CreateList'('$output list 1');
+  forall '$string 1' .in. '$output list 1'
+   execute:{};}
+ properties:{expected_output:"CREATE LIST\n", isTransient:"true"}</bodySource>
+</TaskModel>

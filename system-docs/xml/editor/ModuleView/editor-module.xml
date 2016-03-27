@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+ "docbookx.dtd">
+<section id="editor_module">
+    <title>CPOF-PAL Procedure Editor Module View</title>
+    <section>
+        <title>Primary Presentation</title>
+        <para> The CPOF-PAL procedure editor is a CPOF user affordance that provides
+            support for users to visualize procedures in a human-readable form and to
+            perform simple edits. It is implemented as a VizPak chart with custom 
+            extensions.</para>
+        <figure id="editor-elements" xreflabel="Editor Module Primary Presentation">
+            <title>Module Primary Presentation</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="graphics/PrimaryPresentation.png" scale="99" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>
+        </para>
+        <figure id="editor-elements-key" xreflabel="Editor Module Primary Presentation Key">
+            <title>Module Primary Presentation Key</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="graphics/PrimaryPresentationKey.png"
+                        scale="99" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+    </section>
+    <section>
+        <title>Element Catalog</title>
+        <para></para>
+        <section>
+            <title>Elements and their properties</title>
+            <table>
+                <title>External Modules</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>VizPak</entry>
+                            <entry>The UI engine used to display the viewer.</entry>
+                        </row>
+                        <row>
+                            <entry>CPOF Repository Wrappers</entry>
+                            <entry>3G wrappers that allow aynschronous access to the CPOF
+                                repository.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>com.sri.pal.ui.procedure.editor</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>EditorTooltipFactory</entry>
+                            <entry>A customized non-infocentric tooltip generator.</entry>
+                        </row>
+                        <row>
+                            <entry>ImageFillFrameDesc</entry>
+                            <entry>A custom image descriptor for variable backgrounds.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureEditor</entry>
+                            <entry>A chart customization to handle the viewer's tooltips
+                                and permissions.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureEditorFrameBuilder</entry>
+                            <entry>A custom frame builder that installs the viewer's
+                                custom layout factory.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureEditor</entry>
+                            <entry>A chart customization to handle the viewer's tooltips
+                                and permissions.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureEditorRegion</entry>
+                            <entry>A custom region to override VizPak's default layout
+                                encoding for assertions.</entry>
+                        </row>
+                        <row>
+                            <entry>SetProcedureActionDesc</entry>
+                            <entry>A custom action descriptor set with an appropriate
+                                content to allow dragging procedures out of the viewer.</entry>
+                        </row>
+                        <row>
+                            <entry>ActionClickDeleteFunction</entry>
+                            <entry>A style to handle deleting a step.</entry>
+                        </row>
+                        <row>
+                            <entry>ActionDropFunction</entry>
+                            <entry>A style to handle dropping a step as part of a drag
+                                and drop gesture.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcClickBackFunction</entry>
+                            <entry>A style to roll up to the parent of a nested Procedure.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcClickDrilldownFunction</entry>
+                            <entry>A style to handle drilling down into a nested Procedure.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureDropOverrideStyle</entry>
+                            <entry>A custom action descriptor to allow the viewer to
+                                handle single-drop overrides.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureEditor.cdl</entry>
+                            <entry>The primary chart definition language (CDL)
+                                specification for the procedure editor. This file uses CDL
+                                to define the non-custom parts of the editor and to glue
+                                the custom Java bits together.</entry>
+                        </row>
+                        <row>
+                            <entry>StepClickDiscloseFunction</entry>
+                            <entry>A style to handle the progressive disclosure arrow
+                                on steps.</entry>
+                        </row>
+                        <row>
+                            <entry>ValueClickHighlightFunction</entry>
+                            <entry>A style to handle variable highlighting.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>com.sri.pal.ui.procedure.editor.backend</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>DeleteStep</entry>
+                            <entry>A PDL custom function to implement step deletion.</entry>
+                        </row>
+                        <row>
+                            <entry>DragAndDropStep</entry>
+                            <entry>A PDL custom function to implement step drag and drop.</entry>
+                        </row>
+                        <row>
+                            <entry>HighlightSwitch</entry>
+                            <entry>A PDL custom function to implement variable highlighting.</entry>
+                        </row>
+                        <row>
+                            <entry>Notifier</entry>
+                            <entry>An interface to allow Spark to listen for signature change issues.</entry>
+                        </row>
+                        <row>
+                            <entry>PDLCustomFunction</entry>
+                            <entry>A generic facade to VizPak action descriptors.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureDrilldown</entry>
+                            <entry>A PDL custom function to implement nested Procedure drill down.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureDrop</entry>
+                            <entry>A PDL custom function to implement the Procedure drop override.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureRollup</entry>
+                            <entry>A PDL custom function to implement nested Procedure rollup.</entry>
+                        </row>
+                        <row>
+                            <entry>ProgressiveDisclosureSwitch</entry>
+                            <entry>A PDL custom function to implement progressive disclosure
+                                on steps.</entry>
+                        </row>
+                        <row>
+                            <entry>SignatureWatcherSingleton</entry>
+                            <entry>A signature to allow Spark to listen for signature change issues.</entry>
+                        </row>
+                        <row>
+                            <entry>ValidateProcedure</entry>
+                            <entry>A facade to allow the editor to communicate with Lumen to peform
+                                Procedure validation.</entry>
+                        </row>
+                        <row>
+                            <entry>ValidatorSpineSingleton</entry>
+                            <entry>A singleton to control the creation of Spine instances for
+                                Procedure validation communication.</entry>
+                        </row>
+                        <row>
+                            <entry>SetValidInputs</entry>
+                            <entry>A PDL custom function to [TODO: Should this be deleted?].</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>com.sri.pal.ui.procedure.editor.layouts</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>ActionMetadataStringComputationMethod</entry>
+                            <entry>A computation to display metadata from the Action Model
+                                Registrar.</entry>
+                        </row>
+                        <row>
+                            <entry>ColonSuffixComputationMethod</entry>
+                            <entry>A computation to determine whether or not to display a
+                                colon on labels in the editor.</entry>
+                        </row>
+                        <row>
+                            <entry>CurrentProcedureComputationMethod</entry>
+                            <entry>A computation to [TODO: What is this for?].</entry>
+                        </row>
+                        <row>
+                            <entry>FirstNonNullStringComputationMethod</entry>
+                            <entry>A computation to allow graceful degredation of
+                                display when metadata is not specified.</entry>
+                        </row>
+                        <row>
+                            <entry>IconExistsComputationMethod</entry>
+                            <entry>A computation to determine whether a value has
+                                an associated icon.</entry>
+                        </row>
+                        <row>
+                            <entry>ImagePathTypeComputationMethod</entry>
+                            <entry>A computation to [TODO: What is this for?].</entry>
+                        </row>
+                        <row>
+                            <entry>InfocentricEntityComputationMethod</entry>
+                            <entry>A computation to display infocentric values.</entry>
+                        </row>
+                        <row>
+                            <entry>InfocentricLabelComputationMethod</entry>
+                            <entry>A computation to display infocentric values as text.</entry>
+                        </row>
+                        <row>
+                            <entry>InfocentricGenerator</entry>
+                            <entry>[TODO: What does this do?  Is it redundant with the above?]</entry>
+                        </row>
+                        <row>
+                            <entry>InfocentricLabelOnlyComputationMethod</entry>
+                            <entry>A computation to [TODO: What is this for?].</entry>
+                        </row>
+                        <row>
+                            <entry>ListTermStringComputationMethod</entry>
+                            <entry>A computation to display lists.</entry>
+                        </row>
+                        <row>
+                            <entry>ParameterIsEmbeddedComputationMethod</entry>
+                            <entry>A computation to determin if a parameter is embedded in
+                                the fancy name.</entry>
+                        </row>
+                        <row>
+                            <entry>RemoveUnderscoreComputationMethod</entry>
+                            <entry>A computation to prettify variable display by replacing
+                                underscores with spaces.</entry>
+                        </row>
+                        <row>
+                            <entry>SelectedImgPathComputationMethod</entry>
+                            <entry>A computation to build 3-part background images.</entry>
+                        </row>
+                        <row>
+                            <entry>ShowBackIconComputationMethod</entry>
+                            <entry>A computation to compute an appropriate variable 
+                                background.</entry>
+                        </row>
+                        <row>
+                            <entry>StepHasIssueComputationMethod</entry>
+                            <entry>A computation to determine if a step has an issue.</entry>
+                        </row>
+                        <row>
+                            <entry>StepIssueMessageComputationMethod</entry>
+                            <entry>A computation to find the message associated with
+                                an issue.</entry>
+                        </row>
+                        <row>
+                            <entry>StepIssueTypeComputationMethod</entry>
+                            <entry>A computation to find the type of an issue.</entry>
+                        </row>
+                        <row>
+                            <entry>VariableIsHighlightedComputationMethod</entry>
+                            <entry>A computation to determine whether a variable
+                                is highlighted.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>com.sri.pal.ui.procedure.editor.imports</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                        <row>
+                            <entry>[TODO: document imports]</entry>
+                            <entry>[TODO: document imports]</entry>
+                        </row>
+                    <tbody>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>com.sri.pal.ui.procedure.editor.layouts</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>ActionLayoutFacade</entry>
+                            <entry>Lays out action steps.</entry>
+                        </row>
+                        <row>
+                            <entry>ForinLayoutFacade</entry>
+                            <entry>Lays out loop steps.</entry>
+                        </row>
+                        <row>
+                            <entry>LayoutFacade</entry>
+                            <entry>An abstract class that encapsulates the information
+                                necessary to lay out a symbol in the viewer.</entry>
+                        </row>
+                        <row>
+                            <entry>ParameterLayoutFacade</entry>
+                            <entry>Lays out procedure options and results.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureInputParameterLayoutFacade</entry>
+                            <entry>Lays out procedure options.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureLayoutFacade</entry>
+                            <entry>Lays out procedures.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureLayoutFactory</entry>
+                            <entry>A custom network layout that provides the sizes and
+                                positions for most symbols in the procedure editor.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureParameterDefaultLayoutFacade</entry>
+                            <entry>Lays out procedure options defaults.</entry>
+                        </row>
+                        <row>
+                            <entry>ProcedureInputParameterLayoutFacade</entry>
+                            <entry>[TODO: Is this redundant?].</entry>
+                        </row>
+                        <row>
+                            <entry>SequenceLayoutFacade</entry>
+                            <entry>Lays out sequences of steps.</entry>
+                        </row>
+                        <row>
+                            <entry>TaskLayoutFacade</entry>
+                            <entry>Parent class for laying out steps.</entry>
+                        </row>
+                        <row>
+                            <entry>TermLayoutFacade</entry>
+                            <entry>Parent class for laying out terms in a step.</entry>
+                        </row>
+                        <row>
+                            <entry>ValueLayoutFacade</entry>
+                            <entry>Lays out variables in the value panel.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>com.sri.pal.ui.procedure.editor.util</title>
+                <tgroup cols="2">
+                    <thead>
+                        <row>
+                            <entry valign="top">Element</entry>
+                            <entry valign="top">Description</entry>
+                        </row>
+                    </thead>
+                        <row>
+                            <entry>EditorStringUtil</entry>
+                            <entry>Utilities for manipulating strings.</entry>
+                        </row>
+                        <row>
+                            <entry>RepositoryUtil</entry>
+                            <entry>A facade to fetch values from the CPOF repository.</entry>
+                        </row>
+                    <tbody>
+                    </tbody>
+                </tgroup>
+            </table>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+                href="../../common/included-xml/PAL-architecture-modules.xml" />
+        </section>
+        <section>
+            <title>Relations and their properties</title>
+            <para>The primary relation displayed in the Primary Presentation is the uses
+                relation, which is a specialization of the depends-on relation. This
+                relation asserts that the correctness of one element depends on that of
+                another element. Generalization is also shown where appropriate, asserting
+                one element is a subclass of another. Realizations are shown where
+                appropriate for contextual establishment of program flow; it should be
+                noted that not all realizations are displayed where they do not help with
+                the understanding of flow control for the interactions.</para>
+        </section>
+        <section>
+            <title>Element interface</title>
+            <section>
+                <title>VizPak API</title>
+                <para>The entire procedure viewer is built as a VizPak visualization, so
+                    all displays are handled VizPak APIs to define visualization symbols.
+                    In practice, this is implemented as a combination of standard VizPak
+                    Chart Description Language (CDL) XML and custom Java extensions.</para>
+            </section>
+        </section>
+        <section>
+            <title>Element behavior</title>
+            <para>All sequence diagrams below share the same key, displayed here:</para>
+            <figure id="editor-elements-sequence-key" xreflabel="Editor Module Sequence Key">
+                <title>Module Sequence Key</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="graphics/SequenceKey.png" scale="50" />
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <section>
+                <title>Visualizing a Procedure</title>
+                <figure id="editor-elements-sequence-import" xreflabel="Editor Module Sequence Import">
+                    <title>Module Sequence</title>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="graphics/SequenceVisualize.png"
+                                scale="130" />
+                        </imageobject>
+                    </mediaobject>
+                </figure>
+                <para> The procedure viewer exists inside of the CPOF client. SPIA
+                    procedures also exist as boxes on the user's workspace, and users can
+                    visualize them into the procedure viewer via simple drag and drop.
+                    Upon drop, VizPak generates assertion UUID Lists for each type of
+                    symbol in the ProcedureCore u-form based on the traversal logic
+                    specified in the custom concept converters. The sequence diagram above
+                    only shows the code path for generating assertions for the
+                    ProcedureCore symbol, a representative concept conversion. Some
+                    traversals are a bit more complicated, in particular, sometimes data
+                    is fetched from the action model registrar rather than just the SPIA. </para>
+                <para>These assertions get converted into symbols and their corresponding
+                    graphemes by the VizPak engine as specified in the ProcedureEditor.cdl
+                    CDL file. To lay out the symbols, VizPak calls into the hierarchy of
+                    custom layout facades to generate symbol positions and size
+                    assertions. The sequence diagram above shows the code path for
+                    generating and committing the layout associative converters down to
+                    the task level. The code path down to primitive terms is similar. Once
+                    all this processing completes, the viewer displays the resulting
+                    symbols and graphemes on screen. </para>
+            </section>
+            <section>
+                <title>[TODO: Document code paths for editing]</title>
+            </section>
+        </section>
+    </section>
+    <section>
+        <title>Context Diagram</title>
+        <figure>
+            <title>PAL System Context Diagram</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="graphics/PAL_Architecture.png" scale="100" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>The procedure viewer resides inside of the CPOF client because it is part of
+            the CPOF user interface. The rest of the PAL components reside in the PAL
+            process. Since the procedure viewer only displays information contained in the
+            CPOF IA, it has no need to interact with any components outside of the CPOF
+            process.</para>
+        <section>
+            <title>Process Laydown:</title>
+            <para>The procedure viewer is a VizPak chart that lives inside of the CPOF
+                client process. We communicate with the CPOF repository exclusively
+                through VizPak APIs and the SPIA wrapper classes. </para>
+        </section>
+    </section>
+    <section>
+        <title>Variability Guide</title>
+        <section>
+            <title>SPIA and Action Model Registrar:</title>
+            <para>The procedure viewer bases its procedure visualization the structure
+                of the SPIA ProcedureCore and information in the action model. The actions
+                stored in the action model registrar may vary between releases of CPOF.
+                The viewer relies on these IAs for visualization and will visualize the
+                information contained therein, so this information, including metadata
+                currently used only by the viewer must be kept up to date between
+                releases. If the action model changes between versions, procedures will
+                need to be upgraded in order to even be executable, so we do not
+                anticipate that the editor's requirement that procedures be in sync with
+                the action model will become a primary maintenance point. </para>
+        </section>
+    </section>
+    <section>
+        <title>Architecture Background</title>
+        <para>The procedure viewer visualizes the 6.0 standard Structured Procedure IA
+            (SPIA) using VizPak with some custom Java extensions.</para>
+        <section>
+            <title>Rationale</title>
+            <para>The procedure viewer is implemented as a CPOF chart rather than an
+                external program because CPOF-PAL users perform most of their repetitive
+                tasks inside CPOF and we do not want to burden them with learning a new
+                external interface just to do procedure editing. Our approach improves
+                interoperability between CPOF and PAL and makes the user experience more
+                seamlesss.</para>
+        </section>
+        <section>
+            <title>Analysis and Results</title>
+            <para>Except for standard QA testing for bugs, none at this time.</para>
+        </section>
+        <section>
+            <title>Assumptions</title>
+            <section>
+                <title>Performance and Memory:</title>
+                <para>Procedure editing is a user-driven activity that we do not expect
+                    will occur as frequently as procedure demonstration or execution. The
+                    procedure viewer is designed to not consume resources when the
+                    appliance is not visible. Thus, we assume that memory consumption and
+                    performance is not a concern.</para>
+                <para>The most processor-intensive operation is the display of a procedure
+                    to screen. This operation simply traverses a ProcedureCore u-form
+                    using custom Java concept converters built on the standard VizPak APIs.
+                    As such, we expect memory and performance characteristics to be
+                    similar to other VizPak charts.</para>
+            </section>
+        </section>
+    </section>
+    <section>
+        <title>Other information</title>
+        <section>
+            <title>Affected Subsytems</title>
+            <para>None.</para>
+        </section>
+    </section>
+    <section>
+        <title>Related Views</title>
+        <para>None.</para>
+    </section>
+</section>

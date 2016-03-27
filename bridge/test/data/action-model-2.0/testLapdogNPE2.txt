@@ -1,0 +1,16 @@
+testLapdogNPE2
+NullPointer exception regression test
+#########################################################
+action144[param133=0xfc59cc0b4566666f72742b526f6c65; param185=0x080e000001119372f0440af104a4805f; ]
+action202[param185=0x080e000001119372f0440af104a4805f; param198=icon; param143=com/path/images/problem_icon.png; ]
+action202[param185=0x080e000001119372f0440af104a4805f; param198=Name; param143=Untitled; ]
+action170[param114=0x080e000001119372f0440af104a4805f; param157=item5s; param119=[0xfc59cc0b4566666f72742b526f6c65]; ]
+action170[param114=0x080e000001119372f0440af104a4805f; param157=shared log; param119=[0x080e000001119372f0440af104a48060]; ]
+action202[param185=0x080e000001119372f0440af104a4805f; param198=textComments; param143=; ]
+action202[param185=0x080e000001119372f0440af104a4805f; param198=wrapper; param143=com.generic.value2; ]
+action144[param133=0xfc59cc0e5368617265644c6f672b526f6c65; param185=0x080e000001119372f0440af104a48060; ]
+action170[param114=0x080e000001119372f0440af104a48060; param157=item16s; param119=[]; ]
+action142[param185=0x080e000001119372f0440af104a48060; param198=no_clone; param143=[item16s]; ]
+action142[param185=0x080e000001119372f0440af104a48060; param198=no_action145; param143=[item16s]; ]
+action170[param114=0x080e000001119372f0440af104a48060; param157=item5s; param119=[0xfc59cc0e5368617265644c6f672b526f6c65]; ]
+action202[param185=0x080e000001119372f0440af104a4805f; param198=Name; param143=foobar!; ]

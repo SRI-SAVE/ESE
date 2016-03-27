@@ -1,0 +1,144 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+  <title> Adept Developer Guide </title>
+</head>
+
+
+<body>
+<h1> Adept Developer Guide </h1>
+
+ <P>
+This is a guide for developers of Adept.
+
+<br>
+<h2>Table of Contents</h2>
+
+<a href="#Code"> Code Base </a><br>
+<a href="#Testing"> Testing </a><br>
+
+<br><HR>
+<h2><a name="Code"></a> Code Base </h2>
+ <P>
+The Adept system is part of the tasklearning source. This is maintained in the SVN repository
+<CODE>https://cmxt.sri.com/svn/tasklearning</CODE>. Adept-specific code such as its shell is
+in its <CODE>adept/ </CODE> subdirectory.
+ <P>
+Adept makes use of many task learning components, including the Bridge and the Spine.
+LAPDOG, Lumen, and the Remote XML server (or RemoteXML) are used as well, as are their
+respective mediators. In general, these components are used in other task learning
+systems such as CPOF-PAL and CALO Express. Developers should be aware of the branching
+strategy for the tasklearning and other relevant repositories to assure that inadvertent
+changes are not made.
+ <P>
+Action model for Mozilla is currently under remote-xml-server srouce tree.
+
+<br><HR>
+<h2><a name="Testing"></a> Testing </h2>
+ <P>
+<CODE>ant run</CODE> will bring the Adept Shell and all required components up.
+Currently, logging is done to the console and is rather busy.
+ <P>
+To check that browser instrumentation is working, first install the Firefox plugin
+at <CODE>remotexml-mediator/plugin/firefox/iris.xpi</CODE>.
+Then do an 'ant run' and browse to a URL. You should see something like
+
+<PRE>
+     [java] 16600 [XML-RPC-0] DEBUG EXECUTION-LOG  - Invocation ActionInvocation[ActionDef("TypeName[mozilla.OpenUrlEvent]")](0)(null) moving from CREATED to RUNNING, args [http://www.yahoo.com/]
+     [java] 16600 [XML-RPC-0] DEBUG com.sri.pal.GlobalActionNotifier  - Adding invocation of ActionDef("TypeName[mozilla.OpenUrlEvent]")
+</PRE>
+
+ <P>
+To test if learning is working for a one-action demonstration, visit a URL in the browser.
+Now, since there is no GUI in place to indicate that the demonstration is over, a hack
+has been put in place to do so. Visit a URL containing the string <CODE>".sri.com/~"</CODE>
+for example, <CODE>http://www.ai.sri.com/~tomlee/</CODE> . This will initiate learning;
+you should see the learned procedure in the log:
+
+<PRE>
+     [java] 22388 [LapdogClientCallServiceImpl thread 0] DEBUG com.sri.ai.tasklearning.lapdog.CommonTaskRepresentation  - Learned Lumen action+procedure:
+     [java] action 'SPARK.demo1'(+$url_1 = "http://www.yahoo.com/")
+     [java]  execute:{
+     [java]   do 'mozilla.OpenUrlEvent'($url_1);}
+     [java]  argtypes:["mozilla.url"]
+     [java]  properties:{creator:"user unknown", demonstrated_variable_bindings:{url_1:"http://www.yahoo.com/"}, learner:"LAPDOG", learner_version:"Beta 5.0", registration_date:"20100825T234846Z"};
+     [java] 
+</PRE>
+
+<H1>Misc notes to be reorganized</H1>
+
+Point of maintenance for agave.xml is tasklearning/bridge/src/com/sri/pal.
+ <P>
+Point of maintenance for mozilla action model is remotexml-mediator/src/java/remotexml_model.xml
+ <P>
+Chris, I'll suggest that you pass metadata to LAPDOG via a defineType() property. This method only takes strings as properties, not attribute/value pairs. So I suggest we encode the needed info, and any other metadata of this type should it arise, as "inverse=INVERSEACTIONNAME". In this case we should see "inverse=findLinkRef" on findLinkName's defineAction() and vice versa. Is that right Melinda? 
+ <P>
+THIS DIDN'T WORK: For the short term, I can put in an equivalence hack: When we define a new type to LAPDOG, we'll first check to see if a type exists with the same name, but in the agave namespace. If so, we'll claim that they're equivalent.
+ <P>
+ Chris--if I want to avoid loading certain agave actions (because we don't need them for the demo), is it sufficient to comment out the corresponding lines in the LapdogClientCallServiceImpl?  I.e.,
+
+        agaveActions = new ArrayList<TypeName>();
+        agaveActions.add(new TypeName("string", AGAVE_NAMESPACE));
+        //agaveActions.add(new TypeName("stringlist", AGAVE_NAMESPACE));
+        agaveActions.add(new TypeName("findLinkRef", AGAVE_NAMESPACE));
+        agaveActions.add(new TypeName("findLinkName", AGAVE_NAMESPACE));
+        //agaveActions.add(new TypeName("createStringFromFormatString", AGAVE_NAMESPACE));
+        //agaveActions.add(new TypeName("createFormatStringFromString", AGAVE_NAMESPACE));
+
+
+
+
+ <P>
+To terminate Adept, ctrl-C in its shell works, or kill the process using the OS.
+
+<H2>Appendix</H2>
+
+Java Libraries used (could be out of date):
+
+<UL>
+<LI> SLF4j
+<LI> Activation
+<LI> ActiveMQ 5.3.2   
+<LI> Ant
+<LI> Asm
+<LI> Cglib
+<LI> Classes
+<LI> Commons Logging
+<LI> FXD Tools
+<LI> JavaFXC
+<LI> JavaFXDoc
+<LI> JavaFXRT
+<LI> JaxB
+<LI> JSR173
+<LI> Lapdog
+<LI> Lumen
+<LI> Mailapi
+<LI> Miglayout
+<LI> PalBridge
+<LI> PalCommon
+<LI> PalShell
+<LI> PalSpine   
+<LI> RemoteXml
+<LI> SwingWorker
+<LI> ToolChain
+<LI> WSCommons
+<LI> XMLRPC
+</UL>
+
+</body> 
+</html>

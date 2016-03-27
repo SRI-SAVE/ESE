@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TaskModel version="0.4">
+    <bodySource>action 'lumen^0.4^1.8SubProcedures'
+ execute:{
+  do 'lumen^0.4^1.5ProcedureOutput'('$output 1 1');
+  do 'lumen^0.4^1.4ProcedureInput'('$output 1 1');
+  do 'lumen^0.4^1.6InputAndOutput'('$output 1 1', '$output 1 2');
+  do 'arda^1.0^UseString'('$output 1 2');}
+ properties:{expected_output:"CREATE STRING\nUSE STRING: string\nUSE STRING: string\nCREATE STRING\nUSE STRING: string\n", isTransient:"true"}</bodySource>
+</TaskModel>
