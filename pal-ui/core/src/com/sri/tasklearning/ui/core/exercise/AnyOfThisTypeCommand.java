@@ -18,15 +18,9 @@ package com.sri.tasklearning.ui.core.exercise;
 
 import java.util.List;
 
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-
-import com.sri.tasklearning.ui.core.control.TermSplitMenuButton;
-import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsModel;
-import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
-import com.sri.tasklearning.ui.core.step.StepModel;
-import com.sri.tasklearning.ui.core.step.StepView;
 import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
+
+import javafx.scene.layout.Pane;
 
 public class AnyOfThisTypeCommand extends AbstractCommand {
 	

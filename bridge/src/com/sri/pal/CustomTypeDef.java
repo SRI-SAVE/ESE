@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: CustomTypeDef.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: CustomTypeDef.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import java.util.Set;
@@ -138,6 +138,10 @@ public class CustomTypeDef
 
     @Override
     protected void fillInXml(TypeType typeXml) {
+        if (TypeUtil.isAlias(getAtr())) {
+            return;
+        }
+
         CustomType customXml = new CustomType();
         CustomTypeDef parent = getParentType();
         if (parent != null) {
@@ -216,6 +220,16 @@ public class CustomTypeDef
             return strValue;
         } else {
             return factory.makeObject((String) strValue);
+        }
+    }
+
+    @Override
+    public boolean isValueOf(Object value)
+            throws PALException {
+        try {
+            return getJavaClass().isInstance(value);
+        } catch (ClassNotFoundException e) {
+            throw new PALException(e);
         }
     }
 

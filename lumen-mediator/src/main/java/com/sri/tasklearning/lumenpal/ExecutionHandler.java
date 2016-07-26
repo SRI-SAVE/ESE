@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-// $Id: ExecutionHandler.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: ExecutionHandler.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.lumenpal;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sri.ai.lumen.atr.ATRParameter;
 import com.sri.ai.lumen.atr.ATRParameter.Modality;
@@ -49,19 +37,20 @@ import com.sri.tasklearning.spine.MessageHandler;
 import com.sri.tasklearning.spine.MessageHandlerException;
 import com.sri.tasklearning.spine.Spine;
 import com.sri.tasklearning.spine.SpineException;
-import com.sri.tasklearning.spine.messages.ErrorExecutionStatus;
-import com.sri.tasklearning.spine.messages.ExecuteRequest;
-import com.sri.tasklearning.spine.messages.Message;
-import com.sri.tasklearning.spine.messages.RequestIgnored;
-import com.sri.tasklearning.spine.messages.SerialNumberRequest;
-import com.sri.tasklearning.spine.messages.SerialNumberResponse;
-import com.sri.tasklearning.spine.messages.StartExecutionStatus;
+import com.sri.tasklearning.spine.messages.*;
 import com.sri.tasklearning.spine.messages.contents.TransactionUID;
 import com.sri.tasklearning.spine.util.ErrorFactory;
 import com.sri.tasklearning.spine.util.ErrorType;
 import com.sri.tasklearning.spine.util.ReplyWatcher;
 import com.sri.tasklearning.spine.util.TypeUtil;
 import com.sri.tasklearning.util.NamedThreadFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * This class handles incoming {@link ExecuteRequest}s from other Spine clients.
@@ -75,6 +64,7 @@ public class ExecutionHandler
     public static final String NAMESPACE = "lumen";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final RunOnce runOnce;
     private final LockingActionModel actionModel;
     private final TypeFetcher typeFetcher;
     private final Spine spine;
@@ -86,11 +76,13 @@ public class ExecutionHandler
     private final WithLockedTypes withLockedTypes;
     private final ProcedureDependencyFinder finder;
 
-    public ExecutionHandler(LockingActionModel actionModel,
+    public ExecutionHandler(RunOnce runOnce,
+                            LockingActionModel actionModel,
                             TypeFetcher typeFetcher,
                             ReplyWatcher<SerialNumberResponse> serialGetter,
                             Spine spine,
                             ProcedureDependencyFinder procDepFinder) {
+        this.runOnce = runOnce;
         this.actionModel = actionModel;
         this.typeFetcher = typeFetcher;
         this.spine = spine;
@@ -137,7 +129,6 @@ public class ExecutionHandler
      * @param uid
      * @param parentUid
      * @param inParams
-     * @param lockedTypes
      * @throws SpineException
      * @throws MediatorException
      */
@@ -261,6 +252,15 @@ public class ExecutionHandler
 
         @Override
         public void run() {
+            try {
+                runOnce.runOnce();
+            } catch (Exception e) {
+                log.warn("Lumen preload failed", e);
+                ErrorInfo error = errorFactory.error(ErrorType.LUMEN, e);
+                sendFailureMessage(actionName, uid, parentUid, inParams, error);
+                return;
+            }
+
             ErrorInfo error = null;
             try {
                 ATRActionDeclaration proc = (ATRActionDeclaration) typeFetcher

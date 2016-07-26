@@ -69,6 +69,7 @@ class SriJavaPlugin implements Plugin<Project> {
         }
         project.configurations.create('source')
         project.artifacts.add('source', project.sourceJar)
+        project.artifacts.add('archives', project.sourceJar)
 
         // Don't fail the build if there are Javadoc problems.
         project.javadoc {
@@ -83,6 +84,7 @@ class SriJavaPlugin implements Plugin<Project> {
         }
         project.configurations.create('docs')
         project.artifacts.add('docs', project.docZip)
+        project.artifacts.add('archives', project.docZip)
 
         // Make test jars available to other projects.
         project.task([type: Jar, dependsOn: project.testClasses], "testJar") {
@@ -128,6 +130,11 @@ class SriJavaPlugin implements Plugin<Project> {
             systemProperty 'PAL.storageDir', sandbox.path + '/AdeptTaskLearning'
         }
 
+        // Possibly ignore test failures, for use with Jenkins.
+        if (project.rootProject.hasProperty('test.ignoreFailures')) {
+            project.test.ignoreFailures = true
+        }
+
         // Eclipse's TestNG plugin will create this dumb directory, so
         // we should have clean remove it.
         project.clean.delete(project.file("test-output"))
@@ -144,18 +151,6 @@ class SriJavaPlugin implements Plugin<Project> {
         project.apply(plugin: 'idea')
         project.eclipse.classpath.defaultOutputDir =
             project.file('.eclipse.bin')
-
-        // If autobuild is running, don't fail the build at the first
-        // sign of a broken test. Jenkins will parse our test result
-        // files.
-        project.gradle.taskGraph.whenReady { tg ->
-            if (tg.hasTask(':autobuild')) {
-                project.test.ignoreFailures = true
-            }
-        }
-
-        // The root autobuild task depends on the check task in this project.
-        project.rootProject.autobuild.dependsOn(project.check)
 
         // Create a directory with this project's jars and dependencies.
         project.task("createRunDir", dependsOn: project.assemble) {

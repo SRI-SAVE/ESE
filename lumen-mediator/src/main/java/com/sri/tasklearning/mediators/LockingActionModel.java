@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: LockingActionModel.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: LockingActionModel.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.mediators;
 
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 
+import com.sri.ai.lumen.atr.ATR;
+import com.sri.ai.lumen.atr.ATRCat;
 import com.sri.ai.lumen.atr.ATRParameter;
 import com.sri.ai.lumen.atr.ATRParameter.Modality;
 import com.sri.ai.lumen.atr.ATRSig;
@@ -58,14 +60,8 @@ import org.slf4j.LoggerFactory;
  * Before making use of a type (or action), the user should get a read lock on
  * it. This can be done before the type has been added. When the type is no
  * longer in use, its lock should be released.
- * <p>
- * In practice, two instances of this class exist: One for the LAPDOG Mediator,
- * and another for the Lumen Mediator. New types are added to this, and it calls
- * the appropriate {@link TypeAdder} to actually add the types to LAPDOG or
- * Lumen.
  *
  * @author chris
- * @see com.sri.tasklearning.lapdogController.LockingActionModel
  */
 public class LockingActionModel {
     private static final Logger log = LoggerFactory
@@ -78,6 +74,7 @@ public class LockingActionModel {
     private final Map<SimpleTypeName, Collection<Lock>> dependentLocks;
     private final ExecutorService threadPool;
     private final Object addMonitor = new Object();
+    private final ATRDecl predefined;
 
     public LockingActionModel(TypeAdder adder) {
         typeAdder = adder;
@@ -86,6 +83,19 @@ public class LockingActionModel {
         dependentLocks = new HashMap<SimpleTypeName, Collection<Lock>>();
         ThreadFactory tf = new NamedThreadFactory(getClass());
         threadPool = Executors.newCachedThreadPool(tf);
+
+        // Sentinel object meaning this thing is predefined, and we don't store its definition.
+        predefined = new ATRDecl() {
+            @Override
+            public ATRCat getCategory() {
+                return ATRCat.TYPE_DECLARATION;
+            }
+
+            @Override
+            public ATR getInternalSub() {
+                return null;
+            }
+        };
     }
 
     /**
@@ -125,7 +135,7 @@ public class LockingActionModel {
      * should already be locked before this is called. This method also adds the
      * type to Lumen itself.
      *
-     * @throws MediatorException
+     * @throws MediatorsException
      */
     public void add(ATRDecl type)
             throws MediatorsException {
@@ -163,6 +173,26 @@ public class LockingActionModel {
                 dependentLocks.put(typeName, locks);
             }
         }
+    }
+
+    public void addPredefined(SimpleTypeName typeName) {
+        synchronized (addMonitor) {
+            types.put(typeName, predefined);
+        }
+    }
+
+    public boolean isPredefined(SimpleTypeName typeName) {
+        return types.get(typeName) == predefined;
+    }
+
+    public Set<SimpleTypeName> listPredefined() {
+        Set<SimpleTypeName> predefs = new HashSet<>();
+        for (Map.Entry<SimpleTypeName, ATRDecl> entry : types.entrySet()) {
+            if (entry.getValue() == predefined) {
+                predefs.add(entry.getKey());
+            }
+        }
+        return predefs;
     }
 
     /**
@@ -242,7 +272,11 @@ public class LockingActionModel {
      *         caller should already have a read lock on the requested type.
      */
     public ATRDecl getRaw(SimpleTypeName typeName) {
-        return types.get(typeName);
+        ATRDecl raw = types.get(typeName);
+        if (raw == predefined) {
+            throw new RuntimeException("Cannot retrieve predefined type '" + typeName + "'");
+        }
+        return raw;
     }
 
     /**
@@ -250,7 +284,7 @@ public class LockingActionModel {
      *         action, rewrite its signature to include its parent's parameters.
      */
     public ATRDecl getInherited(SimpleTypeName typeName) {
-        ATRDecl decl = types.get(typeName);
+        ATRDecl decl = getRaw(typeName);
         if (TypeUtil.isAction(decl)) {
             decl = inheritAction((ATRActionDeclaration) decl);
         }

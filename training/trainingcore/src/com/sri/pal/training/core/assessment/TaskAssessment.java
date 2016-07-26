@@ -33,11 +33,12 @@ public class TaskAssessment extends TaskAssessmentBase {
     }
     
     public boolean hasProblems() {
-    	if (getEqualityIssues().size() > 0 || getValueIssues().size() > 0 ||
-    	    getOrderingIssues().size() > 0 || getQueryIssues().size() > 0 ||
-    	    getStateIssues().size() > 0    || getMissingAtomIssues().size() > 0)
-    		return true;
-    	
-    	return false;
+        if (getEqualityIssues().isEmpty() && getValueIssues().isEmpty() && getOrderingIssues().isEmpty() &&
+                getQueryIssues().isEmpty() && getStateIssues().isEmpty() && getMissingAtomIssues().isEmpty() &&
+                getTypeIssues().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

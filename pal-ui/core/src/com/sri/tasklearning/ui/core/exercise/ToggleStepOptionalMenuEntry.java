@@ -22,8 +22,8 @@ public class ToggleStepOptionalMenuEntry extends AnnotationMenuEntry {
 
 	public ToggleStepOptionalMenuEntry(AnnotationPanel panel) {
 		
-		super(panel, new ToggleStepOptionalCommand(panel.getController(), panel), "Make step optional / required", 
-				Utilities.getImage("letter-R-icon.png"), Utilities.getImage("letter-O-icon.png")); 
+		super(panel, new ToggleStepOptionalCommand(panel.getController(), panel), "Required / optional step", 
+				Utilities.getImage("letter-O-icon.png"), Utilities.getImage("letter-R-icon.png")); 
 
 	}
 	

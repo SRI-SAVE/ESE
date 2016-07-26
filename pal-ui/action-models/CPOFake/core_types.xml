@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="0.1">
+
+    <!-- "primitive" types -->
+
+    <type id="string">
+        <metadata key="name" value="text"/>
+        <metadata key="aName" value="text"/>
+        <metadata key="names" value="text strings"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="color">
+        <metadata key="name" value="color"/>
+        <metadata key="contentType" value="enum"/>
+        <metadata key="default" value="Blue"/>
+        <!-- values: ["Blue", "Coral", "Green", "Grey", "Orange", "Red", "Yellow"] -->
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="date range">
+        <metadata key="name" value="date range"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="coordinate">
+        <metadata key="name" value="coordinate"/>
+        <metadata key="default" value="(0,0)"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="dimensions">
+        <metadata key="name" value="dimensions"/>
+        <metadata key="aName" value="dimensions"/>
+        <metadata key="names" value="dimensions"/>
+        <metadata key="thisName" value="these dimensions"/>
+        <metadata key="default" value="800 x 600"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+
+    <!-- CPOF objects -->
+
+    <!-- everything is an "item" -->
+    <type id="item">
+        <metadata key="name" value="item"/>
+        <metadata key="aName" value="an item"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+    
+    <!-- frames are resizable items -->
+    <type id="frame">
+        <inherit parent="item"/>
+        <metadata key="name" value="frame"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <!-- content is an item with data in it -->
+    <type id="content">
+        <inherit parent="item"/>
+        <metadata key="name" value="content"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <!-- content frames can hold content, eg events contained in the map -->
+    <type id="content frame">
+        <inherit parent="item"/>
+        <metadata key="name" value="content frame"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <!-- containers are frames that hold other objects in the 2D space -->
+    <type id="container">
+        <inherit parent="frame"/>
+        <metadata key="name" value="container"/>
+        <metadata key="default" value="WORKSPACE"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="pasteboard">
+        <inherit parent="container"/>
+        <metadata key="name" value="pasteboard"/>
+        <metadata key="icon" value="./cpof/pasteboard.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="stickie">
+        <inherit parent="frame"/>
+        <metadata key="name" value="stickie"/>
+        <metadata key="icon" value="./cpof/stickie.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="map">
+        <inherit parent="frame"/>
+        <inherit parent="content frame"/>
+        <metadata key="name" value="map"/>
+        <metadata key="icon" value="./cpof/map.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="table">
+        <inherit parent="frame"/>
+        <inherit parent="content frame"/>
+        <metadata key="name" value="table"/>
+        <metadata key="icon" value="./cpof/table.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="effort">
+        <inherit parent="content frame"/>
+        <inherit parent="content"/>
+        <metadata key="name" value="effort"/>
+        <metadata key="icon" value="./cpof/effort.png"/>
+        <metadata key="aName" value="an effort"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="event">
+        <inherit parent="content frame"/>
+        <inherit parent="content"/>
+        <metadata key="name" value="event"/>
+        <metadata key="icon" value="./cpof/event.png"/>
+        <metadata key="aName" value="an event"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="effort list">
+        <metadata key="name" value="effort list"/>
+        <metadata key="aName" value="an effort list"/>
+        <metadata key="icon" value="./cpof/effort.png"/>
+        <list>
+            <ref typeRef="effort"/>
+        </list>
+    </type>
+
+    <type id="event list">
+        <metadata key="name" value="event list"/>
+        <metadata key="aName" value="an event list"/>
+        <metadata key="icon" value="./cpof/event-list.png"/>
+        <list>
+            <ref typeRef="event"/>
+        </list>
+    </type>
+
+    <type id="user">
+        <inherit parent="item"/>
+        <metadata key="name" value="user"/>
+        <metadata key="icon" value="./cpof/user.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+</actionModel>

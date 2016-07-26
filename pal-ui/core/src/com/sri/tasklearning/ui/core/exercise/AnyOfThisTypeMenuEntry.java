@@ -16,19 +16,7 @@
 
 package com.sri.tasklearning.ui.core.exercise;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javafx.scene.layout.Pane;
-
-import com.sri.tasklearning.ui.core.step.ContainerStepModel;
-import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
-import com.sri.tasklearning.ui.core.step.ExerciseStepView;
-import com.sri.tasklearning.ui.core.step.StepModel;
-import com.sri.tasklearning.ui.core.step.StepView;
-import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
-import com.sri.tasklearning.ui.core.term.ExerciseStepParameterView;
-import com.sri.tasklearning.ui.core.term.ParameterModel;
 
 
 public class AnyOfThisTypeMenuEntry extends AnnotationMenuEntry {

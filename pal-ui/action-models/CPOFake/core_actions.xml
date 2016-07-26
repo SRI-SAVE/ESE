@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="0.1">
+
+    <action id="Dispense pasteboard">
+        <description>
+            Creates a new pasteboard inside the given container.
+	</description>
+        <metadata key="name" value="Dispense pasteboard"/>
+        <metadata key="fancyName" value="Dispense pasteboard into,#Target container"/>
+        <metadata key="icon" value="./cpof/pasteboard.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Target container">
+            <description>
+                The target container for the new pasteboard
+            </description>
+            <typeRef typeId="container"/>
+        </inputParam>
+        <inputParam id="New location">
+            <description>
+                The target location for the new pasteboard
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="coordinate"/>
+        </inputParam>
+        <outputParam id="Pasteboard">
+            <typeRef typeId="pasteboard"/>
+        </outputParam>
+    </action>
+
+    <action id="Dispense map">
+        <description>
+            Creates a new map inside the given container.
+	</description>
+        <metadata key="name" value="Dispense map"/>
+        <metadata key="fancyName" value="Dispense map into,#Target container"/>
+        <metadata key="icon" value="./cpof/map.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Target container">
+            <description>
+                The target container for the new map
+            </description>
+            <typeRef typeId="container"/>
+        </inputParam>
+        <inputParam id="New location">
+            <description>
+                The target location for the new map
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="coordinate"/>
+        </inputParam>
+        <outputParam id="Map">
+            <typeRef typeId="map"/>
+        </outputParam>
+    </action>
+
+    <action id="Dispense stickie">
+        <description>
+            Creates a new stickie inside the given container.
+	</description>
+        <metadata key="name" value="Dispense stickie"/>
+        <metadata key="fancyName" value="Dispense stickie into,#Target container"/>
+        <metadata key="icon" value="./cpof/stickie.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Target container">
+            <description>
+                The target container for the new stickie
+            </description>
+            <typeRef typeId="container"/>
+        </inputParam>
+        <inputParam id="New location">
+            <description>
+                The target location for the new stickie
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="coordinate"/>
+        </inputParam>
+        <outputParam id="Stickie">
+            <typeRef typeId="stickie"/>
+        </outputParam>
+    </action>
+
+    <action id="Dispense table">
+        <description>
+            Creates a new table inside the given container.
+	</description>
+        <metadata key="name" value="Dispense table"/>
+        <metadata key="fancyName" value="Dispense table into,#Target container"/>
+        <metadata key="icon" value="./cpof/table.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Target container">
+            <description>
+                The target container for the new table
+            </description>
+            <typeRef typeId="container"/>
+        </inputParam>
+        <inputParam id="New location">
+            <description>
+                The target location for the new table
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="coordinate"/>
+        </inputParam>
+        <outputParam id="Table">
+            <typeRef typeId="table"/>
+        </outputParam>
+    </action>
+
+    <action id="Dispense effort">
+        <description>
+            Creates a new effort inside the given container.
+	</description>
+        <metadata key="name" value="Dispense effort"/>
+        <metadata key="fancyName" value="Dispense effort into,#Target container"/>
+        <metadata key="icon" value="./cpof/effort.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Target container">
+            <description>
+                The target container for the new effort
+            </description>
+            <typeRef typeId="container"/>
+        </inputParam>
+        <inputParam id="New location">
+            <description>
+                The target location for the new effort
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="coordinate"/>
+        </inputParam>
+        <outputParam id="Effort">
+            <typeRef typeId="effort"/>
+        </outputParam>
+    </action>
+
+    <action id="Add item to container">
+        <description>
+            Adds an item to the given container, which could be a pasteboard or the workspace.
+	</description>
+        <metadata key="name" value="Add item to container"/>
+        <metadata key="fancyName" value="Add, #Item, to, #Container"/>
+        <metadata key="icon" value="./cpof/pasteboard.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Container">
+            <description>
+                The container to which to add the item
+            </description>
+            <typeRef typeId="container"/>
+        </inputParam>
+        <inputParam id="Item">
+            <description>
+                The item entity to add to the container
+            </description>
+            <typeRef typeId="item"/>
+        </inputParam>
+    </action>
+
+    <action id="Move item within container">
+        <description>
+            Move frames and/or data entities from one location to another within the same container.
+	</description>
+        <metadata key="name" value="Move item within container"/>
+        <metadata key="icon" value="./cpof/move.png"/>
+        <metadata key="fancyName" value="Move,#Item,to,#New position"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Item">
+            <description>
+                The item to move
+            </description>
+            <typeRef typeId="item"/>
+        </inputParam>
+        <inputParam id="New position">
+            <description>
+                The position within the container where the item is to be moved
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="coordinate"/>
+        </inputParam>
+    </action>
+
+    <action id="Clip frame">
+        <description>
+            Modify the clipping region of a frame or other session.
+	</description>
+        <metadata key="name" value="Resize frame"/>
+        <metadata key="fancyName" value="Resize,#Frame,to,#New dimensions"/>
+        <metadata key="icon" value="./cpof/clip.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Frame">
+            <description>
+                The frame to re-clip
+            </description>
+            <typeRef typeId="frame"/>
+        </inputParam>
+        <inputParam id="New dimensions">
+            <description>
+                The width and height of the frame
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="dimensions"/>
+        </inputParam>
+    </action>
+
+    <action id="Add content to an entity">
+        <description>
+            Adds the given content to the specified frame, such as a map, table, or effort.
+	</description>
+        <metadata key="name" value="Add content to an entity"/>
+        <metadata key="fancyName" value="Add,#New content,to,#Content target"/>
+        <metadata key="icon" value="./cpof/effort.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Content target">
+            <description>
+                The target to put the content into
+            </description>
+            <typeRef typeId="content frame"/>
+        </inputParam>
+        <inputParam id="New content">
+            <description>
+                The content to add
+            </description>
+            <typeRef typeId="content"/>
+        </inputParam>
+    </action>
+
+    <action id="Show map layer">
+        <description>
+            Opens and makes visible the specified content layer on a multi-layer visualization.
+	</description>
+        <metadata key="name" value="Show map layer"/>
+        <metadata key="fancyName" value="Show layer,#New layers,of,#Map"/>
+        <metadata key="icon" value="./cpof/layer.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Map">
+            <description>
+                The map containing the layer
+            </description>
+            <typeRef typeId="map"/>
+        </inputParam>
+        <inputParam id="New layers">
+            <description>
+                The content layer to open and make visible
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="effort"/>
+        </inputParam>
+    </action>
+
+    <action id="Set title of an effort">
+        <description>
+            Set the title of an effort.
+	</description>
+        <metadata key="name" value="Set title of an effort"/>
+        <metadata key="fancyName" value="Set title of,#Effort"/>
+        <metadata key="icon" value="./cpof/effort.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Effort">
+            <description>
+                The effort whose title to modify
+            </description>
+            <typeRef typeId="effort"/>
+        </inputParam>
+        <inputParam id="New title">
+            <description>
+                The new title for the effort
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="Set stickie title">
+        <description>
+            Set the title of a stickie.
+	</description>
+        <metadata key="name" value="Set stickie title"/>
+        <metadata key="fancyName" value="Set title of,#Stickie"/>
+        <metadata key="icon" value="./cpof/stickie.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Stickie">
+            <description>
+                The stickie whose title to modify
+            </description>
+            <typeRef typeId="stickie"/>
+        </inputParam>
+        <inputParam id="New title">
+            <description>
+                The new title for the stickie
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="Set stickie text">
+        <description>
+            Set the text of a stickie.
+	</description>
+        <metadata key="name" value="Set stickie text"/>
+        <metadata key="fancyName" value="Set text of,#Stickie"/>
+        <metadata key="icon" value="./cpof/stickie.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Stickie">
+            <description>
+                The stickie whose text to modify
+            </description>
+            <typeRef typeId="stickie"/>
+        </inputParam>
+        <inputParam id="New text">
+            <description>
+                The complete, new text for the stickie
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="Set stickie color">
+        <description>
+            Set the color of a stickie.
+	</description>
+        <metadata key="name" value="Set stickie color"/>
+        <metadata key="fancyName" value="Set color of,#Stickie"/>
+        <metadata key="icon" value="./cpof/stickie.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Stickie">
+            <description>
+                The stickie whose color to modify
+            </description>
+            <typeRef typeId="stickie"/>
+        </inputParam>
+        <inputParam id="New color">
+            <description>
+                The new color for the stickie
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="color"/>
+        </inputParam>
+    </action>
+
+</actionModel>

@@ -23,7 +23,7 @@ import javafx.scene.layout.Pane;
 
 import com.sri.tasklearning.ui.core.ISelectable;
 import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsModel;
-import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsView;
+import com.sri.tasklearning.ui.core.step.ExerciseSubtaskView;
 import com.sri.tasklearning.ui.core.step.StepView;
 
 public class InAnyOrGivenOrderCommand extends AbstractCommand {
@@ -45,22 +45,22 @@ public class InAnyOrGivenOrderCommand extends AbstractCommand {
 	@Override
 	public void invokeCommand() {
 
-		List<ExerciseGroupOfStepsView> selectedSteps = new LinkedList<ExerciseGroupOfStepsView>(); 
+		List<ExerciseSubtaskView> selectedSteps = new LinkedList<ExerciseSubtaskView>(); 
 
 		for (ISelectable step : controller.getView().getSelectionManager().getSelectedItems()) {
-			if (step instanceof ExerciseGroupOfStepsView)
-				selectedSteps.add((ExerciseGroupOfStepsView) step);
+			if (step instanceof ExerciseSubtaskView)
+				selectedSteps.add((ExerciseSubtaskView) step);
 		}
 
 		if (selectedSteps.isEmpty()) {		
-
+ 
 			controller.highlightSubtasks(); 				
 
 		} else {
 
 			controller.unhighlightSteps();
 
-			for (ExerciseGroupOfStepsView step : selectedSteps)				
+			for (ExerciseSubtaskView step : selectedSteps)				
 				invokeCommand(step);	
 
 			controller.getAnnotationPanel().unselectAll();

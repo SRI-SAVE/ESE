@@ -16,9 +16,6 @@
 
 package com.sri.tasklearning.ui.core;
 
-import com.sri.tasklearning.ui.core.control.TermSplitMenuButton;
-import com.sri.tasklearning.ui.core.step.StepView;
-
 public interface SelectionEventCallback<Item> {
 	
 	public void invoke(Item selectedItem);

@@ -170,7 +170,7 @@ public final class Utilities {
      */
     public static void initPalStage(Stage stage, Scene scene) {
         String cssPath = ResourceLoader.getURL("PALCore.css").toExternalForm();
-        //scene.getStylesheets().addAll(cssPath);
+        scene.getStylesheets().addAll(cssPath);
         stage.getIcons().add(getImage("gear.png"));
     } 
     
@@ -194,3 +194,4 @@ public final class Utilities {
     }
 
 }
+

@@ -18,8 +18,6 @@ package com.sri.tasklearning.ui.core.exercise;
 
 import javafx.scene.layout.Pane;
 
-import com.sri.tasklearning.ui.core.step.StepView;
-
 public interface IInvokableCommand {	
 
 	public void invokeCommand(Pane selectedItem);

@@ -55,7 +55,8 @@ public class ServerConnectionImpl_Test extends LumenMediatorTestCase {
                 SerialNumberResponse.class, mockSpine);
         ProcedureDependencyFinder procDepFinder = new ProcedureDependencyFinder(
                 lockingActionModel, typeFetcher);
-        executionHandler = new MockExecutionHandler(lockingActionModel,
+        RunOnce runOnce = new RunOnce(mockLumen, lockingActionModel, procDepFinder);
+        executionHandler = new MockExecutionHandler(runOnce, lockingActionModel,
                 typeFetcher, serialGetter, mockSpine, procDepFinder);
     }
 

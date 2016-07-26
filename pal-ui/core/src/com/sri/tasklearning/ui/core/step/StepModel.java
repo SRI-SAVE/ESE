@@ -42,15 +42,13 @@ import com.sri.pal.CollectionTypeDef;
 import com.sri.pal.PALException;
 import com.sri.pal.StructDef;
 import com.sri.pal.TypeDef;
-import com.sri.tasklearning.ui.core.library.ActionModelAssistant;
-import com.sri.tasklearning.ui.core.library.Namespace;
+import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
 import com.sri.tasklearning.ui.core.resources.ResourceLoader;
 import com.sri.tasklearning.ui.core.term.CompositeTermModel;
 import com.sri.tasklearning.ui.core.term.NullValueModel;
 import com.sri.tasklearning.ui.core.term.ParameterModel;
 import com.sri.tasklearning.ui.core.term.TermModel;
 import com.sri.tasklearning.ui.core.term.VariableModel;
-import com.sri.tasklearning.ui.core.validation.EditorIssue;
 
 /**
  * Holds state common to all steps.
@@ -64,13 +62,12 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
 	
     protected SimpleStringProperty name = new SimpleStringProperty("");
     private String functor;
-    protected Namespace namespace;
     protected String description ="";
     protected StepType stepType;
     private List<ParameterModel> inputs = new ArrayList<ParameterModel>();
     private List<ParameterModel> results = new ArrayList<ParameterModel>();
     // The model maintains the "topmost" error or warning associated with this step.    
-    private List<EditorIssue> issues = new ArrayList<EditorIssue>();
+    
     protected SimpleIntegerProperty index = new SimpleIntegerProperty(-1);
     private SimpleIntegerProperty relativeIndex = new SimpleIntegerProperty(-1);
     private final ReadOnlyBooleanWrapper highlighted = new ReadOnlyBooleanWrapper(false);
@@ -78,6 +75,19 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
     private static final URL DEFAULT_ICON = ResourceLoader.getURL("gear.png");
     private URL iconPath = DEFAULT_ICON;
     
+    //
+    //
+    //
+    
+    private List<StepModel> editableSuccessors = new ArrayList<StepModel>();  
+    private List<StepModel> fixedSuccessors = new ArrayList<StepModel>(); 
+	
+    private StepModel parent = null;
+    
+    //
+    //
+    //
+	
     public StepModel(String functor) {
         this.functor = functor;            
     }
@@ -113,10 +123,6 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
         return stepType;
     }
     
-    public Namespace getNamespace() {
-        return namespace;
-    } 
-
     public URL getIconPath() {
         return iconPath;
     }    
@@ -149,10 +155,6 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
     
     public void setHighlighted(boolean hl) {
         highlighted.setValue(hl);
-    }
-
-    public List<EditorIssue> getIssues() {
-        return issues;
     }
 
     public List<ParameterModel> getInputs() {
@@ -273,17 +275,7 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
         return refs;
     }
 
-    public void addIssue(final EditorIssue newIssue) {
-        if (newIssue.isError())
-            issues.add(0, newIssue); // Errors trump everything else
-        else
-            issues.add(newIssue); // Put non-errors at the end        
-    }
-
-    public void clearIssues() {
-        issues.clear();
-    }
-
+   
     @Override
     public String toString() {
         return "Step: " + name + " [" + inputs + " " + results + "]";
@@ -312,21 +304,6 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
         String ns = actDef.getName().getNamespace();
         String vers = actDef.getName().getVersion();
         
-        namespace = ActionModelAssistant.getInstance().getNamespace(ns, vers);
-        
-        if (actDef.getMetadata("icon") != null) {
-            String resourcePath = namespace.getResourcePath();
-            if (resourcePath != null) {
-                try {
-                    URL icon = new URL(resourcePath + actDef.getMetadata("icon"));
-                    setIconPath(icon);
-                } catch (MalformedURLException e) {
-                    log.error("Unable to create URL for icon: " + resourcePath + actDef.getMetadata("icon"));
-                    setIconPath(null);
-                }
-            }
-        } else
-            setIconPath(namespace.getIcon());
 
         // Parse the inputs and results
         List<ParameterModel> ins = new ArrayList<ParameterModel>();
@@ -438,6 +415,95 @@ public abstract class StepModel implements ATRTask, Comparable<StepModel> {
 	public void updateIndices() {		
 		computeIndex(); 		
 	}
+
+	//
+	//
+	// 
 	
-		 
+	public void setParent(StepModel parent) {
+			this.parent = parent; 
+	}
+	
+	public StepModel getParent() {
+		return parent; 
+	}
+
+	//
+	//
+	//
+
+    public void registerPredecessor(StepModel pred, boolean editable) {
+    	if (editable) {
+    		pred.editableSuccessors.add(this);
+    	} else {
+    		pred.fixedSuccessors.add(this);    		
+    	}
+    }    
+    
+	public List<StepModel> getFixedSuccessors() {
+		return fixedSuccessors; 
+	}    
+
+	public List<StepModel> getEditableSuccessors() {
+		
+		return editableSuccessors;
+	
+	}
+
+	public boolean isBefore(StepModel other) {
+
+		for (StepModel succ : this.editableSuccessors) 
+			if ( succ == other || succ.isBefore(other) )
+				return true;     			
+
+		for (StepModel succ : this.fixedSuccessors) 
+			if ( succ == other || succ.isBefore(other) )
+				return true;
+
+		return false; 
+
+	}
+
+	public boolean mustPrecede(StepModel other) {
+		
+		List<StepModel> from = new ArrayList<StepModel>();
+		List<StepModel> to = new ArrayList<StepModel>();
+		
+		if (this instanceof ExerciseGroupOfStepsModel) 
+			from.addAll(((ExerciseGroupOfStepsModel) this).getSteps()); 
+		else
+			from.add(this);  
+		
+		if (other instanceof ExerciseGroupOfStepsModel) 
+			to.addAll(((ExerciseGroupOfStepsModel) other).getSteps()); 
+		else
+			to.add(other);  
+	
+		for (StepModel x : from) {
+			for (StepModel y : to) {
+				if ( x.getFixedSuccessors().contains(y))
+					return true; 
+			}
+		}
+		
+		for (StepModel x : from) {
+			for (StepModel y : to) { 
+				for (StepModel succ : x.getFixedSuccessors())  {
+					 if ( succ.mustPrecede(y) )
+						 return true;
+				}
+			}
+		}
+		
+		return false; 
+				
+	}     
+
+	public boolean mayPrecede(StepModel other) {
+
+		return ! other.mustPrecede(this);
+
+	}     
+
+
 }

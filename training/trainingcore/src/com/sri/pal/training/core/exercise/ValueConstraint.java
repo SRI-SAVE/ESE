@@ -34,4 +34,10 @@ public class ValueConstraint extends ValueConstraintBase {
         this(parameterName, values);
         this.reason = reason;
     }
+
+    public ValueConstraint(String parameterName, Value minValue, Value maxValue) {
+        this.parameter = parameterName;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
 }

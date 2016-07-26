@@ -1,0 +1,59 @@
+HEADER syntax:[lumen,metalevel];
+
+#### Loadable directly from Adept tasklearning.
+
+predicate HasNonnullProperty(+$propertied, $propSym, -$propValue)  #TODO - move to lumen lib
+  doc: "Wraps HasProperty metapredicate, solving only for values that are not Java null"
+  solve:  HasProperty($propertied, $propSym, $propValue) && ($propValue != {{javanull}});
+
+
+### Detector property names from action model
+function falseAlarmRate eval: `falseAlarmRate;
+function requiresMSIData eval: `requiresMSIData;
+function viewpoint eval: `viewpoint;
+function minSamples eval: `minSamples;
+
+function detector eval: `detector   doc: "Indicates a (primitive) action is an entity detector";
+
+function detectorProperties()
+  doc: "All detector properties, in the order in which they are passed to detector actions"
+  eval: [falseAlarmRate, requiresMSIData, viewpoint, minSamples];
+
+
+## This function is for clarity and could be inlined
+function detectorActionOps()
+  doc: "Returns all loaded operators designated with the 'detector' property" ##TODO use strings?
+  eval: ($op .every. (m_AgentOp($, $op) && HasProperty($op, detector, $)));
+
+
+## Guts of detector selection; it is not an ATRProcedure so it's not suitable to implement as a primitive action
+action 'BAD_AC^2.0^DETECT_ENTITY/0'(+$image, +$classifier, -$entities)
+  doc: "Delegates execution of this abstract action to a concrete one by accessing and exploiting BAD AC selection context"
+  execute:
+{
+  set $bestScore to: -987654321.0;
+  set $bestDetector to: [];
+  foreach $detector in: detectorActionOps() execute: {
+    # TODO - prop values are all strings, do conversions (in callee?)
+    test HasNonnullProperty($detector, falseAlarmRate, $falseAlarmRate);
+    test HasNonnullProperty($detector, requiresMSIData, $requiresMSIData);
+    test HasNonnullProperty($detector, viewpoint, $viewpoint);
+    test HasNonnullProperty($detector, minSamples, $minSamples);
+    do print("Scoring %r requiresMSIData=%r \n", $detector, $requiresMSIData);
+    do 'BAD_AC^2.0^detectorScore'($falseAlarmRate, $requiresMSIData, $viewpoint, $minSamples, $score);
+    if $score > $bestScore then: {
+      reset $bestScore to: $score;
+      reset $bestDetector to: $detector;
+    };
+  };
+
+  if $bestScore < 0.0 then: {
+    do fail("No valid detectors");
+  };
+   
+  do print("Score=%s  best detector: %s\n", $bestScore, $bestDetector);
+  ## TODO: if detector is a primitive action, can we apply it?
+  test $outMarker = ();
+  do apply($bestDetector, [$image, $classifier, $outMarker], $outMarker, $result);
+  test [$, $, $entities] = $result;
+};

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-// $Id: ConstraintHandler.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: ConstraintHandler.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.lumenpal;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -26,10 +28,15 @@ import com.sri.ai.lumen.atr.ATRSyntax;
 import com.sri.ai.lumen.atr.decl.ATRActionDeclaration;
 import com.sri.ai.lumen.atr.decl.ATRDecl;
 import com.sri.ai.lumen.atr.decl.impl.CTRActionDeclaration;
+import com.sri.ai.lumen.atr.impl.CTRSig;
 import com.sri.ai.lumen.atr.term.ATRTerm;
+import com.sri.ai.lumen.atr.term.impl.CTRMap;
+import com.sri.ai.lumen.atr.term.impl.CTRNoEvalTerm;
+import com.sri.ai.lumen.atr.term.impl.CTRNull;
 import com.sri.ai.lumen.syntax.LumenSyntaxError;
 import com.sri.ai.lumen.util.ConstraintChecker;
 import com.sri.pal.common.ErrorInfo;
+import com.sri.pal.common.SimpleTypeName;
 import com.sri.tasklearning.mediators.LockingActionModel;
 import com.sri.tasklearning.mediators.TypeFetcher;
 import com.sri.tasklearning.mediators.WithLockedTypes;
@@ -63,11 +70,16 @@ public class ConstraintHandler
     private final ExecutorService threadPool;
     private final WithLockedTypes withLockedTypes;
     private final ProcedureDependencyFinder finder;
+    private final RunOnce runOnce;
+    private final LockingActionModel actionModel;
 
-    public ConstraintHandler(TypeFetcher typeFetcher,
+    public ConstraintHandler(RunOnce runOnce,
+                             TypeFetcher typeFetcher,
                              LockingActionModel actionModel,
                              Spine spine) {
+        this.runOnce = runOnce;
         this.spine = spine;
+        this.actionModel = actionModel;
         ThreadFactory tf = new NamedThreadFactory(getClass());
         threadPool = Executors.newCachedThreadPool(tf);
         withLockedTypes = new WithLockedTypes(actionModel);
@@ -107,27 +119,36 @@ public class ConstraintHandler
 
         @Override
         public void run() {
-            ErrorInfo error;
+            ErrorInfo error = null;
             String result = null;
 
-            String procSrc = req.getProcSrc();
-            log.debug("Coalescing constraints for {}", procSrc);
-            ATRActionDeclaration proc;
             try {
-                proc = ATRSyntax.CTR.declFromSource(CTRActionDeclaration.class, procSrc);
-
-                ConstraintAction action = new ConstraintAction();
-                withLockedTypes.lockedAction(action, proc, finder);
-                error = action.getError();
-                result = action.result();
-            } catch (LumenSyntaxError e) {
-                log.warn("Unable to parse: " + procSrc, e);
-                error = ErrorFactory.error(spine.getClientId(),
-                        ErrorType.INTERNAL_PARSE, procSrc);
+                runOnce.runOnce();
             } catch (Exception e) {
-                log.warn("Failed coalescing constraints: " + procSrc, e);
-                error = ErrorFactory.error(spine.getClientId(),
-                        ErrorType.CONSTRAINT_COALESCE, procSrc);
+                log.warn("Lumen preload failed", e);
+                error = ErrorFactory.error(spine.getClientId(), ErrorType.LUMEN, e);
+            }
+
+            if (error == null) {
+                String procSrc = req.getProcSrc();
+                log.debug("Coalescing constraints for {}", procSrc);
+                ATRActionDeclaration proc;
+                try {
+                    proc = ATRSyntax.CTR.declFromSource(CTRActionDeclaration.class, procSrc);
+
+                    ConstraintAction action = new ConstraintAction();
+                    withLockedTypes.lockedAction(action, proc, finder);
+                    error = action.getError();
+                    result = action.result();
+                } catch (LumenSyntaxError e) {
+                    log.warn("Unable to parse: " + procSrc, e);
+                    error = ErrorFactory.error(spine.getClientId(),
+                            ErrorType.INTERNAL_PARSE, procSrc);
+                } catch (Exception e) {
+                    log.warn("Failed coalescing constraints: " + procSrc, e);
+                    error = ErrorFactory.error(spine.getClientId(),
+                            ErrorType.CONSTRAINT_COALESCE, procSrc);
+                }
             }
 
             // Send the result.
@@ -165,6 +186,14 @@ public class ConstraintHandler
                         ATRActionDeclaration action = (ATRActionDeclaration) decl;
                         checker.add(action);
                     }
+                }
+                for (SimpleTypeName pdName : actionModel.listPredefined()) {
+                    CTRSig dummySig = new CTRSig(pdName.getFullName());
+                    Map<String, ATRTerm> map = new HashMap<>();
+                    map.put("constraints", new CTRNoEvalTerm(CTRNull.NULL));
+                    CTRMap dummyProps = new CTRMap(map);
+                    ATRActionDeclaration dummyAct = new CTRActionDeclaration(dummySig, dummyProps);
+                    checker.add(dummyAct);
                 }
 
                 // Get the coalesced constraints for this procedure.

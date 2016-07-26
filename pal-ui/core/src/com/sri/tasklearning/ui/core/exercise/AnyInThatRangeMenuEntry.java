@@ -16,9 +16,6 @@
 
 package com.sri.tasklearning.ui.core.exercise;
 
-import com.sri.tasklearning.ui.core.control.Alert;
-import com.sri.tasklearning.ui.core.control.Alert.AlertConfig;
-
 import javafx.scene.layout.Pane;
 
 
@@ -38,8 +35,7 @@ public class AnyInThatRangeMenuEntry extends AnnotationMenuEntry {
 	@Override
 	public void invokeCommand() {
 		
-		Alert.show("Sorry", "Apologies, but this feature is not yet implemented in this preview version of ESE.\n\nPlease also note that none of the supplied exercise files allows for parameter ranges, so this type of annotation is currently not applicable.", 
-				 AlertConfig.OK, null);
+		command.controller.highlightRangeParameters();		
 		
 	}    
 

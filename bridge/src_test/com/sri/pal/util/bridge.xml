@@ -61,6 +61,10 @@
         <appender-ref ref="stdout"/>
     </logger>
 
+    <logger name="org.apache.activemq">
+        <level value="info"/>
+    </logger>
+
     <!--  Example of debugging only one class: -->
     <!--
     <logger name="com.sri.tasklearning.lapdogController.LapdogFacade">

@@ -1,0 +1,398 @@
+/*
+    Document   : PalCore
+    Created on : Jul 9, 2010, 11:09:22 AM
+    Author     : Adam
+-*/
+
+
+.root {
+    /* PAL colors replicated from "Colors.java" */
+    -pal-disabled-text: rgba(87,87,87, 1.0);
+    -pal-selection: rgba(25, 49, 82,1.0);
+
+    -pal-SystemLightGray: rgba(239,239,239,1.0);
+    -pal-SystemGray: rgba(204,204,204,1.0);
+    -pal-SystemGrayTrans: rgba(204,204,204,0.4);
+    -pal-SystemDarkGray: rgba(103,103,103,1.0);
+    -pal-SystemDarkGrayTrans: rgba(103,103,103, 0.8);
+    -pal-StepBackground: rgba(185, 203, 217,1.0);
+    -pal-StepBackgroundOptional: rgba(185, 203, 217, 0.3);
+    -pal-hover-overlay: rgba(0,0,0,0.08);
+    -pal-WindowBackground: rgba(255,255,255,1.0);
+    -pal-SelectedStepBackground: rgba(255,200,145,1.0);  
+    -pal-SelectedStepLightBackground: rgba(255, 245,236,1.0); 
+    -pal-SubtaskBackgroundOrdered: rgba(100,100,200,0.6);
+    -pal-SubtaskBackgroundUnordered: rgba(150,150,150,0.6);
+    
+    /* gradients for buttons  */
+    -pal-SystemGrayDient:           linear-gradient(from 0% 0% to 0% 90%, white, -pal-SystemGray);
+    -pal-SystemDarkGrayPushedDient: linear-gradient(from 0% -30% to 0% 120%, -pal-SystemDarkGray, -pal-SystemGray);
+    -pal-StepBackgroundDient:      linear-gradient(from 0% 0% to 0% 90%, white, pal-StepBackground);
+    -pal-StepBackgroundPushedDient: linear-gradient(from 0% 0% to 0% 120, derive(-pal-StepBackground,-25%), -pal-StepBackground);
+    -pal-LoopBackgroundDient:       linear-gradient(from 0% 0% to 90% 0%, -pal-SystemLightGray, -pal-WindowBackground);
+    -pal-SelectedStepBackgroundDient: linear-gradient(from 0% 0% to 100% 0%, -pal-SelectedStepBackground, -pal-SelectedStepLightBackground);
+    -pal-TrainingPageRight: linear-gradient(from 0% 0% to 100% 0%, -pal-SystemGray 0%, -pal-SystemLightGray 10%, -pal-WindowBackground 15%, -pal-WindowBackground 99%, -pal-SystemLightGray 99%, -pal-SystemGray 100%);
+    -pal-TrainingPageLeft: linear-gradient(from 50% 0% to 100% 0%, -pal-WindowBackground, -pal-SystemLightGray, -pal-SystemGray);
+    
+    /* Variable colors */
+    -pal-ConstantFlat: rgba(225,224,224,1.0);
+    -pal-ConstantBorder: rgba(134,134,134,1.0);
+    -pal-ConstantFill: linear-gradient(from 0% 0% to 0% 200%, -pal-ConstantFlat, -pal-ConstantBorder);
+    -pal-ConstantFillHover: linear-gradient(from 0% 0% to 0% 200%, derive(-pal-ConstantFlat,-16%), derive(-pal-ConstantBorder,-16%));
+    -pal-ConstantFillPushed: linear-gradient(from 0% 0% to 0% 200%, -pal-ConstantBorder, -pal-ConstantFlat);
+    -pal-ExistingVarFlat: rgba(225,230,250,1.0);
+    -pal-ExistingVarBorder: rgba(114,157,196,1.0);
+    -pal-ExistingVarFill: linear-gradient(from 0% 0% to 0% 200%, -pal-ExistingVarFlat, -pal-ExistingVarBorder);
+    -pal-ExistingVarFillHover: linear-gradient(from 0% 0% to 0% 200%, derive(-pal-ExistingVarFlat,-16%), derive(-pal-ExistingVarBorder,-16%));
+    -pal-ExistingVarFillPushed: linear-gradient(from 0% 0% to 0% 200%, -pal-ExistingVarBorder, -pal-ExistingVarFlat);
+    -pal-InputFlat: rgba(196,215,237,1.0);
+    -pal-InputBorder: rgba(69,115,159,1.0);
+    -pal-InputFill: linear-gradient(from 0% 0% to 0% 200%, -pal-InputFlat, -pal-InputBorder);
+    -pal-InputFillPushed: linear-gradient(from 0% 0% to 0% 200%, -pal-InputBorder, -pal-InputFlat);
+    -pal-HiliteVarFlat: rgba(255, 128, 0,1.0);
+    -pal-HiliteVarBorder: rgba(68, 68, 68,1.0);
+    -pal-HiliteVarFill: linear-gradient(from 0% 0% to 0% 200%, -pal-HiliteVarFlat, rgba(157, 86, 14,1.0));
+    -pal-HiliteVarFillPushed: linear-gradient(from 0% 0% to 0% 200%, rgba(157, 86, 14, 1.0), -pal-HiliteVarFlat);
+    
+    /* Added by MW */ 
+    -pal-ChangedVarFlat: rgba(200, 200, 200, 1.0);
+    -pal-ChangedVarBorder: rgba(68, 68, 68,1.0);
+    -pal-ChangedVarFill: linear-gradient(from 0% 0% to 0% 300%, -pal-ChangedVarFlat, rgba(157, 86, 14,1.0)); 
+       
+    /* Main color palette that the user should play with to change colors of controls */
+    
+    -fx-color: -pal-SystemGray;
+    -fx-base: -pal-SystemGray;
+    -fx-background: -pal-SystemGray;
+    -fx-control-inner-background: -pal-SystemLightGray;
+    -fx-focus-color: -pal-StepBackground; 
+
+    -fx-focus-size: 0;
+    -fx-dark-text-color: black;
+    -fx-mid-text-color: black;
+    -fx-light-text-color: white;
+    -fx-mark-color: -pal-SystemDarkGray;
+    -fx-box-border: -pal-SystemDarkGray; 
+    
+}
+
+
+/*******************************************************************************
+ *                                                                             *
+ * CSS Styles for various panels and regions in the application
+ *                                                                             *
+ ******************************************************************************/
+
+.tab-label {
+    -fx-content-display: top;
+}
+
+.tab-pane {
+    -fx-tab-min-height: 50;
+    -fx-tab-max-height: 50;
+}
+
+procedure-view {
+    -fx-background-color: blue;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.step-header-rounded {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-StepBackground); 
+    -fx-background-radius: 5;
+}
+
+.step-header-optional-rounded {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-StepBackgroundOptional); 
+    -fx-background-radius: 5;
+}
+
+.step-header-half-rounded {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-StepBackground); 
+    -fx-background-radius: 5;
+}
+
+.subtask-background-ordered {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-SubtaskBackgroundOrdered); 
+    -fx-background-radius: 5;
+}
+
+.subtask-background-unordered {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 15%, white, -pal-SubtaskBackgroundUnordered); 
+    -fx-background-radius: 5;
+}
+
+/*
+.subtask-background-new {
+    -fx-background-color: transparent; 
+    -fx-border-color: -pal-SystemDarkGray;
+    -fx-border-radius: 5;
+    -fx-border-width: 3;
+    -fx-padding: 4; 
+    -fx-background-radius: 5;
+}
+ */
+
+.subtask-background-new {
+    -fx-background-color: transparent; 
+    -fx-border-color: -pal-SystemDarkGray;
+    -fx-border-radius: 5;
+    -fx-border-width: 3;
+    -fx-background-radius: 5;
+    -fx-border-style: dashed; 
+} 
+
+
+/*******************************************************************************
+ *                                                                             *
+ * CSS Styles for Buttons and Choiceboxes
+ *                                                                             *
+ ******************************************************************************/
+ 
+.button, .menu-button, .split-menu-button {
+    -fx-font: 11pt "Tahoma";
+}
+
+.button, .button:focused, .choice-box, .choice-box:focused, .check-box box, .check-box:selected box {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemLightGray, -pal-SystemGrayDient;
+    -fx-text-fill: black;
+    -fx-background-radius: 5, 5, 4, 3;
+}
+
+.button:hover, .choice-box:hover {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemLightGray, -pal-SystemGrayDient, -pal-hover-overlay;
+}
+.button:pressed, .choice-box:pressed {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemGray, -pal-SystemDarkGrayPushedDient;
+}
+.button:disabled, .button:strong:disabled, .choice-box:disabled {
+    -fx-background-color: rgba(255,255,255,0.20), derive(-pal-SystemDarkGray, 25%),
+        -pal-SystemLightGray, -pal-SystemLightGray;
+    -fx-opacity: .50;
+}
+
+.adept-button:disabled {
+    -fx-text-fill: -pal-SystemDarkGray;
+}
+
+.choice-box, .choice-box:focused {
+    -fx-background-radius: 2,2,2,2;
+    -fx-border-radius: 2;
+}
+.menu-button, .menu-button:pressed, .menu-button:focused, .split-menu-button {
+    -fx-text-overrun: center-ellipsis;
+    -fx-text-wrap: false;
+}
+
+/* "Default" (aka "strong") buttons turn blue */
+.button:strong, .button:strong:focused {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray, -pal-SystemLightGray, -pal-StepBackgroundDient;
+}
+.button:strong:hover {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-SystemLightGray, -pal-StepBackgroundDient, rgba(105, 123, 137,0.15);
+}
+.button:strong:pressed {
+    -fx-background-color: rgba(255,255,255,0.20), -pal-SystemDarkGray,
+        -pal-StepBackground, -pal-StepBackgroundPushedDient;
+}
+
+/* #small-button buttons have squared corners */
+.button#small-button {
+    -fx-background-radius: 0,0,0,0;
+    -fx-border-radius: 0;
+    -fx-font: 12.2pt "Tahoma";
+}
+
+.button#left-arrow {
+    -fx-shape: "M 50,5 L 37,40 5,40 30,60 20,95 50,75 80,95 70,60 95,40 63,40 Z";
+}
+
+.button#right-arrow {
+    -fx-shape: "M 50,5 L 37,40 5,40 30,60 20,95 50,75 80,95 70,60 95,40 63,40 Z";
+}
+/*******************************************************************************
+ *
+ * CSS Styles for Textboxes
+ *
+ ******************************************************************************/
+ 
+.subtask-name-text-field {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-focus-radius: 0;
+    -fx-background-color: white; 
+    -fx-border-width: 0;
+    -fx-border-color: -pal-SystemDarkGray;
+    -fx-text-fill: black;
+    -fx-font: 14pt "Tahoma";
+}
+
+
+/*******************************************************************************
+ *
+ * CSS Styles for ALL Exercise Parameters 
+ * variables are ExerciseParamaterSplitMenuButtons, they contain a label an arrow
+ * 
+ * Added by MW for Exercise Editor
+ *
+ ******************************************************************************/
+ 
+.exercise-var {
+	-fx-skin: "com.sun.javafx.scene.control.skin.SplitMenuButtonSkin";
+    -fx-font: 12pt "Tahoma";
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFill;
+}
+
+.exercise-var:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFill, -pal-hover-overlay;
+}
+
+.exercise-var:armed, .exercise-var:focused {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-InputBorder, -pal-InputFillPushed;
+}
+
+.exercise-var:disabled {
+    -fx-background-color: transparent, -pal-InputBorder, -pal-InputFlat;
+    -fx-opacity: .9;
+}
+
+.exercise-var *.arrow-button {
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+ 
+.exercise-var *.arrow {
+    -fx-background-color: -fx-mark-highlight-color, derive(-pal-InputBorder, -15%);
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+
+/*
+.exercise-var-border-rect {
+    -fx-padding: 2; 
+  	-fx-background-color: -pal-InputBorder;
+  	-fx-foreground-color: -pal-InputBorder; 
+}
+
+.exercise-var-border-rect-highlighted {
+    -fx-padding: 2; 
+  	-fx-background-color: -pal-HiliteVarFlat;
+  	-fx-foreground-color: -pal-HiliteVarFlat; 
+}
+
+*/
+
+.integer-range-editor-menu-item:focused {
+     -fx-background-color: transparent;   
+}
+
+.integer-range-editor-menu-item:focused .label {
+     -fx-text-fill: black;   
+}
+
+.highlighted-menu-item {
+	 -fx-background-color: blue;   
+     -fx-text-fill: yellow;   
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for CHANGED Exercise Parameter
+ * Added by MW
+ * 
+ ******************************************************************************/
+
+.changed {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ChangedVarBorder, -pal-ChangedVarFill;
+}
+
+.changed:hover {
+    -fx-background-color: rgba(255,255,255,0.6), -pal-ChangedVarBorder, -pal-ChangedVarFill, -pal-hover-overlay;
+}
+
+
+.highlighted {
+    -fx-background-color: -pal-HiliteVarFlat;
+}
+
+
+/*******************************************************************************
+ *
+ * CSS Styles for Menus
+ *
+ ******************************************************************************/
+/* style the popup (context) menus */
+
+.popup-menu {
+    -fx-background-radius: 0 4 4 4, 0 3 3 3, 0 2 2 2;
+    -fx-background-color:
+        derive(-fx-color,-40%),
+        derive(-fx-color,65%),
+        linear-gradient(from 0% 0% to 0% 100%, derive(-fx-color,70%), derive(-fx-color,40%), derive(-fx-color,20%), derive(-fx-color,-3%));
+}
+
+/* basic menu items (anything derived from MenuItemBase) */
+*.menu-item, *.check-menu-item {
+    -fx-font: 9pt "Tahoma";
+}
+*.menu-item *.label, *.check-menu-item *.label {
+    -fx-text-overrun: word-ellipsis;
+}
+.menu-item:disabled, .check-menu-item:disabled {
+    -fx-text-fill: -pal-disabled-text;
+}
+.menu-item *.label:disabled, .check-menu-item *.label:disabled {
+    -fx-opacity: 0.82;
+}
+.menu-item:disabled *.box, .check-menu-item:disabled *.box {
+    -fx-opacity: 1;
+}
+
+/* menu is a menu-item with children */
+
+.menu-bar {
+    -fx-background-color: derive(-pal-SystemGray, 0%);
+}
+
+.menu-bar *.menu {
+    -fx-text-fill: -fx-text-background-color;
+}
+
+.menu-bar *.menu:focused:showing, .menu-bar *.menu:showing, .menu:focused:showing, .menu-bar *.menu:hover, .menu-bar *.menu:focused:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+/* separator menu item */
+*.separator:horizontal *.line {
+    -fx-border-style: solid;
+}
+
+/*******************************************************************************
+ *
+ * CSS Styles for special case when a MenuButton is contained within a
+ * SplitMenuButton for purposes of providing a submenu that behaves like
+ * other GUIs. In this case, we need to strip off the border and background
+ * and insure that the mouse-over appears like it does for other menu items. 
+ *
+ ******************************************************************************/
+
+#nested-menu-button {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+#nested-menu-button:hover {
+    -fx-background-color: rgba(22,44,72,1.0);
+    -fx-text-fill: white;
+}

@@ -21,14 +21,14 @@ import java.util.List;
 
 public class ExerciseSubtaskModel extends ExerciseGroupOfStepsModel {
 
-	public ExerciseSubtaskModel(String descr, List<StepModel> theSteps) {
-		super(descr, theSteps);		
+	public ExerciseSubtaskModel(StepModel parent, String descr, List<StepModel> theSteps) {
+		super(parent, descr, theSteps);		
 		this.setName(descr);
 		stepType = StepType.EXERCISE_SUBTASK;         
 	}
 	
-	public ExerciseSubtaskModel(String descr) {
-		this(descr, new LinkedList<StepModel>());
+	public ExerciseSubtaskModel(StepModel parent, String descr) {
+		this(parent, descr, new LinkedList<StepModel>());
 	}
 
 }

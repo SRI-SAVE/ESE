@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="0.1">
+    
+    <type id="CulturedDairy">
+        <description>A type of cultured dairy product</description>
+        <enum>
+            <value>Buttermilk</value>
+            <value>Yogurt</value>
+            <value>SourCream</value>
+        </enum>
+    </type>
+
+    <type id="Milk">
+        <description>A type of milk</description>
+        <enum>
+            <value>WholeMilk</value>
+            <value>LowFatMilk</value>
+            <value>NonFatMilk</value>
+        </enum>
+    </type>
+
+    <type id="Cheese">
+        <description>A type of cheese</description>
+        <enum>
+            <value>Mozzarella</value>
+            <value>Cheddar</value>
+            <value>Parmesan</value>
+            <value>Swiss</value>
+        </enum>
+    </type>
+    
+    <type id="Dairy">
+        <description>A type of dairy product</description>
+        <enum>
+            <subType sub="Cheese"/>
+            <subType sub="CulturedDairy"/>
+            <subType sub="Milk"/>
+        </enum>
+    </type>
+        
+    <type id="Pasta">
+        <description>A type of pasta</description>
+        <enum>
+            <value>Macaroni</value>
+            <value>Shells</value>
+            <value>Spaghetti</value>
+            <value>Fettucine</value>
+        </enum>
+    </type>
+    
+    <type id="Seasoning">
+        <description>A type of seasoning</description>
+        <enum>
+            <value>Salt</value>
+            <value>Pepper</value>
+            <value>Cinnamon</value>
+            <value>Nutmeg</value>
+            <value>SesameSeed</value>
+        </enum>
+    </type>
+    
+    <type id="Meat">
+        <description>A type of meat</description>
+        <enum>
+            <value>ChickenBreast</value>
+            <value>Pepperoni</value>
+            <value>Sausage</value>
+            <value>Bacon</value>
+            <value>Egg</value>
+        </enum>
+    </type>
+    
+    <type id="Sauce">
+        <description>A type of sauce</description>
+        <enum>
+            <value>TeriyakiSauce</value>
+            <value>HoisinSauce</value>
+            <value>TomatoSauce</value>
+            <value>RanchDressing</value>
+            <value>Pesto</value>
+        </enum>
+    </type>
+
+    <type id="Mixin">
+        <description>A type of mix-in</description>
+        <enum>
+            <value>ChocolateChips</value>
+            <value>Dates</value>
+            <value>Raisins</value>
+        </enum>
+    </type>
+    
+    <type id="Vegetable">
+        <description>A type of vegetable</description>
+        <enum>
+            <value>Scallion</value>
+            <value>Onion</value>
+            <value>Spinach</value>
+            <value>Zucchini</value>
+        </enum>
+    </type>
+    
+    <type id="Grain">
+        <description>A type of grain</description>
+        <enum>
+            <value>Oats</value>
+            <value>Rice</value>
+        </enum>
+    </type>
+
+    <type id="Nut">
+        <description>A type of nut</description>
+        <enum>
+            <value>Almonds</value>
+            <value>Cashews</value>
+            <value>Peanuts</value>
+        </enum>
+    </type>
+
+    <type id="Sweetener">
+        <description>A type of sweetener</description>
+        <enum>
+            <value>Sugar</value>
+            <value>BrownSugar</value>
+            <value>Honey</value>
+            <value>MapleSyrup</value>
+        </enum>
+    </type>
+
+    <type id="NutButter">
+        <description>A type of nut butter</description>
+        <enum>
+            <value>PeanutButter</value>
+            <value>AlmondButter</value>
+            <value>SunflowerSeedButter</value>
+        </enum>
+    </type>
+
+    <type id="Fat">
+        <description>A type of fat</description>
+        <enum>
+            <value>Butter</value>
+            <value>Margarine</value>
+            <value>Oil</value>
+        </enum>
+    </type>
+
+    <type id="Flour">
+        <description>A type of flour</description>
+        <enum>
+            <value>AllPurposeFlour</value>
+            <value>WholeWheatFlour</value>
+        </enum>
+    </type>
+
+    <type id="Leavener">
+        <description>A type of leavener</description>
+        <enum>
+            <value>BakingPowder</value>
+            <value>BakingSoda</value>
+            <value>Yeast</value>
+        </enum>
+    </type>
+
+    <type id="Dough">
+        <description>A type of dough</description>
+        <enum>
+            <value>PizzaDough</value>
+            <value>BreadDough</value>
+            <value>CookieDough</value>
+        </enum>
+    </type>
+    
+    <type id="Food">
+        <description>A food</description>
+		<enum>
+            <subType sub="Pasta"/>
+            <subType sub="Dairy"/>
+            <subType sub="Seasoning"/>
+            <subType sub="Meat"/>
+            <subType sub="Sauce"/>
+            <subType sub="Vegetable"/>
+            <subType sub="Grain"/>
+            <subType sub="Nut"/>
+            <subType sub="Sweetener"/>
+            <subType sub="NutButter"/>
+            <subType sub="Mixin"/>
+            <subType sub="Fat"/>
+            <subType sub="Flour"/>
+            <subType sub="Leavener"/>
+            <subType sub="Dough"/>
+        </enum>   
+    </type>
+    
+    
+    <type id="Appliance">
+        <description>Kitchen appliance</description>
+        <enum>
+            <value>Burner</value>
+            <value>Grill</value>
+            <value>Oven</value>
+        </enum>
+    </type>    
+
+    <type id="Cookware">
+        <description>Cookware</description>
+        <enum>
+            <value>SmallSaucepan</value>
+            <value>MediumSaucepan</value>
+            <value>LargeSaucepan</value>
+            <value>BakingPan</value>
+            <value>MuffinTin</value>
+            <value>BakingSheet</value>
+        </enum>
+    </type>
+
+    <type id="MixingBowl">
+        <description>Mixing bowl</description>
+        <enum>
+            <value>SmallBowl</value>
+            <value>MediumBowl</value>
+            <value>LargeBowl</value>
+        </enum>
+    </type>
+
+    <type id="Dinnerware">
+        <description>Dinnerware</description>
+        <enum>
+            <value>Plate</value>
+            <value>Bowl</value>
+            <value>Cup</value>
+        </enum>
+    </type>
+
+    <type id="SmallAppliance">
+        <description>Small appliance</description>
+        <enum>
+            <value>Blender</value>
+            <value>FoodProcessor</value>
+            <value>Toaster</value>
+        </enum>
+    </type>
+
+    <type id="Rack">
+        <description>Rack</description>
+        <enum>
+            <value>CoolingRack</value>
+            <value>OvenRack</value>
+            <value>RefrigeratorRack</value>
+        </enum>
+    </type>
+
+    <type id="Container">
+        <description>Kitchen container</description>
+        <enum>
+            <subType sub="Cookware"/>
+            <subType sub="MixingBowl"/>
+            <subType sub="Dinnerware"/>
+            <subType sub="SmallAppliance"/>
+            <subType sub="Rack"/>
+        </enum>
+    </type>
+
+    <type id="Utensil">
+        <description>Kitchen utensil</description>
+        <enum>
+            <value>WoodenSpoon</value>
+            <value>RubberSpatula</value>
+            <value>Whisk</value>
+        </enum>
+    </type>
+
+    <type id="Accessory">
+        <description>Kitchen accessory</description>
+        <enum>
+            <subType sub="Container"/>
+            <subType sub="Utensil"/>
+        </enum>
+    </type>
+
+    <type id="Kitchenware">
+        <description>Item of kitchenware</description>
+        <enum>
+            <subType sub="Appliance"/>
+            <subType sub="Accessory"/>
+        </enum>
+    </type>    
+
+    <type id="Thing">
+        <description>A thing</description>
+        <enum>
+            <subType sub="Food"/>
+            <subType sub="Kitchenware"/>
+        </enum>
+    </type>    
+    
+    <type id="Quantity">
+        <description>A quantity</description>
+        <enum>
+            <value>0</value>
+            <value>1/4</value>
+            <value>1/2</value>
+            <value>3/4</value>
+            <value>1</value>
+            <value>1 1/4</value>
+            <value>1 1/2</value>
+            <value>1 3/4</value>
+            <value>2</value>
+        </enum>
+    </type>
+
+    <type id="Volume">
+        <description>A volume</description>
+        <enum>
+            <value>piece(s)</value>
+            <value>teaspoon(s)</value>
+            <value>tablespoon(s)</value>
+            <value>cup(s)</value>
+	    </enum>
+	</type>	
+	
+    <type id="Weight">
+        <description>A weight</description>
+        <enum>
+            <value>ounce</value>
+            <value>pound</value>
+        </enum>
+    </type>   
+    
+    <type id="Thickness">
+        <description>A unit of thickness</description>
+        <enum>
+            <value>inch</value>
+        </enum>
+    </type>   
+    
+    <type id="HeatSetting">
+        <description>A heat setting</description>
+        <enum>
+            <value>off</value>
+            <value>low</value>
+            <value>medium</value>
+            <value>high</value>
+        </enum>
+    </type>
+
+    <type id="CookingState">
+        <description>A cooked food state</description>
+        <enum>
+            <value>simmering</value>
+            <value>boiling</value>
+            <value>melted</value>
+        </enum>
+    </type>
+
+    <type id="PhysicalUnit">
+        <description>A physical unit of measurement</description>
+		<enum>
+            <subType sub="Thickness"/>
+            <subType sub="Volume"/>
+            <subType sub="Weight"/>
+        </enum>
+    </type>
+
+    <type id="TemporalUnit">
+        <description>A temporal unit of measurement</description>
+        <enum>
+            <value>second(s)</value>
+            <value>minute(s)</value>
+            <value>hour(s)</value>
+        </enum>
+    </type>
+
+    <type id="Shape">
+        <description>A shape</description>
+        <enum>
+            <value>circle(s)</value>
+            <value>rectangle(s)</value>
+            <value>square(s)</value>
+            <value>triangle(s)</value>
+        </enum>
+    </type>
+    <type id="Concept">
+        <description>A concept</description>
+		<enum>
+            <subType sub="Quantity"/>
+            <subType sub="HeatSetting"/>
+            <subType sub="CookingState"/>
+            <subType sub="PhysicalUnit"/>
+            <subType sub="TemporalUnit"/>
+            <subType sub="Shape"/>
+        </enum>
+    </type>    
+
+</actionModel>

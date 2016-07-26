@@ -18,6 +18,7 @@ package com.sri.tasklearning.lumenpal.mock;
 
 import com.sri.tasklearning.lumenpal.ExecutionHandler;
 import com.sri.tasklearning.lumenpal.ProcedureDependencyFinder;
+import com.sri.tasklearning.lumenpal.RunOnce;
 import com.sri.tasklearning.mediators.LockingActionModel;
 import com.sri.tasklearning.mediators.TypeFetcher;
 import com.sri.tasklearning.spine.MessageHandlerException;
@@ -27,12 +28,13 @@ import com.sri.tasklearning.spine.messages.SerialNumberResponse;
 import com.sri.tasklearning.spine.util.ReplyWatcher;
 
 public class MockExecutionHandler extends ExecutionHandler {
-    public MockExecutionHandler(LockingActionModel actionModel,
+    public MockExecutionHandler(RunOnce runOnce,
+                                LockingActionModel actionModel,
                                 TypeFetcher typeFetcher,
                                 ReplyWatcher<SerialNumberResponse> serialGetter,
                                 Spine spine,
                                 ProcedureDependencyFinder finder) {
-        super(actionModel, typeFetcher, serialGetter, spine, finder);
+        super(runOnce, actionModel, typeFetcher, serialGetter, spine, finder);
     }
 
     @Override

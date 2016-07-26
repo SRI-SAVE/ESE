@@ -31,6 +31,9 @@ public class Fonts {
     public static final Font STANDARD = Font.font(FONTFACE, FontWeight.NORMAL,
             FontPosture.REGULAR, 12.2f);
     
+    public static final Font HUGE = Font.font(FONTFACE, FontWeight.NORMAL,
+            FontPosture.REGULAR, 18f);
+    
     public static final Font LARGE = Font.font(FONTFACE, FontWeight.NORMAL,
             FontPosture.REGULAR, 14.2f);
 

@@ -158,7 +158,12 @@
         <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='value_constraint']">
           <class ref="com.sri.pal.training.core.exercise.ValueConstraint" />
           <property name="valueConstraints" />
-        </bindings>                                
+        </bindings>
+
+        <bindings node="//xs:complexType[@name='Option']/xs:sequence/xs:element[@name='type_constraint']">
+            <class ref="com.sri.pal.training.core.exercise.TypeConstraint" />
+            <property name="typeConstraints" />
+        </bindings>
                                          
         <!-- QueryConstraint Customizations -->
         
@@ -182,15 +187,25 @@
         
         <!-- ValueConstraint Customizations -->
         
-        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:element[@name='value']">
+        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:choice/xs:sequence/xs:element[@name='value']">
           <class ref="com.sri.pal.training.core.exercise.Value" />        
           <property name="values" />
         </bindings>
         
-        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:element[@name='ref']">
+        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:choice/xs:sequence/xs:element[@name='ref']">
           <property name="refs" />
         </bindings>
-        
+
+        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:choice/xs:sequence/xs:choice/xs:element[@name='min_value']">
+            <class ref="com.sri.pal.training.core.exercise.Value" />
+        </bindings>
+
+        <bindings node="//xs:complexType[@name='ValueConstraint']/xs:sequence/xs:choice/xs:sequence/xs:choice/xs:element[@name='max_value']">
+            <class ref="com.sri.pal.training.core.exercise.Value" />
+        </bindings>
+
+        <!-- EqualityConstraint Customizations -->
+
         <bindings node="//xs:complexType[@name='EqualityConstraint']/xs:sequence/xs:element[@name='parameter']">
           <property name="parameters" />
         </bindings>                  
@@ -261,7 +276,12 @@
           <class ref="com.sri.pal.training.core.assessment.ValueIssue" />
           <property name="valueIssues" />
         </bindings>
-        
+
+        <bindings node="//xs:complexType[@name='TaskAssessment']/xs:sequence/xs:element[@name='type_issue']">
+            <class ref="com.sri.pal.training.core.assessment.TypeIssue" />
+            <property name="typeIssues" />
+        </bindings>
+
         <bindings node="//xs:complexType[@name='ArgumentLocation']/xs:sequence/xs:element[@name='accessor']">
           <property name="accessors" />
         </bindings>
@@ -275,7 +295,11 @@
         <bindings node="//xs:complexType[@name='ValueIssue']/xs:sequence/xs:element[@name='location']">
           <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
         </bindings>
-        
+
+        <bindings node="//xs:complexType[@name='TypeIssue']/xs:sequence/xs:element[@name='location']">
+            <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
+        </bindings>
+
         <bindings node="//xs:complexType[@name='EqualityIssue']/xs:sequence/xs:element[@name='location1']">
           <class ref="com.sri.pal.training.core.assessment.ArgumentLocation" />
         </bindings>

@@ -141,6 +141,11 @@ public class PrimitiveTypeDef
     }
 
     @Override
+    public boolean isValueOf(Object value) {
+        return getKind().getRepresentationClass().isInstance(value);
+    }
+
+    @Override
     Object stringify(Object value) {
         return value;
     }

@@ -31,8 +31,7 @@ public interface IStepViewContainer {
 	
 	public SimpleBooleanProperty getStepIndexVisibility(); 
     public ContainerStepModel getContainerStepModel();
-    public StepLayout getStepLayout(); 
-    public void updateIssuesVisualization();
+    public StepLayout getStepLayout();    
     public StepView findStepView(StepModel step);
     public List<StepView> getSteps(); 
     

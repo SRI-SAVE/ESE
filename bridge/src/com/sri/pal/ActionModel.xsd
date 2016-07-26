@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<!-- $Id: ActionModel.xsd 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<!-- $Id: ActionModel.xsd 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $ -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
     <xs:include schemaLocation="ConstraintBinding.xsd"/>
@@ -193,10 +193,11 @@
             <xs:documentation>An enumerated list of string values.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="value" type="xs:string" maxOccurs="unbounded">
+            <xs:element name="subType" type="SubTypeType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>
-                        One or more acceptable values for this enumerated type.
+                        Zero or more acceptable values for this enumerated type.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -367,6 +368,10 @@
 
     <xs:complexType name="InheritType">
         <xs:attribute name="parent" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="SubTypeType">
+        <xs:attribute name="sub" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="TypeRef">

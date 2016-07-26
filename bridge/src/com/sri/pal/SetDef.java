@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: SetDef.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: SetDef.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import java.math.BigInteger;
@@ -69,6 +69,22 @@ public class SetDef
     @Override
     protected Collection<Object> newInstance() {
         return new HashSet<Object>();
+    }
+
+    @Override
+    public boolean isValueOf(Object value)
+            throws PALException {
+        if (!(value instanceof Set)) {
+            return false;
+        }
+        Set<?> set = (Set<?>) value;
+        TypeDef eleType = getElementType();
+        for (Object member : set) {
+            if (!eleType.isValueOf(member)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

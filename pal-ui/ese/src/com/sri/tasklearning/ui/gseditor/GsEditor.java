@@ -20,28 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
-import javafx.geometry.Orientation;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import javafx.util.Callback;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +41,33 @@ import com.sri.tasklearning.ui.core.exercise.ExerciseEditController;
 import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
 import com.sri.tasklearning.ui.core.exercise.ExerciseView;
 import com.sri.tasklearning.ui.core.exercise.ExerciseView.ExerciseOpener;
+import com.sri.tasklearning.ui.core.exercise.InfoPanel;
 import com.sri.tasklearning.util.LogUtil;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.geometry.Orientation;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.Separator;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 
 public class GsEditor extends CoreUIApplication implements ISessionListener {
 
@@ -105,13 +109,15 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
         BackendFacade.getInstance().connect("pal-ui-editor");
         
         this.stage = stage;
+        
         stage.setOnHidden(new EventHandler<WindowEvent>() { 
             public void handle(WindowEvent e) { 
                 BackendFacade.getInstance().disconnect();
             }});
         
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent e) {
+        
+        	public void handle(WindowEvent e) {
                 boolean unsaved = false;
                 for (EditSession sess : EditSessionManager.getSessions())
                     if (sess.getController().isUnsavedChanges()) {
@@ -197,7 +203,7 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
         
         this.scene = new Scene(root);
               
-        Utilities.initPalStage(stage, scene, "PALCoreESE.css");
+       Utilities.initPalStage(stage, scene, "PALCoreESE2.css");
                 
         toolBar = new GsEditorToolBar(this);
         tabPane = new TabPane() {
@@ -212,33 +218,11 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
         
         // library = new GSLibraryPanel();       
 
-        BackendFacade.getInstance().debuggingProcedureProperty().addListener(
-            new ChangeListener<Boolean>() {
-            public void changed(
-                final ObservableValue<? extends Boolean> value,
-                final Boolean oldVal,
-                final Boolean newVal) {
-                toolBar.requestFocus();
-                control.getView().setReadOnly(newVal);                                   
-            }                    
-        });
-        
         blocker.setFill(Color.WHITE);
         blocker.setOpacity(0.5);
         blocker.widthProperty().bind(tabPane.widthProperty());
-        blocker.setHeight(30);
-       
-        BackendFacade.getInstance().debuggingProcedureProperty().addListener(
-            new InvalidationListener() {
-            public void invalidated(Observable value) {
-            	/* 
-                if (BackendFacade.getInstance().isDebuggingProcedure())
-                    root.getChildren().add(blocker);
-                else
-                    root.getChildren().remove(blocker); */ 
-            }
-        });
-        
+        blocker.setHeight(30);       
+      
         initOverlay("Loading\u2026");
         
         /*
@@ -307,7 +291,7 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
     
     private final com.sri.tasklearning.ui.core.exercise.ExerciseView.ExerciseOpener exerciseOpener = new ExerciseOpener() {
         public void open(final ExerciseModel exercise) {
-            if (exercise != null) {
+            if (exercise != null) { 
                 // show a "Loading" overlay
                 showOverlay();
 
@@ -337,6 +321,8 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
 	
     };
        
+
+ 
     
     private void updateWindowTitle() {
         String name = control.getModel().getName();
@@ -401,24 +387,71 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
     	procedureScrollPane.setContent(pv);
     	procedureScrollPane.scrollToTop();
     	
-    
-
+    	VBox rightSide = new VBox();     	
+    	rightSide.setFillWidth(true);
+    	rightSide.setSpacing(10);    	
+    	rightSide.setStyle("-fx-text-fill: black; -fx-border-color: white; -fx-background-color: white; -fx-border-width: 0; -fx-padding: 0"); 
+        
     	AnnotationPanel annotationPanel = new AnnotationPanel(controller);
- 
+    	
+    	EventHandler<ActionEvent> doneHandler = new EventHandler<ActionEvent>() {
+    		public void handle(ActionEvent e) {
+
+    			Callback<AlertResult, Void> call = 
+    					new Callback<AlertResult, Void>() {
+    				public Void call(AlertResult result) {
+
+    					if (result == AlertResult.YES) 
+    						control.attemptSave(true, false, null, getScene());
+    					
+    					if (tabMap.containsKey(em)) {
+    						tabPane.getTabs().remove(tabMap.get(em));
+    						tabMap.get(em).getOnClosed().handle(null);
+    						tabMap.remove(em);
+    						EditSessionManager.removeSessionByName(em.getName());                                	
+        			   }
+
+    					return null;    
+    				}
+    			};
+
+    			String name = control.getModel().getName();
+    			boolean unsavedChanges = control.isUnsavedChanges();
+
+    			if (unsavedChanges) 
+    				Alert.show("Save before finalizing / closing this file?", 
+    						"You currently have unsaved changes. " +
+    								"Do you want me to save before finalizing / closing this file?", 
+    								AlertConfig.YES_NO, call);
+    			else if (tabMap.containsKey(em)) {
+						tabPane.getTabs().remove(tabMap.get(em));
+						tabMap.get(em).getOnClosed().handle(null);
+						tabMap.remove(em);
+						EditSessionManager.removeSessionByName(em.getName());                                	
+    			}
+    		}
+    	}; 
+
+    	InfoPanel infoPanel = new InfoPanel(controller, em, doneHandler); 
+    	Separator sep = new Separator(); 
+    	
     	AnchorPane pane = new AnchorPane();
     	AnchorPane.setTopAnchor(procedureScrollPane, 0.0);
     	AnchorPane.setLeftAnchor(procedureScrollPane, -1.0);
     	AnchorPane.setRightAnchor(procedureScrollPane, AnnotationPanel.DEF_WIDTH);
-    	//AnchorPane.setRightAnchor(procedureScrollPane, 0.0);
     	AnchorPane.setBottomAnchor(procedureScrollPane, -1.0);        
 
-    	AnchorPane.setTopAnchor(annotationPanel, 0.0);
-    	AnchorPane.setRightAnchor(annotationPanel, 0.0);
-    	AnchorPane.setBottomAnchor(annotationPanel, 0.0);
+    	AnchorPane.setTopAnchor(rightSide, 0.0);
+    	AnchorPane.setRightAnchor(rightSide, 0.0);
+    	pane.setStyle("-fx-text-fill: black; -fx-border-color: white; -fx-background-color: white; -fx-border-width: 0; -fx-padding: 0"); 
+        
+    	rightSide.getChildren().addAll(annotationPanel, sep, infoPanel);
 
-    	pane.getChildren().addAll(procedureScrollPane, annotationPanel);    	
+    	infoPanel.setVisible(false);   	
     	
-    	if (em.getOriginalExerciseModel() == null) {
+    	pane.getChildren().addAll(procedureScrollPane, rightSide);    	
+    	
+    	if (em.getOriginalExerciseModel() == null && em.getReadOnlyProperty().getValue() ) {
     		pv.disableProperty().setValue(true);
     		annotationPanel.setDisable(true);
     	}
@@ -494,5 +527,26 @@ public class GsEditor extends CoreUIApplication implements ISessionListener {
 	public static GsEditor getInstance() {
 		return instance;
 	}
+	
+	//
+	// Utility Methods added by MW - should probably go into the controller? 
+	//
+	
+	public void closeCurrentTab() {
+
+		EditSession sess = EditSessionManager.getActiveSession();    				
+		sess.getController().getView().prepareToClose();        		
+		CommonModel model = sess.getController().getModel();
+		EditSessionManager.removeSessionByName(model.getName());
+		
+		if (tabMap.containsKey(model)) {
+			tabMap.get(model).getOnClosed().handle(null);
+			
+			tabPane.getTabs().remove(tabMap.get(model));
+			tabMap.remove(model);
+			EditSessionManager.removeSessionByName(model.getName());                                	
+		}       
+	}
+
 	
 }

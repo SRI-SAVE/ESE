@@ -20,8 +20,15 @@ package com.sri.tasklearning.ui.core.layout;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sri.tasklearning.ui.core.Colors;
+import com.sri.tasklearning.ui.core.Fonts;
+import com.sri.tasklearning.ui.core.step.StepView;
+import com.sri.tasklearning.ui.core.term.ParameterModel;
+import com.sri.tasklearning.ui.core.term.ParameterView;
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
@@ -29,22 +36,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.sri.tasklearning.ui.core.Colors;
-import com.sri.tasklearning.ui.core.Fonts;
-import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsModel;
-import com.sri.tasklearning.ui.core.step.StepView;
-import com.sri.tasklearning.ui.core.term.ParameterModel;
-import com.sri.tasklearning.ui.core.term.ParameterView;
 
 /**
  * A specialization of FlowPane that knows how to visualize instances of

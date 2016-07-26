@@ -25,22 +25,12 @@ import javafx.scene.control.ScrollPane;
  * will evolve to the point where it provides this functionality for us. 
  */
 public class ScrollPanePlus extends ScrollPane {  
-    private static final double SCOOCH = 12; 
+	
+    private static final double SCOOCH = 0.02; 
     
     public ScrollPanePlus() {
         super();        
         prefViewportHeightProperty().bind(this.prefHeightProperty().add(500));
-    }
-    
-    private void setScale() {
-        final Node scrollNode = getContent();
-        scrollNode.autosize();
-        
-        double oldPos = getVvalue();
-        double oldSize = getVmax();
-        
-       // setVmax(scrollNode.getLayoutBounds().getHeight() - getHeight());       
-        setVvalue((getVmax() / oldSize) * oldPos);
     }
     
     // Utility methods
@@ -48,7 +38,6 @@ public class ScrollPanePlus extends ScrollPane {
         Node scrollNode = getContent();
         // Set the ScrollPane proportions so that scrollbar position matches
         // the Y position of nodes within the node being scrolled. 
-        setScale();
                 
         double y = scrollNode.sceneToLocal(node.localToScene(0, 0)).getY();        
         // Only scroll if necessary
@@ -65,20 +54,18 @@ public class ScrollPanePlus extends ScrollPane {
     }
     
     public void scrollToTop() {
-        setVvalue(0.00);
+        setVvalue(0);
     }
     
     public void scoochUp() {
-        // setScale();
         double v = getVvalue();
         double newV = Math.max(0, v - SCOOCH);
         setVvalue(newV);
     }
     
     public void scoochDown() {
-        //setScale();
         double v = getVvalue();
-        double newV = Math.min(getVmax(), v + SCOOCH);
+        double newV = Math.min(getVmax(), v + SCOOCH);  
         setVvalue(newV);
     }
 }

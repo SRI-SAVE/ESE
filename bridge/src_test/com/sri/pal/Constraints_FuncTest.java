@@ -206,7 +206,7 @@ public class Constraints_FuncTest
         log.debug("{} XML constraints: {}", proc.getName(),
                 proc.getConstraints());
         log.debug("Learned proc: {}", proc.getSource());
-        String expConstraintStr = "`('cns^1.0^isFoo'($arg1_1) && 'cns^1.0^isFoo'($arg1_2) && 'cns^1.0^isBar'($arg1_2, $arg2_1))";
+        String expConstraintStr = "`('cns^1.0^isFoo'($arg1_1) && 'cns^1.0^isFoo'($arg1_2) && 'cns^1.0^isBar'($arg1_2, $arg2_3))";
         verifyConstraints(proc, expConstraintStr, true);
     }
 

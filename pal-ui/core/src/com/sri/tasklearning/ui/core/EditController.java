@@ -18,11 +18,6 @@ package com.sri.tasklearning.ui.core;
 
 import java.util.List;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.Scene;
-import javafx.util.Callback;
-
 import com.sri.tasklearning.ui.core.common.CommonModel;
 import com.sri.tasklearning.ui.core.common.CommonView;
 import com.sri.tasklearning.ui.core.layout.StepLayout;
@@ -32,7 +27,10 @@ import com.sri.tasklearning.ui.core.term.ConstantValueModel;
 import com.sri.tasklearning.ui.core.term.ParameterModel;
 import com.sri.tasklearning.ui.core.term.TermModel;
 import com.sri.tasklearning.ui.core.term.VariableModel;
-import com.sri.tasklearning.ui.core.term.function.FunctionModel;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.Scene;
+import javafx.util.Callback;
 
 public abstract class EditController implements IUndoWatcher {
 
@@ -73,21 +71,6 @@ public abstract class EditController implements IUndoWatcher {
 		return false;
 	}
 
-	public SimpleIntegerProperty numStepsWithErrorsProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public SimpleIntegerProperty numStepsWithWarningsProperty() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<StepModel> getStepsWithIssues() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public boolean selectStep(StepModel target) {
 		return false;
 		// TODO Auto-generated method stub
@@ -100,29 +83,6 @@ public abstract class EditController implements IUndoWatcher {
 		
 	}
 
-	public VariableManager getVariableManager() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean renameReplaceVariable(VariableModel variable, String newName) {
-		return false;
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean renameVariable(VariableModel variable, String newName) {
-		return false;
-		// TODO Auto-generated method stub
-		
-	}
-
-	public List<FunctionModel> getSuggestedFunctionCalls(StepModel stepModel,
-			ParameterModel input) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	public void deleteStep(StepView addedStep) {
 		// TODO Auto-generated method stub
 		
@@ -150,11 +110,6 @@ public abstract class EditController implements IUndoWatcher {
 		
 	}
 
-	public void moveSteps(List<StepView> multiDragStepViews,
-			StepLayout origLayout, StepLayout dropLayout, int dropIndex) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void moveStep(StepView originalStep, StepLayout origLayout,
 			StepLayout dropLayout, int dropIndex) {

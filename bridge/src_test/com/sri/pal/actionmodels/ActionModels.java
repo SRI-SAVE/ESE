@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: ActionModels.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: ActionModels.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal.actionmodels;
 
 /**
@@ -41,6 +41,7 @@ public class ActionModels {
     public static final String IDIOMS = "idioms.xml";
     public static final String INHERIT = "inherit.xml";
     public static final String INHERITANCE = "inheritance.xml";
+    public static final String INH_ENUMS = "inh_enums.xml";
     public static final String LEARNING_PREFS = "learningPrefs.xml";
     public static final String LISTS = "lists.xml";
     public static final String METADATA = "metadata.xml";
@@ -59,7 +60,7 @@ public class ActionModels {
             LISTS, TYPES, ACTIONS, BAGS, SETS, DEBUG, WHITESPACE,
             PERMUTABLE_LISTS, STRESS, CPOF, CONSTRAINTS, EQUIVALENCE,
             ACTIONS_DUPES, IDIOMS, LEARNING_PREFS, COLLAPSE, DEFAULTS,
-            COMPLETERS, ARDA
+            COMPLETERS, ARDA, INH_ENUMS
 // "domain/action_model.xml"
     };
 

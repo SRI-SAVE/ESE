@@ -18,18 +18,29 @@ package com.sri.tasklearning.ui.gseditor;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.sri.pal.PALException;
+import com.sri.pal.training.core.exercise.Exercise;
+import com.sri.pal.training.core.storage.ExerciseStorage;
+import com.sri.tasklearning.ui.core.BackendFacade;
+import com.sri.tasklearning.ui.core.BackendInterface;
+import com.sri.tasklearning.ui.core.EditController;
+import com.sri.tasklearning.ui.core.EditSession;
+import com.sri.tasklearning.ui.core.EditSessionManager;
+import com.sri.tasklearning.ui.core.EditSessionManager.ISessionListener;
+import com.sri.tasklearning.ui.core.IUndoWatcher;
+import com.sri.tasklearning.ui.core.IUndoable;
+import com.sri.tasklearning.ui.core.Utilities;
+import com.sri.tasklearning.ui.core.control.Alert;
+import com.sri.tasklearning.ui.core.control.Alert.AlertConfig;
+import com.sri.tasklearning.ui.core.control.Alert.AlertResult;
+import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
+import com.sri.tasklearning.ui.core.exercise.InfoPanel;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Separator;
@@ -38,80 +49,48 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 
-import com.sri.pal.training.core.exercise.Exercise;
-import com.sri.pal.training.core.storage.ExerciseStorage;
-import com.sri.tasklearning.ui.core.BackendFacade;
-import com.sri.tasklearning.ui.core.BackendInterface;
-import com.sri.tasklearning.ui.core.DragDropManager;
-import com.sri.tasklearning.ui.core.EditController;
-import com.sri.tasklearning.ui.core.EditSession;
-import com.sri.tasklearning.ui.core.EditSessionManager;
-import com.sri.tasklearning.ui.core.EditSessionManager.ISessionListener;
-import com.sri.tasklearning.ui.core.ISelectable;
-import com.sri.tasklearning.ui.core.IUndoWatcher;
-import com.sri.tasklearning.ui.core.IUndoable;
-import com.sri.tasklearning.ui.core.StorageAssistant;
-import com.sri.tasklearning.ui.core.UndoManager;
-import com.sri.tasklearning.ui.core.Utilities;
-import com.sri.tasklearning.ui.core.common.CommonView;
-import com.sri.tasklearning.ui.core.common.SignatureModel;
-import com.sri.tasklearning.ui.core.control.Alert;
-import com.sri.tasklearning.ui.core.control.Alert.AlertConfig;
-import com.sri.tasklearning.ui.core.control.Alert.AlertResult;
-import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
-import com.sri.tasklearning.ui.core.step.StepView;
-import com.sri.tasklearning.ui.core.term.ParameterModel;
-
 public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoWatcher {
+	
 	private final BackendInterface backend = BackendFacade.getInstance();
 
 	private final GsEditor editor;   
-	private final ErrorButton errorButton;
 
 	private EditController control;
 
 	public static final double DEF_HEIGHT = 50;          
 
 	public GsEditorToolBar(GsEditor argEditor) {
-		editor = argEditor;           
-		errorButton = new ErrorButton(editor, errorSep);
-
-		for (Node node : debugToolBar)            
-			node.visibleProperty().bind(
-					BackendFacade.getInstance().debuggingProcedureProperty());
-
+		
+		editor = argEditor;           	
 		EditSessionManager.addSessionListener(this);
 
 		setPrefHeight(DEF_HEIGHT);
 
 		getItems().addAll(
-				// showLibButton, 
-				// getSeparator(), 
 				openExerciseButton,
-				saveButton, saveAsButton, 
+				saveButton, saveAsButton,
+				finalizeButton, 
 				getSeparator(), 
-				openURLExerciseButton,
-				saveURLButton,
-				saveAsURLButton,      		
-				getSeparator(), 
+				// openURLExerciseButton,
+				// saveURLButton,
+				// saveAsURLButton,      		
+				//getSeparator(), 
 				showOriginalButton 
-				// undoButton, redoButton, 
-				// deleteButton, errorSep, errorButton
+				// , restoreOriginalButton 
 				);
-
-		getItems().addAll(debugToolBar);
+		
 	}
 
 	//********************** IUndoWatcher **************************************
 
 	@Override
 	public void onUndoChanged(IUndoable action) {
-		toggleUndoRedoButtons();
+		// toggleUndoRedoButtons();
 	}
 
 	@Override
 	public void onUndoCleared() {
-		toggleUndoRedoButtons();
+		// toggleUndoRedoButtons();
 	}  
 
 	//************************ ISessionListener ********************************
@@ -132,9 +111,10 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 		control = newSession.getController();
 		control.getUndoManager().registerWatcher(this);
 
+		/* 
 		deleteButton.disableProperty().bind(
 				control.getView().getSelectionManager()
-				.numSelectedProperty().isEqualTo(0).or(backend.debuggingProcedureProperty()));
+				.numSelectedProperty().isEqualTo(0));
 
 		control.getView().readOnlyProperty().addListener(
 				new ChangeListener<Boolean>() {
@@ -143,8 +123,6 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 							final Boolean oldVal,
 							final Boolean newVal) {
 						
-						errorButton.setDisable(newVal);
-
 						if (newVal) {
 							redoButton.setDisable(true);
 							undoButton.setDisable(true);
@@ -152,51 +130,49 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 							toggleUndoRedoButtons();
 					}
 				});
-
+		 */ 
+		
 		openExerciseButton.disableProperty().bind(
 				ExerciseModel.getActiveModelProperty().isNotNull().
 				and(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty()));   
 		
+		/* 
 		openURLExerciseButton.disableProperty().bind(
 				ExerciseModel.getActiveModelProperty().isNotNull().
-				and(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty()));   
+				and(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty()));
+				*/   
 	
 		saveButton.disableProperty().bind(
-				control.numStepsWithErrorsProperty().greaterThan(0).
-				or(backend.debuggingProcedureProperty()).
-				or(ExerciseModel.getActiveModelProperty().isNull()).
-				or(ExerciseModel.getActiveModelProperty().getValue().getHasFileSourceProperty().not()). 
-				or(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty())); 
+				ExerciseModel.getActiveModelProperty().isNull().
+				or(ExerciseModel.getActiveModelProperty().getValue().getHasFileSourceProperty().not())); 
 
 		saveAsButton.disableProperty().bind(
-				control.numStepsWithErrorsProperty().greaterThan(0).
-				or(backend.debuggingProcedureProperty()).
-				or(backend.debuggingProcedureProperty()).
-				or(ExerciseModel.getActiveModelProperty().isNull()).
-				or(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty()));
+				ExerciseModel.getActiveModelProperty().isNull()); 
+		
+		finalizeButton.disableProperty().bind(
+				ExerciseModel.getActiveModelProperty().isNull().or(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty())); 
 
+		/* 
 		saveURLButton.disableProperty().bind(
-				control.numStepsWithErrorsProperty().greaterThan(0).
-				or(backend.debuggingProcedureProperty()).
-				or(ExerciseModel.getActiveModelProperty().isNull()).
+				ExerciseModel.getActiveModelProperty().isNull().
 				or(ExerciseModel.getActiveModelProperty().getValue().getHasURLSourceProperty().not()).
 				or(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty()));
 
 		saveAsURLButton.disableProperty().bind(
-				control.numStepsWithErrorsProperty().greaterThan(0).
-				or(backend.debuggingProcedureProperty()).
-				or(backend.debuggingProcedureProperty()).
-				or(ExerciseModel.getActiveModelProperty().isNull()).
+				ExerciseModel.getActiveModelProperty().isNull().
 				or(ExerciseModel.getActiveModelProperty().getValue().getReadOnlyProperty()));
+		*/
 		
-		showOriginalButton.disableProperty().bind(
-				control.numStepsWithErrorsProperty().greaterThan(0).
-				or(backend.debuggingProcedureProperty()).
-				or(backend.debuggingProcedureProperty()).
-				or(ExerciseModel.getActiveModelProperty().isNull()).
+		showOriginalButton.disableProperty().bind(			
+				ExerciseModel.getActiveModelProperty().isNull().
 				or(ExerciseModel.getActiveModelProperty().getValue().getHasOriginalExerciseModelProperty().not())); 
 
-		toggleUndoRedoButtons();
+		/* restoreOriginalButton.disableProperty().bind(			
+				ExerciseModel.getActiveModelProperty().isNull().
+				or(ExerciseModel.getActiveModelProperty().getValue().getHasOriginalExerciseModelProperty().not())); */ 
+
+		// toggleUndoRedoButtons();
+		
 	}
 
 	//************************************************************************* 
@@ -205,8 +181,7 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 	@Override
 	protected void layoutChildren() {
 		super.layoutChildren();
-		errorButton.setTranslateY(((getHeight() - 
-				errorButton.getHeight()) / 2) - 5);
+		
 	}
 
 	public Button getButton(String text, String tooltip, String iconPath) {
@@ -244,6 +219,7 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
     }
      */
 
+	/*
 	public void toggleUndoRedoButtons() {
 		UndoManager um = control.getUndoManager();
 
@@ -261,7 +237,7 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 			redoButton.setTooltip(new Tooltip(um.peekRedo().getDescription()));
 		else
 			redoButton.setTooltip(null);
-	}
+	} */
 
 	// *********************** UI Component Declarations ***********************
 
@@ -282,7 +258,12 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 	{
 		openExerciseButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				openExercise();
+				try {
+					openExercise();
+				} catch (PALException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -307,21 +288,39 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 
 	private final Button saveButton = getButton("Save File",
 			//control == null || control.getModel() == null ? "Save" : control.getModel() instanceof ExerciseModel ? "Save the current procedure." : "Save the current exercise.",
-			"Save current exercise or procedure.",
+			"Save current exercise.",
 			"toolbar/save.png");
 	{
 		saveButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				control.attemptSave(true, false, null, getScene());
-				ExerciseModel model = ExerciseModel.getActiveModelProperty().getValue();
-				model.updateNameFile();
+				
+				Alert.show("Question", "Do you want to overwrite existing file\n'" + ExerciseModel.getActiveModelProperty().getValue().getFileSource() + "'?",   
+						AlertConfig.YES_NO, new Callback<AlertResult, Void> () {
+
+					@Override
+					public Void call(AlertResult arg0) { 
+						
+						if (arg0 == AlertResult.YES) {
+					
+							control.attemptSave(true, false, null, getScene());
+							ExerciseModel model = ExerciseModel.getActiveModelProperty().getValue();
+							model.updateNameFile();
+						}
+						
+						return null; 
+						
+					}
+				}
+				);
 			}
-		});
+		}
+		); 
 
 		saveButton.disableProperty().set(true);
 	}
 
 
+	/*
 	private final Button saveURLButton = getButton("Put to Server",
 			//control == null || control.getModel() == null ? "Save" : control.getModel() instanceof ExerciseModel ? "Save the current procedure." : "Save the current exercise.",
 			"Upload current exercise or procedure to server.",
@@ -362,7 +361,8 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 
 		saveURLButton.disableProperty().set(true);
 	}
-
+     */ 
+	
 	private final Button saveAsButton = getButton("Save As File",
 			// control == null || control.getModel() == null ? "Save a copy" : control.getModel() instanceof ExerciseModel ? "Save a copy of the current procedure." : "Save a copy of the current exercise.",
 			"Save a copy of current exercise or procedure.", 
@@ -379,6 +379,7 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 		saveAsButton.disableProperty().set(true);
 	}
 
+	/* 
 	private final Button saveAsURLButton = getButton("Put As to Server",
 			// control == null || control.getModel() == null ? "Save a copy" : control.getModel() instanceof ExerciseModel ? "Save a copy of the current procedure." : "Save a copy of the current exercise.",
 			"Save a copy of current exercise or procedure.", 
@@ -427,7 +428,9 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 
 		saveAsURLButton.disableProperty().set(true);
 	}	
-
+	*/ 
+	
+	/*
 	private final Button undoButton = getButton("Undo", null,
 			"toolbar/undo2.png");
 	{
@@ -495,36 +498,7 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 			}
 		});
 	}    
-
-	private final Button debugStopButton = getButton("Stop", null, "toolbar/stop.png"); 
-	{
-		debugStopButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				backend.cancelProcedureRun();
-			}
-		});
-	};
-
-	private final Button debugStepButton = getButton("Next", null, "toolbar/play.png"); 
-	{
-		debugStepButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				backend.stepProcedureRun();
-			}
-		});
-	};
-
-	private final Button debugContinueButton = getButton("Finish", null,"toolbar/skip.png"); 
-	{
-		debugContinueButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				backend.continueProcedureRun();
-			}
-		});
-	}
-
-	private final Separator debugSep = new Separator();
-	private final Node[] debugToolBar = new Node[] {debugSep, debugStopButton, debugStepButton, debugContinueButton};
+   */ 
 
 	//
 	//
@@ -535,7 +509,7 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 	}    
 
 	
-	private void openExercise() {
+	private void openExercise() throws PALException {
 
 		File file = Utilities.browseForExerciseFile(getScene().getWindow());
 
@@ -577,7 +551,13 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 				
 				if (exercise != null) {
 				
-					ExerciseModel em2 = new ExerciseModel(exercise, em.getUrlSource(), Configuration.SERVER_PUT_USER, Configuration.SERVER_PUT_PASSWORD);
+					ExerciseModel em2 = null;
+					try {
+						em2 = new ExerciseModel(exercise, em.getUrlSource(), Configuration.SERVER_PUT_USER, Configuration.SERVER_PUT_PASSWORD);
+					} catch (PALException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					editor.getExerciseOpener().open(em2);
 					
@@ -595,20 +575,81 @@ public class GsEditorToolBar extends ToolBar implements ISessionListener, IUndoW
 	//
 	//
 
-	private final Button showOriginalButton = getButton("Show Original Version", null,
-			"toolbar/folder_yellow_open.png");
+	private final Button showOriginalButton = getButton("Show / Restore Original", "Show (and possibly restore) the original version of the exercise file (read only, non-editable).",
+			"toolbar/restore.png");
+	
+
+	/* private final Button restoreOriginalButton = getButton("Restore Original Version", "Restore the original version of the exercise. Use \"Save\" if required to restore original file.",
+			"toolbar/folder_yellow_open.png"); */
+	
+	//
+	//
+	
 	{
 		showOriginalButton.setDisable(true);
+		//restoreOriginalButton.setDisable(true);
+
 		showOriginalButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 
 				ExerciseModel original = ExerciseModel.getActiveModelProperty().getValue().getOriginalExerciseModel(); 
+				original.getReadOnlyProperty().setValue(true);
+				original.setFileSource(ExerciseModel.getActiveModelProperty().getValue().getFileSource());
+
 				editor.getExerciseOpener().open(original); 
 				
 			}
 		});
 
 		showOriginalButton.disableProperty().set(true);
+		//restoreOriginalButton.disableProperty().set(true);
+	}
+	
+	//
+	//
+	//
+	
+	/* 
+	
+	{
+		showOriginalButton.setDisable(true);
+		restoreOriginalButton.setDisable(true);
+		
+		restoreOriginalButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+
+				ExerciseModel original = ExerciseModel.getActiveModelProperty().getValue().getOriginalExerciseModel(); 
+				original.getReadOnlyProperty().setValue(false);
+				//original.getHasFileSourceProperty().set(true);
+				original.setFileSource(ExerciseModel.getActiveModelProperty().getValue().getFileSource());
+
+				editor.getExerciseOpener().open(original); 
+				
+			}
+		});
+
+		showOriginalButton.disableProperty().set(true);
+		restoreOriginalButton.disableProperty().set(true);
 	}
 
+   */
+	
+	private final Button finalizeButton = getButton("Finalize File",
+			//control == null || control.getModel() == null ? "Save" : control.getModel() instanceof ExerciseModel ? "Save the current procedure." : "Save the current exercise.",
+			"Finalize Exercise.",
+			"toolbar/finalize.png");
+	{
+		finalizeButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				
+				InfoPanel.makeVisible(ExerciseModel.getActiveModelProperty().getValue()); 					
+							
+			}
+		}
+		); 
+
+		finalizeButton.disableProperty().set(true);
+	}
+
+	
 }

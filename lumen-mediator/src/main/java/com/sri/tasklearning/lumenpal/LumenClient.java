@@ -16,9 +16,6 @@
 
 package com.sri.tasklearning.lumenpal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sri.ai.lumen.runtime.SteppingSupport;
 import com.sri.tasklearning.mediators.LockingActionModel;
 import com.sri.tasklearning.mediators.TypeFetcher;
@@ -27,13 +24,10 @@ import com.sri.tasklearning.spine.MessageHandlerException;
 import com.sri.tasklearning.spine.Spine;
 import com.sri.tasklearning.spine.SpineException;
 import com.sri.tasklearning.spine.impl.jms.JmsClient;
-import com.sri.tasklearning.spine.messages.JmsSpineClosing;
-import com.sri.tasklearning.spine.messages.Message;
-import com.sri.tasklearning.spine.messages.SerialNumberResponse;
-import com.sri.tasklearning.spine.messages.SystemMessageType;
-import com.sri.tasklearning.spine.messages.TypeResult;
-import com.sri.tasklearning.spine.messages.UserMessageType;
+import com.sri.tasklearning.spine.messages.*;
 import com.sri.tasklearning.spine.util.ReplyWatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is the top layer interface to the Lumen module proper. This is
@@ -82,11 +76,12 @@ public class LumenClient
         actionModel = new LockingActionModel(adder);
         typeFetcher = new TypeFetcher(spine, actionModel, typeResultWatcher);
         procDepFinder = new ProcedureDependencyFinder(actionModel, typeFetcher);
+        RunOnce runOnce = new RunOnce(lumen, actionModel, procDepFinder);
 
         serialGetter = new ReplyWatcher<SerialNumberResponse>(
                 SerialNumberResponse.class, spine);
 
-        execHandler = new ExecutionHandler(actionModel, typeFetcher,
+        execHandler = new ExecutionHandler(runOnce, actionModel, typeFetcher,
                 serialGetter, spine, procDepFinder);
         execWatcher = new ExecutionWatcher(spine);
         sci = new ServerConnectionImpl(execHandler, execWatcher, actionModel,
@@ -94,7 +89,7 @@ public class LumenClient
 
         cancelReceiver = new CancelReceiver(lumen);
 
-        constraintHandler = new ConstraintHandler(typeFetcher, actionModel,
+        constraintHandler = new ConstraintHandler(runOnce, typeFetcher, actionModel,
                 spine);
 
         stepHandler = new StepHandler(spine, lumen);

@@ -26,7 +26,6 @@ import com.sri.pal.Bridge;
 import com.sri.pal.LumenProcedureDef;
 import com.sri.pal.PALException;
 import com.sri.tasklearning.ui.core.BackendFacade;
-import com.sri.tasklearning.ui.core.procedure.ProcedureModel;
 
 public class CoreUITestUtilities {
     public static final File ROOT_DIR = new File(CoreUITestUtilities.class.getResource("../testStorage").getPath().replace("%20", " "));
@@ -121,8 +120,5 @@ public class CoreUITestUtilities {
             return buffer.toString();
     }
     
-    public static ProcedureModel procedureModelFromFile(final File procFile) throws IOException, PALException {
-        String source = ctrsFromFile(procFile, true);
-        return BackendFacade.getInstance().instantiateProcedureFromSource(source);
-    }
+   
 }

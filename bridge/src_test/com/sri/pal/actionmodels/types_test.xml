@@ -80,4 +80,8 @@
             <ref typeRef="oid"/>
         </nullable>
     </type>
+    <type id="emptyEnum">
+        <description>An enum with no values.</description>
+        <enum/>
+    </type>
 </actionModel>

@@ -78,7 +78,7 @@ public class LoopLearning_FuncTest extends PALBridgeTestCase {
         takeBName = (SimpleTypeName) TypeNameFactory.makeName("takesOneBType",
                 "1.0", NAMESPACE);
         actionModel.registerExecutor(produceListName, callbackHandler);
-      actionModel.registerExecutor(bodyAction, callbackHandler);
+        actionModel.registerExecutor(bodyAction, callbackHandler);
         actionModel.registerExecutor(takeGiveName, callbackHandler);
         actionModel.registerExecutor(takeBName, callbackHandler);
         actionModel.registerExecutor(consumeListName, callbackHandler);

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise>
+    <name>Granola Bars</name>
+    <description>Simple 5-ingredient recipe for granola bars</description>
+    <action_model>../actionModels/cooking_am.xml</action_model>
+    <problem>
+        <task id="task-1">
+            <name>Granola bars</name>
+            <description>Make grilled chicken</description>
+        </task>
+    </problem>
+    
+    <solution>
+        <task_solution>
+            <option>
+                <step optional="false" subtask="" id="step-1">
+                    <atom functor="cooking_am^0.1^Add">
+                        <parameter accessor="quantity" id="qty-1"/>
+                        <parameter accessor="volumeUnit" id="vol-1"/>
+                        <parameter accessor="food" id="food-1"/>
+                        <parameter accessor="container" id="container-1"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-2">
+                    <atom functor="cooking_am^0.1^Run">
+                        <parameter accessor="appliance" id="app-2"/>
+                        <parameter accessor="amount" id="amt-2"/>
+                        <parameter accessor="temporalUnit" id="unit-2"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-3">
+                    <atom functor="cooking_am^0.1^MoveContents">
+                        <parameter accessor="container" id="container-3"/>
+                        <parameter accessor="destination" id="othercontainer-3"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-4">
+                    <atom functor="cooking_am^0.1^Add">
+                        <parameter accessor="quantity" id="qty-4"/>
+                        <parameter accessor="volumeUnit" id="vol-4"/>
+                        <parameter accessor="food" id="food-4"/>
+                        <parameter accessor="container" id="container-4"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-5">
+                    <atom functor="cooking_am^0.1^Add">
+                        <parameter accessor="quantity" id="qty-5"/>
+                        <parameter accessor="volumeUnit" id="vol-5"/>
+                        <parameter accessor="food" id="food-5"/>
+                        <parameter accessor="container" id="container-5"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-6">
+                    <atom functor="cooking_am^0.1^Add">
+                        <parameter accessor="quantity" id="qty-6"/>
+                        <parameter accessor="volumeUnit" id="vol-6"/>
+                        <parameter accessor="food" id="food-6"/>
+                        <parameter accessor="container" id="container-6"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-7">
+                    <atom functor="cooking_am^0.1^Add">
+                        <parameter accessor="quantity" id="qty-7"/>
+                        <parameter accessor="volumeUnit" id="vol-7"/>
+                        <parameter accessor="food" id="food-7"/>
+                        <parameter accessor="container" id="container-7"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-8">
+                    <atom functor="cooking_am^0.1^Put">
+                        <parameter accessor="thingPut" id="thing-8"/>
+                        <parameter accessor="thingPutOn" id="thingon-8"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-9">
+                    <atom functor="cooking_am^0.1^SetHeat">
+                        <parameter accessor="appliance" id="appliance-9"/>
+                        <parameter accessor="setting" id="setting-9"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-10">
+                    <atom functor="cooking_am^0.1^HeatContentsUntil">
+                        <parameter accessor="cookware" id="cookware-10"/>
+                        <parameter accessor="state" id="state-10"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-11">
+                    <atom functor="cooking_am^0.1^SetHeat">
+                        <parameter accessor="appliance" id="appliance-11"/>
+                        <parameter accessor="setting" id="setting-11"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-12">
+                    <atom functor="cooking_am^0.1^MoveContents">
+                        <parameter accessor="container" id="container-12"/>
+                        <parameter accessor="destination" id="othercontainer-12"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-13">
+                    <atom functor="cooking_am^0.1^MixContents">
+                        <parameter accessor="container" id="container-13"/>
+                        <parameter accessor="utensil" id="utensil-13"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-14">
+                    <atom functor="cooking_am^0.1^MoveContents">
+                        <parameter accessor="container" id="container-14"/>
+                        <parameter accessor="destination" id="othercontainer-14"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-15">
+                    <atom functor="cooking_am^0.1^Spread">
+                        <parameter accessor="quantity" id="qty-15"/>
+                        <parameter accessor="volumeUnit" id="vol-15"/>
+                        <parameter accessor="food" id="food-15"/>
+                        <parameter accessor="thing" id="thing-15"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-16">
+                    <atom functor="cooking_am^0.1^Put">
+                        <parameter accessor="thingPut" id="thing-16"/>
+                        <parameter accessor="thingPutOn" id="thingon-16"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-17">
+                    <atom functor="cooking_am^0.1^CoolContents">
+                        <parameter accessor="container" id="container-17"/>
+                        <parameter accessor="amount" id="amt-17"/>
+                        <parameter accessor="temporalUnit" id="unit-17"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-18">
+                    <atom functor="cooking_am^0.1^CutContents">
+                        <parameter accessor="container" id="container-18"/>
+                        <parameter accessor="shape" id="shape-18"/>
+                    </atom>
+                </step>
+                
+<!--                 <ordering_constraint predecessor="step-1" successor="step-2"/> -->
+                <ordering_constraint predecessor="step-2" successor="step-3"/>
+                <ordering_constraint predecessor="step-3" successor="step-4"/>
+                <ordering_constraint predecessor="step-4" successor="step-5"/>
+                <ordering_constraint predecessor="step-5" successor="step-6"/>
+                <ordering_constraint predecessor="step-6" successor="step-7"/>
+                <ordering_constraint predecessor="step-7" successor="step-8"/>
+                <ordering_constraint predecessor="step-8" successor="step-9"/>
+<!--                 <ordering_constraint predecessor="step-9" successor="step-10"/> -->
+                <ordering_constraint predecessor="step-10" successor="step-11"/>
+                <ordering_constraint predecessor="step-11" successor="step-12"/>
+                <ordering_constraint predecessor="step-12" successor="step-13"/>
+                <ordering_constraint predecessor="step-13" successor="step-14"/>
+                <ordering_constraint predecessor="step-14" successor="step-15"/>
+                <ordering_constraint predecessor="step-15" successor="step-16"/>
+<!--                <ordering_constraint predecessor="step-16" successor="step-17"/> -->
+                <ordering_constraint predecessor="step-17" successor="step-18"/>
+
+                <!-- Must put dates in processor before you process -->
+                <ordering_constraint predecessor="step-1" successor="step-2" editable="false"/>
+                <!-- Must have pan on burner and burner on before you melt its contents-->
+                <ordering_constraint predecessor="step-8" successor="step-10" editable="false"/>
+                <ordering_constraint predecessor="step-9" successor="step-10" editable="false"/>
+                <!-- Must turn on burner before turning it off -->
+<!--                 <ordering_constraint predecessor="step-9" successor="step-11" editable="false"/> -->
+                <!-- Must finish melting before you turn off the burner -->
+<!--                 <ordering_constraint predecessor="step-10" successor="step-11" editable="false"/> -->
+                <!-- Must put contents in pan before it can be cooled or cut -->
+                <ordering_constraint predecessor="step-14" successor="step-17" editable="false"/>
+                <ordering_constraint predecessor="step-14" successor="step-18" editable="false"/>
+                <!-- Must put pan in fridge before you can cool its contents -->
+                <ordering_constraint predecessor="step-16" successor="step-17" editable="false"/>
+
+                <value_constraint>
+                    <parameter>qty-1</parameter>
+                    <value>
+                        <ctrs>"1"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-1</parameter>
+                    <value>
+                        <ctrs>"cup(s)"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-1</parameter>
+                    <value>
+                        <ctrs>"Dates"</ctrs>
+                        <type>cooking_am^0.1^Mixin</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>container-1</parameter>
+                    <value>
+                        <ctrs>"FoodProcessor"</ctrs>
+                        <type>cooking_am^0.1^SmallAppliance</type>
+                    </value>
+                </value_constraint>
+                
+                
+                <value_constraint>
+                    <parameter>app-2</parameter>
+                    <value>
+                        <ctrs>"FoodProcessor"</ctrs>
+                        <type>cooking_am^0.1^SmallAppliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>amt-2</parameter>
+                    <value>
+                        <ctrs>"1"</ctrs>
+                        <type>integer</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>unit-2</parameter>
+                    <value>
+                        <ctrs>"minute(s)"</ctrs>
+                        <type>cooking_am^0.1^TemporalUnit</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>container-3</parameter>
+                    <value>
+                        <ctrs>"FoodProcessor"</ctrs>
+                        <type>cooking_am^0.1^SmallAppliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>othercontainer-3</parameter>
+                    <value>
+                        <ctrs>"LargeBowl"</ctrs>
+                        <type>cooking_am^0.1^MixingBowl</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>qty-4</parameter>
+                    <value>
+                        <ctrs>"1 1/2"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-4</parameter>
+                    <value>
+                        <ctrs>"cup(s)"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-4</parameter>
+                    <value>
+                        <ctrs>"Oats"</ctrs>
+                        <type>cooking_am^0.1^Grain</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>container-4</parameter>
+                    <value>
+                        <ctrs>"LargeBowl"</ctrs>
+                        <type>cooking_am^0.1^MixingBowl</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>qty-5</parameter>
+                    <value>
+                        <ctrs>"1"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-5</parameter>
+                    <value>
+                        <ctrs>"cup(s)"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-5</parameter>
+                    <value>
+                        <ctrs>"Almonds"</ctrs>
+                        <type>cooking_am^0.1^Nut</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>container-5</parameter>
+                    <value>
+                        <ctrs>"LargeBowl"</ctrs>
+                        <type>cooking_am^0.1^MixingBowl</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>qty-6</parameter>
+                    <value>
+                        <ctrs>"1/4"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-6</parameter>
+                    <value>
+                        <ctrs>"cup(s)"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-6</parameter>
+                    <value>
+                        <ctrs>"Honey"</ctrs>
+                        <type>cooking_am^0.1^Sweetener</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>container-6</parameter>
+                    <value>
+                        <ctrs>"SmallSaucepan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>qty-7</parameter>
+                    <value>
+                        <ctrs>"1/4"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-7</parameter>
+                    <value>
+                        <ctrs>"cup(s)"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-7</parameter>
+                    <value>
+                        <ctrs>"PeanutButter"</ctrs>
+                        <type>cooking_am^0.1^NutButter</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>container-7</parameter>
+                    <value>
+                        <ctrs>"SmallSaucepan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>thing-8</parameter>
+                    <value>
+                        <ctrs>"SmallSaucepan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thingon-8</parameter>
+                    <value>
+                        <ctrs>"Burner"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>appliance-9</parameter>
+                    <value>
+                        <ctrs>"Burner"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>setting-9</parameter>
+                    <value>
+                        <ctrs>"low"</ctrs>
+                        <type>cooking_am^0.1^HeatSetting</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>cookware-10</parameter>
+                    <value>
+                        <ctrs>"SmallSaucepan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>state-10</parameter>
+                    <value>
+                        <ctrs>"melted"</ctrs>
+                        <type>cooking_am^0.1^CookingState</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>appliance-11</parameter>
+                    <value>
+                        <ctrs>"Burner"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>setting-11</parameter>
+                    <value>
+                        <ctrs>"off"</ctrs>
+                        <type>cooking_am^0.1^HeatSetting</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>container-12</parameter>
+                    <value>
+                        <ctrs>"SmallSaucepan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>othercontainer-12</parameter>
+                    <value>
+                        <ctrs>"LargeBowl"</ctrs>
+                        <type>cooking_am^0.1^MixingBowl</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>container-13</parameter>
+                    <value>
+                        <ctrs>"LargeBowl"</ctrs>
+                        <type>cooking_am^0.1^MixingBowl</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>utensil-13</parameter>
+                    <value>
+                        <ctrs>"RubberSpatula"</ctrs>
+                        <type>cooking_am^0.1^Utensil</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>container-14</parameter>
+                    <value>
+                        <ctrs>"LargeBowl"</ctrs>
+                        <type>cooking_am^0.1^Container</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>othercontainer-14</parameter>
+                    <value>
+                        <ctrs>"BakingPan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>qty-15</parameter>
+                    <value>
+                        <ctrs>"1/4"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-15</parameter>
+                    <value>
+                        <ctrs>"cup(s)"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-15</parameter>
+                    <value>
+                        <ctrs>"ChocolateChips"</ctrs>
+                        <type>cooking_am^0.1^Mixin</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thing-15</parameter>
+                    <value>
+                        <ctrs>"BakingPan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>thing-16</parameter>
+                    <value>
+                        <ctrs>"BakingPan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thingon-16</parameter>
+                    <value>
+                        <ctrs>"Refrigerator"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>container-17</parameter>
+                    <value>
+                        <ctrs>"BakingPan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>amt-17</parameter>
+                    <value>
+                        <ctrs>"15"</ctrs>
+                        <type>integer</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>unit-17</parameter>
+                    <value>
+                        <ctrs>"minute(s)"</ctrs>
+                        <type>cooking_am^0.1^TemporalUnit</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>container-18</parameter>
+                    <value>
+                        <ctrs>"BakingPan"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>shape-18</parameter>
+                    <value>
+                        <ctrs>"square(s)"</ctrs>
+                        <type>cooking_am^0.1^Shape</type>
+                    </value>
+                </value_constraint>
+
+            </option>
+        </task_solution>
+    </solution>
+</exercise>

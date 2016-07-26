@@ -14,12 +14,16 @@
   ~ limitations under the License.
   -->
 
-<!-- $Id: simple.xml 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ -->
+<!-- $Id: simple.xml 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $ -->
 <actionModel version="1.0">
     <type id="String">
         <description>simple string type</description>
         <equivalentTo>string</equivalentTo>
     </type>
+
+    <action id="noop">
+        <description>Do nothing.</description>
+    </action>
 
     <action id="action1" category="effector">
         <description>action #1</description>

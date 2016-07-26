@@ -79,7 +79,7 @@ public class RelativePath_FuncTest
         }
         log.debug("Found " + actions.size() + " actions.");
         assertEquals(1, actions.size());
-        assertEquals(10, types.size());
+        assertEquals(11, types.size());
 
         for(ActionModelDef paramType : types) {
             String name = paramType.toString();

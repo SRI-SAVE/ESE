@@ -16,6 +16,7 @@
 
 package com.sri.tasklearning.ui.core.step;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,8 +26,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 // import org.slf4j.Logger;
 // import org.slf4j.LoggerFactory;
 
-
-
+import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
 import com.sri.tasklearning.ui.core.resources.ResourceLoader;
 
 /**
@@ -36,21 +36,24 @@ public class ExerciseGroupOfStepsModel extends ContainerStepModel  {
 	
 	public SimpleBooleanProperty isOptional = new SimpleBooleanProperty(); 
 	public SimpleBooleanProperty inAnyOrder = new SimpleBooleanProperty(); 	
+	
+	private static final List<StepModel> emptySteps = new ArrayList<StepModel>(); 
 
 	// private static final Logger log = LoggerFactory
     //    .getLogger(ExerciseGroupOfStepsModel.class);
    
-    public ExerciseGroupOfStepsModel(String descr, 
+    public ExerciseGroupOfStepsModel(StepModel parent, String descr, 
             final List<StepModel> theSteps) {
         
     	super(null);
     	setSteps(theSteps);
+        setParent(parent); 
     	         
-        stepType = StepType.EXERCISE_GROUP;                        
+        stepType = StepType.EXERCISE_GROUP;         
+        
         setName(descr);         
         setIconPath(ResourceLoader.getURL("loop-icon1.png"));     
-        
-      
+                
     	InvalidationListener listener = new  InvalidationListener() {
 
 			@Override
@@ -64,12 +67,15 @@ public class ExerciseGroupOfStepsModel extends ContainerStepModel  {
     	}; 
     			
 		isOptional.addListener(listener);
+		
+		// new default value for cooking domain: we no longer have ordered subgroups
+		setInAnyOrder(true); 
     
     }
     
-    public ExerciseGroupOfStepsModel(String descr) {
+    public ExerciseGroupOfStepsModel(StepModel parent, String descr) {
         
-    	this(descr, new LinkedList<StepModel>()); 
+    	this(parent, descr, new LinkedList<StepModel>()); 
     	
     }    
    
@@ -96,6 +102,24 @@ public class ExerciseGroupOfStepsModel extends ContainerStepModel  {
 	public void setInAnyOrder(boolean inAnyOrder) {
 		this.inAnyOrder.setValue(inAnyOrder);
 	}
+	
+
+	//
+	//
+	// 
+
+	public List<StepModel> getFixedSuccessors() {
+		
+		return emptySteps; 
+	
+	}    
+		
+	
+	public List<StepModel> getEditableSuccessors() {
+		
+		return ((ExerciseModel) this.getParent()).getEditableSuccessors(this); 
+		
+	}	
 	
 }
 

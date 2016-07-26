@@ -39,7 +39,7 @@ public class EnumConstantEditor extends ConstantEditor {
     public EnumConstantEditor(final EnumeratedTypeDef type) {    
         this.type = type;
         
-        for (String value: this.type.getValues())
+        for (String value: this.type.getAllValues())
             cb.getItems().add(value);
         
         	cb.getSelectionModel().selectedItemProperty()

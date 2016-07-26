@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -54,6 +53,7 @@ public class SelectionManager {
     }
 
     public void setSelection(ISelectable selectable, boolean isSelected) {
+    	
         if (disable)
             return;
         

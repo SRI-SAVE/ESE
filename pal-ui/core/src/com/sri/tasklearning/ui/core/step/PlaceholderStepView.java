@@ -17,7 +17,6 @@
 package com.sri.tasklearning.ui.core.step;
 
 import com.sri.tasklearning.ui.core.common.CommonView;
-import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 
 /**
  * View for {@link PlaceholderStepView}.

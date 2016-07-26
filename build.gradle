@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: build.gradle 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: build.gradle 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 
 plugins {
     id "org.sonarqube" version "1.2"
@@ -125,9 +125,6 @@ sonarqube {
 //        property "sonar.scm.disabled", true
    }
 }
-
-// This task is called by the autobuild system, e.g., Jenkins.
-task autobuild
 
 task cleanDist(type: Delete) {
     delete "$rootDir/dist"

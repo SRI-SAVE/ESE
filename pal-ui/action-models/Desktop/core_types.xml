@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="0.1">
+
+    <!-- "primitive" types -->
+
+    <type id="string">
+        <metadata key="name" value="text"/>
+        <metadata key="aName" value="text"/>
+        <metadata key="names" value="text strings"/>
+        <metadata key="default" value="text"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+    
+    <type id="integer">
+        <metadata key="name" value="number"/>
+        <metadata key="default" value="0"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="url">
+        <metadata key="name" value="URL"/>
+        <metadata key="contentType" value="string"/>
+        <metadata key="icon" value="./fapps/html.png"/>
+        <metadata key="default" value="http://ai.sri.com"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="row">
+        <inherit parent="integer"/>
+        <metadata key="name" value="row number"/>
+        <metadata key="contentType" value="string"/>
+        <metadata key="default" value="1"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="column">
+        <inherit parent="string"/>
+        <metadata key="name" value="column"/>
+        <metadata key="contentType" value="string"/>
+        <metadata key="default" value="A"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="cell">
+        <inherit parent="row"/>
+        <inherit parent="column"/>
+        <metadata key="name" value="cell ID"/>
+        <metadata key="contentType" value="string"/>
+        <metadata key="default" value="A1"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="email">
+        <metadata key="name" value="email"/>
+        <metadata key="aName" value="an email"/>
+        <metadata key="contentType" value="string"/>
+        <metadata key="icon" value="./fapps/email.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="filename">
+        <metadata key="name" value="filename"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/file_unknown.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="file">
+        <inherit parent="filename"/>
+        <metadata key="name" value="file"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/file_txt.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="directory">
+        <inherit parent="filename"/>
+        <metadata key="name" value="folder"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/folder.png"/>
+        <metadata key="default" value="C:\Documents and Settings\Default User\Desktop\"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="list of files">
+        <metadata key="name" value="list of files"/>
+        <metadata key="names" value="lists of files"/>
+        <metadata key="icon" value="./fapps/files.png"/>
+        <list>
+            <ref typeRef="file"/>
+        </list>
+    </type>
+
+    <type id="image file">
+        <inherit parent="file"/>
+        <metadata key="name" value="image"/>
+        <metadata key="aName" value="an image"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/file_image.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="pdf file">
+        <inherit parent="file"/>
+        <metadata key="name" value="PDF document"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/file_wordprocessing.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="excel file">
+        <inherit parent="file"/>
+        <metadata key="name" value="Excel workbook"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/file_spreadsheet.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="song">
+        <inherit parent="file"/>
+        <metadata key="name" value="song"/>
+        <metadata key="contentType" value="file"/>
+        <metadata key="icon" value="./fapps/file_music.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+    
+    <type id="song list">
+        <metadata key="name" value="playlist"/>
+        <metadata key="icon" value="./fapps/playlist.png"/>
+        <metadata key="default" value="Library"/>
+        <list>
+            <ref typeRef="song"/>
+        </list>
+    </type>
+
+    <type id="dimensions">
+        <metadata key="name" value="dimensions"/>
+        <metadata key="aName" value="dimensions"/>
+        <metadata key="names" value="dimensions"/>
+        <metadata key="thisName" value="these dimensions"/>
+        <metadata key="contentType" value="enum"/>
+        <metadata key="default" value="medium (800x600 px)"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="document property">
+        <metadata key="name" value="document property"/>
+        <metadata key="icon" value="./fapps/file_info.png"/>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="document property list">
+        <metadata key="name" value="document properties"/>
+        <metadata key="names" value="document properties"/>
+        <metadata key="aName" value="document properties"/>
+        <metadata key="icon" value="./fapps/file_info.png"/>
+        <list>
+            <ref typeRef="document property"/>
+        </list>
+    </type>
+
+
+</actionModel>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: build.gradle 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: build.gradle 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 description = "Core functionality for the FX-based UI"
 
 apply plugin: 'SriJava'
@@ -56,6 +56,7 @@ uploadArchives.repositories.find { repo ->
 }
 
 dependencies {
+    compile 'org.apache.commons:commons-lang3:3.4' 
     compile project(':bridge')
     testCompile project(path: ':common', configuration: 'testCompile')
 }

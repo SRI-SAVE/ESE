@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+
+    <!-- PDF Viewer actions -->
+
+    <action id="Open document">
+        <description>
+            Opens a PDF file from the local file system.
+	</description>
+        <metadata key="name" value="Open document"/>
+        <metadata key="fancyName" value="Open,#File name"/>
+        <metadata key="icon" value="./fapps/document.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="File name">
+            <description>
+                The PDF file to open
+            </description>
+            <typeRef typeId="filename"/>
+        </inputParam>
+        <outputParam id="Document">
+            <typeRef typeId="pdf file"/>
+        </outputParam>
+    </action>
+
+    <action id="Save document as">
+        <description>
+            Saves a copy of the file to the destination directory with the given filename.
+	</description>
+        <metadata key="name" value="Save document as"/>
+        <metadata key="fancyName" value="Save,#Document,as,#New filename"/>
+        <metadata key="icon" value="./fapps/document.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Document">
+            <description>
+                The source PDF file
+            </description>
+            <typeRef typeId="pdf file"/>
+        </inputParam>
+        <inputParam id="New filename">
+            <description>
+                The new filename to save the file as
+            </description>
+            <typeRef typeId="filename"/>
+        </inputParam>
+        <outputParam id="New file">
+            <typeRef typeId="pdf file"/>
+        </outputParam>
+    </action>
+
+    <action id="Get document properties">
+        <description>
+            Gets the properties of a PDF file.
+	</description>
+        <metadata key="name" value="Get document properties"/>
+        <metadata key="fancyName" value="Get properties of,#Document"/>
+        <metadata key="icon" value="./fapps/document.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Document">
+            <description>
+                The PDF file to get the properties of
+            </description>
+            <typeRef typeId="pdf file"/>
+        </inputParam>
+        <outputParam id="List of properties">
+            <typeRef typeId="document property list"/>
+        </outputParam>
+    </action>
+
+    <!-- Image Viewer actions -->
+
+    <action id="Open image">
+        <description>
+            Opens an image file in the Image Viewer.
+	</description>
+        <metadata key="name" value="Open image"/>
+        <metadata key="fancyName" value="Open,#File name"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="File name">
+            <description>
+                The image file to open
+            </description>
+            <typeRef typeId="filename"/>
+        </inputParam>
+        <outputParam id="Image">
+            <typeRef typeId="image file"/>
+        </outputParam>
+    </action>
+
+    <action id="Resize image">
+        <description>
+            Resizes an image to the given dimensions.
+	</description>
+        <metadata key="name" value="Resize image"/>
+        <metadata key="fancyName" value="Resize,#Image"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Image">
+            <description>
+                The image file to resize
+            </description>
+            <typeRef typeId="image file"/>
+        </inputParam>
+        <inputParam id="New dimensions">
+            <description>
+                The target dimensions for the image
+            </description>
+            <ungeneralizable/>
+            <typeRef typeId="dimensions"/>
+        </inputParam>
+        <outputParam id="Resized image">
+            <typeRef typeId="image file"/>
+        </outputParam>
+    </action>
+
+    <action id="Save image as">
+        <description>
+            Saves a copy of the image to the destination directory.
+	</description>
+        <metadata key="name" value="Save image as"/>
+        <metadata key="fancyName" value="Save, #Image, in, #Destination folder"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Image">
+            <description>
+                The image file
+            </description>
+            <typeRef typeId="image file"/>
+        </inputParam>
+        <inputParam id="Destination folder">
+            <description>
+                The folder to save the image to
+            </description>
+            <typeRef typeId="directory"/>
+        </inputParam>
+    </action>
+
+    <!-- Excess actions -->
+    <action id="New row entry">
+        <description>
+            Creates a new row at the end of the database, generating a new unique ID.
+	</description>
+        <metadata key="name" value="Create a new row entry"/>
+        <metadata key="fancyName" value="Create a new row"/>
+        <metadata key="icon" value="./fapps/database.png"/>
+        <effectsType type="has_side_effects"/>
+        <outputParam id="Row number">
+            <typeRef typeId="integer"/>
+        </outputParam>
+        <outputParam id="Unique ID">
+            <typeRef typeId="string"/>
+        </outputParam> 
+    </action>
+
+    <action id="Save database">
+        <description>
+            Saves the database.
+	</description>
+        <metadata key="name" value="Save database"/>
+        <metadata key="icon" value="./fapps/database.png"/>
+        <effectsType type="has_side_effects"/>
+    </action>
+
+    <action id="Update cell">
+        <description>
+            Updates the cell at the given row and column with the new value.
+	</description>
+        <metadata key="name" value="Update cell"/>
+        <metadata key="fancyName" value="Update cell at row,#Row number,and column,#Column name"/>
+        <metadata key="icon" value="./fapps/database.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Row number">
+            <description>
+                The index of the cell's row
+            </description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="Column name">
+            <description>
+                The name of the cell's column
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="New value">
+            <description>
+                The new value to place in the given cell
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="Delete row">
+        <description>
+            Deletes the row at the given index.
+	</description>
+        <metadata key="name" value="Delete row"/>
+        <metadata key="fancyName" value="Delete row,#Row number"/>
+        <metadata key="icon" value="./fapps/database.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Row number">
+            <description>
+                The index of the row
+            </description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+    </action>
+
+    <!-- Firefox actions -->
+
+    <action id="Go to URL">
+        <description>
+            Browses to the given URL address.
+	</description>
+        <metadata key="name" value="Browse to URL"/>
+        <metadata key="fancyName" value="Browse to,#URL"/>
+        <metadata key="icon" value="./fapps/icon_chrome.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="URL">
+            <description>
+                The URL address to navigate to
+            </description>
+            <typeRef typeId="url"/>
+        </inputParam>
+    </action>
+
+    <action id="Search">
+        <description>
+            Searches for the given terms on google.com.
+	</description>
+        <metadata key="name" value="Search google.com"/>
+        <metadata key="fancyName" value="Search,#Search terms"/>
+        <metadata key="icon" value="./fapps/icon_chrome.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Search terms">
+            <description>
+                The text to search for
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+    
+    <!-- Thunderbird actions -->
+
+    <action id="Mark as read">
+        <description>
+            Marks the given email as read.
+	</description>
+        <metadata key="name" value="Mark as read"/>
+        <metadata key="fancyName" value="Mark,#Email,as read"/>
+        <metadata key="icon" value="./fapps/thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Email">
+            <description>
+                The email message to mark as read
+            </description>
+            <typeRef typeId="email"/>
+        </inputParam>
+    </action>
+    
+    <action id="Open email">
+        <description>
+            Opens the given email.
+	</description>
+        <metadata key="name" value="Open email"/>
+        <metadata key="fancyName" value="Open,#Email"/>
+        <metadata key="icon" value="./fapps/thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Email">
+            <description>
+                The email message to mark as read
+            </description>
+            <typeRef typeId="email"/>
+        </inputParam>
+    </action>
+
+    <action id="Delete email">
+        <description>
+            Deletes the given email.
+	</description>
+        <metadata key="name" value="Delete email"/>
+        <metadata key="fancyName" value="Delete,#Email"/>
+        <metadata key="icon" value="./fapps/thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Email">
+            <description>
+                The email message to delete
+            </description>
+            <typeRef typeId="email"/>
+        </inputParam>
+    </action>
+
+    <action id="Save attachments email">
+        <description>
+            Saves the attachments of the given email.
+	</description>
+        <metadata key="name" value="Save attachments of email"/>
+        <metadata key="fancyName" value="Save attachments of,#Email"/>
+        <metadata key="icon" value="./fapps/thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Email">
+            <description>
+                The email message with attachments
+            </description>
+            <typeRef typeId="email"/>
+        </inputParam>
+        <inputParam id="Destination folder">
+            <description>
+                The folder to save the attachments to
+            </description>
+            <typeRef typeId="directory"/>
+        </inputParam>
+        <outputParam id="Saved attachments">
+            <typeRef typeId="list of files"/>
+        </outputParam>
+    </action>
+
+    <!-- Excel actions -->
+<!--
+    <action id="New workbook">
+        <description>
+            Opens a new Excel workbook for editing. At this point, the workbook has not been saved anywhere.
+	</description>
+        <metadata key="name" value="Create a new Excel workbook"/>
+        <metadata key="fancyName" value="Create a new Excel workbook"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <outputParam id="Workbook">
+            <typeRef typeId="excel file"/>
+        </outputParam>
+    </action>
+
+    <action id="Export workbook to HTML">
+        <description>
+            Saves the given workbook as a Web page (HTML).
+	</description>
+        <metadata key="name" value="Export workbook to HTML"/>
+        <metadata key="fancyName" value="Export,#Workbook, as HTML"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Workbook">
+            <description>
+                The Excel workbook to update
+            </description>
+            <typeRef typeId="excel file"/>
+        </inputParam>
+        <inputParam id="Destination folder">
+            <description>
+                The folder to save the exported file to
+            </description>
+            <typeRef typeId="directory"/>
+        </inputParam>
+        <outputParam id="Exported HTML page">
+            <typeRef typeId="url"/>
+        </outputParam>
+    </action>
+
+    <action id="Excel update cell">
+        <description>
+            Updates the cell at the given row and column with the new value.
+	</description>
+        <metadata key="name" value="Update cell"/>
+        <metadata key="fancyName" value="Update cell,#Cell,of,#Workbook"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Workbook">
+            <description>
+                The Excel workbook to update
+            </description>
+            <typeRef typeId="excel file"/>
+        </inputParam>
+        <inputParam id="Cell">
+            <description>
+                The ID of the cell to update
+            </description>
+            <typeRef typeId="cell"/>
+        </inputParam>
+        <inputParam id="New value">
+            <description>
+                The new value to place in the given cell
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="Excel update cell 2">
+        <description>
+            Updates the cell at the given row and column with the new value.
+	</description>
+        <metadata key="name" value="Update cell"/>
+        <metadata key="fancyName" value="Update cell at row, #Row, and column,#Column"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Workbook">
+            <description>
+                The Excel workbook to update
+            </description>
+            <typeRef typeId="excel file"/>
+        </inputParam>
+        <inputParam id="Row">
+            <description>
+                The name of the cell's row
+            </description>
+            <typeRef typeId="row"/>
+        </inputParam>
+        <inputParam id="Column">
+            <description>
+                The index of the cell's column
+            </description>
+            <typeRef typeId="column"/>
+        </inputParam>
+        <inputParam id="New value">
+            <description>
+                The new value to place in the given cell
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="Excel delete row">
+        <description>
+            Deletes the row at the given index.
+	</description>
+        <metadata key="name" value="Delete row"/>
+        <metadata key="fancyName" value="Delete row,#Row or cell number,of,#Workbook"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Workbook">
+            <description>
+                The Excel workbook to edit
+            </description>
+            <typeRef typeId="excel file"/>
+        </inputParam>
+        <inputParam id="Row or cell number">
+            <description>
+                The row or a cell within the row to delete
+            </description>
+            <typeRef typeId="row"/>
+        </inputParam>
+    </action>
+
+    <action id="Add row">
+        <description>
+            Creates a new row.
+	</description>
+        <metadata key="name" value="Add a row"/>
+        <metadata key="fancyName" value="Add a row to,#Workbook"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Workbook">
+            <description>
+                The Excel workbook to edit
+            </description>
+            <typeRef typeId="excel file"/>
+        </inputParam>
+        <outputParam id="New row">
+            <typeRef typeId="row"/>
+        </outputParam>
+    </action>
+
+    <action id="Insert a row">
+        <description>
+            Creates a new row after the given cell, returning the first cell of the new row.
+	</description>
+        <metadata key="name" value="Insert a row"/>
+        <metadata key="fancyName" value="Insert a row after,#Row"/>
+        <metadata key="icon" value="./fapps/excel.gif"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Workbook">
+            <description>
+                The Excel workbook to edit
+            </description>
+            <typeRef typeId="excel file"/>
+        </inputParam>
+        <inputParam id="Row">
+            <description>
+                The row or cell after which to add a row
+            </description>
+            <typeRef typeId="row"/>
+        </inputParam>
+        <outputParam id="New row">
+            <typeRef typeId="cell"/>
+        </outputParam>
+    </action>
+-->
+    <!-- iTunes actions -->
+
+    <action id="Get song info">
+        <description>
+            Gets title and artist information for the given songs as tab-delimited text.
+	</description>
+        <metadata key="name" value="Get song info"/>
+        <metadata key="fancyName" value="Get song info from,#Playlist"/>
+        <metadata key="icon" value="./fapps/itunes.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Playlist">
+            <description>
+                The playlist to get the songs from
+            </description>
+            <typeRef typeId="song list"/>
+        </inputParam>
+        <outputParam id="Song information">
+            <typeRef typeId="string"/>
+        </outputParam>
+    </action>
+
+    <action id="Get selected playlist">
+        <description>
+            Gets the selected playlist in iTunes, or gets Library if no playlist is selected
+	</description>
+        <metadata key="name" value="Get selected playlist"/>
+        <metadata key="icon" value="./fapps/itunes.png"/>
+        <effectsType type="has_side_effects"/>
+        <outputParam id="Playlist">
+            <typeRef typeId="song list"/>
+        </outputParam>
+    </action>
+
+    <!-- flickr actions -->
+
+    <action id="Upload photo to flickr">
+        <description>
+            Uploads an image to the image sharing site flickr.com.
+	</description>
+        <metadata key="name" value="Upload photo to flickr"/>
+        <metadata key="fancyName" value="Upload,#Photo,to flickr.com"/>
+        <metadata key="icon" value="./fapps/flickr.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="Photo">
+            <description>
+                The photo to upload to flickr
+            </description>
+            <typeRef typeId="image file"/>
+        </inputParam>
+        <inputParam id="Description">
+            <description>
+                A description of the photo (optional); may contain some limited HTML
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="Tags">
+            <description>
+                A space-seperated list of tags to apply to the photo (optional)
+            </description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="Uploaded photo URL">
+            <typeRef typeId="url"/>
+        </outputParam>
+    </action>
+
+</actionModel>

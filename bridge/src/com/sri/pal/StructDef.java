@@ -412,6 +412,26 @@ public class StructDef
     }
 
     @Override
+    public boolean isValueOf(Object value)
+            throws PALException {
+        if (!(value instanceof Struct)) {
+            return false;
+        }
+        Struct struct = (Struct) value;
+        if (!struct.getDefinition().equals(this)) {
+            return false;
+        }
+        for (int i = 0; i < size(); i++) {
+            TypeDef fieldType = getFieldType(i);
+            Object fieldVal = struct.getValue(i);
+            if (!fieldType.isValueOf(fieldVal)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     List<?> stringify(Object value) {
         if (value == null) {
             return null;

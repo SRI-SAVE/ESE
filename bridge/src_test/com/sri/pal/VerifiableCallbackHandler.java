@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* $Id: VerifiableCallbackHandler.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $ */
+/* $Id: VerifiableCallbackHandler.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $ */
 package com.sri.pal;
 
 import java.rmi.RemoteException;
@@ -169,7 +169,7 @@ public class VerifiableCallbackHandler
             }
         } else if (type instanceof EnumeratedTypeDef) {
             EnumeratedTypeDef enumType = (EnumeratedTypeDef) type;
-            Set<String> values = enumType.getValues();
+            Set<String> values = enumType.getAllValues();
             return values.iterator().next();
         } else {
             throw new RuntimeException("Can't handle type " + type.getName()

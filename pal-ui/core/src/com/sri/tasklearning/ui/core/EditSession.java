@@ -22,10 +22,6 @@ public class EditSession {
 	
     private final EditController controller;
     
-    public EditSession(ProcedureEditController controller) {
-        this.controller = controller;
-    }
-    
     public EditSession(ExerciseEditController controller) {
         this.controller = controller;
     }

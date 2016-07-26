@@ -16,34 +16,68 @@
 
 package com.sri.tasklearning.ui.core.term;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javafx.beans.property.SimpleBooleanProperty;
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.sri.ai.lumen.atr.ATRSyntax;
 import com.sri.ai.lumen.atr.term.ATRTerm;
 import com.sri.ai.lumen.atr.term.impl.CTRLiteral;
 import com.sri.ai.lumen.syntax.LumenSyntaxError;
-import com.sri.pal.CustomTypeDef;
-import com.sri.pal.EnumeratedTypeDef;
+import com.sri.pal.ActionModelDef;
 import com.sri.pal.TypeDef;
 import com.sri.pal.training.core.exercise.EqualityConstraint;
 import com.sri.pal.training.core.exercise.Parameter;
+import com.sri.pal.training.core.exercise.TypeConstraint;
 import com.sri.pal.training.core.exercise.Value;
 import com.sri.pal.training.core.exercise.ValueConstraint;
 import com.sri.tasklearning.ui.core.common.InputVariableModel;
 import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
-import com.sri.tasklearning.ui.core.step.ExerciseCreateStepModel;
 import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.util.Pair;
 
 /**
  * Extension of VariableModel for exercise inputs, which support the concept
  * of default values. 
  */
 public class ExerciseStepParameter extends InputVariableModel {
+
+	//
+	//
+	//
+
+	public static final Set<String> NUMERIC_RANGE_TYPES = new HashSet<String>(); 
+	{ NUMERIC_RANGE_TYPES.add("integer");
+	  NUMERIC_RANGE_TYPES.add("float");
+	  NUMERIC_RANGE_TYPES.add("quantity");
+	  NUMERIC_RANGE_TYPES.add("Integer");
+	  NUMERIC_RANGE_TYPES.add("Float");
+	  NUMERIC_RANGE_TYPES.add("Quantity");
+	}
+	
+	public static final Set<String> ENUM_RANGE_TYPES = new HashSet<String>(); 
+	{ ENUM_RANGE_TYPES.add("quantity");
+	  ENUM_RANGE_TYPES.add("Quantity");
+	}
+	
+	//
+	// taxonomy initialization root types 
+	//
+
+	private static boolean initialized = false;	
+	private static String[] rootTypes = { "cooking_am^0.1^Concept", "cooking_am^0.1^Thing" };
+
+	private static String version = "0.1";
+	private static String am = "cooking_am"; 
+	private static Set<CTRLiteral> emptyCTRLiterals = new HashSet<CTRLiteral>();  
 
 	// owner
 	private ExerciseStepModel owner; 
@@ -52,146 +86,326 @@ public class ExerciseStepParameter extends InputVariableModel {
 	// original parameter computed and cached on demand  
 	private ExerciseStepParameter original; 
 
-	private List<String> possibleValues; 
-	private Parameter parameter;
+	Parameter parameter;
+
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof ExerciseStepParameter)
+			return parameter.getId().equals(((ExerciseStepParameter) other).parameter.getId());  
+		else 
+			return false; 
+	}
+
+	@Override
+	public int hashCode() {
+		return parameter.getId().hashCode();
+	}
 	
-	// sub-parameter have a parent
-	private ExerciseStepParameter parent;
-	// and conversely: 
-	private List<ExerciseStepParameter> subParameters = new LinkedList<ExerciseStepParameter>();  
+	
+	// the current value, equality and type constraints 
+	// 
 
 	private ValueConstraint vc;
 	private EqualityConstraint ec;
-	
+	private TypeConstraint tc;
+
+	// 
+	// the value, equality, and type constraints that were active when the 
+	// file was loaded - these are NOT the "original" ones. the original   
+	// constraints are available via the original parameter, and this is
+	// what was demonstrated.
+	// 
+
+	private ValueConstraint lvc;  
+	private EqualityConstraint lec;
+	private TypeConstraint ltc; 
+
+	//	
 	//
-	private SimpleBooleanProperty changedFromOriginal = new SimpleBooleanProperty(false); 	
-	
-	private boolean valueConstraintRemoved = false;
-	private boolean equalityConstraintRemoted = false;
-	
-	// result of following the equality constraint
-	private String equalTo = null;   
-		
-	// current literals from value constraints on this parameter
-	private List<CTRLiteral> currentValueConstraintLiterals = new LinkedList<CTRLiteral>();
-	
-	public ExerciseStepParameter(ExerciseModel model, Parameter p, ExerciseStepParameter parent, ValueConstraint vc, EqualityConstraint ec) {
+	//
+
+	private SimpleBooleanProperty changedFromOriginal = new SimpleBooleanProperty(false);
+
+	//
+	//
+	//
+
+	private HashSet<CTRLiteral> allValueConstraintLiterals;
+	private HashSet<String> allTypeConstraints; 	
+
+	//
+	//
+	// 
+
+	public ExerciseStepParameter(ExerciseModel model, Parameter p, ExerciseStepParameter parent, ValueConstraint vc, EqualityConstraint ec, TypeConstraint tc) {
 
 		super();           
 
-		this.vc = vc;
-	
-		
-		this.ec = ec; 
+		this.lvc = vc;		
+		this.lec = ec;
+		this.ltc = tc; 
+
+		this.vc = vc;		
+		this.ec = ec;
+		this.tc = tc; 
+
 		this.parameter = p; 
-		this.parent = parent;
 		this.ownerExerciseModel = model; 
-		
-		this.original = getOriginalParameter(); 
-		
-		if (parent != null)
-			parent.subParameters.add(this); 
 
-		//
-		//
-		// 
-		
-		if (ec != null) {			
-			if (ec.getParameters().get(0).equals(p.getId())) 
-				equalTo = ec.getParameters().get(1); 
-			else 
-				equalTo = ec.getParameters().get(0);								
-		}
-		
-		//
-		//
-		// 
-
-		if (vc != null) {
-			currentValueConstraintLiterals = getValueConstraintLiterals(vc);
-		}
-	
-		// 
-		//
-		// 		
+		this.original = getOriginalParameter();
 		
 	}
+
+	//
+	//
+	// 
+
+	public String getEqualParameter() { 
+
+		if (ec != null) 
+			if (ec.getParameters().get(0).equals(parameter.getId())) 
+				return ec.getParameters().get(1); 			
 	
+		return null;
+		
+	}		
+
+	public Set<ExerciseStepParameter> getEqualByValueParameters() {
+			
+		Stream<ExerciseStepParameter> params = ownerExerciseModel.getExerciseStepParameters().stream();				
+		return (Set<ExerciseStepParameter>) params.filter(x -> x.isEqualParameter(this) && x != this).collect(Collectors.toSet());	
+		
+	}		
+	
+	
+	
+	public Set<ActionModelDef> getValueConstraintTypes(ValueConstraint vc) {
+
+		Set<ActionModelDef> types = new HashSet<ActionModelDef>(); 
+
+		if (vc != null) {
+			for (Value v : vc.getValues())  
+				types.add(TypeUtilities.getTypeFromString(v.getType()));
+
+			if (vc.getMinValue() != null)  
+				types.add(TypeUtilities.getTypeFromString(vc.getMinValue().getType()));
+
+			if (vc.getMaxValue() != null) 
+				types.add(TypeUtilities.getTypeFromString(vc.getMaxValue().getType()));
+
+		}
+
+		return types;  
+
+	}
+
 	public List<CTRLiteral> getValueConstraintLiterals(ValueConstraint vc) {
 
 		Set<CTRLiteral> valueConstraintLiterals = new HashSet<CTRLiteral>(); 
-	
-		for (Value v : vc.getValues())  {
 
-			try {
+		if (vc != null)
 
-				ATRTerm term = ATRSyntax.CTR.termFromSource(v.getCtrs());
+			for (Value v : vc.getValues())  {
 
-				if ( term instanceof CTRLiteral) {
-					CTRLiteral lit = (CTRLiteral) term; 
-					valueConstraintLiterals.add(lit); 
+				try {
+
+					ATRTerm term = ATRSyntax.CTR.termFromSource(v.getCtrs());
+
+					if ( term instanceof CTRLiteral) {
+						CTRLiteral lit = (CTRLiteral) term; 
+						valueConstraintLiterals.add(lit); 
+					}
+
+				} catch (LumenSyntaxError e) {
+					e.printStackTrace();
 				}
-
-			} catch (LumenSyntaxError e) {
-				e.printStackTrace();
 			}
-		}
 
 		return new LinkedList<CTRLiteral>(valueConstraintLiterals); 
 
 	}
+	
+	
+	public CTRLiteral getValueConstraintMin(ValueConstraint vc) {
+
+		if (vc != null && vc.getMinValue() != null ) 
+
+			try {
+
+				ATRTerm term = ATRSyntax.CTR.termFromSource(vc.getMinValue().getCtrs());
+
+				if ( term instanceof CTRLiteral) {
+					CTRLiteral lit = (CTRLiteral) term; 
+					return lit; 
+				}	
+
+			} catch (LumenSyntaxError e) {
+				e.printStackTrace();
+			}	
+		
+		return null; 
+
+	}
+
+	
+	public CTRLiteral getValueConstraintMax(ValueConstraint vc) {
+
+		if (vc != null && vc.getMaxValue() != null)
+
+			try {
+
+				ATRTerm term = ATRSyntax.CTR.termFromSource(vc.getMaxValue().getCtrs());
+
+				if ( term instanceof CTRLiteral) {
+					CTRLiteral lit = (CTRLiteral) term; 
+					return lit; 
+				}	
+
+			} catch (LumenSyntaxError e) {
+				e.printStackTrace();
+			}		
+		
+		return null; 
+
+	}
+
+	//
+	//
+	//
 
 	public void initializeParameterDescription() {
-			
-		if (vc == null) {
+		
+		initializeParameterDescription(true); 
+		
+	}
 
-			setVariableName( getParameterDescription() );						
+	public void initializeParameterDescription(boolean firstTime) {				
 
-		} else {			
+		if (! initialized ) {
+			for (String rootType : rootTypes) 
+				TypeUtilities.initializeTaxonomy( (TypeDef) TypeUtilities.getTypeFromString(rootType));
+			initialized = true;
+		}		
 
-			if ( ! currentValueConstraintLiterals.isEmpty()) {
+		String equalPar = getEqualParameter();
 
-				boolean first = true; 
-				String description = currentValueConstraintLiterals.size() > 1 ? "{ " : "";   			
-				for (CTRLiteral lit : currentValueConstraintLiterals) {
+		if (equalPar != null && firstTime ) {
+
+			if ( vc != null )
+				System.out.println("This parameter is declared to be equal to " + equalPar + " - ignoring value constraint " + vc + " on " + this.getParameter().getId()); 			
+			if ( tc != null )
+				System.out.println("This parameter is declared to be equal to " + equalPar + " - ignoring type constraint " + tc + " on " + this.getParameter().getId());
+			if ( lvc != null )
+				System.out.println("This parameter is declared to be equal to " + equalPar + " - ignoring loaded value constraint " + lvc + " on " + this.getParameter().getId()); 			
+			if ( ltc != null )
+				System.out.println("This parameter is declared to be equal to " + equalPar + " - ignoring loaded type constraint " + ltc + " on " + this.getParameter().getId()); 
+
+			vc = null; 
+			tc = null;			
+
+			List<ExerciseStepParameter> params = ownerExerciseModel.getExerciseStepParameters();
+
+			for (ExerciseStepParameter other : params) {				
+				if (other.getParameter().getId().equals(equalPar)) {
+
+					if (other.vc != null) 
+						vc = copyValueConstraint(other.vc); 
+
+					if (other.tc != null)
+						tc = copyTypeConstraint(other.tc); 			
+
+					if (other.lvc != null) 
+						lvc = copyValueConstraint(other.lvc);
+
+					if (other.ltc != null)
+						ltc = copyTypeConstraint(other.ltc);			
+
+					ec = null;
+
+					break; 
+
+				}
+			}										
+		} 
+
+		if (vc == null && tc == null ) {
+
+			setVariableName(this.getParameter().getId());
+			return;
+
+		};
+
+		if (vc != null ) {			
+
+			boolean first = true; 
+
+			if ( getCurrentValueConstraintLiterals().size() > 1) {				
+				String description = "{ "; 
+
+				for (CTRLiteral lit : getCurrentValueConstraintLiterals()) {
 					if (! first) 
 						description += ", ";  
 					description += lit.getValue();
 					first = false; 
 				}
-				
-				description += currentValueConstraintLiterals.size() > 1 ? " }" : ""; 
-				setVariableName(description); 
+
+				description += " }";  								
+				setVariableName(description);
 
 			} else {
 
-				setVariableName(this.getParameter().getId());
-				
+				String min = this.getCurrentValueConstraintMinLiteral() != null ? this.getCurrentValueConstraintMinLiteral().getString() : null; 
+				String max = this.getCurrentValueConstraintMaxLiteral() != null ? this.getCurrentValueConstraintMaxLiteral().getString() : null; 
+
+				String description;
+
+				if (min != null)
+					if (max != null) 
+						if (min.equals(max))
+							description = "exactly " + min;
+						else 
+							description = "between " + min + " and " + max;
+					else 
+						description = "greater than " + min; 
+				else 
+					if (max != null)
+						description = "smaller than " + max;
+					else 
+						if (!getCurrentValueConstraintLiterals().isEmpty()) 
+							description = getCurrentValueConstraintLiterals().get(0).getString();
+						else description = this.getParameter().getAccessor().toString(); 
+
+				setVariableName(description);
 			}
-		}
-		
-	
+
+			return;
+
+		} 
+
+		setVariableName(TypeUtilities.getUnqualifiedTypeName(tc.getType().get(0))); 
+
 	}
 
-	public String getParameterDescription() {
+
+	private TypeConstraint copyTypeConstraint(TypeConstraint tc2) {
+	
+		TypeConstraint tc1 = new TypeConstraint(); 
+		tc1.setParameter(this.getParameter().getId()); 	
+		tc1.getType().addAll(tc2.getType());
 		
-		if (this.getParent() != null) {
-			
-			return "the " + this.parameter.getAccessor() + " of " + this.getParent().getParameterDescription();
-			
-		}  else if (this.equalTo != null) {
-			
-			// return "the " + this.parameter.getAccessor() + " of " + this.ownerExerciseModel.lookupParameter(this.equalTo).getParameterDescription();
-			
-			return this.ownerExerciseModel.lookupParameter(this.equalTo).getParameterDescription();
-			
-		} else if (this.owner instanceof ExerciseCreateStepModel) {
-			
-			return "the " + ((ExerciseCreateStepModel) this.owner).getCreatedObject();
+		return tc1;
+		
+	}
 
-		} else			
-
-			return "the " + this.getParameter().getAccessor();
+	private ValueConstraint copyValueConstraint(ValueConstraint vc2) {
+	
+		ValueConstraint vc1 = new ValueConstraint();
+		vc1.setParameter(this.getParameter().getId()); 	
+		vc1.getValues().addAll(vc2.getValues());
+		
+		return vc1;
+		
 	}
 
 	@Override
@@ -199,143 +413,233 @@ public class ExerciseStepParameter extends InputVariableModel {
 		return true;
 	}
 
-	@Override
-	public boolean equals(Object other) {
-		return super.equals(other);
-	}
 
-	@Override
-	public int hashCode() {
-		return super.hashCode();
-	}
+	public void setCurrentSelection(Pair<Integer, Integer> currentSelection) {										
+		
+		ValueConstraint ovc = vc; 
+		vc = new ValueConstraint();
+		vc.setParameter(this.getParameter().getId());
 
-	public List<CTRLiteral> getCurrentSelection() { 
-		return currentValueConstraintLiterals;  
-	}
-		
-	public void setCurrentSelection(Object currentSelection) {					
-	
-		List<CTRLiteral> newCurrentValueConstraintLiterals = new LinkedList<CTRLiteral>();
-		
-		ExerciseStepParameter orig = getOriginalParameter();		
-		
-		if (currentSelection == null) {		
+		if (currentSelection.getKey().equals(currentSelection.getValue())) {
 			
-			// "Any" Type menu item was selected
+			Value val = new Value(currentSelection.getKey().toString(), "integer");
+			vc.getValues().add(val); 
+			
+		} else {
 					
-			this.valueConstraintRemoved = true;
-			this.equalityConstraintRemoted = true;		
-			
-			if (vc != null) 
-				ownerExerciseModel.registerValueConstraintAsInvalid(vc);
-			if (ec != null)
-				ownerExerciseModel.registerEqualityConstraintAsInvalid(ec);		
-			
-			this.equalTo = null; 
-
-		} else if (currentSelection == this) {
-			
-			// original value from equality constraint on orig parameter was selected 
-			
-			equalityConstraintRemoted = false;
-			
-			if (ec == null) {
-				ec = new EqualityConstraint();
-				ec.getParameters().addAll(orig.ec.getParameters());
-				ownerExerciseModel.getSolutionOption().getEqualityConstraints().add(ec);
-			}
-					
-			ownerExerciseModel.registerEqualityConstraintAsValid(ec);			
-			equalTo = orig.equalTo; 			
-			
-		} else  {		
-			
-			if (vc == null) {
-				vc = new ValueConstraint();
-				vc.setParameter(this.getParameter().getId()); 
-			}
+			Value minVal = new Value(currentSelection.getKey().toString(), "integer");
+			Value maxVal = new Value(currentSelection.getValue().toString(), "integer");
 		
-			// Enum value was selected 
-			
-			this.valueConstraintRemoved = false;
-			this.equalityConstraintRemoted = false;
-			
-			if (vc != null)
-				ownerExerciseModel.registerValueConstraintAsValid(vc);
-			if (ec != null)
-				ownerExerciseModel.registerEqualityConstraintAsValid(ec);
-			
-			boolean found = false; 
-			for (CTRLiteral a : currentValueConstraintLiterals) {
-				if ( a.getValue().toString().equals(currentSelection) ) {
-					found = true; 
-				} else
-					newCurrentValueConstraintLiterals.add(a);
-			}
-		
-			//
-			//
-			//
-			
-			String type = TypeUtilities.getQualifiedTypeName(this.getTypeDef().getName());
-			String ctrs = "typed(\"" +currentSelection + "\", \"" + type + "\")";   
-			
-			if ( ! found ) {
-				
-				// add 
-				
-				ATRTerm newTerm;
-				
-				try {
-					newTerm = ATRSyntax.CTR.termFromSource(ctrs);
-					if ( newTerm instanceof CTRLiteral) {
-						CTRLiteral newLit = (CTRLiteral) newTerm; 
-						newCurrentValueConstraintLiterals.add(newLit); 
-					}
-				} catch (LumenSyntaxError e) {
-					e.printStackTrace();
-				}			
-			}		
+			vc.setMinValue(minVal);
+			vc.setMaxValue(maxVal);
 		}
-			
-		currentValueConstraintLiterals = newCurrentValueConstraintLiterals; 	
 		
+		// also kill the type constraint, as a range is given!
+		tc = null; 
 	}
 
-	public List<String> getPossibleValues() {    	    
-
-		// use a set to ensure no duplication possible
-		Set<String> ret = new HashSet<String>(); 
+	
+	public void setCurrentSelection(Pair<String, String> currentSelection, String type) {		
 		
-		TypeDef type = this.getTypeDef(); 
+		// used for min / max range intervals 
+		
+		ValueConstraint ovc = vc; 
+		vc = new ValueConstraint();
+		vc.setParameter(this.getParameter().getId());
+		
+		if (currentSelection.getKey().equals(currentSelection.getValue())) {
+			
+			Value val = new Value("\""+ currentSelection.getKey() + "\"", type);
+			vc.getValues().add(val); 
+			
+		} else {
+					
+			Value minVal = new Value("\""+ currentSelection.getKey() + "\"",  type); 
+			Value maxVal = new Value("\"" + currentSelection.getValue() + "\"" , type); 
+		
+			vc.setMinValue(minVal);
+			vc.setMaxValue(maxVal);
+		}
+		
+		// also kill the type constraint, as a range is given!
+		tc = null;
+	}
 
-		if (possibleValues == null) {
-			possibleValues = new LinkedList<String>();
-			if (type instanceof EnumeratedTypeDef) {	    	
-				for (String svalue: ((EnumeratedTypeDef) type).getValues()) {
-					possibleValues.add(svalue); 
+	
+	public void setCurrentSelection(Object currentSelection, boolean typeSelected) {							
+
+		if (typeSelected) {
+
+			vc = null;
+
+			String type = currentSelection.toString();
+			// String type = currentSelection.toString().substring(4); // cut off heading "Any "
+
+			boolean selected = enumValueOrTypeIsSelected(type); 
+
+			if (selected) {
+
+				tc = null;
+
+			} else {			
+
+				ActionModelDef type1 = TypeUtilities.getTypeFromShortTypeName(type, version, am);
+				List<String> types = new LinkedList<String>(); 
+				types.add(type1.getName().getFullName()); 								
+
+				tc = new TypeConstraint(this.getParameter().getId(), 
+						types);
+
+			}
+
+		}  else  {					
+
+			String type = TypeUtilities.getQualifiedTypeName(this.getTypeDef().getName());
+			String ctrs = "typed(\"" +currentSelection + "\", \"" + type + "\")";   				
+
+			tc = null;
+
+			boolean selected = enumValueOrTypeIsSelected(currentSelection.toString()); 			
+			List<Value> newValues = new LinkedList<Value>();
+
+			if (vc != null) {
+
+				List<Value> currentValues = vc.getValues();
+
+				for (Value val : currentValues) {
+					// I have to look for substring, because of 
+					// type("Burner", "cooking_am^0.1^Equipment") vs. typed("Burner", "cooking_am^0.1^Thing") ! 
+					if ( val.getCtrs().indexOf(currentSelection.toString()) == -1) {
+						newValues.add(val); 															
+					}
 				}
 			}
-		}
-		
-		for (String val : possibleValues)
-			ret.add(val); 
-		
-		if (this.original != null)
-			for (CTRLiteral svalue: this.original.currentValueConstraintLiterals) 
-				ret.add(svalue.getString());
 
-		return new LinkedList<String>(ret); 
+			vc = new ValueConstraint();
+			vc.setParameter(this.getParameter().getId());
 
-	}
+			if (! selected ) {
+				Value newVal = new Value(ctrs, type); 
+				newValues.add(newVal);
+			}
 
-	public ExerciseStepParameter getParent() {
-		return parent;
+			vc.getValues().clear();
+			vc.getValues().addAll(newValues);   									
+
+		}	
 	}
 	
-	public List<ExerciseStepParameter> getSubParameters() {
-		return subParameters;
+	public boolean isEqualParameter(ExerciseStepParameter other) {
+		
+		return this.getButtonLabel().equals(other.getButtonLabel()); 
+		
 	}
+
+	//
+	//
+	//
+
+	public boolean isRangeParameter() {
+	
+		if (vc != null ) {			
+
+			String min = this.getCurrentValueConstraintMinLiteral() != null ? this.getCurrentValueConstraintMinLiteral().getString() : null; 
+			String max = this.getCurrentValueConstraintMaxLiteral() != null ? this.getCurrentValueConstraintMaxLiteral().getString() : null; 
+			
+			if (min != null || max != null)
+				return true; 
+			
+			Set<String> types = getPossibleEnumTypes(false);	
+			Stream<String> stream = types.stream();
+			
+			// Stream<String> stream2 = types.stream();
+			// stream2.map(x -> TypeUtilities.getUnqualifiedTypeName(x)).forEach(x -> System.out.println("Element " + x));					
+					
+			return stream.map(x -> TypeUtilities.getUnqualifiedTypeName(x))
+					     .anyMatch(x -> NUMERIC_RANGE_TYPES.contains(x));
+						
+		}
+				
+		return false;
+ 
+	}	
+		
+    //
+	//
+	// 
+		
+	
+	public Set<String> getPossibleEnumValues() {    	    
+
+		allValueConstraintLiterals = new HashSet<CTRLiteral>();  
+
+		allValueConstraintLiterals.addAll(emptyIfNull(getLoadedValueConstraintLiterals()));
+		allValueConstraintLiterals.addAll(emptyIfNull(getCurrentValueConstraintLiterals()));
+		
+		if (getCurrentValueConstraintMinLiteral() != null) 
+			allValueConstraintLiterals.add(getCurrentValueConstraintMinLiteral()); 
+	
+		if (getCurrentValueConstraintMaxLiteral() != null) 
+			allValueConstraintLiterals.add(getCurrentValueConstraintMaxLiteral()); 
+		
+		if (original != null) {
+			original.getPossibleEnumValues();		
+			allValueConstraintLiterals.addAll( original.allValueConstraintLiterals);
+		}
+
+		return TypeUtilities.getPossibleValuesAllSiblings(allValueConstraintLiterals, this); 		
+
+	}
+
+	private Collection<? extends CTRLiteral> emptyIfNull(List<CTRLiteral> literals) {
+		if (literals == null)
+			return emptyCTRLiterals;
+		else 
+			return literals;
+	}
+
+	public Set<String> getPossibleEnumTypes(boolean filter) {    	    
+
+		allTypeConstraints = new HashSet<String>(); 
+
+		for (String superType : TypeUtilities.getEnumSuperTypes(getPossibleEnumValues())) {
+			if ( !filter || ! ExerciseStepParameter.isBadType(superType)) {						
+				allTypeConstraints.add(superType); 
+			}
+		}
+
+		String paramType = getTypeDef().getName().getFullName();
+
+		if ( ! ExerciseStepParameter.isBadType(paramType)) {		
+			allTypeConstraints.add(paramType);			
+		}
+
+		if (original != null) {
+			original.getPossibleEnumTypes();		
+			allTypeConstraints.addAll( original.allTypeConstraints);
+		}
+
+		if (ltc != null) 
+			allTypeConstraints.add(ltc.getType().get(0));
+		if (tc != null) 
+			allTypeConstraints.add(tc.getType().get(0));
+		if (original != null && original.tc != null)  
+			allTypeConstraints.add(original.tc.getType().get(0));
+
+		return allTypeConstraints; 
+
+	}
+	
+	public Set<String> getPossibleEnumTypes() {    	    
+
+		return getPossibleEnumTypes(true);
+		
+	}
+
+
+	//
+	//
+	//
 
 	public ExerciseStepModel getOwner() {
 		return owner;
@@ -344,104 +648,130 @@ public class ExerciseStepParameter extends InputVariableModel {
 	public void setOwner(ExerciseStepModel owner) {
 		this.owner = owner;
 	}
-	
+
 	public Parameter getParameter() {
 		return parameter;
 	}
 
-	public boolean isValueConstraintRemoted() {
-		return valueConstraintRemoved;
-	}
 
-	public void setValueConstraintRemoted(boolean valueConstraintRemoted) {
-		this.valueConstraintRemoved = valueConstraintRemoted;
-	}
-
-	public boolean isEqualityConstraintRemoted() {
-		return equalityConstraintRemoted;
-	}
-
-	public void setEqualityConstraintRemoted(boolean equalityConstraintRemoted) {
-		this.equalityConstraintRemoted = equalityConstraintRemoted;
-	}
-
-	
 	public ExerciseStepParameter getOriginalParameter() {
-		
+
 		if (original == null) {		
 			if (ownerExerciseModel.getOriginalExerciseModel() != null) {
 				original = ownerExerciseModel.getOriginalExerciseModel().lookupParameter(this.parameter.getId()); 
 			}
 		}
-		
+
 		return original; 
-		
+
 	}
-	
 
 	public boolean differentFromOriginalParameter() {
-		
+
 		ExerciseStepParameter original = getOriginalParameter(); 
-		
+
 		if (original == null)  
-			
+
 			return false; 
-		
+
 		else {
-		
-			if ( this.equalTo == null && original.equalTo != null ) 
-				return true; 
-			
-			if ( this.equalTo != null && original.equalTo == null ) 
-				return true; 
-										
-			if ( this.vc == null && original.vc != null) 
-				return true;
-	
-			if ( this.vc != null && original.vc == null) 
-				return true;
-	
-			// both have value constraints -
-			// check if the current selection is different from the original one
-			// first compute the original selection
+
+			if (vc != null) {
 				
-			if (currentValueConstraintLiterals.size() != original.currentValueConstraintLiterals.size())
-				return true; 
-			
-			boolean equal = true; 
-			for (CTRLiteral a : currentValueConstraintLiterals) {
-				boolean found = false; 
-				for (CTRLiteral b : original.currentValueConstraintLiterals) {
-					if (a.getValue().toString().equals(b.getValue().toString())) {
-						found = true; 
-						break;
+				if (getCurrentValueConstraintLiterals().size() != getOriginalValueConstraintLiterals().size())
+					return true;
+				
+				for (CTRLiteral cur : getCurrentValueConstraintLiterals()) {
+					boolean found = false; 		
+					for (CTRLiteral orig : getOriginalValueConstraintLiterals()) {
+						 
+						if ( cur.getString().equals(orig.getString()) ) {
+							found = true; 				
+							break; 
+						}
 					}
-				}
-				if ( ! found ) {
-					equal = false; 
-					break;
-				}
-			}
+					
+					if (! found) {					
+						return true; 
+					}
+				}				
+								
+				boolean changedMinMax = 
+						this.getCurrentValueConstraintMinLiteral() != null && original.getCurrentValueConstraintMinLiteral() == null ||
+						this.getCurrentValueConstraintMinLiteral() == null && original.getCurrentValueConstraintMinLiteral() != null ||
+						this.getCurrentValueConstraintMinLiteral() != null && original.getCurrentValueConstraintMinLiteral() != null && 
+						! this.getCurrentValueConstraintMinLiteral().getString().equals(original.getCurrentValueConstraintMinLiteral().getString()) || 
+						this.getCurrentValueConstraintMaxLiteral() != null && original.getCurrentValueConstraintMaxLiteral() == null ||
+						this.getCurrentValueConstraintMaxLiteral() == null && original.getCurrentValueConstraintMaxLiteral() != null ||
+						this.getCurrentValueConstraintMaxLiteral() != null && original.getCurrentValueConstraintMaxLiteral() != null && 
+						! this.getCurrentValueConstraintMaxLiteral().getString().equals(original.getCurrentValueConstraintMaxLiteral().getString());						
+						
+				if (changedMinMax) 
+					return true; 										
+
+			} else if (tc != null) {
+				if ( original.tc == null)
+					return true; 
+				else  
+					return ! tc.getType().get(0).equals(original.tc.getType().get(0)); 
+			} 
 			
-			return !equal; 
-			
+						
+			return (tc == null && original.tc != null);
+
 		}
-		
 	}
 
-	public boolean valueIsSelected(String value) {	
-		for (CTRLiteral a : currentValueConstraintLiterals) {
-			if ( a.getValue().toString().equals(value) ) 
+	public CTRLiteral getCurrentValueConstraintMinLiteral() { 
+		return getValueConstraintMin(vc); 
+	}
+	
+	public CTRLiteral getCurrentValueConstraintMaxLiteral() { 
+		return getValueConstraintMax(vc); 
+	}
+	
+	public List<CTRLiteral> getCurrentValueConstraintLiterals() { 
+		return getValueConstraintLiterals(vc); 
+	}
+
+
+	public List<CTRLiteral> getLoadedValueConstraintLiterals() { 
+		return getValueConstraintLiterals(lvc); 
+	}
+
+
+	public List<CTRLiteral> getOriginalValueConstraintLiterals() { 
+		return getValueConstraintLiterals(original.vc); 
+	}
+
+
+	public boolean enumValueOrTypeIsSelected(String valueOrType) {	
+
+		for (CTRLiteral a : getCurrentValueConstraintLiterals()) {
+			if ( a.getValue().toString().equals(valueOrType) ) 
 				return true; 
-		}		
+		}
+
+		if (tc != null) { 
+			return tc.getType().get(0).contains(valueOrType);
+		}
+
 		return false; 
 	}
 
+	//
+	//
+	//
+
 	public String getButtonLabel() {
-		initializeParameterDescription(); 			
-		changedFromOriginal.setValue(differentFromOriginalParameter()); 		
+		initializeParameterDescription(false); 			
+		changedFromOriginal.setValue(differentFromOriginalParameter());
 		return getVariableName(); 		
 	}
+
+	//
+	//
+	// 
 
 	public ValueConstraint getValueConstraint() {
 		return vc;
@@ -451,10 +781,71 @@ public class ExerciseStepParameter extends InputVariableModel {
 		return ec;
 	}
 
+	public TypeConstraint getTypeConstraint() {
+		return tc;
+	}
+	
+	//
+	//
+	//
+
+	public ValueConstraint getLoadedValueConstraint() {
+		return lvc;
+	}
+
+	public EqualityConstraint getLoadedEqualityConstraint() {
+		return lec;
+	}
+
+	public TypeConstraint getLoadedTypeConstraint() {
+		return ltc;
+	}
+
+	//
+	//
+	// 
+
+	public ValueConstraint getOriginalValueConstraint() {
+		if (original != null)
+			return original.vc;
+		else
+			return null; 
+	}
+
+	public EqualityConstraint getOriginalEqualityConstraint() {
+		if (original != null)
+			return original.ec;
+		else
+			return null; 	
+	}
+
+	public TypeConstraint getOriginalTypeConstraint() {
+		if (original != null)
+			return original.tc;
+		else
+			return null; 	
+	}
+
+	//
+	//
+	// 
+
+
 	public SimpleBooleanProperty getChangeFromOriginalProperty() {
-		initializeParameterDescription(); 			
+		initializeParameterDescription(false); 			
 		changedFromOriginal.setValue(differentFromOriginalParameter());
 		return changedFromOriginal;
 	}
+
+	//
+	//
+	//
+
+	public static boolean isBadType(String paramType) {
+
+		return ArrayUtils.contains(rootTypes, paramType) || 				
+				TypeUtilities.hasSubType("cooking_am^0.1^Concept", paramType);
+	}
+
 
 }

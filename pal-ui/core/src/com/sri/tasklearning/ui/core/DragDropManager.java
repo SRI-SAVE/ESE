@@ -26,7 +26,7 @@ import com.sri.tasklearning.ui.core.control.Alert.AlertConfig;
 import com.sri.tasklearning.ui.core.control.Alert.AlertResult;
 import com.sri.tasklearning.ui.core.control.ScrollPanePlus;
 import com.sri.tasklearning.ui.core.layout.StepLayout;
-import com.sri.tasklearning.ui.core.step.ExerciseStepView;
+import com.sri.tasklearning.ui.core.step.ExerciseSubtaskView;
 import com.sri.tasklearning.ui.core.step.PlaceholderStepModel;
 import com.sri.tasklearning.ui.core.step.PlaceholderStepView;
 import com.sri.tasklearning.ui.core.step.StepView;
@@ -39,7 +39,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
 import javafx.scene.transform.Transform;
 import javafx.util.Callback;
 
@@ -53,7 +52,7 @@ import javafx.util.Callback;
  */
 public class DragDropManager {
 
-	private static final double MIN_DRAG_DISTANCE = 7;
+	private static final double MIN_DRAG_DISTANCE = 12;
 	private SelectionManager selectionManager;
 
 	private PlaceholderStepView placeholder;
@@ -67,13 +66,37 @@ public class DragDropManager {
 	private EventHandler<? super MouseEvent> originalDraggedEvt;
 	private EventHandler<? super MouseEvent> originalReleasedEvt;
 
-	private StepLayout dropLayout;
-	private int dropIndex;
+	private StepLayout topLayout;	
+	
+	//
+	//
+	//
+	
+	private StepLayout sourceSubLayout;
+	private ExerciseSubtaskView sourceSubGroup;
+	
+	private int sourceIndex;
+	private int sourceSubIndex;
+	
+	//
+	//
+	//
+	
+	private StepLayout targetSubLayout;
+	private ExerciseSubtaskView targetSubGroup;
+	
+	private int targetIndex;
+	private int targetSubIndex;
+	
+	//
+	//
+	//
+	
 	private boolean delete = false; 
 	private boolean disabled = false;
 
 	private StepView originalStep;
-	private int originalIndex;
+	
 	private Scene scene;
 
 	// All SelectionManagers share a singleton DragDropManager
@@ -93,8 +116,7 @@ public class DragDropManager {
 		selectionManager = argSelectionManager;
 		procedureView = argProcedureView;
 		controller = procedureView.getController();
-		controller.getVariableManager();
-
+	
 	}
 
 	public boolean isDisabled() {
@@ -111,30 +133,44 @@ public class DragDropManager {
 
 	public void handleDragging(Node source, MouseEvent e) {    	
 
-		if ((disabled) || 
-				! ( source instanceof ExerciseStepView ) ) 
+		if (disabled)
 			return;
-
+				
 		placeholder = null;         
 		dragging = false;
-		dropIndex = -1; 
+		
+		targetIndex = -1;
+		targetSubIndex = -1;
+		
+		sourceIndex = -1; 
+		sourceSubIndex = -1; 
+		
 		delete = false; 
 
 		originalStep = (StepView) source; 
-		dropLayout = originalStep.getView().getStepLayout();
-
+		
+		topLayout = originalStep.getView().getStepLayout();
+		
+		sourceSubLayout = null;
+		sourceSubGroup = null; 
+		targetSubLayout = null; 
+		
 		originalDraggedEvt  = originalStep.getOnMouseDragged();
 		originalReleasedEvt = originalStep.getOnMouseReleased();
 
+		//
+		// identify coordinates - group and subgroup - and corresponding step layouts of step being dragged 
+		// 
+		
 		List<StepView> stepViews = procedureView.getStepLayout().getStepViews(); 
-
+		
 		for (int i = 0; i < stepViews.size(); i++) {
 
 			StepView stepView = stepViews.get(i);
 
 			if (stepView == originalStep) {
 
-				originalIndex = i; 
+				sourceIndex = i; 
 
 				Transform trans = stepView.getLocalToSceneTransform();
 
@@ -146,20 +182,20 @@ public class DragDropManager {
 				double yf = from.getY(); 
 				double yt = to.getY();
 
-				dropLayout.deleteStepView(stepView); 		    		
+				topLayout.deleteStepView(stepView); 					
 
 				scene = procedureView.getScene();
 
 				((AnchorPane) scene.getRoot()).getChildren().add(stepView);
 
 				PlaceholderStepModel model = new PlaceholderStepModel();
-				placeholder = (PlaceholderStepView) dropLayout.createStepView(model);                                                           
 
-				dropLayout.addStepView(placeholder, i);
+				placeholder = (PlaceholderStepView) topLayout.createStepView(model);      
 
-				placeholder.setPrefHeight(Math.min(stepView.getHeight(), 180));            	
-				placeholder.setMinHeight(Region.USE_PREF_SIZE);
+				placeholder.setMinHeight(stepView.getHeight());
+				placeholder.setMaxHeight(stepView.getHeight());
 
+				topLayout.addStepView(placeholder, i);				
 
 				dragBeginX = e.getSceneX();
 				dragBeginY = e.getSceneY();                 
@@ -168,15 +204,84 @@ public class DragDropManager {
 				stepView.setLayoutY(yf);
 
 				break;
+
+			} else if ( stepView instanceof ExerciseSubtaskView ) {
+
+				List<StepView> stepViews1 = ((ExerciseSubtaskView) stepView).getStepLayout().getStepViews(); 
+				
+				boolean found = false; 
+				
+				for (int ii = 0; ii < stepViews1.size(); ii++) {
+
+					StepView stepView1  = stepViews1.get(ii);
+
+					if (stepView1 == originalStep) {
+
+						sourceSubLayout = ((ExerciseSubtaskView) stepView).getStepLayout();
+						sourceSubGroup =  ((ExerciseSubtaskView) stepView);
+						
+						sourceIndex = i; 
+						sourceSubIndex = ii; 
+
+						Transform trans = stepView1.getLocalToSceneTransform();
+
+						Point2D from = trans.transform( stepView1.getLayoutBounds().getMinX(), stepView1.getLayoutBounds().getMinY()); 
+						Point2D to   = trans.transform( stepView1.getLayoutBounds().getMaxX(), stepView1.getLayoutBounds().getMaxY());
+
+						double xf = from.getX(); 
+						double xt = to.getX(); 
+						double yf = from.getY(); 
+						double yt = to.getY();
+
+						sourceSubLayout.deleteStepView(stepView1); 		
+
+						scene = procedureView.getScene();
+
+						((AnchorPane) scene.getRoot()).getChildren().add(stepView1);
+
+						PlaceholderStepModel model = new PlaceholderStepModel();
+
+						placeholder = (PlaceholderStepView) sourceSubLayout.createStepView(model);      
+
+						placeholder.setMinHeight(stepView1.getHeight());
+						placeholder.setMaxHeight(stepView1.getHeight());
+
+						sourceSubLayout.addStepView(placeholder, ii);				
+
+						dragBeginX = e.getSceneX();
+						dragBeginY = e.getSceneY();                 
+
+						stepView1.setLayoutX(xf);
+						stepView1.setLayoutY(yf);
+
+						found = true; 
+						break;
+
+					}				
+				}
+				
+				if (found) 
+					break; 
+				
 			}
 		}
+		
+		//
+		//
+		//
+		
+		if (placeholder == null) 
+			return; 
 
+		//
+		//
+		// 
 
 		originalStep.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {                  	
 
 				double curX = me.getSceneX();
-				double curY = me.getSceneY(); 
+				double curY = me.getSceneY(); 			
 
 				double incX = curX - dragBeginX;
 				double incY = curY - dragBeginY; 
@@ -190,27 +295,44 @@ public class DragDropManager {
 
 				originalStep.setTranslateX(curX - dragBeginX );
 				originalStep.setTranslateY(curY - dragBeginY );
-
 				originalStep.setCursor(Cursor.DEFAULT);
 
 				ScrollPanePlus sp = procedureView.getScrollPane();
 				Point2D scrollPt = sp.sceneToLocal(curX, curY); 
 
-				if (scrollPt.getY() < 15) {               
-					sp.scoochUp();
+				//
+				//
+				//
 
+				if (scrollPt.getY() < 15) {     
+					sp.scoochUp();				
 				} else if (scrollPt.getY() > sp.getHeight() - 15) {
 					sp.scoochDown();
 				}    
 
+				//
+				//
+				//
+
 				List<StepView> stepViews = procedureView.getStepLayout().getStepViews(); 
 
+				targetIndex = -1; 
+				targetSubIndex = -1; 				
+				targetSubLayout = null;
+
+				//
+				//
+				// 
+
 				if (scrollPt.getX() < 0 || scrollPt.getX() > sp.getWidth() ) {
-					
+
 					delete = true;
 					originalStep.setCursor(Cursor.CROSSHAIR);
 
 				} else {
+
+					boolean found = false; 
+					double lastYt = 0;  
 
 					for (int i = 0; i < stepViews.size(); i++) {
 
@@ -228,18 +350,130 @@ public class DragDropManager {
 							double yf = from.getY(); 
 							double yt = to.getY(); 
 
-							boolean inside = ( xf <= curX) && (curX <= xt) && (yf <= curY) && (curY <= yt);
+							if ( true || ( xf <= curX) && (curX <= xt)) {
 
-							if (inside) {
-								originalStep.setCursor(Cursors.OPEN_HAND);
+								xf = from.getX(); 
+								xt = to.getX(); 
+								yf = from.getY(); 
+								yt = to.getY(); 
 
-								dropLayout.deleteStepView(placeholder); 
-								dropLayout.addStepView(placeholder, i); 
-								dropLayout.requestLayout();
-								dropIndex = i;
+								if ( true || ( xf <= curX) && (curX <= xt) ) {
 
-								break;
+									if ( curY < yf && i == 0) {
+										found = true; 
 
+									} else if ( yf <= curY && curY <= yt ) {
+										found = true; 
+
+									} else if ( curY <= yf && lastYt <= curY ) {
+										found = true; 
+
+									} else if ( curY > yt && i == stepViews.size() -1 ) {
+										found = true; 
+									} 								
+								}														
+
+								lastYt = yt;
+
+								if (found ) {
+
+									targetIndex = i; 									
+
+									if (stepView instanceof ExerciseSubtaskView &&  ! ( originalStep instanceof ExerciseSubtaskView) ) {
+
+										// find index within group 
+
+										ExerciseSubtaskView group = (ExerciseSubtaskView) stepView; 
+
+										targetSubGroup =  ((ExerciseSubtaskView) stepView);
+										
+										targetSubLayout = group.getStepLayout();		
+
+										int ii = 0; 
+										boolean found1 = false;  
+										boolean found2 = false;  
+
+										double lastYt1 = 0;  
+
+										for (StepView subStepView : group.getStepViews()) {											
+
+											Transform trans1 = subStepView.getLocalToSceneTransform();
+
+											Point2D fromSub = trans1.transform( subStepView.getBoundsInLocal().getMinX(), subStepView.getBoundsInLocal().getMinY()); 
+											Point2D toSub   = trans1.transform( subStepView.getBoundsInLocal().getMaxX(), subStepView.getBoundsInLocal().getMaxY());
+
+											double xfSub = fromSub.getX(); 
+											double xtSub = toSub.getX(); 
+											double yfSub = fromSub.getY(); 
+											double ytSub = toSub.getY(); 
+
+											if (true || ( xfSub <= curX) && (curX <= xtSub) ) {
+
+												if ( curY < yfSub ) {
+
+													if ( curY < yf && sourceSubIndex != -1 ) {
+
+														found2 = true; 													
+														break;
+
+													} else {		
+
+														found1 = true; 
+														break;
+													}
+
+												} else if ( yfSub <= curY && curY <= ytSub ) {
+													found1 = true; 
+													break; 												
+												} else if ( curY <= yf && lastYt1 <= curY ) {
+													found1 = true; 
+													break; 
+												}											
+											}
+
+											lastYt1 = ytSub; 										
+											ii++;										
+
+										}
+
+										if (found1 ) {
+
+											originalStep.setCursor(Cursors.OPEN_HAND);										
+
+
+											targetIndex = i;
+											targetSubIndex = ii; 		
+
+											removePlaceholder();
+
+											targetSubLayout.addStepView(placeholder, ii); 																
+											targetSubLayout.requestLayout();		
+											topLayout.requestLayout();		
+
+										} else if (found2 ) {
+
+										}
+
+
+									} else {
+
+										originalStep.setCursor(Cursors.OPEN_HAND);
+
+										targetIndex = i;
+										targetSubIndex = -1; 
+
+										removePlaceholder();
+
+										topLayout.addStepView(placeholder, i); 																
+										topLayout.requestLayout();
+
+									} 
+
+									// quit outer loop 
+
+									break;
+
+								}
 							}
 						}
 					}
@@ -251,23 +485,15 @@ public class DragDropManager {
 
 		originalStep.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent me) {
-
+				
 				if (! dragging) {
-
-					int index = dropLayout.indexOf(placeholder);            
-
-					dropLayout.addStepView(originalStep, index);
-					dropLayout.deleteStepView(placeholder); 
-
-					originalStep.setLayoutX(0); 
-					originalStep.setLayoutY(0); 
-					originalStep.setTranslateX(0); 
-					originalStep.setTranslateY(0);
-
-					procedureView.requestLayout();
+						
+					restoreOriginalPosition(); 
+					
+					cleanup(); 
 
 				} else { 
-
+					
 					cleanup(); 
 				}
 			}
@@ -275,18 +501,36 @@ public class DragDropManager {
 
 	}
 
+	private void restoreOriginalPosition() {
 
-	private boolean removePlaceholder() {
+		removePlaceholder(); 
+		
+		if ( sourceSubIndex != -1 ) 
+			// add back to original sub group 						
+			sourceSubLayout.addStepView(originalStep, sourceSubIndex);
+		else 
+			topLayout.addStepView(originalStep, sourceIndex);	
+		
+	}	
+
+	private void removePlaceholder() {
 
 		if (placeholder != null ) {
-			StepLayout deleteLayout = placeholder.getStepViewContainer().getStepLayout();
-
-			boolean success = deleteLayout.deleteStepView(placeholder);
-			return success;
-
+			
+			if (sourceSubLayout != null) {
+				sourceSubLayout.deleteStepView(placeholder); 					
+				sourceSubLayout.requestLayout();
+			}
+			
+			if (targetSubLayout != null) {
+				targetSubLayout.deleteStepView(placeholder);
+				targetSubLayout.requestLayout();
+			}
+			
+			topLayout.deleteStepView(placeholder); 														
+			topLayout.requestLayout();
+		
 		}
-
-		return false;
 
 	}    
 
@@ -294,14 +538,12 @@ public class DragDropManager {
 
 		originalStep.setOpacity(1);
 		originalStep.setCache(false);
-		originalStep.setPrefWidth(Region.USE_COMPUTED_SIZE);
 		originalStep.setCursor(Cursor.DEFAULT);
 		originalStep.setOnMouseDragged(originalDraggedEvt);
 		originalStep.setOnMouseReleased(originalReleasedEvt);		
 
-
 		if (delete) {
-
+			
 			final List<StepView> delSteps = new ArrayList<StepView>();
 			final SignatureModel sm = procedureView.getModel()
 					.getSignature();
@@ -331,7 +573,7 @@ public class DragDropManager {
 						for (ISelectable sel : selectionManager.getSelectedItems()) {
 							int index = ((StepView)sel).getStepViewContainer().getContainerStepModel()
 									.indexOf(((StepView) sel).getStepModel());
-							dropLayout.addStepView((StepView)sel, index);
+							topLayout.addStepView((StepView)sel, index);
 						}						
 					} 
 
@@ -346,27 +588,137 @@ public class DragDropManager {
 			Alert.show("Confirm delete", message, AlertConfig.YES_NO,
 					call);
 
-		} else if (dropIndex >= 0) {
-
-			removePlaceholder();
+		} else if (targetIndex >= 0) {
 
 			originalStep.setTranslateX(0);
 			originalStep.setTranslateY(0);
+			
+			boolean falseMove = false;
+			
+			if ( sourceSubIndex == -1 ) 
+				// source was top level 				
+				if ( targetSubIndex == -1 )					
+					// target is top level 
+					falseMove = sourceIndex == targetIndex; 					 
+				else 					
+					// target is subgroup 					
+					falseMove = false; 			
+			else 				
+				// source was some subgroup 				
+				if  ( targetSubIndex == -1 )  
+					falseMove = false; 					
+				else 		
+					// target is (potentially same) subgroup 					
+					falseMove = ( sourceIndex == targetIndex) && ( sourceSubIndex == targetSubIndex);  
+					
+			if ( falseMove ) {
 
-			boolean falseMove = (originalIndex == dropIndex);
+				restoreOriginalPosition(); 
 
-			if (falseMove) {
-				// Not deleting. Add the original step back its original location
-				// Placeholder is already gone at this point (works for single & multi)
-				for (ISelectable sel : selectionManager.getSelectedItems()) {
-					int index = ((StepView)sel).getStepViewContainer().getContainerStepModel()
-							.indexOf(((StepView) sel).getStepModel());
-					dropLayout.addStepView((StepView)sel, index);
-				}
 			} else {
 
-				controller.moveStep(originalStep, dropLayout,
-						dropLayout, dropIndex);
+				removePlaceholder(); 
+
+				if ( sourceSubIndex == -1 ) {
+
+					// source was top level 
+
+					if ( targetSubIndex == -1 ) {
+
+						// target is top level 
+
+						if (! topLayout.stepCanBeMovedToPosition(originalStep, targetIndex))    
+
+							showOrderConstraintViolationMessage();
+
+						else
+
+							controller.moveStep(originalStep, topLayout, topLayout, targetIndex);							 
+
+					} else {
+
+						// target is subgroup
+
+						if ( originalStep.getStepModel().mustPrecede( targetSubGroup.getStepModel()) ||
+								targetSubGroup.getStepModel().mustPrecede( originalStep.getStepModel()) ) 
+
+							showOrderConstraintViolationMessage();
+
+						else
+
+							controller.moveStep(originalStep, topLayout, targetSubLayout, targetSubIndex);		
+
+					}
+
+				} else {
+
+					// source was some subgroup 
+
+					if  ( targetSubIndex == -1 ) { 
+
+						// target is top level 
+
+						if ( ! topLayout.stepCanBeMovedToPosition(originalStep, targetIndex))
+
+							showOrderConstraintViolationMessage();
+
+						else {
+
+							if ( sourceSubLayout.getStepViews().size() == 0) {
+
+								// last element of group moved out? dissolve the group	
+
+								controller.deleteStep(sourceSubGroup);
+
+								if (sourceIndex < targetIndex )
+									targetIndex--; 
+
+								controller.addStep(originalStep, topLayout, targetIndex);
+
+							} else 
+
+								controller.moveStep(originalStep, sourceSubLayout, topLayout, targetIndex);
+						}
+
+					} else {
+
+						// target is (potentially same) subgroup
+
+						if ( originalStep.getStepModel().mustPrecede( targetSubGroup.getStepModel()) ||
+								targetSubGroup.getStepModel().mustPrecede( originalStep.getStepModel()) ) 
+
+							showOrderConstraintViolationMessage();
+
+						else {
+
+							if ( sourceSubLayout.getStepViews().size() == 0) {
+
+								// last element of group moved out? dissolve the group							
+
+								controller.deleteStep(sourceSubGroup);							
+
+								if (sourceIndex < targetIndex )
+									targetIndex--; 
+
+								controller.addStep(originalStep, targetSubLayout, targetSubIndex);
+
+							} else 
+
+								controller.moveStep(originalStep, sourceSubLayout, targetSubLayout, targetSubIndex);
+
+						}
+					}								
+				}
+
+				if (sourceSubLayout != null) {									
+					sourceSubLayout.requestLayout();
+				}
+
+				if (targetSubLayout != null) {
+					targetSubLayout.requestLayout();
+				}
+
+				topLayout.requestLayout();
 
 			}
 		}             
@@ -375,6 +727,14 @@ public class DragDropManager {
 
 	};
 
+	private void showOrderConstraintViolationMessage() {
+	
+		Alert.show("Move not permitted", "Moving this step here would violate a required ordering.", AlertConfig.OK, null);
+		restoreOriginalPosition(); 
+
+	}
+	
+	
 	public static String getDeletePromptText(int numSteps, int numResults) {
 		String message = "";
 
@@ -394,5 +754,4 @@ public class DragDropManager {
 	}
 
 }
-
 

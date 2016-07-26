@@ -52,12 +52,6 @@ public abstract class CommonView extends Pane implements IStepViewContainer {
 	}
 
 	@Override
-	public void updateIssuesVisualization() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public StepView findStepView(StepModel step) {
 		// TODO Auto-generated method stub
 		return null;

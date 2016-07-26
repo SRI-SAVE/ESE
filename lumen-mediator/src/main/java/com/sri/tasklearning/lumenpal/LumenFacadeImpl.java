@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-// $Id: LumenFacadeImpl.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: LumenFacadeImpl.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.lumenpal;
 
 import java.util.Map;
 
+import com.sri.ai.lumen.agent.SimpleAgent;
 import com.sri.ai.lumen.atr.ATRSyntax;
 import com.sri.ai.lumen.atr.decl.ATRActionDeclaration;
 import com.sri.ai.lumen.atr.term.ATRTerm;
@@ -100,5 +101,16 @@ public class LumenFacadeImpl
     @Override
     public void shutdown() {
         lumen.disconnectFromLumen();
+    }
+
+    @Override
+    public void executeAction(String actName,
+                              Object[] args) {
+        lumen.executeAction(actName, args);
+    }
+
+    @Override
+    public SimpleAgent getAgent() {
+        return lumen.getAgent();
     }
 }

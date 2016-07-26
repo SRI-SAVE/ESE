@@ -24,7 +24,6 @@ import javafx.util.Callback;
 import com.sri.tasklearning.ui.core.Fonts;
 import com.sri.tasklearning.ui.core.common.CommonView;
 import com.sri.tasklearning.ui.core.control.constant.ConstantEditor;
-import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 import com.sri.tasklearning.ui.core.step.StepView;
 import com.sri.tasklearning.ui.core.term.ConstantValueModel;
 import com.sri.tasklearning.ui.core.term.ParameterModel;

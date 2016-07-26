@@ -83,7 +83,8 @@ public class LumenTaskResultListener_Test extends LumenMediatorTestCase {
                 typeResultGetter);
         ProcedureDependencyFinder procDepFinder = new ProcedureDependencyFinder(
                 actionModel, typeFetcher);
-        execHandler = new MockExecutionHandler(actionModel, new TypeFetcher(
+        RunOnce runOnce = new RunOnce(lumen, actionModel, procDepFinder);
+        execHandler = new MockExecutionHandler(runOnce, actionModel, new TypeFetcher(
                 spineFacade, actionModel, typeResultGetter), serialGetter,
                 spineFacade, procDepFinder);
     }

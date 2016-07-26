@@ -16,17 +16,6 @@
 
 package com.sri.tasklearning.ui.core.step;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.shape.Line;
-
 import com.sri.tasklearning.ui.core.Utilities;
 import com.sri.tasklearning.ui.core.control.ToolTippedImageView;
 import com.sri.tasklearning.ui.core.exercise.ExerciseEditController;
@@ -37,11 +26,27 @@ import com.sri.tasklearning.ui.core.exercise.NewGroupSequenceCommand;
 import com.sri.tasklearning.ui.core.exercise.ToggleStepOptionalCommand;
 import com.sri.tasklearning.ui.core.layout.TextFlowLayout;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
+
 /**
  * View for {@link ExerciseStepModel}.  
  */
 
-public class ExerciseStepView extends ActionStepView {
+public class ExerciseStepView extends StepViewBasicUI {
 
 	protected static Image optionalIcon; 
 	protected static Image requiredIcon;
@@ -59,17 +64,43 @@ public class ExerciseStepView extends ActionStepView {
 	
 	protected SimpleObjectProperty<Image> currentGroupCommandIcon; 
 	
-	protected SimpleObjectProperty<Image> currentNewGroupCommandIcon; 
+	protected SimpleObjectProperty<Image> currentNewGroupCommandIcon;
 	
+	protected ChangeListener listener = null;
+	protected ChangeListener listener2 = null;
+	
+
+	public SimpleDoubleProperty socketNorthXInParent = new SimpleDoubleProperty(); 
+	public SimpleDoubleProperty socketNorthYInParent = new SimpleDoubleProperty(); 
+    
+	public SimpleDoubleProperty socketSouthXInParent = new SimpleDoubleProperty(); 
+	public SimpleDoubleProperty socketSouthYInParent = new SimpleDoubleProperty();     
+    
+	public SimpleDoubleProperty socketEastXInParent = new SimpleDoubleProperty(); 
+	public SimpleDoubleProperty socketEastYInParent = new SimpleDoubleProperty(); 
+    
+	public SimpleDoubleProperty socketWestXInParent = new SimpleDoubleProperty(); 
+	public SimpleDoubleProperty socketWestYInParent = new SimpleDoubleProperty(); 
+    	 
 	public ExerciseStepView(
 
 			final ExerciseStepModel argModel, 
 			final IStepViewContainer argParent, 
 			final ExerciseView argProcView) {
 
-		super(argModel, argParent, argProcView); 
-		
+	     super(argModel, argParent, argProcView);
+	     
+	     super.addChildren();        
+
 	}
+	
+/*
+    public void recalcHeight() {    	
+
+        contentHeight.setValue( StepView.DEFAULT_STEP_HEIGHT); 
+    	
+    } */
+
 
 	protected Pane createTitlePane() {
 		
@@ -81,9 +112,9 @@ public class ExerciseStepView extends ActionStepView {
 		// configure commands
 		//
 		
-		optionalCommand = new ToggleStepOptionalCommand((ExerciseEditController) procedureView.getController(), this);
-		groupCommand    = new GroupUngroupSequenceCommand((ExerciseEditController) procedureView.getController(), this);				
-		newGroupCommand = new NewGroupSequenceCommand((ExerciseEditController) procedureView.getController(), this);				
+		optionalCommand = new ToggleStepOptionalCommand((ExerciseEditController) commonView.getController(), this);
+		groupCommand    = new GroupUngroupSequenceCommand((ExerciseEditController) commonView.getController(), this);				
+		newGroupCommand = new NewGroupSequenceCommand((ExerciseEditController) commonView.getController(), this);				
 		 
 		optionalIcon = Utilities.getImage("letter-O-icon.png");
 		requiredIcon   = Utilities.getImage("letter-R-icon.png");
@@ -110,9 +141,7 @@ public class ExerciseStepView extends ActionStepView {
 
 		headerText = new TextFlowLayout(this);
 		headerText.setPadding(new Insets(1.5 * PAD, 0, 1.5 * PAD, 0));
-
-		final Line bottomBorder = new Line();		
-			
+		
 		titlePane = new Pane() {
 			@Override
 			protected void layoutChildren() {
@@ -130,31 +159,33 @@ public class ExerciseStepView extends ActionStepView {
 				newGroupToggleButton.setLayoutY(getHeight() / 2 - (TITLE_PANE_BUTTON_SIZE / 2));
 
 			}
-
-			@Override
-			public double computePrefHeight(double width) {
-				return headerText.prefHeight(-1);
-			}
-		};
-	
-		double right = 3 * PAD + 2 * TITLE_PANE_BUTTON_SIZE;
-
-		headerText.prefWrapLengthProperty().bind(
-				widthProperty().subtract(2 * DEFAULT_BORDER_WIDTH + TITLE_PANE_LHS + right));
-		titlePane.prefWidthProperty().bind(widthProperty().subtract(2 * DEFAULT_BORDER_WIDTH));
-		titlePane.setMinWidth(Region.USE_PREF_SIZE);
-		titlePane.setMaxWidth(Region.USE_PREF_SIZE);
-		titlePane.setMinHeight(Region.USE_PREF_SIZE);
-		titlePane.setMaxHeight(Region.USE_PREF_SIZE);
-
-		bottomBorder.setStroke(borderColor.getValue());
-		bottomBorder.setStrokeWidth(DEFAULT_BORDER_WIDTH);
-
-		bottomBorder.setStartX(0);
-		bottomBorder.endXProperty().bind(titlePane.widthProperty());
-		bottomBorder.startYProperty().bind(titlePane.heightProperty().subtract(DEFAULT_BORDER_WIDTH));
-		bottomBorder.endYProperty().bind(titlePane.heightProperty().subtract(DEFAULT_BORDER_WIDTH));
 		
+		};
+				
+		
+	    listener = new ChangeListener() {		
+				@Override
+				public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+					updateTitlePaneWidth(); 						
+				}
+			}; 	        		
+			
+	   listener2 = new ChangeListener() {		
+					@Override
+					public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+						updateAnchors(); 						
+					}
+				}; 	        		
+			
+		
+		parentView.addListener(listener); 				
+		parentView.addListener(listener2);	        
+
+		boundsInParentProperty().addListener(listener); 
+		boundsInParentProperty().addListener(listener2); 
+		
+		forceRefresh(); 
+						
 		//
 		// optional toggle button
 		// 
@@ -185,7 +216,7 @@ public class ExerciseStepView extends ActionStepView {
                 } else {                       
                 	currentOptionalCommandIcon.setValue(requiredIcon);
                 }
-                recalcHeight();   
+                //recalcHeight();   
 			}
 		}); 
 		
@@ -219,7 +250,8 @@ public class ExerciseStepView extends ActionStepView {
                 } else {                       
                 	currentGroupCommandIcon.setValue(groupIcon);
                 }
-                recalcHeight();   
+            	            	
+                //recalcHeight();   
 			}
 		}); 
 		
@@ -248,7 +280,7 @@ public class ExerciseStepView extends ActionStepView {
         //
         //
    
-        titlePane.getChildren().addAll(headerText, bottomBorder, // newGroupToggleButton, 
+        titlePane.getChildren().addAll(headerText, // bottomBorder,  newGroupToggleButton, 
         		groupToggleButton, optionalToggleButton);
         
 		if (((ExerciseStepModel) stepModel).isOptional()) {
@@ -276,8 +308,6 @@ public class ExerciseStepView extends ActionStepView {
 			}
 		};
 
-		contentArea.addListener(presentationChangedListener);
-
 		((ExerciseStepModel) stepModel).getIsOptional().addListener(presentationChangedListener);
 		// ((ExerciseStepModel) stepModel).isOptional.addListener(presentationChangedListener);
 		
@@ -290,5 +320,66 @@ public class ExerciseStepView extends ActionStepView {
 		return titlePane;
 		
 	}
+	
+	
+	void updateTitlePaneWidth() {
+		
+	  if ( parentView.getValue() instanceof ExerciseView )  
+		  titlePane.setPrefWidth( StepView.DEF_WIDTH); 
+		else 
+		 titlePane.setPrefWidth( StepView.DEF_WIDTH - LHS_OFFSET );
+	  
+	}
+	
+	public void forceRefresh() {
+		
+		// updateAnchors(); 
+
+		if (listener != null)
+			listener.changed(null,  null,  null);
+		if (listener2 != null) 
+			listener2.changed(null,  null,  null);
+		
+	}
+	
+		  
+	public void updateAnchors() {
+
+		super.updateAnchors();		
+
+		if ( getStepViewContainer() instanceof ExerciseSubtaskView) {
+
+			Pane parent = titlePane;
+			Bounds bounds = parent.getLayoutBounds();
+
+			int i = 0;
+
+			// umm, number 6 is the magic number of transformations that 
+			// we need to compose in order to get to the right parent coordinate system!!
+			// that should be rewritten..			
+			while (parent != null && i < 6) {
+				bounds = parent.localToParent(bounds); 				 
+				parent = (Pane) parent.getParent();
+				i++; 
+			}
+
+			if (parent != null) {
+
+				socketNorthXInParent.setValue( (bounds.getMinX() + bounds.getMaxX()) / 2); 
+				socketSouthXInParent.setValue( (bounds.getMinX() + bounds.getMaxX()) / 2); 
+
+				socketNorthYInParent.setValue( (bounds.getMinY() - 4 ));  
+				socketSouthYInParent.setValue( (bounds.getMinY() + getHeight() - 8 ));
+
+				socketEastXInParent.setValue( bounds.getMaxX() ); 
+				socketEastYInParent.setValue( (bounds.getMinY() + bounds.getMaxY()) / 2);
+
+				socketWestXInParent.setValue( bounds.getMinX() ); 
+				socketWestYInParent.setValue( (bounds.getMinY() + bounds.getMaxY()) / 2);
+			}
+		}
+
+	}; 
+
 
 }

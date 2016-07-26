@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="0.1">
+    <require url="cooking_types.xml"/>
+    <action id="Add">
+        <description>Add food to a container</description>
+        <metadata value="Add food to a container" key="name"/>
+        <metadata value="Add ,#quantity, ,#volumeUnit, ,#food, to ,#container," key="fancyName"/>
+        <inputParam id="quantity">
+            <description>The quantity to be added</description>
+            <typeRef typeId="Quantity"/>
+        </inputParam>
+        <inputParam id="volumeUnit">
+            <description>The unit of measurement</description>
+            <typeRef typeId="Volume"/>
+        </inputParam>
+        <inputParam id="food">
+            <description>The food to be added</description>
+            <typeRef typeId="Food"/>
+        </inputParam>
+        <inputParam id="container">
+            <description>The container in which to add the food</description>
+            <typeRef typeId="Container"/>
+        </inputParam>
+    </action>
+    <action id="MixContents">
+        <description>Mix the contents of a container</description>
+        <metadata value="Mix the contents of a container" key="name"/>
+        <metadata value="Mix contents of ,#container, with ,#utensil," key="fancyName"/>
+        <inputParam id="container">
+            <description>The container</description>
+            <typeRef typeId="Container"/>
+        </inputParam>
+        <inputParam id="utensil">
+            <description>The mixing implement</description>
+            <typeRef typeId="Utensil"/>
+        </inputParam>
+    </action>    
+    <action id="Put">
+        <description>Put something on something</description>
+        <metadata value="Put something in/on something" key="name"/>
+        <metadata value="Put ,#thingPut, in/on ,#thingPutOn," key="fancyName"/>
+        <inputParam id="thingPut">
+            <description>The thing being put</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+        <inputParam id="thingPutOn">
+            <description>The thing put on</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+    </action>
+    <action id="SetHeat">
+        <description>Set the heat</description>
+        <metadata value="Set the heat on an appliance" key="name"/>
+        <metadata value="Set heat on ,#appliance, to ,#setting," key="fancyName"/>
+        <inputParam id="appliance">
+            <description>The appliance whose heat to set</description>
+            <typeRef typeId="Appliance"/>
+        </inputParam>
+        <inputParam id="setting">
+            <description>The heat setting</description>
+            <typeRef typeId="HeatSetting"/>
+        </inputParam>
+    </action>    
+    <action id="HeatContentsUntil">
+        <description>Heat the contents of some cookware</description>
+        <metadata value="Heat the contents of some cookware" key="name"/>
+        <metadata value="Heat contents of ,#cookware, until ,#state," key="fancyName"/>
+        <inputParam id="cookware">
+            <description>The cookware to be heated</description>
+            <typeRef typeId="Cookware"/>
+        </inputParam>
+        <inputParam id="state">
+            <description>The end heating state</description>
+            <typeRef typeId="CookingState"/>
+        </inputParam>
+    </action>    
+    <action id="CookContents">
+        <description>Cook the contents of some cookware for some amount of time</description>
+        <metadata value="Cook the contents of some cookware for some amount of time" key="name"/>
+        <metadata value="Cook contents of ,#cookware, for ,#amount, ,#temporalUnit," key="fancyName"/>
+        <inputParam id="cookware">
+            <description>The cookware whose contents to cook</description>
+            <typeRef typeId="Cookware"/>
+        </inputParam>
+        <inputParam id="amount">
+            <description>The temporal amount</description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="temporalUnit">
+            <description>The temporal unit</description>
+            <typeRef typeId="TemporalUnit"/>
+        </inputParam>
+    </action>    
+    <action id="Grill">
+        <description>Grill some food for some amount of time</description>
+        <metadata value="Grill some food for some amount of time" key="name"/>
+        <metadata value="Grill ,#food, for ,#amount, ,#temporalUnit," key="fancyName"/>
+        <inputParam id="food">
+            <description>The food to grill</description>
+            <typeRef typeId="Food"/>
+        </inputParam>
+        <inputParam id="amount">
+            <description>The temporal amount</description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="temporalUnit">
+            <description>The temporal unit</description>
+            <typeRef typeId="TemporalUnit"/>
+        </inputParam>
+    </action>    
+    <action id="Flip">
+        <description>Flip something</description>
+        <metadata value="Flip something" key="name"/>
+        <metadata value="Flip ,#thing," key="fancyName"/>
+        <inputParam id="thing">
+            <description>The thing to flip</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+    </action>
+    <action id="Spread">
+        <description>Spread some type of food on something</description>
+        <metadata value="Spread some food on something" key="name"/>
+        <metadata value="Spread ,#quantity, ,#volumeUnit, of ,#food, on ,#thing," key="fancyName"/>
+        <inputParam id="quantity">
+            <description>The quantity to be added</description>
+            <typeRef typeId="Quantity"/>
+        </inputParam>
+        <inputParam id="volumeUnit">
+            <description>The unit of measurement</description>
+            <typeRef typeId="Volume"/>
+        </inputParam>
+        <inputParam id="food">
+            <description>The food to be spread</description>
+            <typeRef typeId="Food"/>
+        </inputParam>
+        <inputParam id="thing">
+            <description>The thing on which to spread the food</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+    </action>
+    <action id="Move">
+        <description>Move something from one place to another</description>
+        <metadata value="Move something from one place to another" key="name"/>
+        <metadata value="Move ,#thingMoved, from ,#thingFrom, to ,#thingTo," key="fancyName"/>
+        <inputParam id="thingMoved">
+            <description>The thing being moved</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+        <inputParam id="thingFrom">
+            <description>The origin</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+        <inputParam id="thingTo">
+            <description>The destination</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+    </action>
+    <action id="Run">
+        <description>Run an appliance</description>
+        <metadata value="Run an appliance for some amount of time" key="name"/>
+        <metadata value="Run ,#appliance, for ,#amount, ,#temporalUnit," key="fancyName"/>
+        <inputParam id="appliance">
+            <description>The appliance being run</description>
+            <typeRef typeId="SmallAppliance"/>
+        </inputParam>
+        <inputParam id="amount">
+            <description>The quantity</description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="temporalUnit">
+            <description>The temporal unit</description>
+            <typeRef typeId="TemporalUnit"/>
+        </inputParam>
+    </action> 
+    <action id="MoveContents">
+        <description>Move the contents of something</description>
+        <metadata value="Move the contents of something to some other place" key="name"/>
+        <metadata value="Move contents of ,#container, to ,#destination," key="fancyName"/>
+        <inputParam id="container">
+            <description>The container whose contents are being moved</description>
+            <typeRef typeId="Container"/>
+        </inputParam>
+        <inputParam id="destination">
+            <description>The destination for the contents</description>
+            <typeRef typeId="Container"/>
+        </inputParam>
+    </action>
+    <action id="CoolContents">
+        <description>Cool the contents of some container for some amount of time</description>
+        <metadata value="Cool the contents of some container for some amount of time" key="name"/>
+        <metadata value="Cool contents of ,#container, for ,#amount, ,#temporalUnit," key="fancyName"/>
+        <inputParam id="container">
+            <description>The container whose contents to cool</description>
+            <typeRef typeId="Container"/>
+        </inputParam>
+        <inputParam id="amount">
+            <description>The temporal amount</description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="temporalUnit">
+            <description>The temporal unit</description>
+            <typeRef typeId="TemporalUnit"/>
+        </inputParam>
+    </action>    
+    <action id="CutContents">
+        <description>Cut the contents of some container</description>
+        <metadata value="Cut the contents of some container into some shape" key="name"/>
+        <metadata value="Cut contents of ,#container, into ,#shape," key="fancyName"/>
+        <inputParam id="container">
+            <description>The container whose contents to cut</description>
+            <typeRef typeId="Container"/>
+        </inputParam>
+        <inputParam id="shape">
+            <description>The shape to cut</description>
+            <typeRef typeId="Shape"/>
+        </inputParam>
+    </action>    
+    <action id="Roll">
+        <description>Roll out something</description>
+        <metadata value="Roll out something" key="name"/>
+        <metadata value="Roll ,#food, to ,#quantity, ,#unit, thickness" key="fancyName"/>
+        <inputParam id="food">
+            <description>The food to roll out</description>
+            <typeRef typeId="Food"/>
+        </inputParam>
+        <inputParam id="quantity">
+            <description>The thickness to roll to</description>
+            <typeRef typeId="Quantity"/>
+        </inputParam>
+        <inputParam id="unit">
+            <description>The unit of thickness</description>
+            <typeRef typeId="Thickness"/>
+        </inputParam>
+    </action>    
+    <action id="Rotate">
+        <description>Rotate something</description>
+        <metadata value="Rotate something" key="name"/>
+        <metadata value="Rotate ,#thing," key="fancyName"/>
+        <inputParam id="thing">
+            <description>The thing to rotate</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+    </action>
+    
+</actionModel>
+	

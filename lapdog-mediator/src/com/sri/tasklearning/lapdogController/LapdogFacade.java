@@ -15,14 +15,6 @@
  */
 package com.sri.tasklearning.lapdogController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import com.sri.ai.tasklearning.lapdog.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sri.ai.lumen.atr.ATRParameter;
 import com.sri.ai.lumen.atr.ATRSig;
 import com.sri.ai.lumen.atr.ATRSyntax;
@@ -39,11 +31,17 @@ import com.sri.ai.lumen.atr.term.ATRLiteral;
 import com.sri.ai.lumen.atr.term.ATRMap;
 import com.sri.ai.lumen.atr.term.ATRTerm;
 import com.sri.ai.lumen.syntax.LumenSyntaxError;
-import com.sri.ai.tasklearning.lapdog.core.ActionInstanceList;
+import com.sri.ai.tasklearning.lapdog.*;
 import com.sri.ai.tasklearning.lapdog.Lapdog.TypeError;
 import com.sri.pal.training.core.exercise.Option;
 import com.sri.tasklearning.spine.Spine;
 import com.sri.tasklearning.spine.util.TypeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Will Haines
@@ -55,11 +53,7 @@ public class LapdogFacade {
             .getLogger(LapdogFacade.class);
 
     public static final String AGAVE_CLASS = "com.sri.ai.tasklearning.lapdog.agave.Agave";
-    private static final String CFG_DISABLE_LOOPS = "lapdog.disable-loop-learning";
-    private static final String CFG_VAR_RENUM = "lapdog.naming.variable.renumbering";
-    private static final String CFG_VAR_SEP = "lapdog.naming.variable.separator";
     private static final String CFG_INTERACT_STRAT = "lapdog.interaction-strategy";
-    private static final String CFG_FILTER_ACTIONS = "lapdog.filter-actions";
     private static final String CFG_FILTER_INPUTS = "lapdog.filter-inputs";
     private static final String CFG_LEARN_MODE = "lapdog.learning-mode";
 
@@ -250,22 +244,14 @@ public class LapdogFacade {
     /**
      * Synchronized delegate to
      * {@link CommonTaskRepresentation#learn}
-     *
-     * @param demo
-     * @param taskName
-     * @throws LapdogException
      */
     synchronized CTRActionDeclaration learn(ATRDemonstration demo,
                                             Properties learnProps,                                            
                                             String taskName)
             throws LapdogException {
 
-        if (learnProps == null)  // Some tests pass a null property list. -tomlee
+        if (learnProps == null) {
             learnProps = new Properties();
-
-        /* Disable loop learning if requested. */
-        if (System.getProperty(CFG_DISABLE_LOOPS) != null && !learnProps.containsKey(CFG_DISABLE_LOOPS)) {
-            learnProps.setProperty(CFG_DISABLE_LOOPS, System.getProperty(CFG_DISABLE_LOOPS));
         }
 
         if (demo.getMetadata().get(AtrInputLanguage.taskInputPropertyName) != null) {
@@ -275,32 +261,15 @@ public class LapdogFacade {
             learnProps.setProperty(CFG_FILTER_INPUTS, Boolean.TRUE.toString());
         }
 
-        // [CPOF 6.0] Enable variable renaming/renumbering using a counter per variable name stem,
-        // as opposed to the default of one global counter.
-        if (!learnProps.containsKey(CFG_VAR_RENUM)) {
-            learnProps.setProperty(CFG_VAR_RENUM, LapdogConfiguration.VariableRenumbering.STEM.toString());
-        }
-
-        // [CPOF 7.0] Respect system property for LAPDOG variable naming policy
-        if (System.getProperty(CFG_VAR_SEP) != null && !learnProps.containsKey(CFG_VAR_SEP)) {
-            String sep = System.getProperty(CFG_VAR_SEP);
-            learnProps.setProperty(CFG_VAR_SEP, sep);
-            _logger.debug("Setting variable name separator of LAPDOG to {}.", sep);
-        }
-
         if (!learnProps.containsKey(CFG_INTERACT_STRAT)) {
             learnProps.setProperty(CFG_INTERACT_STRAT,
                     LapdogConfiguration.InteractionStrategy.AUTONOMOUS_WITH_SEARCH.toString());
         }
 
-        if (!learnProps.containsKey(CFG_FILTER_ACTIONS)) {
-            learnProps.setProperty(CFG_FILTER_ACTIONS, Boolean.FALSE.toString());
-        }
-
         LapdogConfiguration learnCfg = new LapdogConfiguration(learnProps, true);
+        learnCfg = new LapdogConfiguration(learnCfg, System.getProperties(), false);
 
-       
-        _logger.debug("Learning procedure: name {}, actions {}", taskName,
+        _logger.debug("Learning procedure: name {}, config {}, actions {}", taskName, learnCfg,
                 demo);
         CTRActionDeclaration p = (CTRActionDeclaration) ctr.learn(demo, taskName, learnCfg);
         _logger.debug("Lapdog returned: {}", ATRSyntax.toSource(p));

@@ -1,0 +1,220 @@
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+    <type id="Milk">
+        <description>Milk.</description>
+        <enum>
+            <value>wholeMilk</value>
+            <value>2%milk</value>
+            <value>1%milk</value>
+            <value>fatFreeMilk</value>
+        </enum>
+    </type>
+
+    <!-- Defined before its parent. -->
+    <type id="Cheese">
+        <description>Cheese.</description>
+        <enum>
+            <value>mozzarella</value>
+            <value>cheddar</value>
+            <value>Parmesan</value>
+            <value>Swiss</value>
+        </enum>
+    </type>
+
+    <!-- Contains its own values, in addition to ones from its children. -->
+    <type id="Food">
+        <description>Food.</description>
+        <enum>
+            <subType sub="Cheese"/>
+            <subType sub="Milk"/>
+            <value>chocolateChips</value>
+            <value>egg</value>
+        </enum>
+    </type>
+
+    <type id="Bakeware">
+        <description>Pans, etc.</description>
+        <enum>
+            <value>bakingPan</value>
+            <value>muffinTin</value>
+            <value>bakingSheet</value>
+        </enum>
+    </type>
+
+    <type id="Dinnerware">
+        <description>Things you eat off of.</description>
+        <enum>
+            <value>plate</value>
+            <value>bowl</value>
+            <value>cup</value>
+        </enum>
+    </type>
+
+    <type id="Accessory">
+        <description>Containers, utensils, etc.</description>
+        <enum>
+            <subType sub="Bakeware"/>
+            <subType sub="Dinnerware"/>
+        </enum>
+    </type>
+
+    <!-- Parent type with only values from its children. -->
+    <type id="Kitchenware">
+        <description>Cooking implements.</description>
+        <enum>
+            <subType sub="Accessory"/>
+        </enum>
+    </type>
+
+    <!-- Root of the enum hierarchy. Contains only values from its children. -->
+    <type id="Thing">
+        <description>Things.</description>
+        <enum>
+            <subType sub="Food"/>
+            <subType sub="Kitchenware"/>
+        </enum>
+    </type>
+
+    <action id="makeMilk">
+        <description>Make Milk as an input.</description>
+        <outputParam id="milk">
+            <description>Milk.</description>
+            <typeRef typeId="Milk"/>
+        </outputParam>
+    </action>
+
+    <action id="useMilk">
+        <description>Use Milk as an input.</description>
+        <inputParam id="milk">
+            <description>Milk.</description>
+            <typeRef typeId="Milk"/>
+        </inputParam>
+    </action>
+
+    <action id="makeCheese">
+        <description>Make Cheese as an input.</description>
+        <outputParam id="cheese">
+            <description>Cheese.</description>
+            <typeRef typeId="Cheese"/>
+        </outputParam>
+    </action>
+
+    <action id="useCheese">
+        <description>Use Cheese as an input.</description>
+        <inputParam id="cheese">
+            <description>Cheese.</description>
+            <typeRef typeId="Cheese"/>
+        </inputParam>
+    </action>
+
+    <action id="makeFood">
+        <description>Make Food as an input.</description>
+        <outputParam id="food">
+            <description>Food.</description>
+            <typeRef typeId="Food"/>
+        </outputParam>
+    </action>
+
+    <action id="useFood">
+        <description>Use Food as an input.</description>
+        <inputParam id="food">
+            <description>Food.</description>
+            <typeRef typeId="Food"/>
+        </inputParam>
+    </action>
+
+    <action id="makeBakeware">
+        <description>Make Bakeware as an input.</description>
+        <outputParam id="bakeware">
+            <description>Bakeware.</description>
+            <typeRef typeId="Bakeware"/>
+        </outputParam>
+    </action>
+
+    <action id="useBakeware">
+        <description>Use Bakeware as an input.</description>
+        <inputParam id="bakeware">
+            <description>Bakeware.</description>
+            <typeRef typeId="Bakeware"/>
+        </inputParam>
+    </action>
+
+    <action id="makeDinnerware">
+        <description>Make Dinnerware as an input.</description>
+        <outputParam id="dinnerware">
+            <description>Dinnerware.</description>
+            <typeRef typeId="Dinnerware"/>
+        </outputParam>
+    </action>
+
+    <action id="useDinnerware">
+        <description>Use Dinnerware as an input.</description>
+        <inputParam id="dinnerware">
+            <description>Dinnerware.</description>
+            <typeRef typeId="Dinnerware"/>
+        </inputParam>
+    </action>
+
+    <action id="makeAccessory">
+        <description>Make Accessory as an input.</description>
+        <outputParam id="accessory">
+            <description>Accessory.</description>
+            <typeRef typeId="Accessory"/>
+        </outputParam>
+    </action>
+
+    <action id="useAccessory">
+        <description>Use Accessory as an input.</description>
+        <inputParam id="accessory">
+            <description>Accessory.</description>
+            <typeRef typeId="Accessory"/>
+        </inputParam>
+    </action>
+
+    <action id="makeKitchenware">
+        <description>Make Kitchenware as an input.</description>
+        <outputParam id="kitchenware">
+            <description>Kitchenware.</description>
+            <typeRef typeId="Kitchenware"/>
+        </outputParam>
+    </action>
+
+    <action id="useKitchenware">
+        <description>Use Kitchenware as an input.</description>
+        <inputParam id="kitchenware">
+            <description>Kitchenware.</description>
+            <typeRef typeId="Kitchenware"/>
+        </inputParam>
+    </action>
+
+    <action id="makeThing">
+        <description>Make Thing as an input.</description>
+        <outputParam id="thing">
+            <description>Thing.</description>
+            <typeRef typeId="Thing"/>
+        </outputParam>
+    </action>
+
+    <action id="useThing">
+        <description>Use Thing as an input.</description>
+        <inputParam id="thing">
+            <description>Thing.</description>
+            <typeRef typeId="Thing"/>
+        </inputParam>
+    </action>
+</actionModel>

@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="./am-to-html.xslt"?>
+
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+    
+    <type id="integer">
+        <description>An integer value</description>
+        <atom>
+            <javaType>java.lang.Integer</javaType>
+        </atom>
+    </type>
+
+    <type id="string">
+        <description>A string value</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="set(string)">
+        <description>A set of strings</description>
+        <set>
+            <ref typeRef="string"/>
+        </set>
+    </type>
+
+    <type id="imageID">
+        <description>Unique identifier, used internally, to identify an in-memory image</description>
+        <atom>
+            <javaType>java.lang.Integer</javaType>
+        </atom>
+    </type>
+
+    <type id="directory">
+        <description>A file system path that references a directory.</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="basefilename">
+        <description>The base file name of a file, excluding its extension</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="extension">
+        <description>The trailing portion of the file name that indicates by convention its type.
+       Exs: "png" "tar.gz" </description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="file">
+        <description>
+    A file on a file system, consisting of a directory,
+    a base file name, and an extension indicating file type
+        </description>
+        <tuple>
+          <ref name="directory" typeRef="directory"/>
+          <ref name="file name" typeRef="basefilename"/>
+          <ref name="extension" typeRef="extension"/>
+      </tuple>
+    </type>
+
+    <type id="set(file)">
+      <description>A set of files</description>
+      <set>
+          <ref typeRef="file"/>
+      </set>
+    </type>
+
+    <action id="OpenImageFile">
+        <description>
+            Opens an image file in the Image Viewer.
+    </description>
+        <metadata key="name" value="Open image in ,#file"/>
+        <metadata key="fancyName" value="Open ,#file"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="file">
+            <description>
+                The image file to open
+            </description>
+            <typeRef typeId="file"/>
+        </inputParam>
+        <outputParam id="image">
+             <description>
+                Identifies the in-memory image currently being manipulated
+            </description>
+           <typeRef typeId="imageID"/>
+        </outputParam>
+    </action>
+
+    <action id="SaveImageFile">
+        <description>
+            Saves an image file in the Image Viewer.
+    </description>
+        <metadata key="name" value="Save image"/>
+        <metadata key="fancyName" value="Save image to ,#file"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="image">
+           <description>
+                The in-memory image to be saved
+           </description>
+           <typeRef typeId="imageID"/>
+        </inputParam>
+        <inputParam id="file">
+            <description>
+                The file to save the image in
+            </description>
+            <typeRef typeId="file"/>
+        </inputParam>
+    </action>
+
+    <action id="SelectImageFiles">
+        <description>
+            Selects all image files in a directory having the desired format(s)
+        </description>
+        <metadata key="name" value="Select images in directory"/>
+        <metadata key="fancyName" value="Select all image files in ,#directory, with formats ,#formats,; these are ,#files"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="directory">
+            <description>
+                The image file to open
+            </description>
+            <typeRef typeId="directory"/>
+        </inputParam>
+        <inputParam id="formats">
+            <description>
+                The image format or formats to include
+            </description>
+            <typeRef typeId="set(string)"/>
+        </inputParam>
+        <outputParam id="files">
+             <description>
+                All files in the directory
+            </description>
+           <typeRef typeId="set(file)"/>
+        </outputParam>
+    </action>
+
+    <action id="OpenNextImageFile">
+        <description>
+            Iterates over a set of image files 
+        </description>
+        <metadata key="name" value="Open next image"/>
+        <metadata key="fancyName" value="Open next image ,#file from a group of images ,#files"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="files">
+            <description>
+                The set of image files being manipulated
+            </description>
+            <typeRef typeId="set(file)"/>
+        </inputParam>
+        <inputParam id="file">
+            <description>
+                The image file to open
+            </description>
+            <typeRef typeId="file"/>
+        </inputParam>
+        <outputParam id="image">
+             <description>
+                Identifies the in-memory image currently being manipulated
+            </description>
+           <typeRef typeId="imageID"/>
+        </outputParam>
+    </action>
+
+    <action id="ResizeImage">
+        <description>
+            Resizes an in-memory image
+        </description>
+        <metadata key="name" value="Resize image"/>
+        <metadata key="fancyName" value="Resize image to ,#resolution-x, X ,#resolution-y"/>
+        <metadata key="icon" value="./fapps/image.jpg"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="image">
+             <description>
+                Identifies the in-memory image currently being manipulated
+            </description>
+           <typeRef typeId="imageID"/>
+        </inputParam>
+        <inputParam id="resolution-x">
+            <description>
+                The x dimension of the resized image, in pixels
+            </description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <inputParam id="resolution-y">
+            <description>
+                The y dimension of the resized image, in pixels
+            </description>
+            <typeRef typeId="integer"/>
+        </inputParam>
+        <outputParam id="resized-image">
+             <description>
+                Identifies the resized image
+            </description>
+           <typeRef typeId="imageID"/>
+        </outputParam>
+    </action>
+
+</actionModel>

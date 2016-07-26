@@ -141,6 +141,7 @@
             <xs:element name="query_constraint"    type="QueryConstraint"    minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="state_constraint"    type="StateConstraint"    minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="value_constraint"    type="ValueConstraint"    minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="type_constraint"     type="TypeConstraint"     minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
@@ -174,20 +175,53 @@
     </xs:complexType>
     
     <xs:complexType name="ValueConstraint">
+        <xs:annotation>
+            <xs:documentation>
+                Value constraint contains one or more values that the parameter must conform to. A value element is a
+                literal value, and a ref element contains an expression that can be evaluated by Lumen to produce a
+                value. If multiple value and/or ref elements are present, the parameter may be equal to any of the set.
+                If min and max value or ref elements are present, this constraint represents a range of acceptable
+                values which the parameter must conform to.
+            </xs:documentation>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="parameter" type="xs:string" minOccurs="1" maxOccurs="1" />
-            <xs:element name="value"     type="Value"     minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="ref"       type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="value"     type="Value"     minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="ref"       type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:choice>
+                        <xs:element name="min_value" type="Value"     minOccurs="1" maxOccurs="1" />
+                        <xs:element name="min_ref"   type="xs:string" minOccurs="1" maxOccurs="1" />
+                    </xs:choice>
+                    <xs:choice>
+                        <xs:element name="max_value" type="Value"     minOccurs="1" maxOccurs="1" />
+                        <xs:element name="max_ref"   type="xs:string" minOccurs="1" maxOccurs="1" />
+                    </xs:choice>
+                </xs:sequence>
+            </xs:choice>
             <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
-        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />  
+        <xs:attribute name="editable" type="xs:boolean" use="optional" default="true" />
+        <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
     </xs:complexType>
     
+    <xs:complexType name="TypeConstraint">
+        <xs:sequence>
+            <xs:element name="parameter" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="type"      type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="reason"    type="xs:string" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="EqualityConstraint">
         <xs:sequence>
             <xs:element name="parameter" type="xs:string" minOccurs="2" maxOccurs="unbounded" />
             <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
-        </xs:sequence>  
+        </xs:sequence>
+        <xs:attribute name="editable" type="xs:boolean" use="optional" default="true" />
         <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
         <xs:attribute name="support" type="xs:boolean" use="optional" default="false" />
     </xs:complexType>
@@ -196,6 +230,7 @@
         <xs:sequence>
             <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
+        <xs:attribute name="editable" type="xs:boolean" use="optional" default="true" />
         <xs:attribute name="predecessor" type="xs:string" use="optional" />
         <xs:attribute name="successor"   type="xs:string" use="optional" /> 
     </xs:complexType>
@@ -212,6 +247,7 @@
             <xs:element name="arg" type="ConstraintArgument" minOccurs="1" maxOccurs="unbounded" /> 
             <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
+        <xs:attribute name="editable" type="xs:boolean" use="optional" default="true" />
         <xs:attribute name="functor" type="xs:string"  use="required" />
         <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
     </xs:complexType>
@@ -221,6 +257,7 @@
             <xs:element name="arg" type="ConstraintArgument" minOccurs="1" maxOccurs="unbounded" /> 
             <xs:element name="reason" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
+        <xs:attribute name="editable" type="xs:boolean" use="optional" default="true" />
         <xs:attribute name="negated" type="xs:boolean" use="optional" default="false" />
         <xs:attribute name="functor" type="xs:string"  use="required" />
     </xs:complexType>
@@ -273,6 +310,7 @@
             <xs:element name="query_issue"        type="QueryIssue"              minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="state_issue"        type="StateIssue"              minOccurs="0" maxOccurs="unbounded" />            
             <xs:element name="value_issue"        type="ValueIssue"              minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="type_issue"         type="TypeIssue"               minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     
@@ -342,6 +380,13 @@
         <xs:sequence>
             <xs:element name="location" type="ArgumentLocation" minOccurs="1" maxOccurs="1" />
             <xs:element name="constraint" type="ValueConstraint" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TypeIssue">
+        <xs:sequence>
+            <xs:element name="location" type="ArgumentLocation" minOccurs="1" maxOccurs="1" />
+            <xs:element name="constraint" type="TypeConstraint" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

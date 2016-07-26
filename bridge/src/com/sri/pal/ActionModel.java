@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: ActionModel.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: ActionModel.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import java.io.IOException;
@@ -583,8 +583,10 @@ public class ActionModel {
                     version, namespace);
             return type;
         } catch (Exception e) {
+        	throw e; 
+        	/*
             throw new PALException("Unable to create type from "
-                    + ATRSyntax.toSource(atr), e);
+                    + ATRSyntax.toSource(atr), e); */
         }
     }
 
@@ -887,9 +889,10 @@ public class ActionModel {
     }
 
     RequestCanceler getTypes(CallbackHandler<Set<ActionModelDef>> callbackHandler,
-                             Set<SimpleTypeName> typeNames) {
+                             Set<SimpleTypeName> typeNames,
+                             boolean allowPartial) {
         log.debug("Will load {}", typeNames);
-        AsyncTypeGetter getter = new AsyncTypeGetter(callbackHandler, typeNames);
+        AsyncTypeGetter getter = new AsyncTypeGetter(callbackHandler, typeNames, allowPartial);
         threadPool.execute(getter);
         return getter;
     }
@@ -1196,10 +1199,13 @@ public class ActionModel {
         private final Set<ActionModelDef> loadedTypes;
         private final CallbackHandler<Set<ActionModelDef>> callbackHandler;
         private final Set<RequestCanceler> cancelers;
+        private final boolean allowPartial;
         private boolean cancel = false;
+        private int numSkipped = 0;
 
         public AsyncTypeGetter(CallbackHandler<Set<ActionModelDef>> callbackHandler,
-                               Set<SimpleTypeName> typeNames) {
+                               Set<SimpleTypeName> typeNames,
+                               boolean allowPartial) {
             this.callbackHandler = callbackHandler;
             this.typeNames = new HashSet<SimpleTypeName>();
             for (SimpleTypeName name : typeNames) {
@@ -1208,6 +1214,7 @@ public class ActionModel {
             }
             cancelers = new HashSet<RequestCanceler>();
             loadedTypes = new HashSet<ActionModelDef>();
+            this.allowPartial = allowPartial;
         }
 
         @Override
@@ -1239,15 +1246,25 @@ public class ActionModel {
         public void result(ActionModelDef result) {
             if (typeNames.contains(result.getName())) {
                 loadedTypes.add(result);
-                if (loadedTypes.size() == typeNames.size()) {
-                    callbackHandler.result(loadedTypes);
-                }
+                maybeFinish();
+            }
+        }
+
+        private void maybeFinish() {
+            if (loadedTypes.size() + numSkipped == typeNames.size()) {
+                callbackHandler.result(loadedTypes);
             }
         }
 
         @Override
         public void error(ErrorInfo error) {
-            callbackHandler.error(error);
+            if (error.getErrorId() == ErrorType.NOT_ALL_LOADED.ordinal() &&
+                    allowPartial) {
+                numSkipped++;
+                maybeFinish();
+            } else {
+                callbackHandler.error(error);
+            }
         }
     }
 }

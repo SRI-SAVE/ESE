@@ -16,23 +16,27 @@
 
 package com.sri.tasklearning.ui.core.exercise;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.scene.layout.Pane;
-
+import com.sri.tasklearning.ui.core.EditSession;
+import com.sri.tasklearning.ui.core.EditSessionManager;
 import com.sri.tasklearning.ui.core.ISelectable;
+import com.sri.tasklearning.ui.core.control.Alert;
+import com.sri.tasklearning.ui.core.control.Alert.AlertConfig;
 import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsModel;
-import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsView;
 import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
 import com.sri.tasklearning.ui.core.step.ExerciseStepView;
 import com.sri.tasklearning.ui.core.step.ExerciseSubtaskModel;
 import com.sri.tasklearning.ui.core.step.ExerciseSubtaskView;
 import com.sri.tasklearning.ui.core.step.StepModel;
 import com.sri.tasklearning.ui.core.step.StepView;
+
+import javafx.scene.layout.Pane;
 
 public class GroupUngroupSequenceCommand extends AbstractCommand {
 
@@ -63,7 +67,14 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 
 	@Override
 	public void invokeCommand(Pane selectedItem) {
-
+		
+		// bugfix since we have drag & drop - "U" always creates a new group!
+		resetGroupingState(); 
+	
+		EditSession sess = EditSessionManager.getActiveSession();    				
+		sess.getController().unsavedChangesProperty().setValue(true);
+	
+		
 		StepModel exStep = (StepModel) ((StepView) selectedItem).getStepModel();
 		ExerciseView exerciseView = controller.getView();
 		ExerciseModel exerciseModel = controller.getModel();
@@ -88,7 +99,7 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 
 				if (theSteps.get(controller.getModel()).size() == 0) {
 
-					// are we building up a group? add this step...
+					// are we building up a new group group? add first step 
 
 					index = exStep1.computeIndexRelativeToContainer();
 					controller.deleteStep(exStep1);		
@@ -96,9 +107,33 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 					name = computeGroupName(); 
 
 				} else {
+					
+					//
+					// check if ordering constraints will be violated
+					//
+					
+					List<StepModel> allSteps = new ArrayList<StepModel>(); 
+					allSteps.addAll(theSteps.get(controller.getModel())); 
+					allSteps.add(exStep);
+					
+					for (StepModel step1 : allSteps)
+						for  (StepModel step2 : allSteps)
+							if (step1.mustPrecede(step2)) { 
+						
+								controller.unhighlightSteps();
+								controller.getAnnotationPanel().unselectAll();
+								resetGroupingState(controller); 
 
-					// this is the first step in a new group we are constructing 
-
+								Alert.show("Grouping not permitted", "Cannot add ordered steps to an unordered group. Sorry.", AlertConfig.OK, null);								
+								
+								return;
+								
+							}
+					
+					//
+					//
+					// 
+					
 					controller.deleteStep(exStep1);				
 					index = constructedGroup.get(exerciseModel).computeIndexRelativeToContainer(); 		
 					controller.deleteStep(constructedGroup.get(exerciseModel));
@@ -108,7 +143,7 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 
 				theSteps.get(exerciseModel).add(exStep1);		
 
-				ExerciseSubtaskModel newGroup = new ExerciseSubtaskModel("", theSteps.get(exerciseModel)); 
+				ExerciseSubtaskModel newGroup = new ExerciseSubtaskModel(exerciseModel, "", theSteps.get(exerciseModel)); 
 				newGroup.setName(name);
 
 				constructedGroup.put(exerciseModel, newGroup);
@@ -178,14 +213,13 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 
 			for (StepView view : ((ExerciseSubtaskView) selectedItem).getStepViews()) {	
 				ExerciseStepView view1 = (ExerciseStepView) view; 				
-				exerciseView.getStepLayout().addStepView(view1, oindex++); 			
-				view1.setStepViewContainer(exerciseView);
-			}
-
+				exerciseView.getStepLayout().addStepView(view1, oindex++); 						
+			}	
+						
 			exerciseModel.updateIndices();		
-
-		} 
-		
+			exerciseView.getStepLayout().layout();
+			
+		} 		
 		
 		controller.unhighlightSteps();
 		
@@ -195,29 +229,31 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 	}
 
 	private String computeGroupName() { 
-
-		String name = ""; 					
-
+					
 		boolean found = true;
-		int groupCounter = 1; 
+		int groupCounter = 1;
+		
+		String name = "Group "+Integer.toString(groupCounter); 
+		
 		while (found) {
 			found = false; 
+			name = "Group "+Integer.toString(groupCounter); 
 			for (StepModel step : controller.getModel().getSteps()) {
-				name = "Group "+Integer.toString(groupCounter); 
 				found = (step instanceof ExerciseSubtaskModel) && (step.getName().equals(name));  
-				if (found)
+				if (found) {
+					groupCounter++;  
 					break;
+				}
 			}
-			groupCounter++; 
 		}
-
+		
 		return name; 
 
 	}
 
 	@Override
 	public void invokeCommand() {
-
+		
 		resetGroupingState();
 
 		List<ISelectable> selectedSteps = controller.getView().getSelectionManager().getSelectedItems();
@@ -244,14 +280,14 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 
 			List<ExerciseStepView> selectedToplevelSteps = new LinkedList<ExerciseStepView>(); 
 			List<ExerciseStepView> selectedSubtaskSteps = new LinkedList<ExerciseStepView>();
-			List<ExerciseGroupOfStepsView> selectedSubtasks = new LinkedList<ExerciseGroupOfStepsView>();
+			List<ExerciseSubtaskView> selectedSubtasks = new LinkedList<ExerciseSubtaskView>();
 
 			for (ISelectable selectedStep : selectedSteps) { 
 				StepView stepView = (StepView) selectedStep;
-				if (stepView instanceof ExerciseGroupOfStepsView) {
-					selectedSubtasks.add((ExerciseGroupOfStepsView) stepView);						
+				if (stepView instanceof ExerciseSubtaskView) {
+					selectedSubtasks.add((ExerciseSubtaskView) stepView);						
 				} else {
-					if (stepView.getStepViewContainer() instanceof ExerciseGroupOfStepsView)   
+					if (stepView.getStepViewContainer() instanceof ExerciseSubtaskView)   
 						selectedSubtaskSteps.add((ExerciseStepView) stepView);
 					else
 						selectedToplevelSteps.add((ExerciseStepView) stepView);				
@@ -266,7 +302,7 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 
 				List<ExerciseStepView> stepsForGroup = new LinkedList<ExerciseStepView>();
 
-				for (ExerciseGroupOfStepsView group : selectedSubtasks) {
+				for (ExerciseSubtaskView group : selectedSubtasks) {
 					for (StepView step : group.getStepViews()) {					
 						stepsForGroup.add((ExerciseStepView) step); 					
 					}
@@ -276,6 +312,24 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 					stepsForGroup.add((ExerciseStepView) step); 					
 				}
 
+				//
+				// check if ordering constraints will be violated 
+				// 
+				
+				for (StepView step1 : stepsForGroup) 
+					for  (StepView step2 : stepsForGroup)
+						if (step1.getStepModel().mustPrecede(step2.getStepModel())) { 
+					
+							controller.unhighlightSteps();
+							controller.getAnnotationPanel().unselectAll();								
+							resetGroupingState(controller); 
+							
+							Alert.show("Grouping not permitted", "Cannot add ordered steps to an unordered group. Sorry.", AlertConfig.OK, null);
+							
+							return;
+							
+						}
+				
 				//
 				//
 				// 
@@ -304,11 +358,11 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 					}
 				}; 
 
-				Comparator<ExerciseGroupOfStepsView> comp2 = new Comparator<ExerciseGroupOfStepsView>() {
+				Comparator<ExerciseSubtaskView> comp2 = new Comparator<ExerciseSubtaskView>() {
 
 					@Override
-					public int compare(ExerciseGroupOfStepsView arg0,
-							ExerciseGroupOfStepsView arg1) {
+					public int compare(ExerciseSubtaskView arg0,
+							ExerciseSubtaskView arg1) {
 
 						int i0 = arg0.getStepModel().getRelativeIndex(); 
 						int i1 = arg1.getStepModel().getRelativeIndex();
@@ -331,14 +385,14 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 				// 
 
 				ExerciseStepView firstToplevelStep = selectedToplevelSteps.isEmpty() ? null : selectedToplevelSteps.get(0);
-				ExerciseGroupOfStepsView firstSubtask = selectedSubtasks.isEmpty() ? null : selectedSubtasks.get(0);
+				ExerciseSubtaskView firstSubtask = selectedSubtasks.isEmpty() ? null : selectedSubtasks.get(0);
 
 				int index1 = firstSubtask == null ? -1 : firstSubtask.getStepModel().getRelativeIndex(); 			
 				int index2 = firstToplevelStep == null ? -1 : firstToplevelStep.getStepModel().getRelativeIndex(); 
 
 				int index = index1 == -1 ? index2 : (index2 == -1 ? index1 : (index1 < index2 ? index1 : index2));  
 
-				for (ExerciseGroupOfStepsView stepView : selectedSubtasks)
+				for (ExerciseSubtaskView stepView : selectedSubtasks)
 					controller.deleteStep(stepView);
 
 				for (StepView stepView : selectedToplevelSteps)
@@ -358,6 +412,9 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 					name = firstSubtask.getStepModel().getName();
 					isOptional = ((ExerciseGroupOfStepsModel) firstSubtask.getStepModel()).isOptional();
 					inAnyOrder = ((ExerciseGroupOfStepsModel) firstSubtask.getStepModel()).inAnyOrder(); 
+					
+					if (name.isEmpty())
+						name = computeGroupName(); 
 
 				} else
 
@@ -367,12 +424,18 @@ public class GroupUngroupSequenceCommand extends AbstractCommand {
 				// create
 				// 
 
-				ExerciseSubtaskModel newGroup = new ExerciseSubtaskModel("", stepModelsForGroup); 
+				ExerciseSubtaskModel newGroup = new ExerciseSubtaskModel(exerciseModel, "", stepModelsForGroup); 
 
 				newGroup.setName(name);
 				newGroup.setOptional(isOptional);
-				newGroup.setInAnyOrder(inAnyOrder);
-
+				
+				
+				// 
+				// newGroup.setInAnyOrder(inAnyOrder);
+				// for cooking domain: always unordered
+				
+				 newGroup.setInAnyOrder(true);
+							
 				//
 				// register context
 				// 

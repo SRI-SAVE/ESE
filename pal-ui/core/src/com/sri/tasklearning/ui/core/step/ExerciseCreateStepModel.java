@@ -20,16 +20,17 @@ import java.util.Collection;
 import java.util.List;
 
 import com.sri.pal.training.core.exercise.Atom;
+import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
 import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
 
 public class ExerciseCreateStepModel extends ExerciseStepModel {
 	
 	private String createdObject; 
 
-	public ExerciseCreateStepModel(Atom step,
+	public ExerciseCreateStepModel(ExerciseModel parent, Atom step,
 			Collection<ExerciseStepParameter> arguments) {
 		
-		super(step, arguments);		
+		super(parent, step, arguments);		
 		
 		if (arguments != null)
 			createdObject = ((List<ExerciseStepParameter>) arguments).get(0).getParameter().getAccessor(); 
@@ -42,3 +43,4 @@ public class ExerciseCreateStepModel extends ExerciseStepModel {
 	}
 
 }
+ 

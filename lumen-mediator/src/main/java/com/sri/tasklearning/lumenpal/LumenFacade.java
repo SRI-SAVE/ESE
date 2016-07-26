@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-// $Id: LumenFacade.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: LumenFacade.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.lumenpal;
 
 import java.util.Map;
 
+import com.sri.ai.lumen.agent.SimpleAgent;
 import com.sri.ai.lumen.atr.decl.ATRActionDeclaration;
 import com.sri.ai.lumen.atr.term.ATRTerm;
 import com.sri.ai.lumen.atr.type.Type.Registry;
@@ -87,6 +88,13 @@ public interface LumenFacade {
      */
     Object evaluateATRTerm(ATRTerm term,
                            Map<String, Object> bindings);
+
+    void executeAction(String name, Object[] args);
+
+    /**
+     * Returns a reference to the underlying Lumen agent, or null if this is a mock.
+     */
+    SimpleAgent getAgent();
 
     void shutdown();
 }

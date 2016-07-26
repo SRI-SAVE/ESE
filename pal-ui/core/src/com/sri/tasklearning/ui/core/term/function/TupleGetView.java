@@ -19,7 +19,6 @@ package com.sri.tasklearning.ui.core.term.function;
 import com.sri.tasklearning.ui.core.common.CommonView;
 import javafx.scene.text.Text;
 
-import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 import com.sri.tasklearning.ui.core.step.StepView;
 import com.sri.tasklearning.ui.core.term.ParameterModel;
 import com.sri.tasklearning.ui.core.term.ParameterView;

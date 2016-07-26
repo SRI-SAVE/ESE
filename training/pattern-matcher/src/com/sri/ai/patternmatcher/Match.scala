@@ -290,6 +290,10 @@ final class Match private (
     nodeMappings.getOrElse(pattern.primaries(id), null)
   }
   
+  def getViolatedConstraints = setAsJavaSet(violatedConstraints) 
+  
+  def getPrimaryDeletions = setAsJavaSet(deletedPrimaryNodes)
+  
   private def maintainCurrentNodes() = {
     currentPrimaryNodes.filter(node => 
       node.allConstraints.find(c => unexploredConstraints.contains(c)) != None)     

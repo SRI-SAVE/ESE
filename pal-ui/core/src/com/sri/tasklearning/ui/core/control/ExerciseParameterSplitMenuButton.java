@@ -18,8 +18,9 @@ package com.sri.tasklearning.ui.core.control;
 
 import java.util.List;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
+import com.sri.tasklearning.ui.core.term.ExerciseStepParameterView;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -28,9 +29,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
-import com.sri.tasklearning.ui.core.term.ExerciseStepParameterView;
-
 /**
  * A SplitMenuButton that is associated with a {@code TermView}. 
  */
@@ -38,6 +36,7 @@ public class ExerciseParameterSplitMenuButton extends Pane {
 
 	private TermSplitMenuButton button;	
 	private HBox borderRect; 
+	private boolean changedFromOriginal = false; 
 
 	public ExerciseParameterSplitMenuButton(ExerciseStepParameterView tv) {
     	
@@ -48,15 +47,20 @@ public class ExerciseParameterSplitMenuButton extends Pane {
         
         button.getStyleClass().add("exercise-var");
         
-        if (((ExerciseStepParameter) tv.getTermModel()).getChangeFromOriginalProperty().getValue())
+        if (((ExerciseStepParameter) tv.getTermModel()).getChangeFromOriginalProperty().getValue()) {
 			button.getStyleClass().add("changed");
+			changedFromOriginal = true; 
+        }
 	   
         ChangeListener<Boolean> arg0 = new ChangeListener<Boolean>() {
+		
 		
 			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0,
 					Boolean arg1, Boolean arg2) {
 				  
+				changedFromOriginal = arg2; 
+				
 				if (arg2) 
 					button.getStyleClass().add("changed");				  
 				else 
@@ -70,19 +74,33 @@ public class ExerciseParameterSplitMenuButton extends Pane {
         borderRect.getChildren().add(button);        
         borderRect.setVisible(true);
         
+       
         unhighlightBorder(); 
-        this.getChildren().add(borderRect);
+        
+        this.getChildren().addAll(borderRect);
                 
     }
     
     public void highlightBorder() {
-    	borderRect.getStyleClass().clear(); 
-    	borderRect.getStyleClass().add("exercise-var-border-rect-highlighted");
+    	/* borderRect.getStyleClass().clear(); 
+    	borderRect.getStyleClass().add("exercise-var-border-rect-highlighted"); */ 
+    	//button.getStyleClass().clear();
+    	button.getStyleClass().clear();          
+        button.getStyleClass().add("exercise-var");
+    	button.getStyleClass().add("highlighted");    	
+    
     }  
     
     public void unhighlightBorder() {
-    	borderRect.getStyleClass().clear(); 
-    	borderRect.getStyleClass().add("exercise-var-border-rect");
+    	/* borderRect.getStyleClass().clear(); 
+    	borderRect.getStyleClass().add("exercise-var-border-rect"); */
+    	
+    	//button.getStyleClass().clear();
+    	button.getStyleClass().clear();          
+        button.getStyleClass().add("exercise-var"); 
+    	if (changedFromOriginal) 
+			button.getStyleClass().add("changed");		
+
     }  
  
     @Override

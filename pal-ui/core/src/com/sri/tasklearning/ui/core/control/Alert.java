@@ -48,7 +48,9 @@ public final class Alert extends Stage {
         CANCEL("Cancel", false),
         NO("No", false),
         OK("OK", true),
-        YES("Yes", true);
+        YES("Yes", true),
+    	ALL("All", true),
+    	THIS("This", false);    	
         
         public final String displayText;
         public final boolean dflt; 
@@ -61,9 +63,10 @@ public final class Alert extends Stage {
     
     public enum AlertConfig  {
         YES_NO(AlertResult.YES, AlertResult.NO),
-        YES_NO_CANCEL(AlertResult.YES, AlertResult.NO, AlertResult.CANCEL),
+        YES_NO_CANCEL(AlertResult.YES, AlertResult.NO, AlertResult.CANCEL),        
         OK_CANCEL(AlertResult.OK, AlertResult.CANCEL),
-        OK(AlertResult.OK);
+        OK(AlertResult.OK),
+        ALL_THIS(AlertResult.ALL, AlertResult.THIS);
         
         public final AlertResult[] opts;
         AlertConfig(AlertResult...opts) {
@@ -99,7 +102,7 @@ public final class Alert extends Stage {
         this.setScene(scene); 
         this.setTitle(title);
         this.setWidth(300);
-        this.initModality(Modality.APPLICATION_MODAL);
+        this.initModality(Modality.WINDOW_MODAL);
         this.initStyle(StageStyle.UTILITY);
         
         scene.setFill(Colors.SystemLightGray);

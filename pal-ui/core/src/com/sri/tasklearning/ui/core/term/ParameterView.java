@@ -16,6 +16,25 @@
 
 package com.sri.tasklearning.ui.core.term;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sri.pal.TypeDef;
+import com.sri.tasklearning.ui.core.BackendFacade;
+import com.sri.tasklearning.ui.core.Colors;
+import com.sri.tasklearning.ui.core.Fonts;
+import com.sri.tasklearning.ui.core.common.CommonView;
+import com.sri.tasklearning.ui.core.control.TermSplitMenuButton;
+import com.sri.tasklearning.ui.core.control.ToolTipper;
+import com.sri.tasklearning.ui.core.control.ToolTipper.IToolTipCallback;
+import com.sri.tasklearning.ui.core.control.ToolTipper.IToolTippable;
+import com.sri.tasklearning.ui.core.step.StepView;
+import com.sri.tasklearning.ui.core.term.function.FunctionModel;
+import com.sri.tasklearning.ui.core.term.function.StructureGetKeyView;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
@@ -30,23 +49,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.sri.pal.TypeDef;
-import com.sri.tasklearning.ui.core.BackendFacade;
-import com.sri.tasklearning.ui.core.Colors;
-import com.sri.tasklearning.ui.core.Fonts;
-import com.sri.tasklearning.ui.core.PalUiException;
-import com.sri.tasklearning.ui.core.common.CommonView;
-import com.sri.tasklearning.ui.core.control.TermSplitMenuButton;
-import com.sri.tasklearning.ui.core.control.ToolTipper;
-import com.sri.tasklearning.ui.core.control.ToolTipper.IToolTipCallback;
-import com.sri.tasklearning.ui.core.control.ToolTipper.IToolTippable;
-import com.sri.tasklearning.ui.core.step.StepView;
-import com.sri.tasklearning.ui.core.term.function.FunctionModel;
-import com.sri.tasklearning.ui.core.term.function.StructureGetKeyView;
 
 /**
  * View for a {@link ParameterModel}. Essentially consists of a pairing between
@@ -74,6 +76,8 @@ public class ParameterView extends HBox implements IToolTippable {
     private BackendFacade backend = BackendFacade.getInstance();
     private boolean readOnlyRequest = false;
     private BooleanProperty parentReadOnly = null;
+
+	private static Map<TermModel, TermView> allTermViews = new HashMap<TermModel, TermView>(); 
 
     public ParameterView(
             final ParameterModel argParamModel,
@@ -158,7 +162,8 @@ public class ParameterView extends HBox implements IToolTippable {
             this.getChildren().add(createLabel());
         
         if (createTermView() != null)
-            this.getChildren().add(termView.getNode());      
+            this.getChildren().add(termView.getNode());        
+        
     }
 
     public boolean isReadOnlyRequest() {
@@ -247,7 +252,7 @@ public class ParameterView extends HBox implements IToolTippable {
                 public String getToolTipText() {
                     return tooltip + "Using " +
                            term.getDisplayString() +
-                           getDebugMessage() +
+                  
                            getTooltipAdvice();
                 }
             });
@@ -270,11 +275,8 @@ public class ParameterView extends HBox implements IToolTippable {
                     String ret = tooltip + "Using procedure input \"" + 
                                  term.getDisplayString() + "\"";
                     
-                    String debug = getDebugMessage();
-                    
-                    if (debug.length() > 0)
-                        ret += debug;
-                    else if (pim.getDefaultValue() != null)
+                     
+                   if (pim.getDefaultValue() != null)
                         ret += "\nDefault value: "
                                 + pim.getDefaultValue().getDisplayString()
                                         .trim();                    
@@ -288,12 +290,12 @@ public class ParameterView extends HBox implements IToolTippable {
                 public String getToolTipText() {
                     if (parameterModel.isResult())
                         return tooltip + " " + 
-                               getDebugMessage() + 
+                               
                                getTooltipAdvice();
                     else
                         return tooltip + "Using the variable '"
                                 + term.getDisplayString() + "'"
-                                + getDebugMessage()
+                              
                                 + getTooltipAdvice();
                 }
             });
@@ -326,24 +328,18 @@ public class ParameterView extends HBox implements IToolTippable {
         
         termView.getNode().setDisable(readOnly.getValue());
 
+        allTermViews.put( this.term , termView); 
+        
         return termView;
     }
     
-    private String getDebugMessage() {
-        if (!backend.isDebuggingProcedure())
-            return "";
-        
-        Object value; 
-        try {
-            value = backend.getDebugValue(termView.getTermModel());
-            if (value == null)
-                return "";
-        } catch (PalUiException e) {
-            return "";
-        }        
-        
-        return "\n\nDebug value: " + value;
+    
+    // ideally, this should go into the controller: todo: 
+    public static TermView findTermView(TermModel model) {
+    	    	
+        return  allTermViews.get(model); 
     }
+    
     
     public TermView getTermView() {
         return termView; 

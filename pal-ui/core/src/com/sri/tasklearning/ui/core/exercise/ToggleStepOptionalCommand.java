@@ -20,6 +20,8 @@ import java.util.List;
 
 import javafx.scene.layout.Pane;
 
+import com.sri.tasklearning.ui.core.EditSession;
+import com.sri.tasklearning.ui.core.EditSessionManager;
 import com.sri.tasklearning.ui.core.ISelectable;
 import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsModel;
 import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
@@ -35,7 +37,10 @@ public class ToggleStepOptionalCommand extends AbstractCommand {
 
 	@Override
 	public void invokeCommand(Pane selectedItem) {
-
+	
+		EditSession sess = EditSessionManager.getActiveSession();    				
+		sess.getController().unsavedChangesProperty().setValue(true);
+	
 		StepModel stepModel = ((StepModel) ((StepView) selectedItem).getStepModel());		
 
 		if (stepModel instanceof ExerciseStepModel) {				

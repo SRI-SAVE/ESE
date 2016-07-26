@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-// $Id: EnumeratedTypeDef.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: EnumeratedTypeDef.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import com.sri.ai.lumen.atr.ATR;
 import com.sri.ai.lumen.atr.ATRConstructor;
@@ -34,23 +27,60 @@ import com.sri.ai.lumen.atr.term.ATRLiteral;
 import com.sri.ai.lumen.atr.term.ATRTerm;
 import com.sri.pal.common.SimpleTypeName;
 import com.sri.pal.jaxb.EnumType;
+import com.sri.pal.jaxb.SubTypeType;
 import com.sri.pal.jaxb.TypeType;
+import com.sri.tasklearning.spine.util.TypeUtil;
+
+import java.util.*;
 
 /**
  * An enumerated type.
  */
 public class EnumeratedTypeDef
         extends TypeDef {
+    private final Set<EnumeratedTypeDef> subTypes;
 
     EnumeratedTypeDef(Enumerated atrDecl,
-                      Bridge bridge) {
+                      Bridge bridge)
+            throws PALException {
         super(atrDecl, bridge);
+
+        Enumerated enumDecl = getConcreteAtr();
+        subTypes = new HashSet<>();
+        for (SimpleTypeName subName : TypeUtil.getSubTypes(enumDecl)) {
+            ActionModelDef subDef = getActionModel().getType(subName);
+            if (subDef == null) {
+                throw new PALException("Unable to find subtype " + subName.getFullName() + " of type " +
+                        getName().getFullName());
+            }
+            if (!(subDef instanceof EnumeratedTypeDef)) {
+                throw new PALException(getName().getFullName() + "'s subtype " + subName.getFullName() + " is of type " +
+                        subDef.getClass() + " and must be of type " + getClass());
+            }
+            subTypes.add((EnumeratedTypeDef) subDef);
+        }
     }
 
     EnumeratedTypeDef(ATRTypeDeclaration alias,
                       Enumerated concrete,
-                      Bridge bridge) {
+                      Bridge bridge)
+            throws PALException {
         super(alias, concrete, bridge);
+
+        Enumerated enumDecl = getConcreteAtr();
+        subTypes = new HashSet<>();
+        for (SimpleTypeName subName : TypeUtil.getSubTypes(enumDecl)) {
+            ActionModelDef subDef = getActionModel().getType(subName);
+            if (subDef == null) {
+                throw new PALException("Unable to find subtype " + subName.getFullName() + " of type " +
+                        getName().getFullName());
+            }
+            if (!(subDef instanceof EnumeratedTypeDef)) {
+                throw new PALException(getName().getFullName() + "'s subtype " + subName.getFullName() + " is of type " +
+                        subDef.getClass() + " and must be of type " + getClass());
+            }
+            subTypes.add((EnumeratedTypeDef) subDef);
+        }
     }
 
     @Override
@@ -71,6 +101,13 @@ public class EnumeratedTypeDef
     @Override
     protected void fillInXml(TypeType typeXml) {
         EnumType enumXml = new EnumType();
+
+        for (EnumeratedTypeDef sub : subTypes) {
+            SubTypeType subXml = new SubTypeType();
+            subXml.setSub(sub.getName().getFullName());
+            enumXml.getSubType().add(subXml);
+        }
+
         List<String> values = enumXml.getValue();
         SortedSet<String> sortedValues = new TreeSet<String>();
         sortedValues.addAll(getValues());
@@ -79,7 +116,33 @@ public class EnumeratedTypeDef
     }
 
     /**
-     * Provides all of the acceptable values for this enumeration.
+     * Provides access to the sub-types of this enumerated type.
+     * @return all of the sub-types of this type
+     */
+    public Set<EnumeratedTypeDef> getSubTypes() {
+        return Collections.unmodifiableSet(subTypes);
+    }
+
+    @Override
+    public boolean isAssignableTo(TypeDef other) {
+        if (super.isAssignableTo(other)) {
+            return true;
+        }
+        if (!(other instanceof EnumeratedTypeDef)) {
+            return false;
+        }
+        EnumeratedTypeDef otherEnum = (EnumeratedTypeDef) other;
+        for (EnumeratedTypeDef subType : otherEnum.subTypes) {
+            if (isAssignableTo(subType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Provides the acceptable values for this enumeration, as directly defined in this type. Values defined in
+     * sub-types are not included.
      *
      * @return a set of enumeration values
      */
@@ -90,6 +153,21 @@ public class EnumeratedTypeDef
             ATRLiteral lit = (ATRLiteral) term;
             result.add(lit.getString());
         }
+        return result;
+    }
+
+    /**
+     * Provides all of the acceptable values for this enumeration, including those defined in sub-types.
+     * @return a set of enumeration values
+     */
+    public Set<String> getAllValues() {
+        Set<String> result = new HashSet<>();
+        result.addAll(getValues());
+
+        for (EnumeratedTypeDef sub : subTypes) {
+            result.addAll(sub.getAllValues());
+        }
+
         return result;
     }
 
@@ -115,6 +193,11 @@ public class EnumeratedTypeDef
         } catch (ClassCastException e) {
             throw new RuntimeException("" + strValue, e);
         }
+    }
+
+    @Override
+    public boolean isValueOf(Object value) {
+        return value instanceof String && getAllValues().contains(value);
     }
 
     @Override

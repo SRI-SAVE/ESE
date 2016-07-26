@@ -55,28 +55,28 @@ public class AnnotationPanel extends Pane {
     private AnnotationMenuEntry selectedItem; 
        
     public AnnotationPanel(ExerciseEditController controller) {
-    	
-    	VBox layout = new VBox();
-    	
+
+    	this.controller = controller;     	    	
+        this.setPrefWidth(DEF_WIDTH); 
     	controller.setAnnotationPanel(this); 
-    	
-    	this.controller = controller; 
-    	    	
-        this.setPrefWidth(DEF_WIDTH);      
-                
-        Label title = new Label("Annotations");
-        title.setFont(Fonts.LARGE);         
-		title.setPrefWidth(DEF_WIDTH);        		
         
+    	VBox layout = new VBox();
+
+    	Label title = new Label(" Annotations");
+        
+        title.setFont(Fonts.HUGE);         
+		title.setPrefWidth(DEF_WIDTH);        		
+    	title.setStyle("-fx-text-fill: black; -fx-border-color: white; -fx-background-color: white; -fx-border-width: 0; -fx-padding: 0"); 
+    	
         header = new PanelHeader(title);
-                    
+        header.setStyle("-fx-border-color: white; -fx-background-color: white;"); 
+    	        
         getStyleClass().add("annotation-panel");
         groupList.setStyle("-fx-border-color: transparent; -fx-border-width: 0;");
                 
         populateGroupList();
         
-        layout.getChildren().addAll(header, groupList); 
-        
+        layout.getChildren().addAll(header, groupList);         
         this.getChildren().addAll(layout); 
         
         layoutChildren();
@@ -104,7 +104,7 @@ public class AnnotationPanel extends Pane {
      
     private void populateGroupList() {
    	
-        AnnotationMenuEntry actions = new AnnotationMenuEntry(this, "Steps", Utilities.getImage("library.png"));               
+        AnnotationMenuEntry actions = new AnnotationMenuEntry(this, "Steps", Utilities.getImage("steps.png"));               
         groupList.getChildren().add(actions);
 
         rearrange = new AnnotationMenuEntry(this, "Rearrange", null);
@@ -122,16 +122,17 @@ public class AnnotationPanel extends Pane {
         groupList.getChildren().add(groupSequence);
         groupSequence.setOnMousePressed(createGroupEventHandler(groupSequence));
      
+        /*
         AnnotationMenuEntry inAnyOrder = new InAnyOrGivenOrderMenuEntry(this);
         inAnyOrder.setLeftIndent(32);
         groupList.getChildren().add(inAnyOrder);
-        inAnyOrder.setOnMousePressed(createGroupEventHandler(inAnyOrder));   
+        inAnyOrder.setOnMousePressed(createGroupEventHandler(inAnyOrder)); */   
      
         //
         //
         // 
         
-        AnnotationMenuEntry parameters = new AnnotationMenuEntry(this, "Parameters", Utilities.getImage("library.png"));
+        AnnotationMenuEntry parameters = new AnnotationMenuEntry(this, "Parameters", Utilities.getImage("parameter.png"));
         groupList.getChildren().add(parameters);   
         
         AnyOfThisTypeMenuEntry anyOfThisType = new AnyOfThisTypeMenuEntry(this);
@@ -156,7 +157,7 @@ public class AnnotationPanel extends Pane {
         
         menuEntries.add(makeOptional); 
         menuEntries.add(groupSequence); 
-        menuEntries.add(inAnyOrder); 
+        //menuEntries.add(inAnyOrder); 
         menuEntries.add(anyOfThisType); 
         menuEntries.add(anyOfTheseValues); 
         menuEntries.add(anyInThatRange); 

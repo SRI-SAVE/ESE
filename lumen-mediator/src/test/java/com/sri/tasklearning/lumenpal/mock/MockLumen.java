@@ -19,6 +19,7 @@ package com.sri.tasklearning.lumenpal.mock;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.sri.ai.lumen.agent.SimpleAgent;
 import com.sri.ai.lumen.atr.decl.ATRActionDeclaration;
 import com.sri.ai.lumen.atr.term.ATRTerm;
 import com.sri.ai.lumen.atr.type.Type;
@@ -91,6 +92,16 @@ public class MockLumen implements LumenFacade {
     @Override
     public Object evaluateATRTerm(ATRTerm term,
                                   Map<String, Object> bindings) {
+        return null;
+    }
+
+    @Override
+    public void executeAction(String name, Object[] args) {
+        // Do nothing.
+    }
+
+    @Override
+    public SimpleAgent getAgent() {
         return null;
     }
 

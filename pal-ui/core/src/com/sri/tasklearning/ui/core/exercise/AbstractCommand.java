@@ -17,9 +17,7 @@
 package com.sri.tasklearning.ui.core.exercise;
 
 import com.sri.tasklearning.ui.core.SelectionEventCallback;
-import com.sri.tasklearning.ui.core.control.TermSplitMenuButton;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
 public class AbstractCommand implements IInvokableCommand, SelectionEventCallback<AbstractCommand> {

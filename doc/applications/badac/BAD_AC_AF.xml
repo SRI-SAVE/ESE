@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="2.0">
+
+  <type id="FileName">
+    <description>File name</description>
+    <custom>
+      <javaType>java.lang.String</javaType>
+    </custom>
+  </type>
+  <type id="Image">
+    <description>An image</description>
+    <custom>
+      <javaType>java.lang.String</javaType>
+    </custom>
+  </type>
+  <type id="Classifier">
+    <description>TODO</description>
+    <enum>
+      <value>Alpha</value>
+      <value>Bravo</value>
+    </enum>
+  </type>
+  <type id="Entity">
+    <description>A physical entity</description>
+    <custom>
+      <javaType>java.lang.String</javaType>
+    </custom>
+  </type>
+  <type id="EntityList">
+    <description>A list of Entity</description>
+    <list>
+      <ref typeRef="Entity"/>
+    </list>
+  </type>
+  <type id="EntityListSet">
+    <description>A set of lists of entities</description>
+    <set>
+      <ref typeRef="EntityList"/>
+    </set>
+  </type>
+  <type id="Graph">
+    <description>An inference graph</description>
+    <custom>
+      <javaType>java.lang.String</javaType>
+    </custom>
+  </type>
+
+  <family id="ENTITY_DETECTION">
+    <inputParam role="IMAGE"/>
+    <inputParam role="CLASSIFIER"/>
+    <outputParam role="ENTITIES"/>
+  </family>
+
+  <family id="ENTITY_INFERENCE">
+    <inputParam role="ENTITIES"/>
+    <outputParam role="INFERRED_ENTITIES"/>
+  </family>
+
+  <action id="importMSI">
+    <description>import image</description>
+    <inputParam id="image_filename">
+      <description>Image file to process</description>
+      <typeRef typeId="FileName"/>
+    </inputParam>
+    <outputParam id="image">
+      <description>The image to process</description>
+      <typeRef typeId="Image"/>
+    </outputParam>
+  </action>
+	
+  <action id="detectRunway">
+    <description>Find runway in the image</description>
+    <metadata key="detector" value="true"/>
+    <metadata key="entityDetected" value="runway"/>
+    <metadata key="falseAlarmRate" value="0.01"/>
+    <metadata key="requiresMSIData" value="true"/>
+    <metadata key="viewpoint" value="TODO"/>
+    <metadata key="minSamples" value="1"/>
+    <idiomFamily family="ENTITY_DETECTION"/>
+    <inputParam id="image">
+      <description>Image to process</description>
+      <typeRef typeId="Image"/>
+      <idiomParam family="ENTITY_DETECTION" role="IMAGE"/>
+    </inputParam>
+    <inputParam id="runwayClassifier">
+      <description>The runway classifier to use</description>
+      <typeRef typeId="Classifier"/>
+      <idiomParam family="ENTITY_DETECTION" role="CLASSIFIER"/>
+    </inputParam>
+    <outputParam id="roads">
+      <description>The runway found in the image</description>
+      <typeRef typeId="EntityList"/>
+      <idiomParam family="ENTITY_DETECTION" role="ENTITIES"/>
+    </outputParam>
+  </action>
+
+  <action id="detectRunwayAlt">
+    <description>Find runway in the image</description>
+    <metadata key="detector" value="true"/>
+    <metadata key="entityDetected" value="runway"/>
+    <metadata key="falseAlarmRate" value="0.001"/>
+    <metadata key="requiresMSIData" value="true"/>
+    <metadata key="viewpoint" value="TODO"/>
+    <metadata key="minSamples" value="10"/>
+    <idiomFamily family="ENTITY_DETECTION"/>
+    <inputParam id="image">
+      <description>Image to process</description>
+      <typeRef typeId="Image"/>
+      <idiomParam family="ENTITY_DETECTION" role="IMAGE"/>
+    </inputParam>
+    <inputParam id="runwayClassifier">
+      <description>The runway classifier to use</description>
+      <typeRef typeId="Classifier"/>
+      <idiomParam family="ENTITY_DETECTION" role="CLASSIFIER"/>
+    </inputParam>
+    <outputParam id="roads">
+      <description>The runway found in the image</description>
+      <typeRef typeId="EntityList"/>
+      <idiomParam family="ENTITY_DETECTION" role="ENTITIES"/>
+    </outputParam>
+  </action>
+
+  <action id="detectHAS">
+    <description>Find HAS in the image</description>
+    <metadata key="detector" value="true"/>
+    <metadata key="entityDetected" value="HAS"/>
+    <metadata key="falseAlarmRate" value="0.05"/>
+    <metadata key="requiresMSIData" value="true"/>
+    <metadata key="viewpoint" value="TODO"/>
+    <metadata key="minSamples" value="10"/>
+    <idiomFamily family="ENTITY_DETECTION"/>
+    <inputParam id="image">
+      <description>Image to process</description>
+      <typeRef typeId="Image"/>
+      <idiomParam family="ENTITY_DETECTION" role="IMAGE"/>
+    </inputParam>
+    <inputParam id="HASClassifier">
+      <description>The HAS classifier to use</description>
+      <typeRef typeId="Classifier"/>
+      <idiomParam family="ENTITY_DETECTION" role="CLASSIFIER"/>
+    </inputParam>
+    <outputParam id="HASs">
+      <description>The HAS found in the image</description>
+      <typeRef typeId="EntityList"/>
+      <idiomParam family="ENTITY_DETECTION" role="ENTITIES"/>
+    </outputParam>
+  </action>
+
+  <action id="detectOpenField">
+    <description>Find open field in the image</description>
+    <metadata key="detector" value="true"/>
+    <metadata key="entityDetected" value="openField"/>
+    <metadata key="falseAlarmRate" value="0.10"/>
+    <metadata key="requiresMSIData" value="true"/>
+    <metadata key="viewpoint" value="TODO"/>
+    <metadata key="minSamples" value="10"/>
+    <idiomFamily family="ENTITY_DETECTION"/>
+    <inputParam id="image">
+      <description>Image to process</description>
+      <typeRef typeId="Image"/>
+      <idiomParam family="ENTITY_DETECTION" role="IMAGE"/>
+    </inputParam>
+    <inputParam id="openFieldClassifier">
+      <description>The open field classifier to use</description>
+      <typeRef typeId="Classifier"/>
+      <idiomParam family="ENTITY_DETECTION" role="CLASSIFIER"/>
+    </inputParam>
+    <outputParam id="open_fields">
+      <description>The open fields found in the image</description>
+      <typeRef typeId="EntityList"/>
+      <idiomParam family="ENTITY_DETECTION" role="ENTITIES"/>
+    </outputParam>
+  </action>
+
+  <action id="inferGraph">
+    <description>Perform graph inference</description>
+    <metadata key="inferrer" value="true"/>
+    <metadata key="entityInferred" value="airbase"/>
+    <metadata key="falseAlarmRate" value="0.10"/>
+    <metadata key="requiresMSIData" value="true"/>
+    <idiomFamily family="ENTITY_INFERENCE"/>
+    <inputParam id="entities">
+      <description>Entities to process</description>
+      <typeRef typeId="EntityListSet"/>
+      <idiomParam family="ENTITY_INFERENCE" role="ENTITIES"/>
+    </inputParam>
+    <inputParam id="graph">
+      <description>The inference graph</description>
+      <typeRef typeId="Graph"/>
+    </inputParam>
+    <outputParam id="has_airbases">
+      <description>The inferred complex entity</description>
+      <typeRef typeId="EntityList"/>
+      <idiomParam family="ENTITY_INFERENCE" role="INFERRED_ENTITIES"/>
+    </outputParam>
+  </action>
+ 
+ <action id="saveKML">
+    <description>Save output to a kml file</description>
+    <inputParam id="kml_filename">
+      <description>KML file to save</description>
+      <typeRef typeId="FileName"/>
+    </inputParam>
+    <inputParam id="has_airbases">
+      <description>Entities to save</description>
+      <typeRef typeId="EntityList"/>
+    </inputParam>
+  </action>
+
+  <action id="detectorScore">
+    <description>Return the suitability of a detector, based on that detector's properties, for a particular
+      environment.</description>
+    <inputParam id="falseAlarmRate">
+      <description>Probability of a false positive.</description>
+      <typeRef typeId="string"/>
+    </inputParam>
+    <inputParam id="requiresMSIData">
+      <description>True if the detector requires MSI data.</description>
+      <typeRef typeId="string"/>
+    </inputParam>
+    <inputParam id="viewpoint">
+      <description>TODO</description>
+      <typeRef typeId="string"/>
+    </inputParam>
+    <inputParam id="minSamples">
+      <description>Minimum number of samples required</description>
+      <typeRef typeId="string"/>
+    </inputParam>
+    <outputParam id="score">
+      <description>The suitability of this detector, with higher scores being better.</description>
+      <typeRef typeId="real"/>
+    </outputParam>
+  </action>
+
+  <idiom id="DETECT_ENTITY">
+    <description>Recognize a one-action entity detection action, for a specific entity type, as a generic idiom detection action</description>
+    <metadata key="fancyName" value="Detect 0+ entities of some type in ,#image using classifier ,#classifier"/>
+
+    <inputParam id="image" matchIf="equals"/>
+    <inputParam id="classifier" matchIf="equals"/>
+    <outputParam id="entities"/>
+
+    <template id="0">
+      <action family="ENTITY_DETECTION">
+        <idiomParam id="image" role="IMAGE"/>
+        <idiomParam id="classifier" role="CLASSIFIER"/>
+        <idiomParam id="entities" role="ENTITIES"/>
+      </action>
+    </template>
+  </idiom>
+</actionModel>

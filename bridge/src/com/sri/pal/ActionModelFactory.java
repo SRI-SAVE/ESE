@@ -62,49 +62,7 @@ import com.sri.pal.common.SimpleTypeName;
 import com.sri.pal.common.TypeName;
 import com.sri.pal.common.TypeNameExpr;
 import com.sri.pal.common.TypeNameFactory;
-import com.sri.pal.jaxb.ActionFamilyParamType;
-import com.sri.pal.jaxb.ActionIdiomFamilyType;
-import com.sri.pal.jaxb.ActionIdiomParamType;
-import com.sri.pal.jaxb.ActionType;
-import com.sri.pal.jaxb.BagType;
-import com.sri.pal.jaxb.CollapsibleOptionType;
-import com.sri.pal.jaxb.CollapsibleParamType;
-import com.sri.pal.jaxb.CollapsibleType;
-import com.sri.pal.jaxb.ConstraintAndType;
-import com.sri.pal.jaxb.ConstraintDeclParamType;
-import com.sri.pal.jaxb.ConstraintDeclarationType;
-import com.sri.pal.jaxb.ConstraintInputConstantType;
-import com.sri.pal.jaxb.ConstraintInputFuncType;
-import com.sri.pal.jaxb.ConstraintInputListType;
-import com.sri.pal.jaxb.ConstraintInputRefType;
-import com.sri.pal.jaxb.ConstraintInputUnknownType;
-import com.sri.pal.jaxb.ConstraintNotType;
-import com.sri.pal.jaxb.ConstraintOrType;
-import com.sri.pal.jaxb.ConstraintParamType;
-import com.sri.pal.jaxb.ConstraintType;
-import com.sri.pal.jaxb.ConstraintsType;
-import com.sri.pal.jaxb.CustomType;
-import com.sri.pal.jaxb.EnumType;
-import com.sri.pal.jaxb.FamilyType;
-import com.sri.pal.jaxb.GeneralizeSingletonType;
-import com.sri.pal.jaxb.GeneralizeUnsupportedType;
-import com.sri.pal.jaxb.IdiomParamType;
-import com.sri.pal.jaxb.IdiomTemplateActionParamType;
-import com.sri.pal.jaxb.IdiomTemplateActionType;
-import com.sri.pal.jaxb.IdiomTemplateNamedActionParamType;
-import com.sri.pal.jaxb.IdiomTemplateNamedActionType;
-import com.sri.pal.jaxb.IdiomTemplateType;
-import com.sri.pal.jaxb.IdiomType;
-import com.sri.pal.jaxb.InheritType;
-import com.sri.pal.jaxb.ListType;
-import com.sri.pal.jaxb.MetadataType;
-import com.sri.pal.jaxb.NullableType;
-import com.sri.pal.jaxb.ParamClassType;
-import com.sri.pal.jaxb.ParamType;
-import com.sri.pal.jaxb.SetType;
-import com.sri.pal.jaxb.StructMemberType;
-import com.sri.pal.jaxb.StructType;
-import com.sri.pal.jaxb.TypeType;
+import com.sri.pal.jaxb.*;
 import com.sri.tasklearning.spine.messages.contents.ActionCategory;
 import com.sri.tasklearning.spine.messages.contents.ParamClass;
 import com.sri.tasklearning.spine.util.TypeUtil;
@@ -381,10 +339,22 @@ public class ActionModelFactory {
             // Re-sort the list of values.
             values.clear();
             values.addAll(valueSet);
+            Collections.sort(values);
+
+            // inheritance of enums
+            List<String> subTypeNames = new ArrayList<>();
+            for (SubTypeType subXml : enumXml.getSubType()) {
+                TypeName subName = TypeNameFactory.makeName(subXml.getSub(), version, namespace);
+                String subStr = subName.getFullName();
+                if (!subTypeNames.contains(subStr)) {
+                    subTypeNames.add(subStr);
+                }
+            }
+            Collections.sort(subTypeNames);
 
             ATRMap props = ctrBuilder.createMap(propMap);
             result = CTRTypeDeclaration.createEnumeratedType(nameStr,
-                    equivTypes, props, values);
+                     equivTypes, props, values, subTypeNames);
         } else if (nullableXml != null) {
             String memberName = nullableXml.getRef().getTypeRef();
             TypeName memberTypeName = TypeNameFactory.makeName(memberName,

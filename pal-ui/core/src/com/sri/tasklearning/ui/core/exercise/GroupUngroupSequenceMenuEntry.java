@@ -22,8 +22,8 @@ public class GroupUngroupSequenceMenuEntry extends AnnotationMenuEntry {
 
 	public GroupUngroupSequenceMenuEntry(AnnotationPanel panel) {
 
-		super(panel, new GroupUngroupSequenceCommand(panel.getController(), panel), "Group / ungroup steps", 
-				Utilities.getImage("letter-U-icon.png"), Utilities.getImage("letter-G-icon.png")); 
+		super(panel, new GroupUngroupSequenceCommand(panel.getController(), panel), "Ungrouped / grouped steps", 
+				Utilities.getImage("letter-G-icon.png"), Utilities.getImage("letter-U-icon.png")); 
 
 	}
 

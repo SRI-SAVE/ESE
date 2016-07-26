@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: TypeUtil.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: TypeUtil.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.spine.util;
 
 import java.util.ArrayList;
@@ -69,6 +69,7 @@ public class TypeUtil {
     public static final String ACTION_CATEGORY = "category";
     public static final String BENIGN = "benign";
     public static final String TRANSIENT = "isTransient";
+    public static final String NEEDS_PRELOAD = "needsPreload";
     public static final String PARAM_CLASS = "class";
     public static final String PARAM_CLASS_VIOLABLE = "violable";
     public static final String PARAM_DESCRIPTION = "description";
@@ -183,6 +184,18 @@ public class TypeUtil {
             String transStr = transTerm.getString();
             boolean isTransient = Boolean.parseBoolean(transStr);
             return isTransient;
+        }
+    }
+
+    public static boolean needsPreload(ATRActionDeclaration type) {
+        ATRMap props = type.getProperties();
+        ATRLiteral preloadTerm = (ATRLiteral) props.get(NEEDS_PRELOAD);
+        if (preloadTerm == null) {
+            return false;
+        } else {
+            String preloadStr = preloadTerm.getString();
+            boolean needsPreload = Boolean.parseBoolean(preloadStr);
+            return needsPreload;
         }
     }
 
@@ -417,6 +430,12 @@ public class TypeUtil {
             }
         }
 
+        // Add sub-type
+        if (isEnumerated(type)) {
+            ATRTypeDeclaration.Enumerated enumType = (ATRTypeDeclaration.Enumerated) type;
+            result.addAll(getSubTypes(enumType));
+        }
+
         if (isProcedure(type)) {
             // Add nested actions.
             result.addAll(SubTasksFinder
@@ -554,6 +573,24 @@ public class TypeUtil {
     public static SimpleTypeName getParent(ApplicationSubType atr) {
         ATRLiteral lit = atr.getParentType();
         return (SimpleTypeName) getName(lit);
+    }
+
+    public static List<SimpleTypeName> getSubTypes(ATRTypeDeclaration.Enumerated enumType) {
+        // Get version and namespace of the parent type, to use in case the child names aren't fully qualified.
+        String parentNameStr = enumType.getTypeName().getString();
+        SimpleTypeName parentName = (SimpleTypeName) TypeNameFactory.makeName(parentNameStr);
+        String version = parentName.getVersion();
+        String namespace = parentName.getNamespace();
+
+        List<SimpleTypeName> result = new ArrayList<>();
+        for (ATRTerm childTerm : enumType.getChildTypes().getTerms()) {
+            ATRLiteral childLit = (ATRLiteral) childTerm;
+            String childStr = childLit.getString();
+            TypeName childName = TypeNameFactory.makeName(childStr, version, namespace);
+            SimpleTypeName childSimpleName = (SimpleTypeName) childName;
+            result.add(childSimpleName);
+        }
+        return result;
     }
 
     /**

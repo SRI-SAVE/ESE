@@ -26,7 +26,6 @@ import javafx.scene.control.MenuItem;
 
 import com.sri.tasklearning.ui.core.IUndoable;
 import com.sri.tasklearning.ui.core.common.CommonView;
-import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 import com.sri.tasklearning.ui.core.step.StepView;
 import com.sri.tasklearning.ui.core.term.ConstantValueModel;
 import com.sri.tasklearning.ui.core.term.ConstantValueView;

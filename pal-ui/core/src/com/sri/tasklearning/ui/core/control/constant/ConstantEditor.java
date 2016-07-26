@@ -16,18 +16,6 @@
 
 package com.sri.tasklearning.ui.core.control.constant;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.util.Callback;
-
-import com.sri.pal.CollectionTypeDef;
 import com.sri.pal.CustomTypeDef;
 import com.sri.pal.EnumeratedTypeDef;
 import com.sri.pal.PrimitiveTypeDef;
@@ -40,9 +28,19 @@ import com.sri.tasklearning.ui.core.control.ToolTippedImageView;
 import com.sri.tasklearning.ui.core.control.ToolTipper;
 import com.sri.tasklearning.ui.core.control.ToolTipper.IToolTipCallback;
 import com.sri.tasklearning.ui.core.control.ToolTipper.IToolTippable;
-import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 import com.sri.tasklearning.ui.core.step.StepView;
 import com.sri.tasklearning.ui.core.term.TermModel;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.util.Callback;
 
 /**
  * Base class for controls that facilitate editing fixed/constant values in a
@@ -130,10 +128,7 @@ public abstract class ConstantEditor {
         else if (type instanceof PrimitiveTypeDef ||
                  type instanceof CustomTypeDef) 
             return getEditorFromClass(type);
-        else if (type instanceof CollectionTypeDef  ||
-                 type instanceof StructDef)            
-            return new ComplexConstantEditor(type, step, procView);
-        else {
+           else {
             return new StringConstantEditor(type);
         }
     }
@@ -186,12 +181,7 @@ public abstract class ConstantEditor {
         if (type instanceof StructDef && typeName.equals("file")) {
             
             StructDef sd = (StructDef)type;
-            if (sd.size() == 3 &&
-                sd.getFieldNum("directory") >= 0 &&
-                sd.getFieldNum("file name") >= 0 &&
-                sd.getFieldNum("extension") >= 0) {
-                return new FileConstantEditor(sd, step);
-            }
+          
         }
         
         return null;

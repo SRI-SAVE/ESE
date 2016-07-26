@@ -16,11 +16,6 @@
 
 package com.sri.tasklearning.ui.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import com.sri.ai.lumen.atr.ATR;
 import com.sri.ai.lumen.atr.ATRConstructor;
 import com.sri.ai.lumen.atr.ATRParameter;
@@ -30,7 +25,6 @@ import com.sri.ai.lumen.atr.decl.ATRDecl;
 import com.sri.ai.lumen.atr.logical.ATRLogical;
 import com.sri.ai.lumen.atr.logical.ATRPredicate;
 import com.sri.ai.lumen.atr.task.ATRIf;
-import com.sri.ai.lumen.atr.task.ATRSequence;
 import com.sri.ai.lumen.atr.task.ATRTask;
 import com.sri.ai.lumen.atr.term.ATRMap;
 import com.sri.ai.lumen.atr.term.ATRSymbol;
@@ -39,25 +33,13 @@ import com.sri.ai.lumen.atr.term.ATRVariable;
 import com.sri.ai.lumen.core.LumenConstant;
 import com.sri.ai.lumen.runtime.StructureGenFunOp;
 import com.sri.ai.lumen.runtime.StructureGetFunOp;
-import com.sri.pal.common.SimpleTypeName;
-import com.sri.pal.common.TypeNameFactory;
-import com.sri.tasklearning.ui.core.procedure.ProcedureModel;
-import com.sri.tasklearning.ui.core.procedure.SignatureModel;
-import com.sri.tasklearning.ui.core.procedure.StepSequence;
-import com.sri.tasklearning.ui.core.step.ActionStepModel;
-import com.sri.tasklearning.ui.core.step.IdiomStepModel;
-import com.sri.tasklearning.ui.core.step.LoopModel;
-import com.sri.tasklearning.ui.core.step.ProcedureStepModel;
-import com.sri.tasklearning.ui.core.step.StepModel;
-import com.sri.tasklearning.ui.core.term.ActionDeclarationParameterModel;
-import com.sri.tasklearning.ui.core.term.ConstantValueModel;
-import com.sri.tasklearning.ui.core.term.ListModel;
-import com.sri.tasklearning.ui.core.term.MapModel;
-import com.sri.tasklearning.ui.core.term.NoEvalTermModel;
-import com.sri.tasklearning.ui.core.term.NullValueModel;
-import com.sri.tasklearning.ui.core.term.TermModel;
-import com.sri.tasklearning.ui.core.term.VariableModel;
+import com.sri.tasklearning.ui.core.term.*;
 import com.sri.tasklearning.ui.core.term.function.*;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ATR factory for the PAL UI's ATR implementation (PUTR). Uses classes from 
@@ -73,34 +55,6 @@ public class CoreUIModelFactory implements ATRConstructor<ATR, ATRTask, ATRTerm,
     
     private final static String MESSAGE = "Editor does not currently support ";
 
-    @Override
-    public StepModel createAction(
-            final String functor,
-            final Collection<? extends ATRTerm> arguments,
-            final ATRTask body) {
-        // Although ATR doesn't distinguish between a procedure step and a 
-        // normal action step, we do so we make that distinction here based on
-        // the action's namespace        
-        SimpleTypeName name = (functor == null || functor.length() == 0) ? 
-                null : (SimpleTypeName)TypeNameFactory.makeName(functor);
-        if (name != null && name.getNamespace().equals(BackendInterface.PROC_NAMESPACE))
-            return new ProcedureStepModel(functor, arguments);
-        else {
-            if (body != null) {
-                // It's an idiom, so create an IdiomStepModel
-                return new IdiomStepModel(functor, arguments, body);
-            } else {
-                return new ActionStepModel(functor, arguments);
-            }
-        }
-    }
-
-
-	@Override
-	public ATRDecl createActionDeclaration(ATRSig signature, ATRTask taskExpression,
-			ATRMap properties) {
-		 return new ProcedureModel((SignatureModel)signature, taskExpression, (MapModel)properties);
-    } 
 
     @Override
     public ActionDeclarationParameterModel createParameter(ATRVariable variable, ATRParameter.Modality modality, String type, ATRTerm defaultValue) {
@@ -161,31 +115,8 @@ public class CoreUIModelFactory implements ATRConstructor<ATR, ATRTask, ATRTerm,
         return NullValueModel.NULL;
     }
     
-    @Override
-    public SignatureModel createSignature(String functor, Collection<ATRParameter> arguments) {
-        List<ActionDeclarationParameterModel> parms = new ArrayList<ActionDeclarationParameterModel>();
-        for (ATRParameter arg : arguments)
-            parms.add((ActionDeclarationParameterModel)arg);
-        return new SignatureModel(functor, parms);
-    }
+  
     
-    @Override
-    public VariableModel createVariable(String var) {
-        return VariableModel.create(var, VariableManager.getNextVariableManager()); 
-    }       
-    
-    @Override
-    public LoopModel createForin(ATRTerm variable, ATRTerm list, ATRTask task, ATRTerm collect, ATRTerm into) {
-        ArrayList<StepModel> steps = new ArrayList<StepModel>();
-        if ( task instanceof ATRSequence ) {
-            for (ATRTask t: ((ATRSequence)task).getTasks())
-                steps.add((StepModel)t);
-        } else {
-            steps.add((StepModel)task);
-        }
-        return new LoopModel((TermModel)variable, (TermModel)list, steps, (TermModel)collect, (TermModel)into);
-    }
-
     // Begin of unsupported create methods    
     @Override
     public ATRIf createIf(ATRLogical condition, ATRTask ifTask, ATRTask elseTask) {
@@ -308,11 +239,7 @@ public class CoreUIModelFactory implements ATRConstructor<ATR, ATRTask, ATRTerm,
         throw new UnsupportedOperationException(MESSAGE + "Select");
     }
 
-    @Override
-    public ATRSequence createSequence(Collection<? extends ATRTask> taskExpressions) {
-        return new StepSequence(taskExpressions);
-    }
-
+  
     @Override
     public ATRTask createSetValue(ATRVariable variable, ATRTerm value) {
         throw new UnsupportedOperationException(MESSAGE + "SetValue");
@@ -343,6 +270,15 @@ public class CoreUIModelFactory implements ATRConstructor<ATR, ATRTask, ATRTerm,
         throw new UnsupportedOperationException(MESSAGE + "TriggerDeclaration");
     }
 
+    @Nonnull
+    @Override
+    public ATRDecl createTypeDeclaration(@Nonnull String name, List<String> optEquivalentTypes, ATRMap optProperties,
+                                         List<String> optValues, String optRepresentationType, String optParentType,
+                                         List<String> optFieldNames, List<String> optFieldTypes,
+                                         List<String> optChildTypes) {
+        throw new UnsupportedOperationException(MESSAGE + "TypeDeclaration");
+    }
+
     @Override
     public ATRTask createTry(ATRTask mainTask, ATRTask onSucceedTask, ATRTask onFailTask, ATRTask finallyTask, ATRVariable failurCVariableModel) {
         throw new UnsupportedOperationException(MESSAGE + "Try");
@@ -364,12 +300,41 @@ public class CoreUIModelFactory implements ATRConstructor<ATR, ATRTask, ATRTerm,
         throw new UnsupportedOperationException(MESSAGE + "ShortParameter");
     }
 
-    @Override
-    public ATRDecl createTypeDeclaration(String name, List<String> optEquivalentTypes, ATRMap optProperties,
-            List<String> optValues, String optRepresentationType, String optParentType,
-            List<String> optFieldNames, List<String> optFieldTypes) {
-        throw new UnsupportedOperationException(MESSAGE + "TypeDeclaration");
-    }
+	@Override
+	public ATRTask createAction(String arg0, Collection<? extends ATRTerm> arg1, ATRTask arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ATRTask createForin(ATRTerm arg0, ATRTerm arg1, ATRTask arg2, ATRTerm arg3, ATRTerm arg4) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ATRVariable createVariable(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ATRDecl createActionDeclaration(ATRSig arg0, ATRTask arg1, ATRMap arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ATRSig createSignature(String arg0, Collection<ATRParameter> arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ATRTask createSequence(Collection<? extends ATRTask> arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }

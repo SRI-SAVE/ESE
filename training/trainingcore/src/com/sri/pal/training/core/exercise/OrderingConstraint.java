@@ -31,5 +31,18 @@ public class OrderingConstraint extends OrderingConstraintBase {
         this(predecessorStepName, successorStepName);
         this.reason = reason;
     }
-
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (!(o instanceof OrderingConstraint)) return false;
+    	OrderingConstraint that = (OrderingConstraint) o;
+    	return this.predecessor.equals(that.predecessor) && this.successor.equals(that.successor); 
+    }
+    
+    @Override
+    public int hashCode() {
+    	return (((null == predecessor) ? "NULL" : predecessor) + "<" +
+    			((null == successor) ? "NULL" : successor)).hashCode();
+    }
+    
 }

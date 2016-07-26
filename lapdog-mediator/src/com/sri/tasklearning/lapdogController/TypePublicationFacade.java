@@ -19,11 +19,21 @@ import com.sri.ai.lumen.atr.ATRSyntax;
 import com.sri.ai.lumen.atr.decl.ATRActionDeclaration;
 import com.sri.ai.lumen.atr.decl.ATRDecl;
 import com.sri.ai.lumen.atr.decl.ATRTypeDeclaration;
+import com.sri.ai.lumen.atr.decl.impl.CTRTypeDeclaration;
+import com.sri.ai.lumen.atr.term.ATRLiteral;
+import com.sri.ai.lumen.atr.term.ATRMap;
+import com.sri.ai.lumen.atr.term.ATRTerm;
+import com.sri.ai.tasklearning.lapdog.Lapdog;
+import com.sri.pal.common.SimpleTypeName;
 import com.sri.tasklearning.mediators.TypeAdder;
 import com.sri.tasklearning.spine.util.TypeUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Will Haines
@@ -36,10 +46,12 @@ public class TypePublicationFacade
     private static final Logger _logger = LoggerFactory
             .getLogger(TypePublicationFacade.class);
 
-    private LapdogFacade lapdogFacade;
+    private final LapdogFacade lapdogFacade;
+    private final Map<SimpleTypeName, ATRTypeDeclaration.Enumerated> enums;
 
     TypePublicationFacade(LapdogFacade lapdogFacade) {
         this.lapdogFacade = lapdogFacade;
+        enums = new HashMap<>();
     }
 
     /**
@@ -129,6 +141,9 @@ public class TypePublicationFacade
         try {
             if (TypeUtil.isCollection(type)) {
                 lapdogFacade.publishCollection(type);
+            } else if (TypeUtil.isEnumerated(type)) {
+                ATRTypeDeclaration.Enumerated enumType = (ATRTypeDeclaration.Enumerated) type;
+                publishEnumType(enumType);
             } else {
                 lapdogFacade.publishType(type);
             }
@@ -138,6 +153,42 @@ public class TypePublicationFacade
                             + ATRSyntax.toSource(type), e);
             throw new TypePublicationFacadeException(e);
         }
+    }
+
+    private void publishEnumType(final ATRTypeDeclaration.Enumerated enumType)
+            throws Lapdog.TypeError {
+        // Merge in enum values from sub-types, and get the list of sub-type names.
+        List<String> allValues = new ArrayList<>();
+        List<String> subTypes = new ArrayList<>();
+        for (ATRTerm valTerm : enumType.getValues().getTerms()) {
+            ATRLiteral valLit = (ATRLiteral) valTerm;
+            allValues.add(valLit.getString());
+        }
+        for (SimpleTypeName subName : TypeUtil.getSubTypes(enumType)) {
+            subTypes.add(subName.getFullName());
+            ATRTypeDeclaration.Enumerated subType = enums.get(subName);
+            for (ATRTerm valTerm : subType.getValues().getTerms()) {
+                ATRLiteral valLit = (ATRLiteral) valTerm;
+                allValues.add(valLit.getString());
+            }
+        }
+
+        // Clone the old type, with new values.
+        String nameStr = enumType.getTypeName().getString();
+        List<String> equivs = null;
+        if (enumType.optEquivalentTypes() != null) {
+            equivs = new ArrayList<>();
+            for (ATRTerm equivTerm : enumType.optEquivalentTypes().getTerms()) {
+                ATRLiteral equivLit = (ATRLiteral) equivTerm;
+                equivs.add(equivLit.getString());
+            }
+        }
+        ATRMap props = enumType.optProperties();
+
+        ATRTypeDeclaration.Enumerated newType = CTRTypeDeclaration.createEnumeratedType(nameStr, equivs, props,
+                allValues, subTypes);
+        enums.put(TypeUtil.getName(newType), newType);
+        lapdogFacade.publishType(newType);
     }
 
     @Override

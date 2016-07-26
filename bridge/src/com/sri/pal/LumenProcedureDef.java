@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: LumenProcedureDef.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: LumenProcedureDef.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import java.util.Collections;
@@ -157,6 +157,10 @@ public final class LumenProcedureDef
             throw new PALException("Refusing to load un-runnable procedure "
                     + name);
         }
+        boolean allowPartial = false;
+        if (TypeUtil.needsPreload(sparklProc)) {
+            allowPartial = true;
+        }
 
         /*
          * Overwrite the transient property on the ATR proc. We might have
@@ -214,7 +218,7 @@ public final class LumenProcedureDef
         Set<SimpleTypeName> calledActionNames = SubTasksFinder
                 .findSubTasks(sparklProc);
         RequestCanceler rc = bridge.getActionModel().getTypes(chain,
-                calledActionNames);
+                calledActionNames, allowPartial);
         chain.addCanceler(rc);
         return chain;
     }

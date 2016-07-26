@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: ActionModel_Test.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: ActionModel_Test.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -79,7 +79,7 @@ public class ActionModel_Test
             throws Exception {
         URL url = ActionModels.class.getResource(ActionModels.SIMPLE);
         Set<ActionModelDef> actions = actionModel.load(url, "ns");
-        assertEquals(4, actions.size());
+        assertEquals(5, actions.size());
         for (ActionModelDef type : actions) {
             ActionModelDef type2 = actionModel.getType(type.getName());
             assertEquals(type, type2);
@@ -101,7 +101,7 @@ public class ActionModel_Test
         URL url = ActionModels.class.getResource(ActionModels.SIMPLE);
         String amStr = ProcedureLearner.readWholeFile(url);
         Set<ActionModelDef> actions = actionModel.load(amStr, "ns");
-        assertEquals(4, actions.size());
+        assertEquals(5, actions.size());
 
         mockCtrl.verify();
     }
@@ -116,10 +116,10 @@ public class ActionModel_Test
         JAXBElement<?> ele = (JAXBElement<?>) unmar.unmarshal(url);
         ActionModelType amXml = (ActionModelType) ele.getValue();
         assertEquals(1, amXml.getType().size());
-        assertEquals(3, amXml.getAction().size());
+        assertEquals(4, amXml.getAction().size());
 
         Set<ActionModelDef> actions = actionModel.load(amXml, "ns");
-        assertEquals(4, actions.size());
+        assertEquals(5, actions.size());
 
         mockCtrl.verify();
     }
@@ -132,14 +132,14 @@ public class ActionModel_Test
         String ns2 = "bar";
 
         Set<ActionModelDef> actions1 = actionModel.load(url, ns1);
-        assertEquals(4, actions1.size());
+        assertEquals(5, actions1.size());
         TypeDef type1 = (TypeDef) actionModel.getType(TypeNameFactory.makeName(
                 "String", "1.0", ns1));
         assertNotNull(type1);
         assertTrue(actions1.contains(type1));
 
         Set<ActionModelDef> actions2 = actionModel.load(url, ns2);
-        assertEquals(4, actions2.size());
+        assertEquals(5, actions2.size());
         TypeDef type2 = (TypeDef) actionModel.getType(TypeNameFactory.makeName(
                 "String", "1.0", ns2));
         assertNotNull(type2);

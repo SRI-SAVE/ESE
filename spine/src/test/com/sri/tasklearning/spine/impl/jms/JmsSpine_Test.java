@@ -438,7 +438,7 @@ public class JmsSpine_Test extends SpineTestCase {
         }
     }
 
-    @Test
+    @Test(timeOut = 2000)
     public void canRegisterAndReceiveTwoTopicMessagesManyTimesInOrder() throws SpineException, InterruptedException {
         masterJmsSpine = new JmsSpine(JmsClient.LOCAL, bridge);
 
@@ -468,7 +468,7 @@ public class JmsSpine_Test extends SpineTestCase {
 
         // Sleep to allow all the messages to propagate
         int counter = 0;
-        while (lapdogHandler.getMessageUidListFromSender(bridge).size() < 2000 && counter++ < 20) {
+        while (lapdogHandler.getMessageUidListFromSender(bridge).size() < 2000) {
             Thread.sleep(10);
         }
 
@@ -484,7 +484,7 @@ public class JmsSpine_Test extends SpineTestCase {
         }
     }
 
-    @Test
+    @Test(timeOut = 2000)
     public void canSendMessagesToMultipleSubscribers() throws SpineException, InterruptedException {
         masterJmsSpine = new JmsSpine(JmsClient.LOCAL, bridge);
 
@@ -523,13 +523,13 @@ public class JmsSpine_Test extends SpineTestCase {
 
         // Sleep to allow all the messages to propagate
         int counter = 0;
-        while (lapdogHandler.getMessageUidListFromSender(bridge).size() < 2000 && counter++ < 20) {
+        while (lapdogHandler.getMessageUidListFromSender(bridge).size() < 2000 ) {
             Thread.sleep(10);
         }
 
         // Sleep to allow all the messages to propagate
         counter = 0;
-        while (lumenHandler.getMessageUidListFromSender(bridge).size() < 2000 && counter++ < 20) {
+        while (lumenHandler.getMessageUidListFromSender(bridge).size() < 2000) {
             Thread.sleep(10);
         }
 

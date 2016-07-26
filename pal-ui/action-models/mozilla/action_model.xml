@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+        
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<actionModel version="1.0">
+
+    <type id="string">
+        <description>simple string type</description>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <type id="url">
+        <description>A url such as http://www.yahoo.com</description>
+	<!-- Allow agave URL params to support and be supported by our URLs -->
+	<equivalentTo>agave.url</equivalentTo>
+        <atom>
+            <javaType>java.lang.String</javaType>
+        </atom>
+    </type>
+
+    <action id="OpenUrlEvent">
+        <description>Firefox open url event</description>
+        <metadata key="name" value="Open URL"/>
+		<metadata key="fancyName" value="Open: ,#url"/>
+        <metadata key="icon" value="./fapps/icon_firefox.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="url">
+            <description>URL</description>
+            <typeRef typeId="url"/>
+        </inputParam>
+    </action>
+
+    <action id="FormSubmitEvent">
+        <description>Firefox form submit event</description>
+        <metadata key="name" value="Submit form"/>
+        <metadata key="fancyName" value="Submit ,#action, with ,#params, to ,#url"/>
+        <metadata key="icon" value="./fapps/icon_firefox.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="url">
+            <description>The url containing the form</description>
+            <typeRef typeId="url"/>
+        </inputParam>
+        <inputParam id="action">
+            <description>The action of the form</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="params">
+            <description>Encoded parameter string</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="SubmitTextEvent">
+        <description>Wrapper around form submit/open url events</description>
+        <metadata key="name" value="Submit text"/>
+        <metadata key="fancyName" value="Enter ,#text, to ,#url, resulting in ,#result_url"/>
+        <metadata key="icon" value="./fapps/icon_firefox.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="url">
+            <description>The base url of the action</description>
+            <typeRef typeId="url"/>
+        </inputParam>
+        <inputParam id="text">
+            <description>The text to submit to the form</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <outputParam id="result_url">
+            <description>The URL resulting from the text submission</description>
+            <typeRef typeId="url"/>
+        </outputParam>
+    </action>
+
+    <action id="OpenEmailWindowEvent">
+        <description>Firefox open url event</description>
+        <metadata key="name" value="Open Email Window"/>
+		<metadata key="fancyName" value="Open Email Window: ,#uri, id=,#id"/>
+        <metadata key="icon" value="./fapps/icon_thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="uri">
+            <description>uri</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="id">
+            <description>id</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="SaveEmailAttachmentEvent">
+        <description>Thunderbird event to save a single attachment of an email message to a directory</description>
+        <metadata key="name" value="Save Email Attachment"/>
+		<metadata key="fancyName" value="Save Email Attachment: ,#uri, ,#part, ,#name, ,#location"/>
+        <metadata key="icon" value="./fapps/icon_thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="uri">
+            <description>uri</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="part">
+            <description>attachment part number</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="name">
+            <description>name of the attachment</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="location">
+            <description>location to save attachment</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+    <action id="SaveAllEmailAttachmentEvent">
+        <description>Thunderbird event to save all attachments of an email message to a directory</description>
+        <metadata key="name" value="Save All Email Attachments"/>
+		<metadata key="fancyName" value="Save All Email Attachments: ,#uri, ,#location"/>
+        <metadata key="icon" value="./fapps/icon_thunderbird.png"/>
+        <effectsType type="has_side_effects"/>
+        <inputParam id="uri">
+            <description>uri</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+        <inputParam id="location">
+            <description>location to save attachments</description>
+            <typeRef typeId="string"/>
+        </inputParam>
+    </action>
+
+</actionModel>

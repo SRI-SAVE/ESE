@@ -103,8 +103,13 @@ public class AnnotationMenuEntry extends Pane implements IToolTippable, ISelecta
         
         ToolTipper.registerEventHandlers(this);
         
-        setPrefHeight(Region.USE_COMPUTED_SIZE);
-        setMinHeight(Region.USE_PREF_SIZE);
+        //setPrefHeight(Region.USE_COMPUTED_SIZE);
+        //setMinHeight(Region.USE_PREF_SIZE);
+        
+        if ( argIcon != null ) {        
+        	setMinHeight(argIcon.getHeight());
+        	label.setMinHeight(argIcon.getHeight());
+        }
         
         ((ImageView)label.getGraphic()).setImage(icon);
         label.setText(text);
@@ -131,7 +136,8 @@ public class AnnotationMenuEntry extends Pane implements IToolTippable, ISelecta
     
     @Override
     protected void layoutChildren() {
-        this.setHeight(computePrefHeight(0));
+    	
+    	//this.setHeight(computePrefHeight(0));
         super.layoutChildren();
         
         label.relocate(leftIndent, PAD / 2);

@@ -41,16 +41,16 @@ public final class EditSessionManager {
     }
     
     public static void setActiveSession(EditSession session) {
-        EditSession oldSession = activeSession;
-        activeSession = session;
-        
-          	if (session == null)
-        		ExerciseModel.setActiveModel(null); 
-        	else if (session.getController().getModel() instanceof ExerciseModel)  
-        		ExerciseModel.setActiveModel((ExerciseModel) session.getController().getModel());
+    	EditSession oldSession = activeSession;
+    	activeSession = session;
 
-        for (ISessionListener listen : listeners)
-            listen.activeSessionChanged(oldSession, activeSession);
+    	if (session == null)
+    		ExerciseModel.setActiveModel(null); 
+    	else if (session.getController().getModel() instanceof ExerciseModel)  
+    		ExerciseModel.setActiveModel((ExerciseModel) session.getController().getModel());
+
+    	for (ISessionListener listen : listeners)
+    		listen.activeSessionChanged(oldSession, activeSession);
     }
     
     public static void addSession(EditSession session) {

@@ -19,5 +19,17 @@ package com.sri.pal.training.core.assessment;
 import com.sri.pal.training.core.basemodels.MissingAtomIssueBase;
 
 public class MissingAtomIssue extends MissingAtomIssueBase {
+	
+	@Override
+	public int hashCode() {
+		return getStep().hashCode();
+	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof MissingAtomIssue)) return false;
+		MissingAtomIssue mai = (MissingAtomIssue) o;
+		return this.getStep().equals(mai.getStep());
+	}
+	
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: ProcedureDependencyFinder.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: ProcedureDependencyFinder.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.tasklearning.lumenpal;
 
 import java.util.ArrayList;
@@ -104,10 +104,13 @@ public class ProcedureDependencyFinder
             return result;
         }
 
-        ATRDecl type = null;
         if (typeName instanceof SimpleTypeName) {
             SimpleTypeName simpleName = (SimpleTypeName) typeName;
-            type = actionModel.getRaw(simpleName);
+            if (actionModel.isPredefined(simpleName)) {
+                return result;
+            }
+
+            ATRDecl type = actionModel.getRaw(simpleName);
             if (type == null) {
                 type = fetcher.getType(simpleName);
             }

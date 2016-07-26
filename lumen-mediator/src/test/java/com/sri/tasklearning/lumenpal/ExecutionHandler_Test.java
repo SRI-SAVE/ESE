@@ -92,7 +92,8 @@ public class ExecutionHandler_Test extends LumenMediatorTestCase {
     public void canConstruct() {
         ProcedureDependencyFinder procDepFinder = new ProcedureDependencyFinder(
                 lockingActionModel, simpleTypeFetcher);
-        ExecutionHandler executionHandler = new ExecutionHandler(
+        RunOnce runOnce = new RunOnce(mockLumen, lockingActionModel, procDepFinder);
+        ExecutionHandler executionHandler = new ExecutionHandler(runOnce,
                 lockingActionModel, simpleTypeFetcher, serialGetter, mockSpine,
                 procDepFinder);
         assertNotNull(executionHandler);
@@ -126,7 +127,8 @@ public class ExecutionHandler_Test extends LumenMediatorTestCase {
     public void canAddAndRemoveExecutors() {
         ProcedureDependencyFinder procDepFinder = new ProcedureDependencyFinder(
                 lockingActionModel, complexTypeFetcher);
-        ExecutionHandler executionHandler = new ExecutionHandler(
+        RunOnce runOnce = new RunOnce(mockLumen, lockingActionModel, procDepFinder);
+        ExecutionHandler executionHandler = new ExecutionHandler(runOnce,
                 lockingActionModel, complexTypeFetcher, serialGetter,
                 mockSpine, procDepFinder);
 
@@ -141,7 +143,8 @@ public class ExecutionHandler_Test extends LumenMediatorTestCase {
         MockTaskExecutor mockTaskExecutor = new MockTaskExecutor();
         ProcedureDependencyFinder procDepFinder = new ProcedureDependencyFinder(
                 lockingActionModel, complexTypeFetcher);
-        ExecutionHandler executionHandler = new ExecutionHandler(
+        RunOnce runOnce = new RunOnce(mockLumen, lockingActionModel, procDepFinder);
+        ExecutionHandler executionHandler = new ExecutionHandler(runOnce,
                 lockingActionModel, complexTypeFetcher, serialGetter,
                 mockSpine, procDepFinder);
 

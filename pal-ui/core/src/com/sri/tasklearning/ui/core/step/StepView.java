@@ -19,16 +19,21 @@ package com.sri.tasklearning.ui.core.step;
 import java.util.Comparator;
 import java.util.List;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Transform;
 import javafx.stage.Screen;
 
 import com.sri.tasklearning.ui.core.ISelectable;
 import com.sri.tasklearning.ui.core.common.CommonView;
-import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 
 /**
  * Abstract base class for step views. Provides common properties and methods
@@ -39,15 +44,26 @@ import com.sri.tasklearning.ui.core.procedure.ProcedureView;
 public abstract class StepView extends Pane implements ISelectable {
 	
     public static final double DEF_WIDTH = 700.0;
-    public static final double MIN_WIDTH = 700.0;
     public static final double EDGE_ROUNDING = 6.0;
-    public static final double DEFAULT_BORDER_WIDTH = 1.0;
-    public static final double TITLE_VAR_SCALAR = 1.25;
-    public static final double LHS_OFFSET = 55.0;
-    public static final double PAD = 7.0;
-    public static final double RHS_PAD = 8 * PAD;
-    public static final double ICON_SIZE = 32.0;
-    public static final double SMALL_ICON_SIZE = 28.0;
+    public static final double LHS_OFFSET = 40.0;
+    public static final double UP_OFFSET = 40.0;
+    public static final double PAD = 8.0;
+
+    public static final double DEFAULT_STEP_HEIGHT = 70; 
+    public static final double DEFAULT_BORDER_WIDTH = 4.0;
+    
+    public SimpleDoubleProperty socketNorthX = new SimpleDoubleProperty();    
+    public SimpleDoubleProperty socketNorthY = new SimpleDoubleProperty();
+    
+    public SimpleDoubleProperty socketSouthX = new SimpleDoubleProperty();    
+    public SimpleDoubleProperty socketSouthY = new SimpleDoubleProperty();    
+    
+    public SimpleDoubleProperty socketEastX = new SimpleDoubleProperty();    
+    public SimpleDoubleProperty socketEastY = new SimpleDoubleProperty();    
+    
+    public SimpleDoubleProperty socketWestX = new SimpleDoubleProperty();    
+    public SimpleDoubleProperty socketWestY = new SimpleDoubleProperty();    
+    
     
     // A comparator that will compare step views based on their
     // underlying model's step index
@@ -65,22 +81,22 @@ public abstract class StepView extends Pane implements ISelectable {
     };
     
     protected StepModel stepModel;
-    protected IStepViewContainer parentView; 
-    protected CommonView procedureView;
+    protected SimpleObjectProperty<IStepViewContainer> parentView = new SimpleObjectProperty<IStepViewContainer>();  
+    protected CommonView commonView;
     
     // State properties
-    protected SimpleBooleanProperty expanded = new SimpleBooleanProperty(false);
     protected SimpleBooleanProperty selected = new SimpleBooleanProperty(false);
     protected SimpleBooleanProperty stepIndexVisibilityProperty = new SimpleBooleanProperty(false); 
-    
-    
+      
     public StepView(
             final StepModel argModel, 
             final IStepViewContainer argParent, 
             final CommonView argProcView) {
+    	
         this.stepModel = argModel;  
-        this.parentView = argParent;
-        this.procedureView = argProcView;        
+        this.parentView.setValue(argParent); 
+        this.commonView = argProcView;     
+        
     }
 
     public StepModel getStepModel() {
@@ -102,26 +118,21 @@ public abstract class StepView extends Pane implements ISelectable {
     
     public IStepViewContainer getStepViewContainer() {
         if (parentView != null)
-            return parentView;
+            return parentView.getValue();
         
-        return procedureView; 
+        return commonView; 
     }
      
     public void setStepViewContainer(IStepViewContainer parentView) {
-        this.parentView = parentView;
+        this.parentView.setValue(parentView); 
     }
     
     public CommonView getView() {
-        return procedureView;
+        return commonView;
     }
     
     public void setView(CommonView procedureView) {
-        this.procedureView = procedureView;
-    }
-    
-    // Intended to be overwritten
-    public void updateIssueVisualization() {
-        
+        this.commonView = procedureView;
     }
 
     /**
@@ -151,17 +162,12 @@ public abstract class StepView extends Pane implements ISelectable {
      * @return - the number of visual nesting levels for this step
      */
     public int getVisualNestingLevel() {
-        int level = 0; 
-        StepView sv = this;
-        while (sv.getStepViewContainer() instanceof LoopView) {
-            level++;
-            sv = (LoopView)sv.getStepViewContainer();
-        }
+        int level = 0;    
         return level; 
     }
     
     public boolean isOnScreen() {
-        Bounds bounds = localToScene(parentToLocal(this.getBoundsInParent()));
+        Bounds bounds = localToScene(parentToLocal(this.getBoundsInParent()));        
         Rectangle2D r2d2 = new Rectangle2D(bounds.getMinX(), bounds.getMinY(),
                 bounds.getWidth(), bounds.getHeight());
 
@@ -169,15 +175,7 @@ public abstract class StepView extends Pane implements ISelectable {
         return screens != null && screens.size() > 0;
     }
      
-     /**
-      * Intended to be overwritten by some subclasses
-      *
-      * @return The height of the step for purposes of drag/drop calculations
-      */
-     public double getCoreHeight() {
-         return getHeight();     
-     }
-     
+   
      public SimpleBooleanProperty getStepIndexVisibility() {
  		
  		return stepIndexVisibilityProperty;

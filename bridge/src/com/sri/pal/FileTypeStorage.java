@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: FileTypeStorage.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: FileTypeStorage.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import java.io.BufferedReader;
@@ -285,6 +285,7 @@ public class FileTypeStorage
             throws PALException {
         // Find the dir this file exists in.
         File nsDir = new File(rootDir, mangle(name.getNamespace()));
+        System.out.println("Loading " + rootDir + " name " + name); 
         File versDir = new File(nsDir, mangle(name.getVersion()));
         if (!versDir.exists()) {
             return null;

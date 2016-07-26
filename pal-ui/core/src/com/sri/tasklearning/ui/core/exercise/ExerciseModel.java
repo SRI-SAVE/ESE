@@ -21,14 +21,12 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -51,10 +49,12 @@ import com.sri.pal.training.core.exercise.OrderingConstraint;
 import com.sri.pal.training.core.exercise.Parameter;
 import com.sri.pal.training.core.exercise.Step;
 import com.sri.pal.training.core.exercise.TaskSolution;
+import com.sri.pal.training.core.exercise.TypeConstraint;
 import com.sri.pal.training.core.exercise.ValueConstraint;
 import com.sri.pal.training.core.storage.ExerciseFactory;
 import com.sri.pal.training.core.storage.ExerciseStorage;
 import com.sri.tasklearning.ui.core.BackendFacade;
+import com.sri.tasklearning.ui.core.PalUiException;
 import com.sri.tasklearning.ui.core.common.CommonModel;
 import com.sri.tasklearning.ui.core.step.ExerciseCreateStepModel;
 import com.sri.tasklearning.ui.core.step.ExerciseGroupOfStepsModel;
@@ -62,6 +62,9 @@ import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
 import com.sri.tasklearning.ui.core.step.ExerciseSubtaskModel;
 import com.sri.tasklearning.ui.core.step.StepModel;
 import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Top-level class representing an exercise. Contains references to all
@@ -101,12 +104,8 @@ public class ExerciseModel extends CommonModel {
 	// all params of all steps including all the subparameters
 	private List<ExerciseStepParameter> allParams = new LinkedList<ExerciseStepParameter>();
 	
-	private List<OrderingConstraint> orderingConstraints = new LinkedList<OrderingConstraint>();  
+	private List<OrderingConstraint> fixedOrderingConstraints = new LinkedList<OrderingConstraint>();  
 	
-	// the value and equality constraints which have been removed during editing  (by changing to "Any <Class>") 
-	private List<EqualityConstraint> invalidatedEqualityConstraints = new LinkedList<EqualityConstraint>();
-	private List<ValueConstraint> invalidatedValueConstraints = new LinkedList<ValueConstraint>();
-
 	// all the create actions
 	private List<ExerciseStepModel> initialCreateActions = new LinkedList<ExerciseStepModel>();
 	
@@ -115,8 +114,13 @@ public class ExerciseModel extends CommonModel {
 	private String serverPassword;
 	
 	// mapping parameters to constraints
-	private HashMap<String, ValueConstraint> paramToValueconstraintMap;
-	private HashMap<String, EqualityConstraint> paramToEqualityconstraintMap;
+	private HashMap<String, ValueConstraint> paramToValueConstraintMap;
+	private HashMap<String, EqualityConstraint> paramToEqualityConstraintMap;
+	private HashMap<String, TypeConstraint> paramToTypeConstraintMap;
+	
+	//
+	//
+	// 
 	
 	public List<ExerciseStepModel> getInitialCreateActions() {
 		return initialCreateActions;
@@ -137,17 +141,19 @@ public class ExerciseModel extends CommonModel {
 	
 	/**
 	 * Constructor for creating new excercises
+	 * @throws PALException 
+	 * @throws PalUiException 
 	 */
-	public ExerciseModel(Exercise exercise, File file, URL url, String serverUser, String serverPassword, boolean recursive) {
+	public ExerciseModel(Exercise exercise, File file, URL url, String serverUser, String serverPassword, boolean recursive) throws PALException {
 
 		super("");
-	
+
 		this.fileSource = file; 
 		this.urlSource = url; 
 		this.exercise = exercise;
-		
+
 		updateName();
-	
+
 		this.setServerUser(serverUser); 
 		this.setServerPassword(serverPassword);
 
@@ -206,7 +212,9 @@ public class ExerciseModel extends CommonModel {
 
 				} catch (PALException e) {
 
-					log.error("Failed to load action model " + am + " into namespace " + ns);
+					throw e; 
+
+					//					log.error("Failed to load action model " + am + " into namespace " + ns);
 
 				} catch (MalformedURLException e) {
 
@@ -222,9 +230,6 @@ public class ExerciseModel extends CommonModel {
 
 			List<TaskSolution> solutions = exercise.getSolution().getTaskSolutions(); 
 
-			int pos = 0; 
-			boolean orderingConstraintsFound = false;    		
-
 			//
 			//
 			//         
@@ -239,10 +244,10 @@ public class ExerciseModel extends CommonModel {
 
 				List<ValueConstraint> vcs = solutionOption.getValueConstraints();
 
-				paramToValueconstraintMap = new HashMap<String, ValueConstraint>(); 
+				paramToValueConstraintMap = new HashMap<String, ValueConstraint>(); 
 
 				for (ValueConstraint vc : vcs) 									
-					paramToValueconstraintMap.put(vc.getParameter().toString(), vc);
+					paramToValueConstraintMap.put(vc.getParameter().toString(), vc);
 
 				//
 				//
@@ -250,12 +255,12 @@ public class ExerciseModel extends CommonModel {
 
 				List<EqualityConstraint> ecs = solutionOption.getEqualityConstraints();
 
-				paramToEqualityconstraintMap = new HashMap<String, EqualityConstraint>(); 
+				paramToEqualityConstraintMap = new HashMap<String, EqualityConstraint>(); 
 
 				for (EqualityConstraint ec : ecs) {
 
 					if (ec.getParameters().size() == 2) { 					
-						paramToEqualityconstraintMap.put(ec.getParameters().get(1), ec); 
+						paramToEqualityConstraintMap.put(ec.getParameters().get(0), ec); 
 					} else {						
 						log.error("Found bad equality constraint - ignoring it: " + ec); 						
 					}
@@ -263,15 +268,30 @@ public class ExerciseModel extends CommonModel {
 
 				//
 				//
+				//        	
+
+				List<TypeConstraint> tcs = solutionOption.getTypeConstraints(); 
+
+				paramToTypeConstraintMap = new HashMap<String, TypeConstraint>(); 
+
+				for (TypeConstraint tc : tcs) {
+
+					if (tc.getType().size() == 1 || tc.getParameter() == null) {				
+						paramToTypeConstraintMap.put(tc.getParameter(), tc); 
+					} else {						
+						log.error("Found bad type constraint - ignoring it: " + tc); 						
+					}
+				}        
+
+				//
+				//
 				// 
 
-				String lastSubtask = null;  
+				Map<String, ExerciseSubtaskModel> subtaskModels = new HashMap<String, ExerciseSubtaskModel>(); 
 
 				ExerciseSubtaskModel subtaskModel = null; 
 
-				int subtaskCounter = 0;
-				int stepCounter = 0; 
-				int subtaskPosition = 0; 
+				List<StepModel> steps = new ArrayList<StepModel>();  
 
 				for (Step step : solutionOption.getSteps()) {        		
 
@@ -315,20 +335,20 @@ public class ExerciseModel extends CommonModel {
 						// process new subtask 
 						//
 
-						if (subtask == null)
+						if (subtask == null)  {
 
 							subtaskModel = null;
 
-						else if (lastSubtask == null || ! lastSubtask.equals(subtask)) {
+						} else {
 
-							subtaskCounter++;
-							subtaskModel = new ExerciseSubtaskModel(subtask);
-							subtaskPosition = 0; 
-							addStep(subtaskModel, stepCounter++); 
+							subtaskModel = subtaskModels.get(subtask);
 
-						}						    
-
-						lastSubtask = subtask;						
+							if ( subtaskModel == null) {							
+								subtaskModel = new ExerciseSubtaskModel(this, subtask);								
+								subtaskModels.put(subtask,  subtaskModel); 
+								steps.add(subtaskModel);
+							}															
+						}							
 
 						//
 						//
@@ -337,7 +357,7 @@ public class ExerciseModel extends CommonModel {
 
 						boolean isCreateAction = functor.startsWith("Create");
 
-						ExerciseStepModel stepModel = isCreateAction ? new ExerciseCreateStepModel(atom, params) : new ExerciseStepModel(atom, params);
+						ExerciseStepModel stepModel = isCreateAction ? new ExerciseCreateStepModel(this, atom, params) : new ExerciseStepModel(this, atom, params);
 
 						stepModel.setOptional(optional);
 
@@ -347,16 +367,11 @@ public class ExerciseModel extends CommonModel {
 						//
 						//
 
-						if (isCreateAction) {							
-							initialCreateActions.add(stepModel); 							
-						} else {
-							if (subtaskModel == null) {
-								addStep(stepModel, stepCounter++);														
-							} else { 						 										
-								subtaskModel.addStep(stepModel, subtaskPosition++);
-							}							
-						}	
-
+						if (subtaskModel == null ) {						
+							steps.add(stepModel);						  
+						} else {							
+							subtaskModel.addStep(stepModel, subtaskModel.getStepCount()); 								
+						}
 					}	
 				}
 
@@ -366,43 +381,13 @@ public class ExerciseModel extends CommonModel {
 
 				for (ExerciseStepParameter p : allParams) {
 					p.initializeParameterDescription(); 
-					// System.out.println(p.getVariableName()); 
 				}					
-
-				//
-				// assign "Group <number>" default names for unnamed subtasks
-				//
-
-				/* 
-				for (StepModel unnamedStep : getSteps()) {
-					if (unnamedStep instanceof ExerciseSubtaskModel) {
-						if (((ExerciseSubtaskModel) unnamedStep).getName().equals("")) { 
-							boolean found = true;
-							int groupCounter = 1; 
-							String name = ""; 
-							while (found) {
-								found = false; 
-								for (StepModel step : getSteps()) {
-									name = "Group "+Integer.toString(groupCounter); 
-									found = (step instanceof ExerciseSubtaskModel) && (step.getName().equals(name));  
-									if (found)
-										break;
-								}
-								groupCounter++; 
-							}
-
-							((ExerciseSubtaskModel) unnamedStep).setName(name);
-						}
-					}
-				} */
-
+			
 				//
 				//
 				// 
 
 				for ( OrderingConstraint oc : solutionOption.getOrderingConstraints()) {
-
-					orderingConstraintsFound = true; 
 
 					String pred = oc.getPredecessor(); 
 					String succ = oc.getSuccessor();
@@ -411,70 +396,120 @@ public class ExerciseModel extends CommonModel {
 					ExerciseStepModel succ1 = idToStep.get(succ);
 
 					if (pred != null && succ != null ) {
-						succ1.registerPredecessor(pred1);
+						succ1.registerPredecessor(pred1, oc.isEditable());
+						if (! oc.isEditable())
+							fixedOrderingConstraints.add(oc);					
 					}
-
-					orderingConstraints.add(oc);
-
-				}						
-
-			}
-
-			//
-			// auto-add ordering constraint in case there aren't any 
-			// 
-
-			/* 
-			if (! orderingConstraintsFound) {
-				ExerciseStepModel last = null; 
-				for ( StepModel step : this.getSteps()) {
-					ExerciseStepModel exStep = (ExerciseStepModel) step; 
-					if (last != null) {    					
-						exStep.registerPredecessor(last);    	
-					}
-					last = exStep; 
-
 				}	
-			} */ 
 
-			//
-			// deduce "in any order" attribute for subtasks 
-			//
+				//
+				// sanity check ordering constraints 
+				// 
 
-			for (StepModel step : getSteps()) {		
+				for (StepModel step : steps) {
 
-				if (step instanceof ExerciseGroupOfStepsModel) {					
+					if (step.isBefore(step)) {
+						log.error("Bad ordering constraints: " + step + " is before itself!");
+						throw new PALException("Bad ordering constraints given!");
+					}
+				}
 
-					boolean inAnyOrder = true; 
+				//
+				//
+				//
 
-					ExerciseGroupOfStepsModel group = (ExerciseGroupOfStepsModel) step;
+				Comparator<StepModel> comparator = new Comparator<StepModel>() {
 
-					label: 
-						for (StepModel step2 : group.getSteps()) {
-							ExerciseStepModel exStep = (ExerciseStepModel) step2; 
-							for (ExerciseStepModel predStep : exStep.getPredecessors()) {
-								if ( predStep.getContainer().getValue() == group ) { 
-									inAnyOrder = false; 
-									break label; 
-								} else {								
+					@Override
+					public int compare(StepModel o1, StepModel o2) {
+						if (o1 == o2)
+							return 0;
+						else if ( o1.isBefore(o2))
+							return -1; 
+						else 
+							return 1; 
+					}					
 
-									log.warn("Found bad / non-editiable inter-group ordering constraint: " + predStep.getFunctor() + " < " + exStep.getFunctor());
-									// orderingConstraints.add(new OrderingConstraint(predStep.getStep().getStep().getId(), exStep.getStep().getStep().getId()));  
+				};
 
-								}
-							}						
+				steps.sort(comparator);
+				int stepCounter = 0; 
+
+				for (StepModel step : steps) {
+
+					if (step instanceof ExerciseCreateStepModel) {							
+						initialCreateActions.add((ExerciseStepModel) step); 							
+					} else {				
+						addStep(step, stepCounter++);														
+					}
+				}
+
+				//
+				// ordering of substeps in groups 
+				// 
+
+
+				for (StepModel group : steps) {
+
+					if (group instanceof ExerciseSubtaskModel) {	
+
+						// make a copy, because of clearSteps().... 
+						steps = new LinkedList<StepModel>(((ExerciseSubtaskModel) group).getSteps());
+
+						// sort 
+						steps.sort(comparator);
+
+						// reassign sorted sub-steps
+						stepCounter = 0; 						
+						((ExerciseSubtaskModel) group).clearSteps();	
+						for (StepModel step : steps) {									
+							((ExerciseSubtaskModel) group).addStep(step, stepCounter++);
 						}
 
-					group.setInAnyOrder(inAnyOrder);
-
+					}
 				}
-			}
+
+				//
+				// delete all editable ordering constraints - they get recomputed when saved. 
+				// only preserve the non-editiable ones. 
+				// 
+
+				solutionOption.getOrderingConstraints().clear();
+				solutionOption.getOrderingConstraints().addAll(fixedOrderingConstraints);									
+
+			}	
+
+			//
+			// currently, all groups are always unordered 
+			// also compute the optional attribute of the group - if all
+			// steps in group are optional, set optional on group also,  
+			// just to get the icon right. notice that there might be single			
+			// steps which are not optional, so...
+			// 
+
+			for (StepModel step : getSteps()) {		
+				if (step instanceof ExerciseGroupOfStepsModel) {			
+					ExerciseGroupOfStepsModel group = ((ExerciseGroupOfStepsModel) step); 
+					group.setInAnyOrder(true); 
+					boolean allOptional = true; 
+					for (StepModel step1 : group.getSteps()) {									
+						allOptional &= ((ExerciseStepModel) step1).isOptional(); 
+						if ( !allOptional )
+							break;
+					}
+					// System.out.println("Group is optional " + allOptional);
+					group.setOptional(allOptional);
+				}
+			}					
 
 			//
 			// read in original exercise solution
 			//
 
 			if ( ! recursive ) {
+
+				System.out.println();
+				System.out.println("================== READING ORIGINAL ================");
 
 				EditorDataBase editorData = exercise.getEditorData();
 
@@ -514,7 +549,7 @@ public class ExerciseModel extends CommonModel {
 									originalExerciseModel = new ExerciseModel(originalExercise, null, null, null, null, true);
 
 									if (originalExerciseModel != null) {
-										originalExerciseModel.readOnlyProperty.setValue(true); 
+										// originalExerciseModel.readOnlyProperty.setValue(true); 
 										this.hasOriginalExerciseModelProperty.set(true);
 
 										originalExerciseModel.setName("Original " + getName());  
@@ -536,7 +571,7 @@ public class ExerciseModel extends CommonModel {
 					originalExerciseModel = new ExerciseModel(exercise, null, null, null, null, true);
 
 					if (originalExerciseModel != null) {
-						originalExerciseModel.readOnlyProperty.setValue(true); 
+						// originalExerciseModel.readOnlyProperty.setValue(true); 
 						this.hasOriginalExerciseModelProperty.set(true);
 
 						originalExerciseModel.setName("Original " + getName());  
@@ -546,10 +581,6 @@ public class ExerciseModel extends CommonModel {
 				}
 
 			}
-
-			//
-			//
-			//
 
 		}
 
@@ -572,10 +603,11 @@ public class ExerciseModel extends CommonModel {
 	
 	private ExerciseStepParameter processParameter(Parameter p, ExerciseStepParameter parent, List<ExerciseStepParameter> params) {
 			
-		ValueConstraint vc = paramToValueconstraintMap.get(p.getId()); 
-		EqualityConstraint ec = paramToEqualityconstraintMap.get(p.getId()); 
+		ValueConstraint vc = paramToValueConstraintMap.get(p.getId()); 
+		EqualityConstraint ec = paramToEqualityConstraintMap.get(p.getId()); 
+		TypeConstraint tc = paramToTypeConstraintMap.get(p.getId()); 
 		
-		ExerciseStepParameter param = new ExerciseStepParameter(this, p, parent, vc, ec);
+		ExerciseStepParameter param = new ExerciseStepParameter(this, p, parent, vc, ec, tc);
 		
 		idToParam.put(p.getId(), param);		
 		params.add(param); 
@@ -585,17 +617,17 @@ public class ExerciseModel extends CommonModel {
 		
 		return param; 
 		
-	}
+	} 
 	
 	public ExerciseModel() {
 		super("");
 		this.setExercise(exercise);
 	} 
-	public ExerciseModel(Exercise exercise, File file, String serverUser, String serverPassword) {
+	public ExerciseModel(Exercise exercise, File file, String serverUser, String serverPassword) throws PALException {
 		this(exercise, file, null, serverUser, serverPassword, false);		 	
 	}
 
-	public ExerciseModel(Exercise exercise, URL url, String serverUser, String serverPassword) {
+	public ExerciseModel(Exercise exercise, URL url, String serverUser, String serverPassword) throws PALException {
 		this(exercise, null, url, serverUser, serverPassword, false);
 	}
 
@@ -603,7 +635,7 @@ public class ExerciseModel extends CommonModel {
 
 		String fullName = 
 				exercise.getName() + "\n" + 
-						((fileSource != null) ? fileSource.toString() : ((urlSource != null) ? urlSource.toString() : "Unnamed"));
+						((fileSource != null) ? fileSource.getName().toString() : ((urlSource != null) ? urlSource.toString() : "Unnamed"));
 
 		this.name.setValue(fullName);
 		 
@@ -613,7 +645,7 @@ public class ExerciseModel extends CommonModel {
 
 		String fullName = 
 				exercise.getName() + "\n" + 
-						((fileSource != null) ? fileSource.toString() : "Unnamed");
+						((fileSource != null) ? fileSource.getName().toString() : "Unnamed");
 
 		this.name.setValue(fullName);
 		 
@@ -684,9 +716,10 @@ public class ExerciseModel extends CommonModel {
 		return allToplevelParams; 
 	}
 
+	/*
 	public Collection<? extends OrderingConstraint> getOrderingConstraints() {
 		return orderingConstraints;
-	}
+	} */
 
 	//
 	//
@@ -758,33 +791,39 @@ public class ExerciseModel extends CommonModel {
 	public void setAbsoluteActionModelURL(URL absoluteActionModelURL) {
 		this.absoluteActionModelURL = absoluteActionModelURL;
 	}
-
-	public boolean equalityConstraintIsInvalid(EqualityConstraint cs) {
-		return invalidatedEqualityConstraints.contains(cs);
-	}
 	
-	public void registerEqualityConstraintAsInvalid(EqualityConstraint cs) {
-		invalidatedEqualityConstraints.add(cs);
-	}
-	
-	public void registerEqualityConstraintAsValid(EqualityConstraint cs) {
-		invalidatedEqualityConstraints.remove(cs);
-	}	
-	
-	public boolean valueConstraintIsInvalid(ValueConstraint cs) {
-		return invalidatedValueConstraints.contains(cs);
-	}
-	
-	public void registerValueConstraintAsInvalid(ValueConstraint cs) {
-		invalidatedValueConstraints.add(cs);
-	}
-	
-	public void registerValueConstraintAsValid(ValueConstraint cs) {
-		invalidatedValueConstraints.remove(cs);
-	}
+	//
+	//
+	//
 
 	public ExerciseModel getOriginalExerciseModel() {
 		return originalExerciseModel;
+	}
+
+	//
+	//
+	//
+	
+	public List<StepModel> getEditableSuccessors(StepModel exerciseStepModel) {
+		
+		List<StepModel> res = new ArrayList<StepModel>(); 
+		int n = indexOf(exerciseStepModel);
+		
+		if (n+1 < getStepCount()) {
+			StepModel succ = getStepNo(n+1);
+			if (! getFixedSuccessors(exerciseStepModel).contains(succ)) {
+				res.add(succ);
+			}
+		}
+		
+		return res; 
+
+	}
+	
+	public List<StepModel> getFixedSuccessors(StepModel exerciseStepModel) {
+		
+		return exerciseStepModel.getFixedSuccessors(); 
+
 	}
 	
 }

@@ -28,7 +28,6 @@ import com.sri.pal.StructDef;
 import com.sri.pal.TypeDef;
 import com.sri.pal.common.TypeNameFactory;
 import com.sri.tasklearning.ui.core.BackendFacade;
-import com.sri.tasklearning.ui.core.VariableManager;
 import com.sri.tasklearning.ui.core.step.ActionStepModel;
 
 /**
@@ -73,14 +72,7 @@ public class ActionDeclarationParameterModel extends ParameterModel
             modal = INPUT_FUNCTOR;
             // If this is an input, it needs to be made into a procedure input 
             // variable model
-            if (fromFactory) {
-                VariableManager varMgr = VariableManager.getNextVariableManager();
-                varMgr.unmanageVariable(vm);                
-                vm = new ProcedureInputVariableModel(vm.getVariableName(),
-                        defaultValue);
-                vm.setTypeDef(type);
-                varMgr.manageVariable(vm);
-            }
+         
         } 
         else if (md.equals(Modality.OUTPUT))
             modal = RESULT_FUNCTOR;        

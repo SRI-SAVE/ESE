@@ -21,8 +21,6 @@ import com.sri.ai.lumen.atr.task.ATRTask;
 import com.sri.ai.lumen.atr.term.ATRLiteral;
 import com.sri.ai.lumen.atr.term.ATRMap;
 import com.sri.tasklearning.ui.core.EditController;
-import com.sri.tasklearning.ui.core.ProcedureEditController;
-import com.sri.tasklearning.ui.core.VariableManager;
 import com.sri.tasklearning.ui.core.step.ContainerStepModel;
 
 public abstract class CommonModel extends ContainerStepModel implements ATRActionDeclaration {
@@ -55,10 +53,6 @@ public abstract class CommonModel extends ContainerStepModel implements ATRActio
 		return null;
 	}
 
-	public VariableManager getVariableManager() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public void setController(EditController editController) {
 		// TODO Auto-generated method stub

@@ -269,22 +269,33 @@ public class ServerConnectionImpl
 
         @Override
         public void run() {
-            ATRActionDeclaration action = (ATRActionDeclaration) actionModel
-                    .getInherited(actionName);
-            // TODO TLEARN-413 fails on this line:
-            List<? extends ATRParameter> atrParams = action.getSignature()
-                    .getElements();
-            List<Object> inParams = new ArrayList<Object>();
-            for(int i = 0; i < atrParams.size(); i++) {
-                ATRParameter atrParam = atrParams.get(i);
-                if(atrParam.getMode() == Modality.OUTPUT) {
-                    continue;
+            List<Object> inParams = null;
+            ATRActionDeclaration action = null;
+            try {
+                action = (ATRActionDeclaration) actionModel
+                        .getInherited(actionName);
+                // TODO TLEARN-413 fails on this line:
+                List<? extends ATRParameter> atrParams = action.getSignature()
+                        .getElements();
+                inParams = new ArrayList<Object>();
+                for (int i = 0; i < atrParams.size(); i++) {
+                    ATRParameter atrParam = atrParams.get(i);
+                    if (atrParam.getMode() == Modality.OUTPUT) {
+                        continue;
+                    }
+                    Object paramValue = taskArgs.get(i);
+                    if (CoreUtil.isNull(paramValue)) {
+                        paramValue = null;
+                    }
+                    inParams.add(paramValue);
                 }
-                Object paramValue = taskArgs.get(i);
-                if (CoreUtil.isNull(paramValue)) {
-                    paramValue = null;
+            } catch (Exception e) {
+                try {
+                    requester.taskFailed(uid.toString(), e, null);
+                } catch (MediatorException e1) {
+                    log.warn("Failed to start task, and failed to send failure message to Lumen for " + actionName, e1);
                 }
-                inParams.add(paramValue);
+                return;
             }
 
             log.debug("Requesting execution of {} with UID {} and args {}",

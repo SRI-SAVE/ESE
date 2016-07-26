@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// $Id: TypeDef.java 7401 2016-03-25 20:18:20Z Chris Jones (E24486) $
+// $Id: TypeDef.java 7750 2016-07-26 16:53:01Z Chris Jones (E24486) $
 package com.sri.pal;
 
 import java.util.Collections;
@@ -243,7 +243,7 @@ public abstract class TypeDef
 
     /**
      * Indicates if one type is assignable to another. In other words, can a
-     * value of type other be assigned to variable or parameter of this type?
+     * value of this type be assigned to variable or parameter of type other?
      * @param other the TypeDef to check assignability against
      * @return true if values of type other are assignable to this type
      */
@@ -321,6 +321,14 @@ public abstract class TypeDef
     abstract int getStringSize(Object strValue);
 
     abstract Object unstringify(Object strValue);
+
+    /**
+     * Indicates if the given value is a member of this type.
+     * @param value a value to be tested
+     * @return true if value is a member of this type.
+     */
+    public abstract boolean isValueOf(Object value)
+            throws PALException;
 
     /**
      * Although this method is exposed publicly, it is intended for internal

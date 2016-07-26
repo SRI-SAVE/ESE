@@ -27,9 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.sri.tasklearning.ui.core.common.SignatureModel;
 import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
-import com.sri.tasklearning.ui.core.procedure.ProcedureModel;
-import com.sri.tasklearning.ui.core.procedure.StepSequence;
-
 
 /**
  * Abstract model representing any step that contains other steps, such as a
@@ -50,6 +47,12 @@ public abstract class ContainerStepModel extends StepModel {
         return steps;
     }
     
+    
+    public StepModel getStepNo(int n) {
+        return steps.get(n); 
+    }
+    
+    
     public void setSteps(List<StepModel> argSteps) {
     	
     	for (StepModel step : argSteps) 
@@ -57,6 +60,12 @@ public abstract class ContainerStepModel extends StepModel {
     	
         steps.clear();
         steps.addAll(argSteps);
+        updateHasSteps();
+    }
+    
+  public void clearSteps() {
+    	
+        steps.clear();
         updateHasSteps();
     }
     
@@ -75,11 +84,6 @@ public abstract class ContainerStepModel extends StepModel {
                 + getResults() + "]";
     }
 
-    public StepSequence stepsAsSequence() {
-        return new StepSequence(steps);
-    }
-    
-   
     public boolean addStep(StepModel newStep, int position) {
     	   	    	
         if (!steps.contains(newStep)) {
@@ -154,9 +158,7 @@ public abstract class ContainerStepModel extends StepModel {
             final String oldFunctor,
             final String newFunctor) {
         for (StepModel s : getSteps()) {
-            if (s instanceof ProcedureStepModel && oldFunctor.equals(s.getFunctor())) {
-                s.setFunctor(newFunctor);
-            }
+           
             if (s instanceof ContainerStepModel)
                 ((ContainerStepModel)s).updateFunctorReferences(oldFunctor, newFunctor);
         }

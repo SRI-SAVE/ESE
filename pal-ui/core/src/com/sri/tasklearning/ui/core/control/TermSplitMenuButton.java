@@ -16,6 +16,7 @@
 
 package com.sri.tasklearning.ui.core.control;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.shape.Rectangle;
 
@@ -32,8 +33,7 @@ public class TermSplitMenuButton extends SplitMenuButton {
     public TermSplitMenuButton(TermView tv) {
         super(); 
         setMnemonicParsing(false);
-        termView = tv;
-       
+        termView = tv;        
     }
 
     public TermView getTermView() {

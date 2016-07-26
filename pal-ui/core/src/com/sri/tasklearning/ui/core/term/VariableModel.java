@@ -22,7 +22,6 @@ import javafx.beans.property.SimpleStringProperty;
 import com.sri.ai.lumen.atr.ATR;
 import com.sri.ai.lumen.atr.ATRCat;
 import com.sri.ai.lumen.atr.term.ATRVariable;
-import com.sri.tasklearning.ui.core.VariableManager;
 
 /**
  * Holds the state common to all types of variables.
@@ -42,14 +41,11 @@ public class VariableModel extends AtomicTermModel
         displayStringProperty().bind(name);
     }
     
-    public static VariableModel create(String name, VariableManager varMgr) {
-        if (varMgr.getVariableByName(name) == null) {
-            VariableModel newVar = new VariableModel();
-            newVar.name.setValue(name);
-            varMgr.manageVariable(newVar);
-            return newVar;
-        }
-        return varMgr.getVariableByName(name);
+    public static VariableModel create(String name) {
+    	VariableModel newVar = new VariableModel();
+    	newVar.name.setValue(name);
+          return newVar;
+        
     }
       
     public boolean isReferenced() {

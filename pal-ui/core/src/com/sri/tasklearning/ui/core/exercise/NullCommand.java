@@ -16,9 +16,6 @@
 
 package com.sri.tasklearning.ui.core.exercise;
 
-import com.sri.tasklearning.ui.core.control.TermSplitMenuButton;
-import com.sri.tasklearning.ui.core.step.StepView;
-
 import javafx.scene.layout.Pane;
 
 public class NullCommand extends AbstractCommand {

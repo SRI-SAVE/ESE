@@ -1,0 +1,92 @@
+HEADER syntax:[lumen,metalevel];
+
+#### To be loaded from the command line, not from within Adept tasklearning, for testing.
+#### To run rudimentary test, load and:
+####   > do 'DETECT_ENTITY/0'(`i, `c, $e)
+####
+#### Expected output:
+#### Scoring \<ActionExprLumen$ActionClosureInstance@1704239382:action(\<Expr detectOpenField(+$image, +$classifier, -$entities)>\, properties:\<Expr {detector:"true", falseAlarmRate:"0.05", minSamples:"1000", requiresMSIData:"true", viewpoint:"overhead"}>\, execute:\<Expr {test \<Expr $entities = [`\<Expr openField1>\, `\<Expr openField2>\]>\;}>\)>\ requiresMSIData="true"
+#### Scoring \<ActionExprLumen$ActionClosureInstance@633154019:action(\<Expr detectRunway(+$image, +$classifier, -$entities)>\, properties:\<Expr {detector:"true", falseAlarmRate:"0.01", minSamples:"1000", requiresMSIData:"false", viewpoint:"overhead"}>\, execute:\<Expr {test \<Expr $entities = [`\<Expr runway31>\]>\;}>\)>\ requiresMSIData="false"
+#### Scoring \<ActionExprLumen$ActionClosureInstance@133629639:action(\<Expr detectHAS(+$image, +$classifier, -$entities)>\, properties:\<Expr {detector:"true", falseAlarmRate:"0.02", minSamples:"1000", requiresMSIData:"false", viewpoint:"overhead"}>\, execute:\<Expr {test \<Expr $entities = [`\<Expr HAS1>\]>\;}>\)>\ requiresMSIData="false"
+#### Score=12345.6  best detector: <ActionExprLumen$ActionClosureInstance@1704239382:action(\<Expr detectOpenField(+$image, +$classifier, -$entities)>\, properties:\<Expr {detector:"true", falseAlarmRate:"0.05", minSamples:"1000", requiresMSIData:"true", viewpoint:"overhead"}>\, execute:\<Expr {test \<Expr $entities = [`\<Expr openField1>\, `\<Expr openField2>\]>\;}>\)>
+
+
+predicate HasNonnullProperty(+$propertied, $propSym, -$propValue)  #TODO - move to lumen lib
+  solve:  HasProperty($propertied, $propSym, $propValue) && ($propValue != {{javanull}});
+
+
+### Duplicates code in detectorSelection.lumen
+### Detector property names from action model
+function falseAlarmRate eval: `falseAlarmRate;
+function requiresMSIData eval: `requiresMSIData;
+function viewpoint eval: `viewpoint;
+function minSamples eval: `minSamples;
+
+function detector eval: `detector   doc: "Indicates a (primitive) action is an entity detector";
+
+function detectorProperties()
+  doc: "All detector properties, in the order in which they are passed to detector actions"
+  eval: [falseAlarmRate, requiresMSIData, viewpoint, minSamples];
+
+
+## This function is for clarity and could be inlined
+function detectorActionOps()
+  doc: "Returns all loaded operators designated with the 'detector' property" ##TODO use strings?
+  eval: ($op .every. (m_AgentOp($, $op) && HasProperty($op, detector, $)));
+
+
+### These are stand-ins for primitive actions (that will have their real implementations in Java)
+
+action detectRunway(+$image, +$classifier, -$entities)
+  properties: { detector: "true",
+		falseAlarmRate: "0.01", requiresMSIData: "false", viewpoint: "overhead", minSamples: "1000" }
+  execute: { test $entities = [`runway31]; };
+
+action detectHAS(+$image, +$classifier, -$entities)
+  properties: { detector: "true",
+		falseAlarmRate: "0.02", requiresMSIData: "false", viewpoint: "overhead", minSamples: "1000" }
+  execute: { test $entities = [`HAS1]; };
+
+action detectOpenField(+$image, +$classifier, -$entities)
+  properties: { detector: "true",
+		falseAlarmRate: "0.05", requiresMSIData: "true", viewpoint: "overhead", minSamples: "1000" }
+  execute: { test $entities = [`openField1, `openField2]; };
+
+
+## Duplicates action in detectorSelection.lumen, except that it has an unqualified name.
+## Guts of detector selection; it is not an ATRProcedure so it's not suitable to implement as a primitive action
+action 'DETECT_ENTITY/0'(+$image, +$classifier, -$entities)
+  doc: "Delegates execution of this abstract action to a concrete one by accessing and exploiting BAD AC selection context"
+  execute:
+{
+  set $bestScore to: -987654321.0;
+  set $bestDetector to: [];
+  foreach $detector in: detectorActionOps() execute: {
+    # TODO - prop values are all strings, do conversions (in callee?)
+    test HasNonnullProperty($detector, falseAlarmRate, $falseAlarmRate);
+    test HasNonnullProperty($detector, requiresMSIData, $requiresMSIData);
+    test HasNonnullProperty($detector, viewpoint, $viewpoint);
+    test HasNonnullProperty($detector, minSamples, $minSamples);
+    do print("Scoring %r requiresMSIData=%r \n", $detector, $requiresMSIData);
+    do detectorScore($falseAlarmRate, $requiresMSIData, $viewpoint, $minSamples, $score);
+    if $score > $bestScore then: {
+      reset $bestScore to: $score;
+      reset $bestDetector to: $detector;
+    };
+  };
+
+  if $bestScore < 0.0 then: {
+    do fail("No valid detectors");
+  };
+   
+  do print("Score=%s  best detector: %s\n", $bestScore, $bestDetector);
+  ## TODO: if detector is a primitive action, can we apply it?
+  test $outMarker = ();
+  do apply($bestDetector, [$image, $classifier, $outMarker], $outMarker, $result);
+  test [$, $, $entities] = $result;
+};
+
+action  detectorScore(+$falseAlarmRate, +$requiresMSIData, +$viewpoint, +$minSamples, -$score)
+    execute: {
+      test $score = 12345.6;
+};

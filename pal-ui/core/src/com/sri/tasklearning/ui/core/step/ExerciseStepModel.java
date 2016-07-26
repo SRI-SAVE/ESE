@@ -24,6 +24,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import com.sri.pal.training.core.exercise.Atom;
 import com.sri.pal.training.core.exercise.Step;
+import com.sri.tasklearning.ui.core.exercise.ExerciseModel;
 import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
 
 /**
@@ -32,14 +33,14 @@ import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
 
 public class ExerciseStepModel extends ActionStepModel {   
 	
-	private Atom step;	
+	private Atom step;
+	
 	private SimpleBooleanProperty isOptional = new SimpleBooleanProperty(); 
 	private SimpleBooleanProperty isHidden = new SimpleBooleanProperty(); 
 	
-	private List<ExerciseStepModel> predecessors = new LinkedList<ExerciseStepModel>(); 
-	private List<ExerciseStepModel> successors = new LinkedList<ExerciseStepModel>(); 
-	
+		
 	 public ExerciseStepModel(
+			    final ExerciseModel parent,
 	            final String functor,
 	            final Collection<ExerciseStepParameter> arguments) {
 		 
@@ -55,42 +56,35 @@ public class ExerciseStepModel extends ActionStepModel {
 	        this.setStep(atom);     	        
 	        this.stepType = StepType.EXERCISE_STEP;
 	        
+	        setParent(parent); 
+	        
 	        registerParameterOwner(arguments);
 	        	    
 	    }
 
-	public ExerciseStepModel(Atom step, final Collection<ExerciseStepParameter> arguments) {
+
+	public ExerciseStepModel(ExerciseModel parent, Atom step, final Collection<ExerciseStepParameter> arguments) {
 
 		super(step.getFunctor(), arguments);   
 		 
 		this.setStep(step); 
 		this.stepType = StepType.EXERCISE_STEP;
-	        
+		 
+		setParent(parent); 
+		 
 	    registerParameterOwner(arguments);
     
     }
 	
+	
 	private void registerParameterOwner(Collection<ExerciseStepParameter> arguments) {
 		
 		for (ExerciseStepParameter arg : arguments) {
-			arg.setOwner(this);
-			registerParameterOwner(arg.getSubParameters()); 
+			arg.setOwner(this);		
 		}
 		
 	}
 
-    public void registerPredecessor(ExerciseStepModel pred) {
-    	predecessors.add(pred);
-    	pred.successors.add(this); 
-    }
-    
-    public List<ExerciseStepModel> getPredecessors() {
-    	return predecessors; 
-    }
-    
-    public List<ExerciseStepModel> getSuccessors() {
-    	return successors; 
-    }
 
 	public Atom getStep() {
 		return step;
@@ -123,5 +117,16 @@ public class ExerciseStepModel extends ActionStepModel {
 	public SimpleBooleanProperty getIsHidden() {
 		return isHidden;
 	}
+	
+	//
+	//
+	//
+	
+	public List<StepModel> getEditableSuccessors() {
+		
+		return ((ExerciseModel) getParent()).getEditableSuccessors(this);  
 
+	}
+		
+ 
 }

@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Copyright 2016 SRI International
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<exercise>
+    <name>Pizza</name>
+    <description>Simple adaptable pizza</description>
+    <action_model>../actionModels/cooking_am.xml</action_model>
+    <problem>
+        <task id="task-1">
+            <name>Pizza task</name>
+            <description>Make pizza</description>
+        </task>
+    </problem>
+    
+    <solution>
+        <task_solution>
+            <option>
+                <step optional="false" subtask="" id="step-1">
+                    <atom functor="cooking_am^0.1^SetHeat">
+                        <parameter accessor="appliance" id="appliance-1"/>
+                        <parameter accessor="setting" id="setting-1"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-2">
+                    <atom functor="cooking_am^0.1^Roll">
+                        <parameter accessor="food" id="food-2"/>
+                        <parameter accessor="quantity" id="qty-2"/>
+                        <parameter accessor="unit" id="unit-2"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-3">
+                    <atom functor="cooking_am^0.1^Put">
+                        <parameter accessor="thingPut" id="thing-3"/>
+                        <parameter accessor="thingPutOn" id="thingOn-3"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-4">
+                    <atom functor="cooking_am^0.1^Spread">
+                        <parameter accessor="quantity" id="qty-4"/>
+                        <parameter accessor="volumeUnit" id="vol-4"/>
+                        <parameter accessor="food" id="food-4"/>
+                        <parameter accessor="thing" id="thing-4"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-5">
+                    <atom functor="cooking_am^0.1^Spread">
+                        <parameter accessor="quantity" id="qty-5"/>
+                        <parameter accessor="volumeUnit" id="vol-5"/>
+                        <parameter accessor="food" id="food-5"/>
+                        <parameter accessor="thing" id="thing-5"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-6">
+                    <atom functor="cooking_am^0.1^Spread">
+                        <parameter accessor="quantity" id="qty-6"/>
+                        <parameter accessor="volumeUnit" id="vol-6"/>
+                        <parameter accessor="food" id="food-6"/>
+                        <parameter accessor="thing" id="thing-6"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-7">
+                    <atom functor="cooking_am^0.1^Spread">
+                        <parameter accessor="quantity" id="qty-7"/>
+                        <parameter accessor="volumeUnit" id="vol-7"/>
+                        <parameter accessor="food" id="food-7"/>
+                        <parameter accessor="thing" id="thing-7"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-8">
+                    <atom functor="cooking_am^0.1^Put">
+                        <parameter accessor="thingPut" id="thing-8"/>
+                        <parameter accessor="thingPutOn" id="thingon-8"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-9">
+                    <atom functor="cooking_am^0.1^CookContents">
+                        <parameter accessor="cookware" id="cookware-9"/>
+                        <parameter accessor="amount" id="amt-9"/>
+                        <parameter accessor="temporalUnit" id="unit-9"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-10">
+                    <atom functor="cooking_am^0.1^Rotate">
+                        <parameter accessor="thing" id="thing-10"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-11">
+                    <atom functor="cooking_am^0.1^CookContents">
+                        <parameter accessor="cookware" id="cookware-11"/>
+                        <parameter accessor="amount" id="amt-11"/>
+                        <parameter accessor="temporalUnit" id="unit-11"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-12">
+                    <atom functor="cooking_am^0.1^Move">
+                        <parameter accessor="thingMoved" id="thing-12"/>
+                        <parameter accessor="thingFrom" id="thingfrom-12"/>
+                        <parameter accessor="thingTo" id="thingto-12"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-13">
+                    <atom functor="cooking_am^0.1^CoolContents">
+                        <parameter accessor="container" id="container-13"/>
+                        <parameter accessor="amount" id="amt-13"/>
+                        <parameter accessor="temporalUnit" id="unit-13"/>
+                    </atom>
+                </step>
+                <step optional="false" subtask="" id="step-14">
+                    <atom functor="cooking_am^0.1^SetHeat">
+                        <parameter accessor="appliance" id="appliance-14"/>
+                        <parameter accessor="setting" id="setting-14"/>
+                    </atom>
+                </step>
+                
+                <ordering_constraint predecessor="step-1" successor="step-2"/>
+                <ordering_constraint predecessor="step-2" successor="step-3"/>
+                <ordering_constraint predecessor="step-3" successor="step-4"/>
+                <ordering_constraint predecessor="step-4" successor="step-5"/>
+                <ordering_constraint predecessor="step-5" successor="step-6"/>
+                <ordering_constraint predecessor="step-6" successor="step-7"/>
+                <ordering_constraint predecessor="step-7" successor="step-8"/>
+<!--                 <ordering_constraint predecessor="step-8" successor="step-9"/> -->
+                <ordering_constraint predecessor="step-9" successor="step-10"/>
+                <ordering_constraint predecessor="step-10" successor="step-11"/>
+                <ordering_constraint predecessor="step-11" successor="step-12"/>
+                <ordering_constraint predecessor="step-12" successor="step-13"/>
+                <ordering_constraint predecessor="step-13" successor="step-14"/>
+
+                <!--  Must heat oven before baking pizza and before turning it off -->
+                <ordering_constraint predecessor="step-1" successor="step-9" editable="false"/>
+                <ordering_constraint predecessor="step-1" successor="step-11" editable="false"/>
+                <!--  Must heat oven before turning it off -->
+<!--                 <ordering_constraint predecessor="step-1" successor="step-14" editable="false"/> -->
+                <!--  Must put pizza in oven before it can be cooked -->
+                <ordering_constraint predecessor="step-8" successor="step-9" editable="false"/>
+                <ordering_constraint predecessor="step-8" successor="step-11" editable="false"/>
+                <!--  Must put pizza in oven before it can be removed -->
+<!--                 <ordering_constraint predecessor="step-8" successor="step-12" editable="false"/> -->
+                <!--  Must bake pizza before cooling it -->
+                <ordering_constraint predecessor="step-9" successor="step-13" editable="false"/>
+                <ordering_constraint predecessor="step-11" successor="step-13" editable="false"/>
+                <!--  Must finish baking before turning off the oven -->
+<!--                 <ordering_constraint predecessor="step-9" successor="step-14" editable="false"/>
+                <ordering_constraint predecessor="step-11" successor="step-14" editable="false"/> -->
+
+                <value_constraint>
+                    <parameter>appliance-1</parameter>
+                    <value>
+                        <ctrs>"Oven"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>setting-1</parameter>
+                    <value>
+                        <ctrs>"high"</ctrs>
+                        <type>cooking_am^0.1^HeatSetting</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>food-2</parameter>
+                    <value>
+                        <ctrs>"PizzaDough"</ctrs>
+                        <type>cooking_am^0.1^Dough</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>qty-2</parameter>
+                    <value>
+                        <ctrs>"1/4"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>unit-2</parameter>
+                    <value>
+                        <ctrs>"inch"</ctrs>
+                        <type>cooking_am^0.1^Thickness</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>thing-3</parameter>
+                    <value>
+                        <ctrs>"PizzaDough"</ctrs>
+                        <type>cooking_am^0.1^Dough</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thingOn-3</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>qty-4</parameter>
+                    <value>
+                        <ctrs>"1/4"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-4</parameter>
+                    <value>
+                        <ctrs>"cup"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-4</parameter>
+                    <value>
+                        <ctrs>"TomatoSauce"</ctrs>
+                        <type>cooking_am^0.1^Sauce</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thing-4</parameter>
+                    <value>
+                        <ctrs>"PizzaDough"</ctrs>
+                        <type>cooking_am^0.1^Dough</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>qty-5</parameter>
+                    <value>
+                        <ctrs>"1/2"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-5</parameter>
+                    <value>
+                        <ctrs>"cup"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-5</parameter>
+                    <value>
+                        <ctrs>"Mozzarella"</ctrs>
+                        <type>cooking_am^0.1^Cheese</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thing-5</parameter>
+                    <value>
+                        <ctrs>"PizzaDough"</ctrs>
+                        <type>cooking_am^0.1^Dough</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>qty-6</parameter>
+                    <value>
+                        <ctrs>"1/2"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-6</parameter>
+                    <value>
+                        <ctrs>"cup"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-6</parameter>
+                    <value>
+                        <ctrs>"Bacon"</ctrs>
+                        <type>cooking_am^0.1^Meat</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thing-6</parameter>
+                    <value>
+                        <ctrs>"PizzaDough"</ctrs>
+                        <type>cooking_am^0.1^Dough</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>qty-7</parameter>
+                    <value>
+                        <ctrs>"1/2"</ctrs>
+                        <type>cooking_am^0.1^Quantity</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>vol-7</parameter>
+                    <value>
+                        <ctrs>"cup"</ctrs>
+                        <type>cooking_am^0.1^Volume</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>food-7</parameter>
+                    <value>
+                        <ctrs>"Spinach"</ctrs>
+                        <type>cooking_am^0.1^Vegetable</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thing-7</parameter>
+                    <value>
+                        <ctrs>"PizzaDough"</ctrs>
+                        <type>cooking_am^0.1^Dough</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>thing-8</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thingon-8</parameter>
+                    <value>
+                        <ctrs>"Oven"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>cookware-9</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>amt-9</parameter>
+                    <value>
+                        <ctrs>"5"</ctrs>
+                        <type>integer</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>unit-9</parameter>
+                    <value>
+                        <ctrs>"minute(s)"</ctrs>
+                        <type>cooking_am^0.1^TemporalUnit</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>thing-10</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>cookware-11</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>amt-11</parameter>
+                    <value>
+                        <ctrs>"5"</ctrs>
+                        <type>integer</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>unit-11</parameter>
+                    <value>
+                        <ctrs>"minute(s)"</ctrs>
+                        <type>cooking_am^0.1^TemporalUnit</type>
+                    </value>
+                </value_constraint>
+
+                <value_constraint>
+                    <parameter>thing-12</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thingfrom-12</parameter>
+                    <value>
+                        <ctrs>"Oven"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>thingto-12</parameter>
+                    <value>
+                        <ctrs>"CoolingRack"</ctrs>
+                        <type>cooking_am^0.1^Rack</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>container-13</parameter>
+                    <value>
+                        <ctrs>"BakingSheet"</ctrs>
+                        <type>cooking_am^0.1^Cookware</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>amt-13</parameter>
+                    <value>
+                        <ctrs>"3"</ctrs>
+                        <type>integer</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>unit-13</parameter>
+                    <value>
+                        <ctrs>"minute(s)"</ctrs>
+                        <type>cooking_am^0.1^TemporalUnit</type>
+                    </value>
+                </value_constraint>
+                
+                <value_constraint>
+                    <parameter>appliance-14</parameter>
+                    <value>
+                        <ctrs>"Oven"</ctrs>
+                        <type>cooking_am^0.1^Appliance</type>
+                    </value>
+                </value_constraint>
+                <value_constraint>
+                    <parameter>setting-14</parameter>
+                    <value>
+                        <ctrs>"off"</ctrs>
+                        <type>cooking_am^0.1^HeatSetting</type>
+                    </value>
+                </value_constraint>
+
+            </option>
+        </task_solution>
+    </solution>
+</exercise>

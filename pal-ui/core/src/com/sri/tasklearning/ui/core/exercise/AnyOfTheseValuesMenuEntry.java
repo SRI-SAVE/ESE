@@ -18,12 +18,6 @@ package com.sri.tasklearning.ui.core.exercise;
 
 import javafx.scene.layout.Pane;
 
-import com.sri.tasklearning.ui.core.step.ExerciseStepModel;
-import com.sri.tasklearning.ui.core.step.StepModel;
-import com.sri.tasklearning.ui.core.term.ExerciseStepParameter;
-import com.sri.tasklearning.ui.core.term.ExerciseStepParameterView;
-import com.sri.tasklearning.ui.core.term.ParameterModel;
-
 
 public class AnyOfTheseValuesMenuEntry extends AnnotationMenuEntry {
 
